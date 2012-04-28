@@ -1,0 +1,9 @@
+/**
+ * Knapsen configuration file
+ *
+ * The value for these defines is controlled by CMake at configuration time.
+ * NOTE: This file needs to be written in C, as it will be included by C source files too.
+ */
+
+/* Define the fallback prefix */
+#define KNAPSEN_PREFIX "${CMAKE_INSTALL_PREFIX}"
