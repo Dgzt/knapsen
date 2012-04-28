@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<kcfg xmlns="http://www.kde.org/standards/kcfg/1.0"
+      xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+      xsi:schemaLocation="http://www.kde.org/standards/kcfg/1.0
+      http://www.kde.org/standards/kcfg/1.0/kcfg.xsd" >
+  <kcfgfile name="knapsenrc"/>
+  
+	<group name="General">
+    
+		<entry name="PlayerName" type="String">
+			<label>Player name</label>
+			<default>Player</default>
+		</entry>
+	
+		<entry name="BotName" type="String">
+			<label>Bot name</label>
+			<default>Bot</default>
+		</entry>
+	 
+	</group>
+  
+	<group name="Game">
+	  
+		<entry name="LocalPlayer" type="Bool">
+			<default>true</default>
+		</entry>
+		
+		<entry name="OpponentPlayer" type="Bool">
+			<default>false</default>
+		</entry>
+		
+		<entry name="RandomPlayer" type="Bool">
+			<default>false</default>
+		</entry>
+		
+		<entry name="CardsInHand5" type="Bool">
+			<default>true</default>
+		</entry>
+		
+		<entry name="CardsInHand6" type="Bool">
+			<default>false</default>
+		</entry>
+		
+		<entry name="SizeOfDeck20" type="Bool">
+			<default>true</default>
+		</entry>
+		
+		<entry name="SizeOfDeck24" type="Bool">
+			<default>false</default>
+		</entry>
+		
+		<entry name="GermanSuits" type="Bool">
+			<default>true</default>
+		</entry>
+		
+		<entry name="FrenchSuits" type="Bool">
+			<default>false</default>
+		</entry>
+		
+		
+  </group>
+  
+</kcfg>
