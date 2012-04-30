@@ -52,7 +52,7 @@ private slots:
 	void slotNewPlayer( Player* );
 	void slotPlayerDisconnected( Player* );
 	
-	void slotPlayerSelectedCard( Card );
+	void slotPlayerSelectedCard( Card, int );
 	void slotPlayerTwentyButtonClicked();
 	void slotPlayerFortyButtonClicked();
 	

@@ -94,6 +94,21 @@ int Player::getNumberOfCardsInHandNow()
 	return ret;
 }
 
+int Player::getPositionOfPairOfCard( Card card )
+{
+	for( int i = 0; i < mCards.size(); ++i ){
+		if( mCards.at(i).isValid() && card.getCardSuit() == mCards.at(i).getCardSuit() &&
+			( ( card.getCardType() == Card::King && mCards.at(i).getCardType() == Card::Queen ) ||
+			  ( card.getCardType() == Card::Queen && mCards.at(i).getCardType() == Card::King ) )
+		){
+			return i;
+		}
+	}
+	
+	//Error
+	return -1;
+}
+
 bool Player::haveRegularMarriages() const
 {
 	bool ret = false;
@@ -208,7 +223,7 @@ void Player::newCommand( QString command )
 				mOpponent->sendCommand( OPPONENT_SELECTED_CARD_ID_COMMAND+QString::number( ret ) );
 				mOpponent->sendOpponentAddNewCentralCard( getCard( ret ) );
 				
-				emit signalSelectedCard( mCards.at( ret ) );
+				emit signalSelectedCard( mCards.at( ret ), ret );
 				
 				//Remove card
 				addNewCentralCard( getCard( ret ) );

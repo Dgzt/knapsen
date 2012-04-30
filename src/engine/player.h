@@ -53,6 +53,10 @@ static const QString TWENTY_BUTTON_CLICKED_COMMAND = ":TWENTY_BUTTON_CLICKED";
 //static const QString OPPONENT_TWENTY_BUTTON_CLICKED_COMMAND = ":OPPONENT_TWENTY_BUTTON_CLICKED";
 static const QString FORTY_BUTTON_CLICKED_COMMAND = ":FORTY_BUTTON_CLICKED";
 //static const QString OPPONENT_FORTY_BUTTON_CLICKED_COMMAND = ":OPPONENT_FORTY_BUTTON_CLICKED";
+//
+static const QString VISIBLE_OPPONENT_CARD1_ID_COMMAND = ":VISIBLE_OPPONENT_CARD1_ID=";
+static const QString VISIBLE_OPPONENT_CARD2_ID_COMMAND = ":VISIBLE_OPPONENT_CARD2_ID=";
+//
 
 
 //
@@ -153,9 +157,12 @@ public:
 	
 	int getNumberOfCardsInHandNow();
 	
+	//If this card is king, then return equal suit of queen, 
+	//else this card is queen, then return equal suit of king
+	int getPositionOfPairOfCard( Card );
 	//
+	
 	int getTricks() const{ return mTricks; }
-	//
 	
 	bool haveRegularMarriages() const;
 	bool haveTrumpMarriages() const;
@@ -203,6 +210,11 @@ public:
 	void sendTwentyButtonVisible();
 	void sendFortyButtonVisible();
 	
+	//
+	void sendVisibleOpponentCard1Id( int id ){ sendCommand( VISIBLE_OPPONENT_CARD1_ID_COMMAND+QString::number( id ) ); }
+	void sendVisibleOpponentCard2Id( int id ){ sendCommand( VISIBLE_OPPONENT_CARD2_ID_COMMAND+QString::number( id ) ); }
+	//
+	
 	
 	void sendStartGame(){ sendCommand( START_GAME_COMMAND ); }
 	
@@ -210,7 +222,7 @@ signals:
 	//Signals to server
 	void signalNewPlayer( Player* );
 	void signalPlayerDisconnected( Player* );
-	void signalSelectedCard( Card );
+	void signalSelectedCard( Card, int );
 	//
 	void signalTwentyButtonClicked();
 	void signalFortyButtonClicked();

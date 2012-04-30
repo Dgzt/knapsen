@@ -58,7 +58,7 @@ void Server::slotNewPlayer( Player* player )
 		
 		mPlayerList.append( player );
 		connect( player, SIGNAL( signalPlayerDisconnected( Player* ) ),	this, SLOT( slotPlayerDisconnected( Player* ) ) );
-		connect( player, SIGNAL( signalSelectedCard( Card ) ),			this, SLOT( slotPlayerSelectedCard( Card ) ) ); 
+		connect( player, SIGNAL( signalSelectedCard( Card, int ) ),		this, SLOT( slotPlayerSelectedCard( Card, int ) ) ); 
 		connect( player, SIGNAL( signalTwentyButtonClicked() ),			this, SLOT( slotPlayerTwentyButtonClicked() ) );
 		connect( player, SIGNAL( signalFortyButtonClicked() ),			this, SLOT( slotPlayerFortyButtonClicked() ) );
 		emit signalPlayerConnected( player->getName() );
@@ -105,7 +105,7 @@ void Server::slotPlayerDisconnected( Player* player )
 	}
 }
 
-void Server::slotPlayerSelectedCard( Card selectedCard )
+void Server::slotPlayerSelectedCard( Card selectedCard, int cardPosition )
 {
 	kDebug() << "Selected card:" << selectedCard.getCardText( mTypeOfCards );
 	
@@ -114,8 +114,23 @@ void Server::slotPlayerSelectedCard( Card selectedCard )
 	if( mCentralCards.size() != MAX_CENTRAL_CARDS_SIZE ){
 		kDebug() << "Next player step.";
 		
+		Player* previousPlayer = mGameSequence->getCurrentPlayer();
 		Player* nextPlayer = mGameSequence->getNextPlayer();
 		mGameSequence->setCurrentPlayer( nextPlayer );
+		
+		//If the previous player clicked to twenty/forty button, then show that card to current player
+		if( mTwentyButtonClickedThisTurn ){
+			nextPlayer->sendVisibleOpponentCard1Id( cardPosition );
+			kDebug() << "Pair this card position:" << previousPlayer->getPositionOfPairOfCard( selectedCard );
+			nextPlayer->sendVisibleOpponentCard2Id( previousPlayer->getPositionOfPairOfCard( selectedCard ) );
+		}
+		
+		if( mFortyButtonClickedThisTurn ){
+			nextPlayer->sendVisibleOpponentCard1Id( cardPosition );
+			kDebug() << "Pair this card position:" << previousPlayer->getPositionOfPairOfCard( selectedCard );
+			nextPlayer->sendVisibleOpponentCard2Id( previousPlayer->getPositionOfPairOfCard( selectedCard ) );
+		}
+		
 		
 		//nextPlayer->sendSelectableAllCards();
 		if( mDeck->getDeckSize() > 0 ){
@@ -177,7 +192,13 @@ void Server::slotCheckCentralCards()
 		
 	kDebug() << mGameSequence->getCurrentPlayer()->getName() << "get" << centralCard1Point+centralCard2Point << "points.";
 	mGameSequence->getCurrentPlayer()->addTricks( centralCard1Point + centralCard2Point );
-		
+	
+	if( mTwentyButtonClickedThisTurn )
+		mTwentyButtonClickedThisTurn = false;
+	
+	if( mFortyButtonClickedThisTurn )
+		mFortyButtonClickedThisTurn = false;
+	
 	if( mGameSequence->isRoundOver() ){
 		kDebug() << "--- Round end! ---";
 	}else{
