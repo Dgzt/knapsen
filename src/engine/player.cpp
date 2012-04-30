@@ -227,7 +227,7 @@ void Player::newCommand( QString command )
 		
 		if( mTwentyButtonVisible ){
 			twentyButtonClicked();
-			mOpponent->sendOpponentTwentyButtonClicked();
+			//mOpponent->sendOpponentTwentyButtonClicked();
 			emit signalTwentyButtonClicked();
 		}else{
 			kDebug() << getName() << "ERROR! Twenty button clicked, but twenty button is not visible!";
@@ -239,7 +239,7 @@ void Player::newCommand( QString command )
 		
 		if( mFortyButtonVisible ){
 			fortyButtonClicked();
-			mOpponent->sendOpponentFortyButtonClicked();
+			//mOpponent->sendOpponentFortyButtonClicked();
 			emit signalFortyButtonClicked();
 		}else{
 			kDebug() << getName() << "ERROR! Forty button clicked, but forty button is not visible!";

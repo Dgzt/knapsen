@@ -172,13 +172,13 @@ void Client::newCommand( QString command )
 		}
 	}
 	
-	if( getCommandPartOfCommand( command ) == OPPONENT_TWENTY_BUTTON_CLICKED_COMMAND ){
+	/*if( getCommandPartOfCommand( command ) == OPPONENT_TWENTY_BUTTON_CLICKED_COMMAND ){
 		kDebug() << getName() << "Opponent clicked to twenty button.";
-	}
+	}*/
 	
-	if( getCommandPartOfCommand( command ) == OPPONENT_FORTY_BUTTON_CLICKED_COMMAND ){
+	/*if( getCommandPartOfCommand( command ) == OPPONENT_FORTY_BUTTON_CLICKED_COMMAND ){
 		kDebug() << getName() << "Opponent clicked to forty button.";
-	}
+	}*/
 	
 	if( getCommandPartOfCommand( command ) == PLAYER_TRICKS_CHANGED_COMMAND ){
 		kDebug() << getName() << "Player tricks changed:" << getValuePartOfCommand( command );

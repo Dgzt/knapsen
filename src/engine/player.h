@@ -50,9 +50,9 @@ static const QString CLEAR_CENTRAL_CARDS_COMMAND = ":CLEAR_CENTRAL_CARDS";
 static const QString TWENTY_BUTTON_VISIBLE_COMMAND = ":TWENTY_VISIBLE_BUTTON";
 static const QString FORTY_BUTTON_VISIBLE_COMMAND = ":FORTY_VISIBLE_BUTTON";
 static const QString TWENTY_BUTTON_CLICKED_COMMAND = ":TWENTY_BUTTON_CLICKED";
-static const QString OPPONENT_TWENTY_BUTTON_CLICKED_COMMAND = ":OPPONENT_TWENTY_BUTTON_CLICKED";
+//static const QString OPPONENT_TWENTY_BUTTON_CLICKED_COMMAND = ":OPPONENT_TWENTY_BUTTON_CLICKED";
 static const QString FORTY_BUTTON_CLICKED_COMMAND = ":FORTY_BUTTON_CLICKED";
-static const QString OPPONENT_FORTY_BUTTON_CLICKED_COMMAND = ":OPPONENT_FORTY_BUTTON_CLICKED";
+//static const QString OPPONENT_FORTY_BUTTON_CLICKED_COMMAND = ":OPPONENT_FORTY_BUTTON_CLICKED";
 
 
 //
@@ -92,8 +92,8 @@ class Player : public QTcpSocket
 	//Send to player the new opponent card id
 	void sendNewOpponentCard( int id ){ mOpponent->sendCommand( NEW_OPPONENT_CARD_COMMAND_ID+QString::number( id ) ); }
 	//
-	void sendOpponentTwentyButtonClicked(){ sendCommand( OPPONENT_TWENTY_BUTTON_CLICKED_COMMAND ); }
-	void sendOpponentFortyButtonClicked(){ sendCommand( OPPONENT_FORTY_BUTTON_CLICKED_COMMAND ); }
+	//void sendOpponentTwentyButtonClicked(){ sendCommand( OPPONENT_TWENTY_BUTTON_CLICKED_COMMAND ); }
+	//void sendOpponentFortyButtonClicked(){ sendCommand( OPPONENT_FORTY_BUTTON_CLICKED_COMMAND ); }
 	//
 	
 	bool setSelectableCardsWhatEqualSuit( Card::CardSuit );
