@@ -54,8 +54,9 @@ static const QString TWENTY_BUTTON_CLICKED_COMMAND = ":TWENTY_BUTTON_CLICKED";
 static const QString FORTY_BUTTON_CLICKED_COMMAND = ":FORTY_BUTTON_CLICKED";
 //static const QString OPPONENT_FORTY_BUTTON_CLICKED_COMMAND = ":OPPONENT_FORTY_BUTTON_CLICKED";
 //
-static const QString VISIBLE_OPPONENT_CARD1_ID_COMMAND = ":VISIBLE_OPPONENT_CARD1_ID=";
-static const QString VISIBLE_OPPONENT_CARD2_ID_COMMAND = ":VISIBLE_OPPONENT_CARD2_ID=";
+//static const QString VISIBLE_OPPONENT_CARD1_ID_COMMAND = ":VISIBLE_OPPONENT_CARD1_ID=";
+//static const QString VISIBLE_OPPONENT_CARD2_ID_COMMAND = ":VISIBLE_OPPONENT_CARD2_ID=";
+static const QString VISIBLE_OPPONENT_CARDS_COMMAND = ":VISIBLE_OPPONENT_CARDS=";
 //
 
 
@@ -114,7 +115,7 @@ protected:
 	int getNumberOfCardsInHand() const{ return mCards.size(); }
 	
 	int addNewCard( Card );
-	Card getCard( int id ){ return mCards.at( id ); }
+	//Card getCard( int id ){ return mCards.at( id ); }
 	void removeCard( int id ){ mCards[ id ] = Card(); }
 	
 	//Trump card
@@ -156,6 +157,8 @@ public:
 	QString getName() const { return mName; }
 	
 	int getNumberOfCardsInHandNow();
+	
+	Card getCard( int id ){ return mCards.at( id ); }
 	
 	//If this card is king, then return equal suit of queen, 
 	//else this card is queen, then return equal suit of king
@@ -211,8 +214,9 @@ public:
 	void sendFortyButtonVisible();
 	
 	//
-	void sendVisibleOpponentCard1Id( int id ){ sendCommand( VISIBLE_OPPONENT_CARD1_ID_COMMAND+QString::number( id ) ); }
-	void sendVisibleOpponentCard2Id( int id ){ sendCommand( VISIBLE_OPPONENT_CARD2_ID_COMMAND+QString::number( id ) ); }
+	//void sendVisibleOpponentCard1Id( int id ){ sendCommand( VISIBLE_OPPONENT_CARD1_ID_COMMAND+QString::number( id ) ); }
+	//void sendVisibleOpponentCard2Id( int id ){ sendCommand( VISIBLE_OPPONENT_CARD2_ID_COMMAND+QString::number( id ) ); }
+	void sendVisibleOpponentCards( int, Card, int, Card );
 	//
 	
 	

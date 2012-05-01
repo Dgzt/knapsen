@@ -361,6 +361,13 @@ void Player::addTricks( int tricks )
 	mOpponent->sendCommand( OPPONENT_TRICKS_CHANGED_COMMAND+QString::number( getTricks() ) );
 }
 
+void Player::sendVisibleOpponentCards( int card1Pos, Card card1, int card2Pos, Card card2 )
+{
+	sendCommand( VISIBLE_OPPONENT_CARDS_COMMAND+QString::number( card1Pos )+","+QString::number( card1.getValue() )+","+
+												QString::number( card2Pos )+","+QString::number( card2.getValue() )
+	);
+}
+
 void Player::sendClearCentralCards()
 {
 	clearCentralCards();

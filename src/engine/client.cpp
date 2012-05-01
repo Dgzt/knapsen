@@ -180,12 +180,15 @@ void Client::newCommand( QString command )
 		kDebug() << getName() << "Opponent clicked to forty button.";
 	}*/
 	
-	if( getCommandPartOfCommand( command ) == VISIBLE_OPPONENT_CARD1_ID_COMMAND ){
+	/*if( getCommandPartOfCommand( command ) == VISIBLE_OPPONENT_CARD1_ID_COMMAND ){
 		kDebug() << getName() << "Visible opponent card 1 id:" << getValuePartOfCommand( command );
 	}
 	
 	if( getCommandPartOfCommand( command )  == VISIBLE_OPPONENT_CARD2_ID_COMMAND ){
 		kDebug() << getName() << "Visible opponent card 2 id:" << getValuePartOfCommand( command );
+	}*/
+	if( getCommandPartOfCommand( command ) == VISIBLE_OPPONENT_CARDS_COMMAND ){
+		kDebug() << getName() << "Visible opponent cards:" << getValuePartOfCommand( command );
 	}
 	
 	if( getCommandPartOfCommand( command ) == PLAYER_TRICKS_CHANGED_COMMAND ){
