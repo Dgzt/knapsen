@@ -120,28 +120,24 @@ void Server::slotPlayerSelectedCard( Card selectedCard, int cardPosition )
 		
 		//If the previous player clicked to twenty/forty button, then show that card to current player
 		if( mTwentyButtonClickedThisTurn ){
-			//nextPlayer->sendVisibleOpponentCard1Id( cardPosition );
 			kDebug() << "Pair this card position:" << previousPlayer->getPositionOfPairOfCard( selectedCard );
-			//nextPlayer->sendVisibleOpponentCard2Id( previousPlayer->getPositionOfPairOfCard( selectedCard ) );
 			int posOfPairOfCard = previousPlayer->getPositionOfPairOfCard( selectedCard );
 			nextPlayer->sendVisibleOpponentCards( cardPosition, selectedCard, posOfPairOfCard, previousPlayer->getCard( posOfPairOfCard ) );
 		}
 		
 		if( mFortyButtonClickedThisTurn ){
-			//nextPlayer->sendVisibleOpponentCard1Id( cardPosition );
 			kDebug() << "Pair this card position:" << previousPlayer->getPositionOfPairOfCard( selectedCard );
-			//nextPlayer->sendVisibleOpponentCard2Id( previousPlayer->getPositionOfPairOfCard( selectedCard ) );
 			int posOfPairOfCard = previousPlayer->getPositionOfPairOfCard( selectedCard );
 			nextPlayer->sendVisibleOpponentCards( cardPosition, selectedCard, posOfPairOfCard, previousPlayer->getCard( posOfPairOfCard ) );
 		}
 		
 		
 		//nextPlayer->sendSelectableAllCards();
-		/*if( mDeck->getDeckSize() > 0 ){
+		if( mDeck->getDeckSize() > 0 ){
 			nextPlayer->sendSelectableAllCards();
 		}else{ // mDeck->getDeckSize() == 0
 			nextPlayer->sendSelectableCertainCards();
-		}*/
+		}
 		
 	}else{
 		QTimer::singleShot( 1000, this, SLOT( slotCheckCentralCards() ) );

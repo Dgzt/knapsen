@@ -171,22 +171,7 @@ void Client::newCommand( QString command )
 			addNewCentralCard( Card( ret ) );
 		}
 	}
-	
-	/*if( getCommandPartOfCommand( command ) == OPPONENT_TWENTY_BUTTON_CLICKED_COMMAND ){
-		kDebug() << getName() << "Opponent clicked to twenty button.";
-	}*/
-	
-	/*if( getCommandPartOfCommand( command ) == OPPONENT_FORTY_BUTTON_CLICKED_COMMAND ){
-		kDebug() << getName() << "Opponent clicked to forty button.";
-	}*/
-	
-	/*if( getCommandPartOfCommand( command ) == VISIBLE_OPPONENT_CARD1_ID_COMMAND ){
-		kDebug() << getName() << "Visible opponent card 1 id:" << getValuePartOfCommand( command );
-	}
-	
-	if( getCommandPartOfCommand( command )  == VISIBLE_OPPONENT_CARD2_ID_COMMAND ){
-		kDebug() << getName() << "Visible opponent card 2 id:" << getValuePartOfCommand( command );
-	}*/
+
 	if( getCommandPartOfCommand( command ) == VISIBLE_OPPONENT_CARDS_COMMAND ){
 		kDebug() << getName() << "Visible opponent cards:" << getValuePartOfCommand( command );
 	}
