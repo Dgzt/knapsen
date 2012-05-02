@@ -54,8 +54,11 @@ static const QString TWENTY_BUTTON_CLICKED_COMMAND = ":TWENTY_BUTTON_CLICKED";
 static const QString FORTY_BUTTON_CLICKED_COMMAND = ":FORTY_BUTTON_CLICKED";
 //static const QString OPPONENT_FORTY_BUTTON_CLICKED_COMMAND = ":OPPONENT_FORTY_BUTTON_CLICKED";
 //
-static const QString VISIBLE_OPPONENT_CARDS_COMMAND = ":VISIBLE_OPPONENT_CARDS=";
+static const QString VISIBLE_OPPONENT_CARDS_COMMAND = ":VISIBLE_OPPONENT_CARDS="; 
 //
+static const QString COMMANDS_END_COMMAND = ":COMMANDS_END";
+//
+
 
 
 //
@@ -213,6 +216,10 @@ public:
 	
 	
 	void sendStartGame(){ sendCommand( START_GAME_COMMAND ); }
+	
+	//
+	void sendCommandsEnd(){ sendCommand( COMMANDS_END_COMMAND ); }
+	//
 	
 signals:
 	//Signals to server

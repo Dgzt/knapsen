@@ -61,186 +61,198 @@ void Client::newCommand( QString command )
 		emit signalInitialize( getName(), mOpponentName, mTypeOfCards, getNumberOfCardsInHand() );
 	}
 	
-	if( getCommandPartOfCommand( command ) == NEW_PLAYER_CARD_COMMAND ){
-		kDebug() << getName() << "new card:" << getValuePartOfCommand( command );
-
-		bool ok;
-		int ret = getValuePartOfCommand( command ).toInt( &ok );
-		if( ok ){
-			int cardId = addNewCard( Card( ret) );
-			emit signalNewPlayerCard( cardId, Card( ret ).getCardText( mTypeOfCards ) );
-			
-			mSizeOfDeck--;
-			if( mSizeOfDeck == 0 ){
-				emit signalDeckVisible( false );
-			}
-		}else{
-			kDebug() << "ERROR! Cannot convert new player card value to int!";
-		}
-	}
-	
-	if( getCommandPartOfCommand( command ) == NEW_OPPONENT_CARD_COMMAND_ID ){
-		kDebug() << getName() << "new opponent card id:" << getValuePartOfCommand( command );
-		
-		bool ok;
-		int ret = getValuePartOfCommand( command ).toInt( &ok );
-		if( ok ){
-			emit signalNewOpponentCardId( ret );
-			
-			mSizeOfDeck--;
-			if( mSizeOfDeck == 0 ){
-				emit signalDeckVisible( false );
-			}
-		}else{
-			kDebug() << "ERROR! Cannot covert new opponent card command id value to int!";
-		}
-	}
-	
-	if( getCommandPartOfCommand( command ) == NEW_TRUMP_CARD_COMMAND ){
-		kDebug() << getName() << "Trump card:" << getValuePartOfCommand( command );
-		
-		bool ok;
-		int ret = getValuePartOfCommand( command ).toInt( &ok );
-		if( ok ){
-			setTrumpCard( Card( ret ) );
-			emit signalNewTrumpCard( getTrumpCard().getCardText( mTypeOfCards ) );
-		}else{
-			kDebug() << "ERROR! Cannot convert new trump card command value to int!";
-		}
-	}
-	
-	if( getCommandPartOfCommand( command ) == TWENTY_BUTTON_VISIBLE_COMMAND ){
-		kDebug() << getName() << "Twenty button visible.";
-		
-		setTwentyButtonVisible( true );
-	}
-	
-	if( getCommandPartOfCommand( command ) == FORTY_BUTTON_VISIBLE_COMMAND ){
-		kDebug() << getName() << "Forty button visible.";
-		
-		setFortyButtonVisible( true );
-	}
-	
-	if( getCommandPartOfCommand( command ) == CLEAR_TRUMP_CARD_COMMAND ){
-		kDebug() << getName() << "Clear trump card.";
-		
-		clearTrumpCard();
-		emit signalTrumpCardHide();
-	}
-	
-	if( getCommandPartOfCommand( command ) == SELECTABLE_ALL_CARDS_COMMAND ){
-		kDebug() << getName() << "Selectable all cards.";
-		
-		setSelectableAllCards( true );
-		
-		//Emit for bot, it in action
-		emit signalInAction();
-	}
-	
-	if( getCommandPartOfCommand( command ) == SELECTABLE_CERTAIN_CARDS_COMMAND ){
-		kDebug() << getName() << "Selectable certan cards.";
-		
-		setSelectableCertainCards();
-		emit signalInAction();
-	}
-	
-	if( getCommandPartOfCommand( command ) == OPPONENT_SELECTED_CARD_ID_COMMAND ){
-		kDebug() << getName() << "Opponent selected card id:" << getValuePartOfCommand( command );
-		
-		bool ok;
-		int ret = getValuePartOfCommand( command ).toInt( &ok );
-		if( ok ){
-			emit signalOpponentSelectedCardId( ret );
-		}else{
-			kDebug() << "ERROR! Cannot convert opponent selected card id command value to int!";
-		}
-	}
-	
 	if( getCommandPartOfCommand( command ) == OPPONENT_DISCONNECTED_COMMAND ){
 		kDebug() << getName() << "Opponent disconnected!";
-		
+	
 		emit signalOpponentDisconnected();
 	}
 	
-	if( getCommandPartOfCommand( command ) == OPPONENT_ADD_NEW_CENTRAL_CARD_COMMAND ){
-		kDebug() << getName() << "Opponent add new central card.";
+	if( getCommandPartOfCommand( command ) == COMMANDS_END_COMMAND ){
 		
-		bool ok;
-		int ret = getValuePartOfCommand( command ).toInt( &ok );
-		if( ok ){
-			addNewCentralCard( Card( ret ) );
-		}
-	}
-
-	if( getCommandPartOfCommand( command ) == VISIBLE_OPPONENT_CARDS_COMMAND ){
-		kDebug() << getName() << "Visible opponent cards:" << getValuePartOfCommand( command );
-		
-		QString value( getValuePartOfCommand( command ) );
-		
-		bool ok;
-
-		int temp = value.indexOf( ',' );
-		int card1Pos = value.mid( 0, temp ).toInt( &ok );
-		
-		value = value.right( value.size()-temp-1 );
-		temp = value.indexOf( ',' );
-		int card1Value = value.mid( 0, temp ).toInt( &ok );
-		
-		value = value.right( value.size()-temp-1 );
-		temp = value.indexOf( ',' );
-		int card2Pos = value.mid( 0, temp ).toInt( &ok );
-		
-		value = value.right( value.size()-temp-1 );
-		int card2Value = value.toInt( &ok );
-		
-		
-		if( ok ){
-			kDebug() << card1Pos;
-			kDebug() << card1Value;
-			kDebug() << card2Pos;
-			kDebug() << card2Value;
+		for( int i = 0; i < commandList.size(); ++i ){
+				
 			
-			emit signalShowOpponentCards( card1Pos, Card(card1Value).getCardText( mTypeOfCards ), card2Pos, Card(card2Value).getCardText( mTypeOfCards ) );
-		}else{
-			kDebug() << "ERROR! Wrong value in visible cards command!";
+			if( getCommandPartOfCommand( commandList.at(i) ) == NEW_PLAYER_CARD_COMMAND ){
+				kDebug() << getName() << "new card:" << getValuePartOfCommand( commandList.at(i) );
+
+				bool ok;
+				int ret = getValuePartOfCommand( commandList.at(i) ).toInt( &ok );
+				if( ok ){
+					int cardId = addNewCard( Card( ret) );
+					emit signalNewPlayerCard( cardId, Card( ret ).getCardText( mTypeOfCards ) );
+					
+					mSizeOfDeck--;
+					if( mSizeOfDeck == 0 ){
+						emit signalDeckVisible( false );
+					}
+				}else{
+					kDebug() << "ERROR! Cannot convert new player card value to int!";
+				}
+			}
+			
+			if( getCommandPartOfCommand( commandList.at(i) ) == NEW_OPPONENT_CARD_COMMAND_ID ){
+				kDebug() << getName() << "new opponent card id:" << getValuePartOfCommand( commandList.at(i) );
+				
+				bool ok;
+				int ret = getValuePartOfCommand( commandList.at(i) ).toInt( &ok );
+				if( ok ){
+					emit signalNewOpponentCardId( ret );
+					
+					mSizeOfDeck--;
+					if( mSizeOfDeck == 0 ){
+						emit signalDeckVisible( false );
+					}
+				}else{
+					kDebug() << "ERROR! Cannot covert new opponent card command id value to int!";
+				}
+			}
+			
+			if( getCommandPartOfCommand( commandList.at(i) ) == NEW_TRUMP_CARD_COMMAND ){
+				kDebug() << getName() << "Trump card:" << getValuePartOfCommand( commandList.at(i) );
+				
+				bool ok;
+				int ret = getValuePartOfCommand( commandList.at(i) ).toInt( &ok );
+				if( ok ){
+					setTrumpCard( Card( ret ) );
+					emit signalNewTrumpCard( getTrumpCard().getCardText( mTypeOfCards ) );
+				}else{
+					kDebug() << "ERROR! Cannot convert new trump card command value to int!";
+				}
+			}
+			
+			if( getCommandPartOfCommand( commandList.at(i) ) == TWENTY_BUTTON_VISIBLE_COMMAND ){
+				kDebug() << getName() << "Twenty button visible.";
+				
+				setTwentyButtonVisible( true );
+			}
+			
+			if( getCommandPartOfCommand( commandList.at(i) ) == FORTY_BUTTON_VISIBLE_COMMAND ){
+				kDebug() << getName() << "Forty button visible.";
+				
+				setFortyButtonVisible( true );
+			}
+			
+			if( getCommandPartOfCommand( commandList.at(i) ) == CLEAR_TRUMP_CARD_COMMAND ){
+				kDebug() << getName() << "Clear trump card.";
+				
+				clearTrumpCard();
+				emit signalTrumpCardHide();
+			}
+			
+			if( getCommandPartOfCommand( commandList.at(i) ) == SELECTABLE_ALL_CARDS_COMMAND ){
+				kDebug() << getName() << "Selectable all cards.";
+				
+				setSelectableAllCards( true );
+				
+				//Emit for bot, it in action
+				emit signalInAction();
+			}
+			
+			if( getCommandPartOfCommand( commandList.at(i) ) == SELECTABLE_CERTAIN_CARDS_COMMAND ){
+				kDebug() << getName() << "Selectable certan cards.";
+				
+				setSelectableCertainCards();
+				emit signalInAction();
+			}
+			
+			if( getCommandPartOfCommand( commandList.at(i) ) == OPPONENT_SELECTED_CARD_ID_COMMAND ){
+				kDebug() << getName() << "Opponent selected card id:" << getValuePartOfCommand( commandList.at(i) );
+				
+				bool ok;
+				int ret = getValuePartOfCommand( commandList.at(i) ).toInt( &ok );
+				if( ok ){
+					emit signalOpponentSelectedCardId( ret );
+				}else{
+					kDebug() << "ERROR! Cannot convert opponent selected card id command value to int!";
+				}
+			}
+			
+			if( getCommandPartOfCommand( commandList.at(i) ) == OPPONENT_ADD_NEW_CENTRAL_CARD_COMMAND ){
+				kDebug() << getName() << "Opponent add new central card.";
+				
+				bool ok;
+				int ret = getValuePartOfCommand( commandList.at(i) ).toInt( &ok );
+				if( ok ){
+					addNewCentralCard( Card( ret ) );
+				}
+			}
+
+			if( getCommandPartOfCommand( commandList.at(i) ) == VISIBLE_OPPONENT_CARDS_COMMAND ){
+				kDebug() << getName() << "Visible opponent cards:" << getValuePartOfCommand( commandList.at(i) );
+				
+				QString value( getValuePartOfCommand( commandList.at(i) ) );
+				
+				bool ok;
+
+				int temp = value.indexOf( ',' );
+				int card1Pos = value.mid( 0, temp ).toInt( &ok );
+				
+				value = value.right( value.size()-temp-1 );
+				temp = value.indexOf( ',' );
+				int card1Value = value.mid( 0, temp ).toInt( &ok );
+				
+				value = value.right( value.size()-temp-1 );
+				temp = value.indexOf( ',' );
+				int card2Pos = value.mid( 0, temp ).toInt( &ok );
+				
+				value = value.right( value.size()-temp-1 );
+				int card2Value = value.toInt( &ok );
+				
+				
+				if( ok ){
+					kDebug() << card1Pos;
+					kDebug() << card1Value;
+					kDebug() << card2Pos;
+					kDebug() << card2Value;
+					
+					emit signalShowOpponentCards( card1Pos, Card(card1Value).getCardText( mTypeOfCards ), card2Pos, Card(card2Value).getCardText( mTypeOfCards ) );
+				}else{
+					kDebug() << "ERROR! Wrong value in visible cards command!";
+				}
+				
+			}
+			
+			if( getCommandPartOfCommand( commandList.at(i) ) == PLAYER_TRICKS_CHANGED_COMMAND ){
+				kDebug() << getName() << "Player tricks changed:" << getValuePartOfCommand( commandList.at(i) );
+				
+				bool ok;
+				int ret = getValuePartOfCommand( commandList.at(i) ).toInt( &ok );
+				if( ok ){
+					setTricks( ret );
+					emit signalPlayerTricksChanged( getTricks() );
+				}else{
+					kDebug() << "ERROR! Cannot convert player tricks changed command value to int!";
+				}
+			}
+			
+			if( getCommandPartOfCommand( commandList.at(i) ) == OPPONENT_TRICKS_CHANGED_COMMAND ){
+				kDebug() << getName() << "Opponent tricks changed:" << getValuePartOfCommand( commandList.at(i) );
+				
+				bool ok;
+				int ret = getValuePartOfCommand( commandList.at(i) ).toInt( &ok );
+				if( ok ){
+					emit signalOpponentTricksChanged( ret );
+				}else{
+					kDebug() << "ERROR! Cannot convert opponent tricks changed command value to int!";
+				}
+			}
+			
+			if( getCommandPartOfCommand( commandList.at(i) ) == CLEAR_CENTRAL_CARDS_COMMAND ){
+				kDebug() << getName() << "Clear central cards command.";
+				clearCentralCards();
+			}
+			
+			if( getCommandPartOfCommand( commandList.at(i) ) == START_GAME_COMMAND ){
+				kDebug() << getName() << "Start game.";
+				emit signalStartGame();
+			}
+		
 		}
 		
+		commandList.clear();
 	}
 	
-	if( getCommandPartOfCommand( command ) == PLAYER_TRICKS_CHANGED_COMMAND ){
-		kDebug() << getName() << "Player tricks changed:" << getValuePartOfCommand( command );
-		
-		bool ok;
-		int ret = getValuePartOfCommand( command ).toInt( &ok );
-		if( ok ){
-			setTricks( ret );
-			emit signalPlayerTricksChanged( getTricks() );
-		}else{
-			kDebug() << "ERROR! Cannot convert player tricks changed command value to int!";
-		}
-	}
-	
-	if( getCommandPartOfCommand( command ) == OPPONENT_TRICKS_CHANGED_COMMAND ){
-		kDebug() << getName() << "Opponent tricks changed:" << getValuePartOfCommand( command );
-		
-		bool ok;
-		int ret = getValuePartOfCommand( command ).toInt( &ok );
-		if( ok ){
-			emit signalOpponentTricksChanged( ret );
-		}else{
-			kDebug() << "ERROR! Cannot convert opponent tricks changed command value to int!";
-		}
-	}
-	
-	if( getCommandPartOfCommand( command ) == CLEAR_CENTRAL_CARDS_COMMAND ){
-		kDebug() << getName() << "Clear central cards command.";
-		clearCentralCards();
-	}
-	
-	if( getCommandPartOfCommand( command ) == START_GAME_COMMAND ){
-		kDebug() << getName() << "Start game.";
-		emit signalStartGame();
-	}
+	commandList.append( command );
 	
 }
 

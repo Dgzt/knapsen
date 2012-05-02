@@ -128,18 +128,18 @@ void Server::slotPlayerSelectedCard( Card selectedCard, int cardPosition )
 			nextPlayer->sendVisibleOpponentCards( cardPosition, selectedCard, posOfPairOfCard, previousPlayer->getCard( posOfPairOfCard ) );
 		}
 		
-		
-		//nextPlayer->sendSelectableAllCards();
-		/*
 		if( mDeck->getDeckSize() > 0 ){
 			nextPlayer->sendSelectableAllCards();
 		}else{ // mDeck->getDeckSize() == 0
 			nextPlayer->sendSelectableCertainCards();
 		}
-		*/
 		
 	}else{
 		QTimer::singleShot( 1000, this, SLOT( slotCheckCentralCards() ) );
+	}
+	
+	for( int i = 0; i < mPlayerList.size(); ++i ){
+		mPlayerList.at( i )->sendCommandsEnd();
 	}
 }
 
@@ -228,7 +228,10 @@ void Server::slotCheckCentralCards()
 		}
 		
 		mGameSequence->getCurrentPlayer()->sendSelectableAllCards();
-		
+	}
+	
+	for( int i = 0; i < mPlayerList.size(); ++i ){
+		mPlayerList.at( i )->sendCommandsEnd();
 	}
 	
 }
@@ -315,5 +318,8 @@ void Server::startGame()
 	//And finally send start the game
 	for( int i = 0; i < mPlayerList.size(); ++i ){
 		mPlayerList.at( i )->sendStartGame();
+		mPlayerList.at( i )->sendCommandsEnd();
 	}
+	
+	
 }

@@ -14,6 +14,10 @@ class Client : public Player
 	
 	int mSizeOfDeck;
 	
+	//
+	QList<QString> commandList;
+	//
+	
 	virtual void newCommand( QString );
 	
 private slots:
