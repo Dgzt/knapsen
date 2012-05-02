@@ -285,7 +285,9 @@ void MainWindow::closeGameSlot()
 	
 	client->disconnectFromHost();
 	
-	delete client;
+	//delete client;
+	//client = 0;
+	client->deleteLater();
 	client = 0;
 	
 	closeGameAction->setEnabled( false );
