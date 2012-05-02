@@ -22,10 +22,7 @@ Server::Server( QObject* parent ) :
 	mGameSequence->setPlayerList( &mPlayerList );
 	
 	//Defaults
-	//mWhoStartGame = Knapsen::AdminPlayer;
-	//mSizeOfDeck = Server::Number20;
 	mSizeOfDeck = 20;
-	//mCardsInHand = Server::Number5;
 	mNumberOfCardsInHand = 5;
 	mTypeOfCards = Knapsen::GermanSuits;
 	
@@ -133,11 +130,13 @@ void Server::slotPlayerSelectedCard( Card selectedCard, int cardPosition )
 		
 		
 		//nextPlayer->sendSelectableAllCards();
+		/*
 		if( mDeck->getDeckSize() > 0 ){
 			nextPlayer->sendSelectableAllCards();
 		}else{ // mDeck->getDeckSize() == 0
 			nextPlayer->sendSelectableCertainCards();
 		}
+		*/
 		
 	}else{
 		QTimer::singleShot( 1000, this, SLOT( slotCheckCentralCards() ) );

@@ -54,6 +54,7 @@ signals:
 	
 	void signalTrumpCardHide();
 	
+	void signalShowOpponentCards( int, QString, int, QString );
 	
 	void signalStartGame();
 	

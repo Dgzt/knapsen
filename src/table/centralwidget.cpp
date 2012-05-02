@@ -711,6 +711,12 @@ void CentralWidget::slotFortyButtonVisible( bool visible )
 	mFortyButton->setVisible( visible );
 }
 
+void CentralWidget::slotShowOpponentCards( int card1Pos, QString card1Text, int card2Pos, QString card2Text )
+{
+	mOpponentCards[ card1Pos ].setElementId( card1Text );
+	mOpponentCards[ card2Pos ].setElementId( card2Text );
+}
+
 void CentralWidget::slotStartGame()
 {
 	kDebug() << "Start game.";

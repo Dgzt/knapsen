@@ -174,6 +174,37 @@ void Client::newCommand( QString command )
 
 	if( getCommandPartOfCommand( command ) == VISIBLE_OPPONENT_CARDS_COMMAND ){
 		kDebug() << getName() << "Visible opponent cards:" << getValuePartOfCommand( command );
+		
+		QString value( getValuePartOfCommand( command ) );
+		
+		bool ok;
+
+		int temp = value.indexOf( ',' );
+		int card1Pos = value.mid( 0, temp ).toInt( &ok );
+		
+		value = value.right( value.size()-temp-1 );
+		temp = value.indexOf( ',' );
+		int card1Value = value.mid( 0, temp ).toInt( &ok );
+		
+		value = value.right( value.size()-temp-1 );
+		temp = value.indexOf( ',' );
+		int card2Pos = value.mid( 0, temp ).toInt( &ok );
+		
+		value = value.right( value.size()-temp-1 );
+		int card2Value = value.toInt( &ok );
+		
+		
+		if( ok ){
+			kDebug() << card1Pos;
+			kDebug() << card1Value;
+			kDebug() << card2Pos;
+			kDebug() << card2Value;
+			
+			emit signalShowOpponentCards( card1Pos, Card(card1Value).getCardText( mTypeOfCards ), card2Pos, Card(card2Value).getCardText( mTypeOfCards ) );
+		}else{
+			kDebug() << "ERROR! Wrong value in visible cards command!";
+		}
+		
 	}
 	
 	if( getCommandPartOfCommand( command ) == PLAYER_TRICKS_CHANGED_COMMAND ){

@@ -88,6 +88,8 @@ public slots:
 	void slotTwentyButtonVisible( bool );
 	void slotFortyButtonVisible( bool );
 	
+	void slotShowOpponentCards( int, QString, int, QString );
+	
 	void slotStartGame();
 	
 	//void opponentScoresChanged( int );
