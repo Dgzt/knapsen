@@ -73,9 +73,63 @@ void Player::setSelectableCertainCards()
 		//If have not cards which equal type whith central card, then set true, which equal type whith trump card 
 		if( setSelectableCardsWhatEqualSuit( mTrumpCardSuit ) == false ){
 			
-			//If have not thats card, then equal all card
+			//If have not that cards, then equal all card
 			setSelectableAllCards( true );
 			
+		}
+		
+	}
+}
+
+void Player::setSelectableRegularMarriagesCards()
+{
+	for( int i = 0; i < mCards.size(); ++i ){
+		
+		if( mCards.at( i ).isValid() && 
+			mCards.at( i ).getCardSuit() != mTrumpCardSuit && 
+			mCards.at( i ).getCardType() == Card::King
+		){
+			for( int j = 0; j < mCards.size(); ++j ){
+				
+				if( mCards.at( j ).isValid() &&
+					mCards.at( j ).getCardSuit() == mCards.at( i ).getCardSuit() &&
+					mCards.at( j ).getCardType() == Card::Queen
+					
+				){
+					mCards[ i ].setSelectable( true );
+					mCards[ j ].setSelectable( true );
+					emit signalPlayerCardSelectableChanged( i, mCards.at( i ).isSelectable() );
+					emit signalPlayerCardSelectableChanged( j, mCards.at( j ).isSelectable() );
+				}
+				
+			}
+		}
+		
+	}
+}
+
+void Player::setSelectableTrumpMarriagesCards()
+{
+	for( int i = 0; i < mCards.size(); ++i ){
+		
+		if( mCards.at( i ).isValid() && 
+			mCards.at( i ).getCardSuit() == mTrumpCardSuit && 
+			mCards.at( i ).getCardType() == Card::King
+		){
+			for( int j = 0; j < mCards.size(); ++j ){
+				
+				if( mCards.at( j ).isValid() &&
+					mCards.at( j ).getCardSuit() == mCards.at( i ).getCardSuit() &&
+					mCards.at( j ).getCardType() == Card::Queen
+					
+				){
+					mCards[ i ].setSelectable( true );
+					mCards[ j ].setSelectable( true );
+					emit signalPlayerCardSelectableChanged( i, mCards.at( i ).isSelectable() );
+					emit signalPlayerCardSelectableChanged( j, mCards.at( j ).isSelectable() );
+				}
+				
+			}
 		}
 		
 	}
@@ -187,6 +241,9 @@ void Player::twentyButtonClicked()
 	if( mFortyButtonVisible ){
 		setFortyButtonVisible( false );
 	}
+	
+	setSelectableAllCards( false );
+	setSelectableRegularMarriagesCards();
 }
 
 void Player::fortyButtonClicked()
@@ -196,6 +253,9 @@ void Player::fortyButtonClicked()
 	if( mTwentyButtonVisible ){
 		setTwentyButtonVisible( false );
 	}
+	
+	setSelectableAllCards( false );
+	setSelectableTrumpMarriagesCards();
 }
 
 void Player::newCommand( QString command )

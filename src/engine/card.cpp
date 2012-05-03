@@ -1,10 +1,8 @@
 #include <KDE/KDebug>
 #include "card.h"
 
-//static const int CARD_NUMBERS = 24;
-
 static const int INVALID_CARD_VALUE = -1;
-	
+
 static const QString GERGMAN_SUIT_CARD_NAME[ Card::CARD_NUMBERS_WITH_9 ] = {
 	"1_heart", "king_heart", "queen_heart", "jack_heart", "10_heart", //heart
 	"1_diamond", "king_diamond", "queen_diamond", "jack_diamond", "10_diamond", //diamond

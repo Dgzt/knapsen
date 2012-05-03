@@ -122,7 +122,13 @@ protected:
 	
 	//Set selectable OR not selectable all avalibe card
 	void setSelectableAllCards( bool );
+	//Set selectable cards, which suit of cards equal the suit of central card or suit of trump card
 	void setSelectableCertainCards();
+	
+	//
+	void setSelectableRegularMarriagesCards();
+	void setSelectableTrumpMarriagesCards();
+	//
 	
 	//Add new card to central cards
 	void addNewCentralCard( Card );
