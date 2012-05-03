@@ -20,6 +20,8 @@ class Client : public Player
 	
 	virtual void newCommand( QString );
 	
+	void processCommands();
+	
 private slots:
 	void slotConnected();
 	
