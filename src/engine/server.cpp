@@ -108,40 +108,45 @@ void Server::slotPlayerSelectedCard( Card selectedCard, int cardPosition )
 	
 	mCentralCards.append( selectedCard );
 	
+	Player* currentPlayer = mGameSequence->getCurrentPlayer();
+	Player* nextPlayer = mGameSequence->getNextPlayer();
+	
 	if( mCentralCards.size() != MAX_CENTRAL_CARDS_SIZE ){
 		kDebug() << "Next player step.";
 		
-		Player* previousPlayer = mGameSequence->getCurrentPlayer();
-		Player* nextPlayer = mGameSequence->getNextPlayer();
-		mGameSequence->setCurrentPlayer( nextPlayer );
+		//Player* currentPlayer = mGameSequence->getCurrentPlayer();
+		//Player* nextPlayer = mGameSequence->getNextPlayer();
 		
 		//If the previous player clicked to twenty/forty button, then show that card to current player
 		if( mTwentyButtonClickedThisTurn ){
-			kDebug() << "Pair this card position:" << previousPlayer->getPositionOfPairOfCard( selectedCard );
-			int posOfPairOfCard = previousPlayer->getPositionOfPairOfCard( selectedCard );
-			nextPlayer->sendVisibleOpponentCards( cardPosition, selectedCard, posOfPairOfCard, previousPlayer->getCard( posOfPairOfCard ) );
+			kDebug() << "Pair this card position:" << currentPlayer->getPositionOfPairOfCard( selectedCard );
+			int posOfPairOfCard = currentPlayer->getPositionOfPairOfCard( selectedCard );
+			nextPlayer->sendVisibleOpponentCards( cardPosition, selectedCard, posOfPairOfCard, currentPlayer->getCard( posOfPairOfCard ) );
 		}
 		
 		if( mFortyButtonClickedThisTurn ){
-			kDebug() << "Pair this card position:" << previousPlayer->getPositionOfPairOfCard( selectedCard );
-			int posOfPairOfCard = previousPlayer->getPositionOfPairOfCard( selectedCard );
-			nextPlayer->sendVisibleOpponentCards( cardPosition, selectedCard, posOfPairOfCard, previousPlayer->getCard( posOfPairOfCard ) );
+			kDebug() << "Pair this card position:" << currentPlayer->getPositionOfPairOfCard( selectedCard );
+			int posOfPairOfCard = currentPlayer->getPositionOfPairOfCard( selectedCard );
+			nextPlayer->sendVisibleOpponentCards( cardPosition, selectedCard, posOfPairOfCard, currentPlayer->getCard( posOfPairOfCard ) );
 		}
+		
+		mGameSequence->setCurrentPlayer( nextPlayer );
 		
 		if( mDeck->getDeckSize() > 0 ){
 			nextPlayer->sendSelectableAllCards();
 		}else{ // mDeck->getDeckSize() == 0
 			nextPlayer->sendSelectableCertainCards();
 		}
+	
+		//The commands end command send in the player class
 		
 	}else{
 		QTimer::singleShot( 1000, this, SLOT( slotCheckCentralCards() ) );
 	}
-	
-	
-	for( int i = 0; i < mPlayerList.size(); ++i ){
-		mPlayerList.at( i )->sendCommandsEnd();
-	}
+
+	nextPlayer->sendOpponentSelectedCardId( cardPosition );
+	nextPlayer->sendOpponentAddNewCentralCard( selectedCard );
+	nextPlayer->sendCommandsEnd();
 }
 
 void Server::slotPlayerTwentyButtonClicked()
@@ -229,6 +234,16 @@ void Server::slotCheckCentralCards()
 		}
 		
 		mGameSequence->getCurrentPlayer()->sendSelectableAllCards();
+		
+		if( mGameSequence->getCurrentPlayer()->haveRegularMarriages() ){
+			kDebug() << mGameSequence->getCurrentPlayer()->getName() << "have regular marriages.";
+			mGameSequence->getCurrentPlayer()->sendTwentyButtonVisible();
+		}
+	
+		if( mGameSequence->getCurrentPlayer()->haveTrumpMarriages() ){
+			kDebug() << mGameSequence->getCurrentPlayer()->getName() << "have trump marriages.";
+			mGameSequence->getCurrentPlayer()->sendFortyButtonVisible();
+		}
 	}
 	
 	for( int i = 0; i < mPlayerList.size(); ++i ){

@@ -280,16 +280,28 @@ void Player::newCommand( QString command )
 		
 			if( mCards.at( ret ).isSelectable() ){
 				setSelectableAllCards( false );
+				
+				if( isTwentyButtonVisible() ){
+					setTwentyButtonVisible( false );
+				}
+				
+				if( isFortyButtonVisible() ){
+					setFortyButtonVisible( false );
+				}
+				
+				Card selectedCard = getCard( ret );
+				addNewCentralCard( selectedCard );
+				removeCard( ret );
+				
+				//emit signalSelectedCard( mCards.at( ret ), ret );
+				emit signalSelectedCard( selectedCard, ret );
 				//mOpponent->sendCommand( OPPONENT_SELECTED_CARD_ID_COMMAND+QString::number( ret ) );
 				//mOpponent->sendOpponentAddNewCentralCard( getCard( ret ) );
-				
-				emit signalSelectedCard( mCards.at( ret ), ret );
-				mOpponent->sendCommand( OPPONENT_SELECTED_CARD_ID_COMMAND+QString::number( ret ) );
-				mOpponent->sendOpponentAddNewCentralCard( getCard( ret ) );
+				//mOpponent->sendCommand( COMMANDS_END_COMMAND );
 				
 				//Remove card
-				addNewCentralCard( getCard( ret ) );
-				removeCard( ret );
+				//addNewCentralCard( getCard( ret ) );
+				//removeCard( ret );
 			}else{
 				kDebug() << "ERROR!" << getName() << "selected" << ret << "card id, but this is not selectable!";
 			}

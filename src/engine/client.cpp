@@ -256,7 +256,7 @@ void Client::slotProcessCommands()
 		
 		
 		
-		if( getCommandPartOfCommand( commandList.first() ) == VISIBLE_OPPONENT_CARDS_COMMAND ){
+		if( getName() != "Bot" && getCommandPartOfCommand( commandList.first() ) == VISIBLE_OPPONENT_CARDS_COMMAND ){
 			kDebug() << "Break loop.";
 			commandList.removeFirst();
 			break;
@@ -286,6 +286,14 @@ void Client::slotSelectedCardId( int id )
 	addNewCentralCard( getCard( id ) );
 	removeCard( id );
 	sendCommand( SELECTED_CARD_ID_COMMAND+QString::number( id ) );
+	
+	if( isTwentyButtonVisible() ){
+		setTwentyButtonVisible( false );
+	}
+	
+	if( isFortyButtonVisible() ){
+		setFortyButtonVisible( false );
+	}
 }
 
 void Client::slotTwentyButtonClicked()

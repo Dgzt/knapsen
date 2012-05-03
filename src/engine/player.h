@@ -136,7 +136,9 @@ protected:
 	
 	//
 	void setTwentyButtonVisible( bool );
+	bool isTwentyButtonVisible() const{ return mTwentyButtonVisible; }
 	void setFortyButtonVisible( bool );
+	bool isFortyButtonVisible() const{ return mFortyButtonVisible; }
 	void twentyButtonClicked();
 	void fortyButtonClicked();
 	//
@@ -204,6 +206,8 @@ public:
 	//
 	void sendSelectableCertainCards();
 	//
+	
+	void sendOpponentSelectedCardId( int id ){ sendCommand( OPPONENT_SELECTED_CARD_ID_COMMAND+QString::number( id ) ); }
 	
 	void sendOpponentAddNewCentralCard( Card );
 	
