@@ -108,13 +108,12 @@ void Server::slotPlayerSelectedCard( Card selectedCard, int cardPosition )
 	
 	mCentralCards.append( selectedCard );
 	
-	Player* currentPlayer = mGameSequence->getCurrentPlayer();
 	Player* nextPlayer = mGameSequence->getNextPlayer();
 	
 	if( mCentralCards.size() != MAX_CENTRAL_CARDS_SIZE ){
 		kDebug() << "Next player step.";
 		
-		//Player* currentPlayer = mGameSequence->getCurrentPlayer();
+		Player* currentPlayer = mGameSequence->getCurrentPlayer();
 		//Player* nextPlayer = mGameSequence->getNextPlayer();
 		
 		//If the previous player clicked to twenty/forty button, then show that card to current player
@@ -130,6 +129,9 @@ void Server::slotPlayerSelectedCard( Card selectedCard, int cardPosition )
 			nextPlayer->sendVisibleOpponentCards( cardPosition, selectedCard, posOfPairOfCard, currentPlayer->getCard( posOfPairOfCard ) );
 		}
 		
+		nextPlayer->sendOpponentSelectedCardId( cardPosition );
+		nextPlayer->sendOpponentAddNewCentralCard( selectedCard );
+		
 		mGameSequence->setCurrentPlayer( nextPlayer );
 		
 		if( mDeck->getDeckSize() > 0 ){
@@ -141,11 +143,11 @@ void Server::slotPlayerSelectedCard( Card selectedCard, int cardPosition )
 		//The commands end command send in the player class
 		
 	}else{
+		nextPlayer->sendOpponentSelectedCardId( cardPosition );
+		nextPlayer->sendOpponentAddNewCentralCard( selectedCard );
 		QTimer::singleShot( 1000, this, SLOT( slotCheckCentralCards() ) );
 	}
-
-	nextPlayer->sendOpponentSelectedCardId( cardPosition );
-	nextPlayer->sendOpponentAddNewCentralCard( selectedCard );
+	
 	nextPlayer->sendCommandsEnd();
 }
 

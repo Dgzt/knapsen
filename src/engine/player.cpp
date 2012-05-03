@@ -69,10 +69,8 @@ void Player::setSelectableCertainCards()
 {
 	//Set true, which cards equal type whit central card
 	if( setSelectableCardsWhatEqualSuit( mCentralCards.at( 0 ).getCardSuit() ) == false ){
-		
 		//If have not cards which equal type whith central card, then set true, which equal type whith trump card 
 		if( setSelectableCardsWhatEqualSuit( mTrumpCardSuit ) == false ){
-			
 			//If have not that cards, then equal all card
 			setSelectableAllCards( true );
 			
