@@ -20,8 +20,6 @@ class Client : public Player
 	
 	virtual void newCommand( QString );
 	
-	void processCommands();
-	
 private slots:
 	void slotConnected();
 	
@@ -35,6 +33,9 @@ public slots:
 	void slotSelectedCardId( int );
 	void slotTwentyButtonClicked();
 	void slotFortyButtonClicked();
+	//
+	void slotProcessCommands();
+	//
 	
 signals:
 	void signalInitialize( QString, QString, Knapsen::TypeOfCards, int );

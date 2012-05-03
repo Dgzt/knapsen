@@ -1,3 +1,5 @@
+#include <QtCore/QTimer>
+#include <QtCore/QSignalMapper>
 #include <QtGui/QPainter>
 #include <QtGui/QGraphicsScene>
 #include <QtGui/QResizeEvent>
@@ -542,7 +544,8 @@ void CentralWidget::slotInitialize( QString playerName, QString opponentName, Kn
 	//Set opponent's and player's cards
 	mNumberOfCardsInHand = numberOfCardsInHand;
 	
-	mOpponentCards = new QGraphicsSvgItem[ mNumberOfCardsInHand ];
+	//mOpponentCards = new QGraphicsSvgItem[ mNumberOfCardsInHand ];
+	mOpponentCards = new MySvgItem[ mNumberOfCardsInHand ];
 	mPlayerCards = new MySvgItem[ mNumberOfCardsInHand ];
 	
 	for( int i = 0; i < mNumberOfCardsInHand; ++i ){
@@ -715,6 +718,11 @@ void CentralWidget::slotShowOpponentCards( int card1Pos, QString card1Text, int 
 {
 	mOpponentCards[ card1Pos ].setElementId( card1Text );
 	mOpponentCards[ card2Pos ].setElementId( card2Text );
+	
+	mShowOpponentCardsId[0] = card1Pos;
+	mShowOpponentCardsId[1] = card2Pos;
+	
+	QTimer::singleShot( 1000, this, SLOT( slotCoverOpponentCards() ) );
 }
 
 void CentralWidget::slotStartGame()
@@ -752,6 +760,14 @@ void CentralWidget::slotClick( int id )
 {
 	emit signalSelectedCardId( id );
 	mPlayerCards[ id ].setVisible( false );
+}
+
+void CentralWidget::slotCoverOpponentCards()
+{
+	mOpponentCards[ mShowOpponentCardsId[0] ].setElementId( "back" );
+	mOpponentCards[ mShowOpponentCardsId[1] ].setElementId( "back" );
+	
+	emit signalHideShowedOpponentCards();
 }
 
 /*void CentralWidget::closeButtonSlot()

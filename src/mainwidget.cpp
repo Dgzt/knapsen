@@ -154,6 +154,8 @@ void MainWindow::setGameSignals()
 	connect( cWidget, SIGNAL( signalSelectedCardId( int ) ),									client, SLOT( slotSelectedCardId( int ) ) );
 	connect( cWidget, SIGNAL( signalTwentyButtonClicked() ),									client, SLOT( slotTwentyButtonClicked() ) );
 	connect( cWidget, SIGNAL( signalFortyButtonClicked() ),										client, SLOT( slotFortyButtonClicked() ) );
+	connect( cWidget, SIGNAL( signalHideShowedOpponentCards() ),								client, SLOT( slotProcessCommands() ) );
+	
 }
 
 void MainWindow::newGameSlot()

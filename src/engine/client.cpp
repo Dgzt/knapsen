@@ -22,14 +22,14 @@ void Client::newCommand( QString command )
 	
 	if( getCommandPartOfCommand( command ) == COMMANDS_END_COMMAND ){
 		
-		processCommands();
+		slotProcessCommands();
 	}
 	
 	commandList.append( command );
 	
 }
 
-void Client::processCommands()
+void Client::slotProcessCommands()
 {
 	do{
 		if( getCommandPartOfCommand( commandList.first() ) == OPPONENT_NAME_COMMAND ){
@@ -254,8 +254,16 @@ void Client::processCommands()
 			emit signalStartGame();
 		}
 		
-		commandList.removeFirst();
 		
+		
+		if( getCommandPartOfCommand( commandList.first() ) == VISIBLE_OPPONENT_CARDS_COMMAND ){
+			kDebug() << "Break loop.";
+			commandList.removeFirst();
+			break;
+		}
+		
+		commandList.removeFirst();
+			
 	}while( commandList.size() != 0 );
 }
 

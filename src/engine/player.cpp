@@ -280,10 +280,12 @@ void Player::newCommand( QString command )
 		
 			if( mCards.at( ret ).isSelectable() ){
 				setSelectableAllCards( false );
-				mOpponent->sendCommand( OPPONENT_SELECTED_CARD_ID_COMMAND+QString::number( ret ) );
-				mOpponent->sendOpponentAddNewCentralCard( getCard( ret ) );
+				//mOpponent->sendCommand( OPPONENT_SELECTED_CARD_ID_COMMAND+QString::number( ret ) );
+				//mOpponent->sendOpponentAddNewCentralCard( getCard( ret ) );
 				
 				emit signalSelectedCard( mCards.at( ret ), ret );
+				mOpponent->sendCommand( OPPONENT_SELECTED_CARD_ID_COMMAND+QString::number( ret ) );
+				mOpponent->sendOpponentAddNewCentralCard( getCard( ret ) );
 				
 				//Remove card
 				addNewCentralCard( getCard( ret ) );

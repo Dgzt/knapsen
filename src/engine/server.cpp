@@ -138,6 +138,7 @@ void Server::slotPlayerSelectedCard( Card selectedCard, int cardPosition )
 		QTimer::singleShot( 1000, this, SLOT( slotCheckCentralCards() ) );
 	}
 	
+	
 	for( int i = 0; i < mPlayerList.size(); ++i ){
 		mPlayerList.at( i )->sendCommandsEnd();
 	}
