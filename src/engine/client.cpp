@@ -138,6 +138,12 @@ void Client::slotProcessCommands()
 			
 			setFortyButtonVisible( true );
 		}
+		
+		if( getCommandPartOfCommand( commandList.first() ) == CLOSE_BUTTON_VISIBLE_COMMAND ){
+			kDebug() << getName() << "Close button visible.";
+			
+			setCloseButtonVisible( true );
+		}
 			
 		if( getCommandPartOfCommand( commandList.first() ) == CLEAR_TRUMP_CARD_COMMAND ){
 			kDebug() << getName() << "Clear trump card.";
@@ -285,7 +291,6 @@ void Client::slotSelectedCardId( int id )
 	setSelectableAllCards( false );
 	addNewCentralCard( getCard( id ) );
 	removeCard( id );
-	sendCommand( SELECTED_CARD_ID_COMMAND+QString::number( id ) );
 	
 	if( isTwentyButtonVisible() ){
 		setTwentyButtonVisible( false );
@@ -294,6 +299,12 @@ void Client::slotSelectedCardId( int id )
 	if( isFortyButtonVisible() ){
 		setFortyButtonVisible( false );
 	}
+	
+	if( isCloseButtonVisible() ){
+		setCloseButtonVisible( false );
+	}
+	
+	sendCommand( SELECTED_CARD_ID_COMMAND+QString::number( id ) );
 }
 
 void Client::slotTwentyButtonClicked()

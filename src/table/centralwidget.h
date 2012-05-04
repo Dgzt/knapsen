@@ -32,8 +32,7 @@ class CentralWidget : public QGraphicsView
 	
 	int mNumberOfCardsInHand;
 	
-	//QGraphicsSvgItem* mOpponentCards;
-	MySvgItem* mOpponentCards;
+	QGraphicsSvgItem* mOpponentCards;
 	MySvgItem* mPlayerCards;
 	
 	ScoreTable* mOpponentScoreTable;
@@ -43,7 +42,7 @@ class CentralWidget : public QGraphicsView
 	
 	QGraphicsSvgItem* mCentralCards;
 	
-	//QGraphicsProxyWidget* closeButton;
+	QGraphicsProxyWidget* mCloseButton;
 	QGraphicsProxyWidget* mTwentyButton;
 	QGraphicsProxyWidget* mFortyButton;
 	
@@ -62,10 +61,8 @@ protected:
 private slots:
 	void slotClick( int );
 	//void closeButtonSlot();
-	//void twentyButtonSlot(){ emit signalTwenty(); }
 	void slotTwentyButtonClicked(){ emit signalTwentyButtonClicked(); }
 	void slotFortyButtonClicked(){ emit signalFortyButtonClicked(); }
-	//void fortyButtonSlot(){ emit signalForty(); }
 	//void selectedTrumpCardSlot(){ emit signalSelectedTrumpCard(); }
 	void slotCoverOpponentCards();
 	
@@ -93,6 +90,7 @@ public slots:
 	
 	void slotTwentyButtonVisible( bool );
 	void slotFortyButtonVisible( bool );
+	void slotCloseButtonVisible( bool );
 	
 	void slotShowOpponentCards( int, QString, int, QString );
 	

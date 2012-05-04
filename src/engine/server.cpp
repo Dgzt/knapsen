@@ -246,6 +246,11 @@ void Server::slotCheckCentralCards()
 			kDebug() << mGameSequence->getCurrentPlayer()->getName() << "have trump marriages.";
 			mGameSequence->getCurrentPlayer()->sendFortyButtonVisible();
 		}
+		
+		if( mDeck->getDeckSize() > 3 ){
+			mGameSequence->getCurrentPlayer()->sendCloseButtonVisible();
+		}
+		
 	}
 	
 	for( int i = 0; i < mPlayerList.size(); ++i ){
@@ -321,17 +326,21 @@ void Server::startGame()
 		
 	}
 	
-	if( mGameSequence->getCurrentPlayer()->haveRegularMarriages() ){
-		kDebug() << mGameSequence->getCurrentPlayer()->getName() << "have regular marriages.";
-		mGameSequence->getCurrentPlayer()->sendTwentyButtonVisible();
+	Player* currentPlayer = mGameSequence->getCurrentPlayer();
+	
+	if( currentPlayer->haveRegularMarriages() ){
+		kDebug() << currentPlayer->getName() << "have regular marriages.";
+		currentPlayer->sendTwentyButtonVisible();
 	}
 	
-	if( mGameSequence->getCurrentPlayer()->haveTrumpMarriages() ){
-		kDebug() << mGameSequence->getCurrentPlayer()->getName() << "have trump marriages.";
-		mGameSequence->getCurrentPlayer()->sendFortyButtonVisible();
+	if( currentPlayer->haveTrumpMarriages() ){
+		kDebug() << currentPlayer->getName() << "have trump marriages.";
+		currentPlayer->sendFortyButtonVisible();
 	}
 	
-	mGameSequence->getCurrentPlayer()->sendSelectableAllCards();
+	currentPlayer->sendCloseButtonVisible();
+	
+	currentPlayer->sendSelectableAllCards();
 	
 	//And finally send start the game
 	for( int i = 0; i < mPlayerList.size(); ++i ){

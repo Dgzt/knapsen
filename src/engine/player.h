@@ -47,17 +47,18 @@ static const QString OPPONENT_DISCONNECTED_COMMAND = ":OPPONENT_DISCONNECTED";
 static const QString CLEAR_CENTRAL_CARDS_COMMAND = ":CLEAR_CENTRAL_CARDS";
 
 //
-static const QString TWENTY_BUTTON_VISIBLE_COMMAND = ":TWENTY_VISIBLE_BUTTON";
-static const QString FORTY_BUTTON_VISIBLE_COMMAND = ":FORTY_VISIBLE_BUTTON";
+static const QString TWENTY_BUTTON_VISIBLE_COMMAND = ":TWENTY_BUTTON_VISIBLE";
+static const QString FORTY_BUTTON_VISIBLE_COMMAND = ":FORTY_BUTTON_VISIBLE";
 static const QString TWENTY_BUTTON_CLICKED_COMMAND = ":TWENTY_BUTTON_CLICKED";
-//static const QString OPPONENT_TWENTY_BUTTON_CLICKED_COMMAND = ":OPPONENT_TWENTY_BUTTON_CLICKED";
 static const QString FORTY_BUTTON_CLICKED_COMMAND = ":FORTY_BUTTON_CLICKED";
-//static const QString OPPONENT_FORTY_BUTTON_CLICKED_COMMAND = ":OPPONENT_FORTY_BUTTON_CLICKED";
 //
+static const QString CLOSE_BUTTON_VISIBLE_COMMAND = ":CLOSE_BUTTON_VISIBLE";
+//
+
 static const QString VISIBLE_OPPONENT_CARDS_COMMAND = ":VISIBLE_OPPONENT_CARDS="; 
-//
+
 static const QString COMMANDS_END_COMMAND = ":COMMANDS_END";
-//
+
 
 
 
@@ -92,6 +93,9 @@ class Player : public QTcpSocket
 	
 	bool mTwentyButtonVisible;
 	bool mFortyButtonVisible;
+	//
+	bool mCloseButtonVisible;
+	//
 	
 	virtual void newCommand( QString );
 	
@@ -141,6 +145,9 @@ protected:
 	bool isFortyButtonVisible() const{ return mFortyButtonVisible; }
 	void twentyButtonClicked();
 	void fortyButtonClicked();
+	//
+	void setCloseButtonVisible( bool visible ){ mCloseButtonVisible = visible; emit signalCloseButtonVisible( visible ); }
+	bool isCloseButtonVisible() const{ return mCloseButtonVisible; }
 	//
 	
 	void setTricks( int tricks ){ mTricks = tricks; }
@@ -219,10 +226,12 @@ public:
 	
 	void sendTwentyButtonVisible();
 	void sendFortyButtonVisible();
+	//
+	void sendCloseButtonVisible();
+	//
 	
-	//
+	//If the opponent clicked to twenty or forty button, then show that cards
 	void sendVisibleOpponentCards( int, Card, int, Card );
-	//
 	
 	
 	void sendStartGame(){ sendCommand( START_GAME_COMMAND ); }
@@ -245,6 +254,7 @@ signals:
 	void signalPlayerCardSelectableChanged( int, bool );
 	void signalTwentyButtonVisible( bool );
 	void signalFortyButtonVisible( bool );
+	void signalCloseButtonVisible( bool );
 	void signalCentralCardChanged( int, Card );
 };
 

@@ -8,7 +8,8 @@ Player::Player( QObject* parent ):
 	//mScores( 0 ),
 	mTrumpCard(),
 	mTwentyButtonVisible( false ),
-	mFortyButtonVisible( false )
+	mFortyButtonVisible( false ),
+	mCloseButtonVisible( false )
 {
 	mOpponent = 0;
 	
@@ -287,6 +288,10 @@ void Player::newCommand( QString command )
 					setFortyButtonVisible( false );
 				}
 				
+				if( isCloseButtonVisible() ){
+					setCloseButtonVisible( false );
+				}
+				
 				Card selectedCard = getCard( ret );
 				addNewCentralCard( selectedCard );
 				removeCard( ret );
@@ -456,4 +461,10 @@ void Player::sendFortyButtonVisible()
 {
 	setFortyButtonVisible( true );
 	sendCommand( FORTY_BUTTON_VISIBLE_COMMAND );
+}
+
+void Player::sendCloseButtonVisible()
+{
+	setCloseButtonVisible( true );
+	sendCommand( CLOSE_BUTTON_VISIBLE_COMMAND );
 }

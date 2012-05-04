@@ -193,6 +193,7 @@ void CentralWidget::clearWidget()
 	}
 	scene()->removeItem( mTwentyButton );
 	scene()->removeItem( mFortyButton );
+	scene()->removeItem( mCloseButton );
 	
 	delete mOpponentName;
 	delete mPlayerName;
@@ -206,6 +207,7 @@ void CentralWidget::clearWidget()
 	delete[] mCentralCards;
 	delete mTwentyButton;
 	delete mFortyButton;
+	delete mCloseButton;
 	
 	mOpponentName = 0;
 	mPlayerName = 0;
@@ -219,6 +221,7 @@ void CentralWidget::clearWidget()
 	mCentralCards = 0;
 	mTwentyButton = 0;
 	mFortyButton = 0;
+	mCloseButton = 0;
 }
 
 /*void CentralWidget::setInGamePositions()
@@ -405,6 +408,13 @@ void CentralWidget::setInGamePositions()
 	fortyButtonPos.setY( mPlayerCards[2].scenePos().y()-buttonDistance-20 );
 	
 	mFortyButton->setGeometry( QRect( fortyButtonPos, QSize( mCardSize.width(), 20 ) ) );
+	
+	//Set position of close button
+	QPoint closeButtonPos;
+	closeButtonPos.setX( mDeck->scenePos().x() );
+	closeButtonPos.setY( mDeck->scenePos().y()+mCardSize.height()+10 );
+	
+	mCloseButton->setGeometry( QRect( closeButtonPos, QSize( mCardSize.width(), 20 ) ) );
 }
 
 void CentralWidget::resizeEvent( QResizeEvent* re )
@@ -418,93 +428,6 @@ void CentralWidget::resizeEvent( QResizeEvent* re )
 		setInGamePositions();
 	}
 }
-
-/*void CentralWidget::initializeSlot()
-{
-	kDebug() << "InitializeSlot";
-
-	const int cardNum = 5;
-	
-	opponentCards = new QGraphicsSvgItem[ cardNum ];
-	playerCards = new MySvgItem[ cardNum ];
-	
-	for( int i = 0; i < cardNum; ++i ){
-		//Set opponent's cards
-		opponentCards[i].setSharedRenderer( renderer );
-		opponentCards[i].setElementId( "back" );
-		opponentCards[i].setScale( SCALE_VALUE );
-		opponentCards[i].setVisible( false );
-		scene()->addItem( &opponentCards[i] );
-		
-		//Set player's cards
-		playerCards[i].setSharedRenderer( renderer );
-		playerCards[i].setElementId( "back" );
-		playerCards[i].setScale( SCALE_VALUE );
-		playerCards[i].setVisible( false );
-		//playerCards[i].setEnabled( false );
-		playerCards[i].setSelectable( false );
-		playerCards[i].setId( i );
-		scene()->addItem( &playerCards[i] );
-
-		connect( &playerCards[i], SIGNAL(click(int)), this, SLOT(clickSlot(int)));
-	}
-	
-	//set the centralcards
-	centralCards = new QGraphicsSvgItem[ CENTRALCARDS_SIZE ];
-	for( int i = 0; i < CENTRALCARDS_SIZE; ++i ){
-		centralCards[i].setSharedRenderer( renderer );
-		centralCards[i].setScale( SCALE_VALUE );
-		centralCards[i].setVisible( false );
-		centralCards[i].setElementId( "back" );
-	
-		scene()->addItem( &centralCards[i] );
-	}
-	
-	// TMP Set trump card
-	trumpCard = new MySvgItem;
-	trumpCard->setSharedRenderer( renderer );
-	trumpCard->setElementId( "back" );
-	trumpCard->setScale( SCALE_VALUE );
-	trumpCard->setTransformOriginPoint( 0, trumpCard->boundingRect().height()/2 );
-	trumpCard->setRotation( 90 );
-	trumpCard->setVisible( false );
-	trumpCard->setSelectable( false );
-	
-	connect( trumpCard, SIGNAL(click(int)),this,SLOT(selectedTrumpCardSlot()));
-
-	scene()->addItem( trumpCard );
-	trumpCard->setZValue(0);
-	cardDeckSvgItem->setZValue( 1 );
-	//
-	
-	//set the score tables
-	opponentScoreTable = new ScoreTable;
-	playerScoreTable = new ScoreTable;
-	
-	opponentScoreTable->setVisible( false );
-	playerScoreTable->setVisible( false );
-	
-	scene()->addItem( opponentScoreTable );
-	scene()->addItem( playerScoreTable );
-	
-	//Set close button
-	QPushButton* closePushButton = new QPushButton( i18n( "Close" ) );
-	closeButton = scene()->addWidget( closePushButton );
-	closeButton->setVisible( false );
-	connect( closePushButton, SIGNAL(clicked()), this, SLOT(closeButtonSlot()));
-	
-	//Set twenty button
-	QPushButton* twentyPushButton = new QPushButton( i18n( "Twenty" ) );
-	twentyButton = scene()->addWidget( twentyPushButton );
-	twentyButton->setVisible( false );
-	connect( twentyPushButton, SIGNAL(clicked()), this, SLOT(twentyButtonSlot()));
-	
-	//Set forty button
-	QPushButton* fortyPushButton = new QPushButton( i18n( "Forty" ) );
-	fortyButton = scene()->addWidget( fortyPushButton );
-	fortyButton->setVisible( false );
-	connect( fortyPushButton, SIGNAL(clicked()), this, SLOT( fortyButtonSlot()));
-}*/
 
 /*void CentralWidget::trumpCardSlot( QString cardText )
 {
@@ -544,8 +467,7 @@ void CentralWidget::slotInitialize( QString playerName, QString opponentName, Kn
 	//Set opponent's and player's cards
 	mNumberOfCardsInHand = numberOfCardsInHand;
 	
-	//mOpponentCards = new QGraphicsSvgItem[ mNumberOfCardsInHand ];
-	mOpponentCards = new MySvgItem[ mNumberOfCardsInHand ];
+	mOpponentCards = new QGraphicsSvgItem[ mNumberOfCardsInHand ];
 	mPlayerCards = new MySvgItem[ mNumberOfCardsInHand ];
 	
 	for( int i = 0; i < mNumberOfCardsInHand; ++i ){
@@ -611,17 +533,22 @@ void CentralWidget::slotInitialize( QString playerName, QString opponentName, Kn
 	scene()->addItem( mPlayerScoreTable );
 	
 	//Set twenty button
-	QPushButton* twentyPushButton = new QPushButton( i18n( "Twenty" ) );
-	mTwentyButton = scene()->addWidget( twentyPushButton );
+	QPushButton *twentyButton = new QPushButton( i18n( "Twenty" ) );
+	mTwentyButton = scene()->addWidget( twentyButton );
 	mTwentyButton->setVisible( false );
-	connect( twentyPushButton, SIGNAL( clicked() ), this, SLOT( slotTwentyButtonClicked() ) );
+	connect( twentyButton, SIGNAL( clicked() ), this, SLOT( slotTwentyButtonClicked() ) );
 	
 	//Set forty button
-	QPushButton* fortyPushButton = new QPushButton( i18n( "Forty" ) );
-	mFortyButton = scene()->addWidget( fortyPushButton );
+	QPushButton *fortyButton = new QPushButton( i18n( "Forty" ) );
+	mFortyButton = scene()->addWidget( fortyButton );
 	mFortyButton->setVisible( false );
-	connect( fortyPushButton, SIGNAL(clicked()), this, SLOT( slotFortyButtonClicked() ) );
+	connect( fortyButton, SIGNAL(clicked()), this, SLOT( slotFortyButtonClicked() ) );
 	
+	//Set close button
+	QPushButton *closeButton = new QPushButton( i18n( "Close" ) );
+	mCloseButton = scene()->addWidget( closeButton );
+	mCloseButton->setVisible( false );
+	//connect( closeButton, SIGNAL( clicked() ), this, SLOT( 
 }
 
 void CentralWidget::slotNewPlayerCard( int id , QString card )
@@ -667,12 +594,6 @@ void CentralWidget::slotPlayerCardSelectableChanged( int id , bool selectable )
 	mPlayerCards[ id ].setSelectable( selectable );
 }
 
-/*void CentralWidget::slotNewCentralCard( int id, QString cardText )
-{
-	mCentralCards[ id ].setElementId( cardText );
-	mCentralCards[ id ].setVisible( true );
-}*/
-
 void CentralWidget::slotCentralCardChanged( int id, QString cardText )
 {
 	if( cardText.isEmpty() ){
@@ -712,6 +633,11 @@ void CentralWidget::slotTwentyButtonVisible( bool visible )
 void CentralWidget::slotFortyButtonVisible( bool visible )
 {
 	mFortyButton->setVisible( visible );
+}
+
+void CentralWidget::slotCloseButtonVisible( bool visible )
+{
+	mCloseButton->setVisible( visible );
 }
 
 void CentralWidget::slotShowOpponentCards( int card1Pos, QString card1Text, int card2Pos, QString card2Text )

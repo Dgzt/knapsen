@@ -46,7 +46,6 @@ signals:
 	
 	void signalNewTrumpCard( QString );
 	
-	//void signalNewCentralCard( int, QString );
 	void signalCentralCardChanged( int, QString );
 	
 	void signalOpponentSelectedCardId( int );
