@@ -548,7 +548,7 @@ void CentralWidget::slotInitialize( QString playerName, QString opponentName, Kn
 	QPushButton *closeButton = new QPushButton( i18n( "Close" ) );
 	mCloseButton = scene()->addWidget( closeButton );
 	mCloseButton->setVisible( false );
-	//connect( closeButton, SIGNAL( clicked() ), this, SLOT( 
+	connect( closeButton, SIGNAL( clicked() ), this, SLOT( slotCloseButtonClicked() ) ); 
 }
 
 void CentralWidget::slotNewPlayerCard( int id , QString card )
@@ -623,6 +623,14 @@ void CentralWidget::slotPlayerTricksChanged( int tricks )
 void CentralWidget::slotDeckVisible( bool visible )
 {
 	mDeck->setVisible( visible );
+}
+
+void CentralWidget::slotCloseDeck()
+{
+	mTrumpCard->setElementId( "back" );
+	
+	mDeck->setZValue( 0 );
+	mTrumpCard->setZValue( 1 );
 }
 
 void CentralWidget::slotTwentyButtonVisible( bool visible )

@@ -14,7 +14,9 @@ Server::Server( QObject* parent ) :
 	QTcpServer( parent ),
 	mAdminName( "" ),
 	mTwentyButtonClickedThisTurn( false ),
-	mFortyButtonClickedThisTurn( false )
+	mFortyButtonClickedThisTurn( false ),
+	mClickedToCloseButtonThisTurn( false ),
+	mClickedToCloseButtonThisRound( false ) 
 {
 	kDebug() << "Initialize.";
 
@@ -58,6 +60,7 @@ void Server::slotNewPlayer( Player* player )
 		connect( player, SIGNAL( signalSelectedCard( Card, int ) ),		this, SLOT( slotPlayerSelectedCard( Card, int ) ) ); 
 		connect( player, SIGNAL( signalTwentyButtonClicked() ),			this, SLOT( slotPlayerTwentyButtonClicked() ) );
 		connect( player, SIGNAL( signalFortyButtonClicked() ),			this, SLOT( slotPlayerFortyButtonClicked() ) );
+		connect( player, SIGNAL( signalCloseButtonClicked() ),			this, SLOT( slotPlayerClickedToCloseButton() ) );
 		emit signalPlayerConnected( player->getName() );
 		
 		if( mPlayerList.size() == MAX_PLAYERS ){
@@ -129,12 +132,16 @@ void Server::slotPlayerSelectedCard( Card selectedCard, int cardPosition )
 			nextPlayer->sendVisibleOpponentCards( cardPosition, selectedCard, posOfPairOfCard, currentPlayer->getCard( posOfPairOfCard ) );
 		}
 		
+		if( mClickedToCloseButtonThisTurn ){
+			nextPlayer->sendOpponentClickedToCloseButton();
+		}
+		
 		nextPlayer->sendOpponentSelectedCardId( cardPosition );
 		nextPlayer->sendOpponentAddNewCentralCard( selectedCard );
 		
 		mGameSequence->setCurrentPlayer( nextPlayer );
 		
-		if( mDeck->getDeckSize() > 0 ){
+		if( !mClickedToCloseButtonThisRound && mDeck->getDeckSize() > 0 ){
 			nextPlayer->sendSelectableAllCards();
 		}else{ // mDeck->getDeckSize() == 0
 			nextPlayer->sendSelectableCertainCards();
@@ -161,6 +168,13 @@ void Server::slotPlayerFortyButtonClicked()
 {
 	kDebug() << mGameSequence->getCurrentPlayer()->getName() << "Clicked to forty button.";
 	mFortyButtonClickedThisTurn = true;
+}
+
+void Server::slotPlayerClickedToCloseButton()
+{
+	kDebug() << mGameSequence->getCurrentPlayer()->getName() << "Clicked to close button.";
+	mClickedToCloseButtonThisTurn = true;
+	mClickedToCloseButtonThisRound = true;
 }
 
 void Server::slotCheckCentralCards()
@@ -200,12 +214,18 @@ void Server::slotCheckCentralCards()
 	kDebug() << mGameSequence->getCurrentPlayer()->getName() << "get" << centralCard1Point+centralCard2Point << "points.";
 	mGameSequence->getCurrentPlayer()->addTricks( centralCard1Point + centralCard2Point );
 	
-	if( mTwentyButtonClickedThisTurn )
+	if( mTwentyButtonClickedThisTurn ){
 		mTwentyButtonClickedThisTurn = false;
-	
-	if( mFortyButtonClickedThisTurn )
+	}
+		
+	if( mFortyButtonClickedThisTurn ){
 		mFortyButtonClickedThisTurn = false;
-	
+	}
+		
+	if( mClickedToCloseButtonThisTurn ){
+		mClickedToCloseButtonThisTurn = false;
+	}
+		
 	if( mGameSequence->isRoundOver() ){
 		kDebug() << "--- Round end! ---";
 	}else{
@@ -217,22 +237,24 @@ void Server::slotCheckCentralCards()
 			mPlayerList.at( i )->sendClearCentralCards();
 		}
 		
-		//If the dech have card yet, then add new cards to players, frist who won the last turn
-		if( mDeck->getDeckSize() > 0 ){
-			mGameSequence->getCurrentPlayer()->sendNewCard( mDeck->getCard() );
-			
+		if( !mClickedToCloseButtonThisRound ){
+			//If the dech have card yet, then add new cards to players, frist who won the last turn
 			if( mDeck->getDeckSize() > 0 ){
-				mGameSequence->getNextPlayer()->sendNewCard( mDeck->getCard() );
-			}else{
-				mGameSequence->getNextPlayer()->sendNewCard( mTrumpCard );
-				mTrumpCard = Card();
-				
-				for( int i = 0; i < mPlayerList.size(); ++i ){
-					mPlayerList.at( i )->sendClearTrumpCard();
-				}
-				
-			}
+				mGameSequence->getCurrentPlayer()->sendNewCard( mDeck->getCard() );
 			
+				if( mDeck->getDeckSize() > 0 ){
+					mGameSequence->getNextPlayer()->sendNewCard( mDeck->getCard() );
+				}else{
+					mGameSequence->getNextPlayer()->sendNewCard( mTrumpCard );
+					mTrumpCard = Card();
+				
+					for( int i = 0; i < mPlayerList.size(); ++i ){
+						mPlayerList.at( i )->sendClearTrumpCard();
+					}
+				
+				}
+			
+			}
 		}
 		
 		mGameSequence->getCurrentPlayer()->sendSelectableAllCards();
@@ -247,7 +269,7 @@ void Server::slotCheckCentralCards()
 			mGameSequence->getCurrentPlayer()->sendFortyButtonVisible();
 		}
 		
-		if( mDeck->getDeckSize() > 3 ){
+		if( !mClickedToCloseButtonThisRound && mDeck->getDeckSize() > 3 ){
 			mGameSequence->getCurrentPlayer()->sendCloseButtonVisible();
 		}
 		

@@ -249,6 +249,11 @@ void Client::slotProcessCommands()
 				kDebug() << "ERROR! Cannot convert opponent tricks changed command value to int!";
 			}
 		}
+		
+		if( getCommandPartOfCommand( commandList.first() ) == OPPONENT_CLICKED_TO_CLOSE_BUTTON_COMMAND ){
+			kDebug() << getName() << "Opponent clicked to close button.";
+			emit signalCloseDeck();
+		}
 			
 		if( getCommandPartOfCommand( commandList.first() ) == CLEAR_CENTRAL_CARDS_COMMAND ){
 			kDebug() << getName() << "Clear central cards command.";
@@ -318,4 +323,11 @@ void Client::slotFortyButtonClicked()
 	kDebug();
 	fortyButtonClicked();
 	sendCommand( FORTY_BUTTON_CLICKED_COMMAND );
+}
+
+void Client::slotCloseButtonClicked()
+{
+	setCloseButtonVisible( false );
+	emit signalCloseDeck();
+	sendCommand( CLOSE_BUTTON_CLICKED_COMMAND );
 }

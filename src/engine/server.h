@@ -46,6 +46,9 @@ class Server : public QTcpServer
 	//
 	bool mTwentyButtonClickedThisTurn;
 	bool mFortyButtonClickedThisTurn;
+	
+	bool mClickedToCloseButtonThisTurn;
+	bool mClickedToCloseButtonThisRound;
 	//
 	
 private slots:
@@ -55,6 +58,7 @@ private slots:
 	void slotPlayerSelectedCard( Card, int );
 	void slotPlayerTwentyButtonClicked();
 	void slotPlayerFortyButtonClicked();
+	void slotPlayerClickedToCloseButton();
 	
 	//
 	void slotCheckCentralCards();

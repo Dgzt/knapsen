@@ -337,6 +337,18 @@ void Player::newCommand( QString command )
 			kDebug() << getName() << "ERROR! Forty button clicked, but forty button is not visible!";
 		}
 	}
+	
+	if( getCommandPartOfCommand( command ) == CLOSE_BUTTON_CLICKED_COMMAND ){
+		kDebug() << getName() << "Close button clicked.";
+		
+		if( isCloseButtonVisible() ){
+			setCloseButtonVisible( false );
+			emit signalCloseButtonClicked();
+		}else{
+			kDebug() << getName() << "ERROR! Clicked to close button, but this is not visible!";
+		}
+		
+	}
 }
 
 bool Player::setSelectableCardsWhatEqualSuit( Card::CardSuit cardSuit )

@@ -60,9 +60,9 @@ protected:
 
 private slots:
 	void slotClick( int );
-	//void closeButtonSlot();
 	void slotTwentyButtonClicked(){ emit signalTwentyButtonClicked(); }
 	void slotFortyButtonClicked(){ emit signalFortyButtonClicked(); }
+	void slotCloseButtonClicked(){ emit signalCloseButtonClicked(); }
 	//void selectedTrumpCardSlot(){ emit signalSelectedTrumpCard(); }
 	void slotCoverOpponentCards();
 	
@@ -87,6 +87,7 @@ public slots:
 	void slotPlayerTricksChanged( int );
 	
 	void slotDeckVisible( bool );
+	void slotCloseDeck();
 	
 	void slotTwentyButtonVisible( bool );
 	void slotFortyButtonVisible( bool );
@@ -98,22 +99,13 @@ public slots:
 	
 	//void opponentScoresChanged( int );
 	//void playerScoresChanged( int );
-
-	//void changedDeckVisibleSlot( bool );
-	
-	//void enabledCloseButtonSlot( bool );
-	
-	//void enabledTwentyButtonSlot( bool );
-	
-	//void enabledFortyButtonSlot( bool );
-	
-	//void selectableTrumpCard( bool );
-	
+		
 signals:
 	void signalSelectedCardId( int );
 	//void signalCloseDeck();
 	void signalTwentyButtonClicked();
 	void signalFortyButtonClicked();
+	void signalCloseButtonClicked();
 	//void signalSelectedTrumpCard();
 	
 	void signalHideShowedOpponentCards();

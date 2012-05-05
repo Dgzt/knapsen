@@ -33,6 +33,7 @@ public slots:
 	void slotSelectedCardId( int );
 	void slotTwentyButtonClicked();
 	void slotFortyButtonClicked();
+	void slotCloseButtonClicked();
 	//
 	void slotProcessCommands();
 	//
@@ -57,6 +58,8 @@ signals:
 	void signalPlayerTricksChanged( int );
 	
 	void signalDeckVisible( bool );
+	
+	void signalCloseDeck();
 	
 	void signalTrumpCardHide();
 	

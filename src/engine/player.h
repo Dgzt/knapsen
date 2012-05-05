@@ -51,8 +51,9 @@ static const QString TWENTY_BUTTON_VISIBLE_COMMAND = ":TWENTY_BUTTON_VISIBLE";
 static const QString FORTY_BUTTON_VISIBLE_COMMAND = ":FORTY_BUTTON_VISIBLE";
 static const QString TWENTY_BUTTON_CLICKED_COMMAND = ":TWENTY_BUTTON_CLICKED";
 static const QString FORTY_BUTTON_CLICKED_COMMAND = ":FORTY_BUTTON_CLICKED";
-//
 static const QString CLOSE_BUTTON_VISIBLE_COMMAND = ":CLOSE_BUTTON_VISIBLE";
+static const QString CLOSE_BUTTON_CLICKED_COMMAND = ":CLOSE_BUTTON_CLICKED";
+static const QString OPPONENT_CLICKED_TO_CLOSE_BUTTON_COMMAND = ":OPPONENT_CLICKED_TO_CLOSE_BUTTON";
 //
 
 static const QString VISIBLE_OPPONENT_CARDS_COMMAND = ":VISIBLE_OPPONENT_CARDS="; 
@@ -93,9 +94,7 @@ class Player : public QTcpSocket
 	
 	bool mTwentyButtonVisible;
 	bool mFortyButtonVisible;
-	//
 	bool mCloseButtonVisible;
-	//
 	
 	virtual void newCommand( QString );
 	
@@ -228,6 +227,7 @@ public:
 	void sendFortyButtonVisible();
 	//
 	void sendCloseButtonVisible();
+	void sendOpponentClickedToCloseButton(){ sendCommand( OPPONENT_CLICKED_TO_CLOSE_BUTTON_COMMAND ); }
 	//
 	
 	//If the opponent clicked to twenty or forty button, then show that cards
@@ -248,6 +248,7 @@ signals:
 	//
 	void signalTwentyButtonClicked();
 	void signalFortyButtonClicked();
+	void signalCloseButtonClicked();
 	//
 	
 	//Signals to player
