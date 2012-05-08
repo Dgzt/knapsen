@@ -8,7 +8,6 @@ Bot::Bot( QObject* parent ): Client( parent )
 	
 	connect( this, SIGNAL( signalOpponentDisconnected() ),	this, SLOT( slotOpponentDisconnected() ) );
 	connect( this, SIGNAL( signalInAction() ),				this, SLOT( slotInAction() ) );
-	connect( this, SIGNAL( signalShowOpponentCards( int, QString, int, QString ) ), this, SLOT( slotShowOpponentCards( int, QString, int, QString ) ) );
 }
 
 void Bot::slotOpponentDisconnected()
