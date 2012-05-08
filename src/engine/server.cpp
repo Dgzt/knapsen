@@ -61,6 +61,7 @@ void Server::slotNewPlayer( Player* player )
 		connect( player, SIGNAL( signalTwentyButtonClicked() ),			this, SLOT( slotPlayerTwentyButtonClicked() ) );
 		connect( player, SIGNAL( signalFortyButtonClicked() ),			this, SLOT( slotPlayerFortyButtonClicked() ) );
 		connect( player, SIGNAL( signalCloseButtonClicked() ),			this, SLOT( slotPlayerClickedToCloseButton() ) );
+		connect( player, SIGNAL( signalChangedTrumpCard( Card ) ),		this, SLOT( slotPlayerChangedTrumpCard( Card ) ) );
 		emit signalPlayerConnected( player->getName() );
 		
 		if( mPlayerList.size() == MAX_PLAYERS ){
@@ -175,6 +176,19 @@ void Server::slotPlayerClickedToCloseButton()
 	kDebug() << mGameSequence->getCurrentPlayer()->getName() << "Clicked to close button.";
 	mClickedToCloseButtonThisTurn = true;
 	mClickedToCloseButtonThisRound = true;
+}
+
+void Server::slotPlayerChangedTrumpCard( Card newTrumpCard )
+{
+	mTrumpCard = newTrumpCard;
+	
+	for( int i = 0; i < mPlayerList.size(); ++i ){
+		
+		if( mPlayerList.at(i) != mGameSequence->getCurrentPlayer() ){
+			mPlayerList.at(i)->sendNewTrumpCard( mTrumpCard );
+		}
+		
+	}
 }
 
 void Server::slotCheckCentralCards()
@@ -358,6 +372,11 @@ void Server::startGame()
 	if( currentPlayer->haveTrumpMarriages() ){
 		kDebug() << currentPlayer->getName() << "have trump marriages.";
 		currentPlayer->sendFortyButtonVisible();
+	}
+	
+	if( currentPlayer->canChangeTrumpCard() ){
+		kDebug() << currentPlayer->getName() << "can change trump card.";
+		currentPlayer->sendSelectableTrumpCard();
 	}
 	
 	currentPlayer->sendCloseButtonVisible();

@@ -15,6 +15,7 @@ void MySvgItem::mousePressEvent( QGraphicsSceneMouseEvent* gsme )
 	
 	if( mSelectable ){
 		//selectable = false;
+		emit click();
 		emit click( mId );
 	}
 }

@@ -25,6 +25,8 @@ static const QString NEW_OPPONENT_CARD_COMMAND_ID = ":NEW_OPPONENT_CARD_ID=";
 //
 static const QString NEW_TRUMP_CARD_COMMAND = ":NEW_TRUMP_CARD=";
 static const QString CLEAR_TRUMP_CARD_COMMAND = ":CLEAR_TRUMP_CARD";
+static const QString TRUMP_CARD_SELECTABLE_COMMAND = ":TRUMP_CARD_SELECTABLE";
+static const QString CHANGE_TRUMP_CARD_COMMAND = ":CHANGE_TRUMP_CARD";
 
 //
 static const QString SELECTABLE_ALL_CARDS_COMMAND = ":SELECTABLE_ALL_CARDS";
@@ -51,12 +53,12 @@ static const QString TWENTY_BUTTON_VISIBLE_COMMAND = ":TWENTY_BUTTON_VISIBLE";
 static const QString FORTY_BUTTON_VISIBLE_COMMAND = ":FORTY_BUTTON_VISIBLE";
 static const QString TWENTY_BUTTON_CLICKED_COMMAND = ":TWENTY_BUTTON_CLICKED";
 static const QString FORTY_BUTTON_CLICKED_COMMAND = ":FORTY_BUTTON_CLICKED";
+static const QString VISIBLE_OPPONENT_CARDS_COMMAND = ":VISIBLE_OPPONENT_CARDS=";
+
+//
 static const QString CLOSE_BUTTON_VISIBLE_COMMAND = ":CLOSE_BUTTON_VISIBLE";
 static const QString CLOSE_BUTTON_CLICKED_COMMAND = ":CLOSE_BUTTON_CLICKED";
 static const QString OPPONENT_CLICKED_TO_CLOSE_BUTTON_COMMAND = ":OPPONENT_CLICKED_TO_CLOSE_BUTTON";
-//
-
-static const QString VISIBLE_OPPONENT_CARDS_COMMAND = ":VISIBLE_OPPONENT_CARDS="; 
 
 static const QString COMMANDS_END_COMMAND = ":COMMANDS_END";
 
@@ -85,9 +87,7 @@ class Player : public QTcpSocket
 	
 	//Trump card
 	Card mTrumpCard;
-	//
 	Card::CardSuit mTrumpCardSuit;
-	//
 	
 	//Central cards
 	QList<Card> mCentralCards;
@@ -122,6 +122,9 @@ protected:
 	void setTrumpCard( Card trumpCard ) { mTrumpCard = trumpCard; mTrumpCardSuit = mTrumpCard.getCardSuit(); }
 	Card getTrumpCard() const { return mTrumpCard; }
 	void clearTrumpCard() { mTrumpCard = Card(); }
+	//
+	int changeTrumpCard();
+	//
 	
 	//Set selectable OR not selectable all avalibe card
 	void setSelectableAllCards( bool );
@@ -181,6 +184,10 @@ public:
 	bool haveRegularMarriages() const;
 	bool haveTrumpMarriages() const;
 	
+	//
+	bool canChangeTrumpCard() const;
+	//
+	
 	//-- Commands --
 	
 	//Send the opponent's name
@@ -225,9 +232,14 @@ public:
 	
 	void sendTwentyButtonVisible();
 	void sendFortyButtonVisible();
-	//
+
 	void sendCloseButtonVisible();
+	
 	void sendOpponentClickedToCloseButton(){ sendCommand( OPPONENT_CLICKED_TO_CLOSE_BUTTON_COMMAND ); }
+	
+	//
+	void sendSelectableTrumpCard(){ sendCommand( TRUMP_CARD_SELECTABLE_COMMAND ); }
+	void sendChangeTrumpCard(){ sendCommand( CHANGE_TRUMP_CARD_COMMAND ); }
 	//
 	
 	//If the opponent clicked to twenty or forty button, then show that cards
@@ -249,6 +261,7 @@ signals:
 	void signalTwentyButtonClicked();
 	void signalFortyButtonClicked();
 	void signalCloseButtonClicked();
+	void signalChangedTrumpCard( Card );
 	//
 	
 	//Signals to player

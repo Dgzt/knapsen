@@ -21,56 +21,6 @@ const int CENTRAL_CARDS_SIZE = 2;
 
 const double SCALE_VALUE = 0.6; //0.7
 
-/*CentralWidget::CentralWidget( QWidget* parent ) : QGraphicsView( parent )
-{	
-	//Set View's stuff
-	setFrameStyle( QFrame::NoFrame );
-	setHorizontalScrollBarPolicy( Qt::ScrollBarAlwaysOff );
-	setVerticalScrollBarPolicy( Qt::ScrollBarAlwaysOff );
-	
-	//Set graphics scene
-	QGraphicsScene* gScene = new QGraphicsScene;
-	gScene->setItemIndexMethod( QGraphicsScene::NoIndex );
-	setScene( gScene );
-	
-	gameIsRunning = false;
-	
-	QImage backgroundImage( KGlobal::dirs()->findResource( "appdata", "pics/background.png" ) );
-	
-	gScene->setBackgroundBrush( QBrush( backgroundImage ) );
-	
-	opponentName = 0;
-	playerName = 0;
-	
-	renderer = new QSvgRenderer( KGlobal::dirs()->findResource( "appdata", "pics/william-tell.svgz" ) );
-	
-	cardDeckSvgItem = new QGraphicsSvgItem;
-	//cardDeckSvgItem = new MySvgItem;
-	cardDeckSvgItem->setSharedRenderer( renderer );
-	cardDeckSvgItem->setElementId( "back" );
-	
-	cardDeckSvgItem->setScale( SCALE_VALUE );
-	
-	//cardSize = cardDeckSvgItem->boundingRect()*SCALE_VALUE;
-	cardSize = cardDeckSvgItem->boundingRect().size()*SCALE_VALUE;
-	
-	opponentCards = 0;
-	playerCards = 0;
-	
-	opponentScoreTable = 0;
-	playerScoreTable = 0;
-	
-	trumpCard = 0;
-	
-	centralCards = 0;
-	
-	closeButton = 0;
-	twentyButton = 0;
-	fortyButton = 0;
-	
-	gScene->addItem( cardDeckSvgItem );
-}*/
-
 CentralWidget::CentralWidget( QWidget* parent ): 
 	QGraphicsView( parent )
 {
@@ -125,53 +75,6 @@ CentralWidget::~CentralWidget()
 
 }
 
-
-/*void CentralWidget::clearWidget()
-{
-	kDebug() << "Clear widget.";
-	
-	gameIsRunning = false;
-	
-	//Remove items from the scene
-	for( int i = 0; i < 5; ++i ){
-		scene()->removeItem( &opponentCards[i] );
-		scene()->removeItem( &playerCards[i] );
-	}
-	
-	scene()->removeItem( opponentName );
-	scene()->removeItem( playerName );
-	scene()->removeItem( trumpCard );
-	scene()->removeItem( centralCards );
-	
-	delete[] opponentCards;
-	delete[] playerCards;
-	delete opponentName;
-	delete playerName;
-	delete opponentScoreTable;
-	delete playerScoreTable;
-	delete trumpCard;
-	delete[] centralCards;
-	delete closeButton;
-	delete twentyButton;
-	delete fortyButton;
-	
-	opponentCards = 0;
-	playerCards = 0;
-	opponentName = 0;
-	playerName = 0;
-	opponentScoreTable = 0;
-	playerScoreTable = 0;
-	trumpCard = 0;
-	centralCards = 0;
-	twentyButton = 0;
-	closeButton = 0;
-	
-	fortyButton = 0;
-	
-	if( !cardDeckSvgItem->isVisible() )
-		cardDeckSvgItem->setVisible( true );
-}*/
-
 void CentralWidget::clearWidget()
 {
 	kDebug() << "Clear widget.";
@@ -223,107 +126,6 @@ void CentralWidget::clearWidget()
 	mFortyButton = 0;
 	mCloseButton = 0;
 }
-
-/*void CentralWidget::setInGamePositions()
-{
-	const int halpOfWidth  = width()/2;
-	const int cardDistance = 10;
-	const int nameDistance = 5;
-	const int scoreTableDistance = 5;
-	//
-	const int buttonDistance = 5;
-	//
-	
-	//Set position of player's name
-	QPoint playerNamePos;
-	playerNamePos.setX( halpOfWidth - playerName->boundingRect().width()/2 );
-	playerNamePos.setY( height() - nameDistance -playerName->boundingRect().height() );
-	playerName->setPos( playerNamePos );
-	
-	//Set position of opponent's name
-	playerNamePos.setX( halpOfWidth - opponentName->boundingRect().width()/2 );
-	playerNamePos.setY( nameDistance );
-	opponentName->setPos( playerNamePos );
-
-	//Set position of opponent's cards and player's cards
-	QPoint posOpponent( halpOfWidth-cardSize.width()/2-2*cardSize.width()-2*cardDistance, 
-						nameDistance+opponentName->boundingRect().height()+nameDistance );
-	QPoint posPlayer( posOpponent.x(), 
-					  height()-nameDistance-playerName->boundingRect().height()-nameDistance-cardSize.height());
-	
-	opponentCards[0].setPos( posOpponent );
-	playerCards[0].setPos( posPlayer );
-	
-	for(int i = 1; i < 5; ++i){
-		posOpponent.rx() += cardDistance+cardSize.width();
-		opponentCards[i].setPos( posOpponent );
-		
-		posPlayer.rx() += cardDistance+cardSize.width();
-		playerCards[i].setPos( posPlayer );
-	}
-	
-	//Set position of trump card
-	QPoint trumpPos;
-	trumpPos.setX( cardDeckSvgItem->scenePos().x()+cardSize.width() );
-	trumpPos.setY( cardDeckSvgItem->scenePos().y()-(cardDeckSvgItem->boundingRect().height()-cardSize.height()) );
-	
-	trumpCard->setPos( trumpPos );	
-	
-	//Set position of centralcards
-	QPoint cenralCard1Pos;
-	cenralCard1Pos.setX( halpOfWidth - cardSize.width()/2 );
-	cenralCard1Pos.setY( ( height()-cardSize.height() ) / 2 );
-	
-	centralCards[0].setPos( cenralCard1Pos );
-	
-	QPoint cenralCard2Pos;
-	cenralCard2Pos.setX( halpOfWidth );
-	cenralCard2Pos.setY( ( height()-cardSize.height() ) / 2 );
-
-	centralCards[1].setPos( cenralCard2Pos );
-	
-	//Set position of score tables
-	QPoint opponentScoreTablePos;
-	opponentScoreTablePos.setX( opponentCards[4].scenePos().x()+cardSize.width()+scoreTableDistance );
-	opponentScoreTablePos.setY( opponentCards[4].scenePos().y() );
-	
-	opponentScoreTable->setPos( opponentScoreTablePos );
-	
-	QPoint playerScoreTablePos;
-	playerScoreTablePos.setX( playerCards[4].scenePos().x()+cardSize.width()+scoreTableDistance );
-	playerScoreTablePos.setY( playerCards[4].scenePos().y()+cardSize.height()-playerScoreTable->boundingRect().height() );
-	
-	playerScoreTable->setPos( playerScoreTablePos );
-	
-	//
-	//setTrumpCardPosition();
-	QPoint trumpCardPos;
-	trumpCardPos.setX( cardDeckSvgItem->scenePos().x()+cardSize.width() );
-	trumpCardPos.setY( cardDeckSvgItem->scenePos().y()-(cardDeckSvgItem->boundingRect().height()-cardSize.height()) );
-	
-	trumpCard->setPos( trumpCardPos );
-	
-	//Set position of close button
-	QPoint closeButtonPos;
-	closeButtonPos.setX( cardDeckSvgItem->scenePos().x() );
-	closeButtonPos.setY( cardDeckSvgItem->scenePos().y()+cardSize.height()+10 );
-	
-	closeButton->setGeometry( QRect( closeButtonPos, QSize( cardSize.width(), 20 ) ) );
-	
-	//Set position of twenty button
-	QPoint twentyButtonPos;
-	twentyButtonPos.setX( playerCards[2].scenePos().x()-cardSize.width()/2-buttonDistance );
-	twentyButtonPos.setY( playerCards[2].scenePos().y()-buttonDistance-20 );
-	
-	twentyButton->setGeometry( QRect( twentyButtonPos, QSize( cardSize.width(), 20 ) ) );
-	
-	//Set position of forty button
-	QPoint fortyButtonPos;
-	fortyButtonPos.setX( playerCards[2].scenePos().x()+cardSize.width()/2+buttonDistance );
-	fortyButtonPos.setY( playerCards[2].scenePos().y()-buttonDistance-20 );
-	
-	fortyButton->setGeometry( QRect( fortyButtonPos, QSize( cardSize.width(), 20 ) ) );
-}*/
 
 void CentralWidget::setInGamePositions()
 {
@@ -429,19 +231,6 @@ void CentralWidget::resizeEvent( QResizeEvent* re )
 	}
 }
 
-/*void CentralWidget::trumpCardSlot( QString cardText )
-{
-	if( !cardText.isEmpty() ){
-		trumpCard->setElementId( cardText );
-	}else{
-		trumpCard->setVisible( false );
-	}
-	
-	//If the trump card is changed, then put under the deck
-	cardDeckSvgItem->setZValue( 1 );
-	trumpCard->setZValue( 0 );
-}*/
-
 void CentralWidget::slotInitialize( QString playerName, QString opponentName, Knapsen::TypeOfCards typeOfCards , int numberOfCardsInHand )
 {
 	kDebug() << "Initialize.";
@@ -508,6 +297,8 @@ void CentralWidget::slotInitialize( QString playerName, QString opponentName, Kn
 	mTrumpCard->setVisible( false );
 	mTrumpCard->setSelectable( false );
 	mTrumpCard->setZValue( -1 );
+	
+	connect( mTrumpCard, SIGNAL( click() ), this, SLOT( slotSelectedTrumpCardSlot() ) );
 
 	scene()->addItem( mTrumpCard );
 	
@@ -555,7 +346,7 @@ void CentralWidget::slotNewPlayerCard( int id , QString card )
 {
 	mPlayerCards[ id ].setElementId( card );
 	
-	if( mGameIsRunning ){
+	if( mGameIsRunning && !mPlayerCards[ id ].isVisible() ){
 		mPlayerCards[ id ].setVisible( true );
 	}
 }
@@ -569,14 +360,6 @@ void CentralWidget::slotNewOpponentCardId( int id )
 
 void CentralWidget::slotNewTrumpCard( QString card )
 {
-	kDebug() << card;
-	
-	/*if( !card.isEmpty() ){
-		mTrumpCard->setElementId( card );
-	}else{
-		mTrumpCard->setVisible( false );
-		mTrumpCard->setElementId( card );
-	}*/
 	mTrumpCard->setElementId( card );
 	
 	if( !mTrumpCard->isVisible() ){
@@ -587,6 +370,11 @@ void CentralWidget::slotNewTrumpCard( QString card )
 void CentralWidget::slotTrumpCardHide()
 {
 	mTrumpCard->setVisible( false );
+}
+
+void CentralWidget::slotTrumpCardSelectableChanged( bool selectable )
+{
+	mTrumpCard->setSelectable( selectable );
 }
 
 void CentralWidget::slotPlayerCardSelectableChanged( int id , bool selectable )
@@ -681,12 +469,7 @@ void CentralWidget::slotStartGame()
 	mPlayerScoreTable->setVisible( true );
 	
 	mTrumpCard->setVisible( true );
-	
-	//
-	//mTwentyButton->setVisible( true );
-	//mFortyButton->setVisible( true );
-	//
-	
+
 	mGameIsRunning = true;
 }
 
@@ -704,16 +487,6 @@ void CentralWidget::slotCoverOpponentCards()
 	emit signalHideShowedOpponentCards();
 }
 
-/*void CentralWidget::closeButtonSlot()
-{
-	trumpCard->setElementId( "back" );
-	
-	cardDeckSvgItem->setZValue( 0 );
-	trumpCard->setZValue( 1 );
-	
-	emit signalCloseDeck();
-}*/
-
 /*void CentralWidget::opponentScoresChanged( int scores )
 {
 	opponentScoreTable->setScores( scores );
@@ -722,24 +495,4 @@ void CentralWidget::slotCoverOpponentCards()
 /*void CentralWidget::playerScoresChanged( int scores )
 {
 	playerScoreTable->setScores( scores );
-}*/
-
-/*void CentralWidget::enabledCloseButtonSlot( bool enabled )
-{
-	closeButton->setVisible( enabled );
-}*/
-
-/*void CentralWidget::enabledTwentyButtonSlot( bool enabled )
-{
-	twentyButton->setVisible( enabled );
-}*/
-
-/*void CentralWidget::enabledFortyButtonSlot(bool enabled )
-{
-	fortyButton->setVisible( enabled );
-}*/
-
-/*void CentralWidget::selectableTrumpCard( bool selectable )
-{
-	trumpCard->setSelectable( selectable );
 }*/

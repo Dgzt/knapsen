@@ -63,7 +63,7 @@ private slots:
 	void slotTwentyButtonClicked(){ emit signalTwentyButtonClicked(); }
 	void slotFortyButtonClicked(){ emit signalFortyButtonClicked(); }
 	void slotCloseButtonClicked(){ emit signalCloseButtonClicked(); }
-	//void selectedTrumpCardSlot(){ emit signalSelectedTrumpCard(); }
+	void slotSelectedTrumpCardSlot(){ emit signalSelectedTrumpCard(); }
 	void slotCoverOpponentCards();
 	
 public slots:
@@ -75,6 +75,7 @@ public slots:
 	
 	void slotNewTrumpCard( QString );
 	void slotTrumpCardHide();
+	void slotTrumpCardSelectableChanged( bool );
 	
 	void slotPlayerCardSelectableChanged( int, bool );
 
@@ -102,11 +103,11 @@ public slots:
 		
 signals:
 	void signalSelectedCardId( int );
-	//void signalCloseDeck();
+	void signalSelectedTrumpCard();
 	void signalTwentyButtonClicked();
 	void signalFortyButtonClicked();
 	void signalCloseButtonClicked();
-	//void signalSelectedTrumpCard();
+	
 	
 	void signalHideShowedOpponentCards();
 	

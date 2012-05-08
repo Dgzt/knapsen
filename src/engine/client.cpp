@@ -151,6 +151,11 @@ void Client::slotProcessCommands()
 			clearTrumpCard();
 			emit signalTrumpCardHide();
 		}
+		
+		if( getCommandPartOfCommand( commandList.first() ) == TRUMP_CARD_SELECTABLE_COMMAND ){
+			kDebug() << getName() << "Selectable trump card.";
+			emit signalTrumpCardSelectableChanged( true );
+		}
 			
 		if( getCommandPartOfCommand( commandList.first() ) == SELECTABLE_ALL_CARDS_COMMAND ){
 			kDebug() << getName() << "Selectable all cards.";
@@ -310,6 +315,18 @@ void Client::slotSelectedCardId( int id )
 	}
 	
 	sendCommand( SELECTED_CARD_ID_COMMAND+QString::number( id ) );
+}
+
+void Client::slotSelectedTrumpCard()
+{
+	kDebug() << "Selected trump card.";
+	
+	int ret = changeTrumpCard();
+	emit signalNewPlayerCard( ret, getCard(ret).getCardText( mTypeOfCards ) );
+	emit signalNewTrumpCard( getTrumpCard().getCardText( mTypeOfCards ) );
+	emit signalTrumpCardSelectableChanged( false );
+	
+	sendChangeTrumpCard();
 }
 
 void Client::slotTwentyButtonClicked()

@@ -56,6 +56,28 @@ int Player::addNewCard( Card card )
 	return -1;
 }
 
+int Player::changeTrumpCard()
+{
+	int ret = -1;
+	
+	for( int i = 0; i < mCards.size(); ++i ){
+		
+		if( mCards.at(i).isValid() && mCards.at(i).getCardSuit() == mTrumpCardSuit && mCards.at(i).getCardType() == Card::Jack ){
+			kDebug() << i;
+			
+			Card tmpCard = mTrumpCard;
+			mTrumpCard = mCards.at(i);
+			removeCard( i );
+			ret = addNewCard( tmpCard );
+			
+			break;
+		}
+		
+	}
+	
+	return ret;
+}
+
 void Player::setSelectableAllCards( bool enabled )
 {
 	for( int i = 0; i < mCards.size(); ++i ){
@@ -200,11 +222,25 @@ bool Player::haveTrumpMarriages() const
 	return ret;
 }
 
+bool Player::canChangeTrumpCard() const
+{
+	bool canChange = false;
+	
+	for( int i = 0; i < mCards.size(); ++i ){
+		
+		if( mCards.at(i).isValid() && mCards.at(i).getCardSuit() == mTrumpCardSuit && mCards.at(i).getCardType() == Card::Jack ){
+			canChange = true;
+		}
+		
+	}
+	
+	return canChange;
+}
+
 void Player::addNewCentralCard( Card card )
 {
 	mCentralCards.append( card );
 	
-	//emit signalNewCentralCard( mCentralCards.size()-1, card );
 	emit signalCentralCardChanged( mCentralCards.size()-1, card );
 }
 
@@ -296,15 +332,7 @@ void Player::newCommand( QString command )
 				addNewCentralCard( selectedCard );
 				removeCard( ret );
 				
-				//emit signalSelectedCard( mCards.at( ret ), ret );
 				emit signalSelectedCard( selectedCard, ret );
-				//mOpponent->sendCommand( OPPONENT_SELECTED_CARD_ID_COMMAND+QString::number( ret ) );
-				//mOpponent->sendOpponentAddNewCentralCard( getCard( ret ) );
-				//mOpponent->sendCommand( COMMANDS_END_COMMAND );
-				
-				//Remove card
-				//addNewCentralCard( getCard( ret ) );
-				//removeCard( ret );
 			}else{
 				kDebug() << "ERROR!" << getName() << "selected" << ret << "card id, but this is not selectable!";
 			}
@@ -347,8 +375,16 @@ void Player::newCommand( QString command )
 		}else{
 			kDebug() << getName() << "ERROR! Clicked to close button, but this is not visible!";
 		}
-		
+
 	}
+	
+	if( getCommandPartOfCommand( command ) == CHANGE_TRUMP_CARD_COMMAND ){
+		kDebug() << getName() << "Change trump card.";
+		
+		changeTrumpCard();
+		emit signalChangedTrumpCard( mTrumpCard );
+	}
+	
 }
 
 bool Player::setSelectableCardsWhatEqualSuit( Card::CardSuit cardSuit )

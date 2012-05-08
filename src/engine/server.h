@@ -59,6 +59,7 @@ private slots:
 	void slotPlayerTwentyButtonClicked();
 	void slotPlayerFortyButtonClicked();
 	void slotPlayerClickedToCloseButton();
+	void slotPlayerChangedTrumpCard( Card );
 	
 	//
 	void slotCheckCentralCards();

@@ -22,6 +22,7 @@ public:
 
 signals:
 	void click( int );
+	void click();
 	
 };
 

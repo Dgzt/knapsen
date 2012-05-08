@@ -31,6 +31,7 @@ public:
 	
 public slots:
 	void slotSelectedCardId( int );
+	void slotSelectedTrumpCard();
 	void slotTwentyButtonClicked();
 	void slotFortyButtonClicked();
 	void slotCloseButtonClicked();
@@ -62,6 +63,10 @@ signals:
 	void signalCloseDeck();
 	
 	void signalTrumpCardHide();
+	
+	//
+	void signalTrumpCardSelectableChanged( bool );
+	//
 	
 	void signalShowOpponentCards( int, QString, int, QString );
 	
