@@ -154,7 +154,8 @@ void Client::slotProcessCommands()
 		
 		if( getCommandPartOfCommand( commandList.first() ) == TRUMP_CARD_SELECTABLE_COMMAND ){
 			kDebug() << getName() << "Selectable trump card.";
-			emit signalTrumpCardSelectableChanged( true );
+			getTrumpCard().setSelectable( true );
+			emit signalTrumpCardSelectableChanged( getTrumpCard().isSelectable() );
 		}
 			
 		if( getCommandPartOfCommand( commandList.first() ) == SELECTABLE_ALL_CARDS_COMMAND ){
@@ -346,5 +347,12 @@ void Client::slotCloseButtonClicked()
 {
 	setCloseButtonVisible( false );
 	emit signalCloseDeck();
+	
+	kDebug() << getTrumpCard().isSelectable();
+	if( getTrumpCard().isSelectable() ){
+		getTrumpCard().setSelectable( false );
+		emit signalTrumpCardSelectableChanged( getTrumpCard().isSelectable() );
+	}
+	
 	sendCommand( CLOSE_BUTTON_CLICKED_COMMAND );
 }

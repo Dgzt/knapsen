@@ -75,6 +75,8 @@ int Player::changeTrumpCard()
 		
 	}
 	
+	mTrumpCard.setSelectable( false );
+
 	return ret;
 }
 
@@ -371,6 +373,11 @@ void Player::newCommand( QString command )
 		
 		if( isCloseButtonVisible() ){
 			setCloseButtonVisible( false );
+			
+			if( getTrumpCard().isSelectable() ){
+				getTrumpCard().setSelectable( false );
+			}
+			
 			emit signalCloseButtonClicked();
 		}else{
 			kDebug() << getName() << "ERROR! Clicked to close button, but this is not visible!";

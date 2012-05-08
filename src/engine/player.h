@@ -120,11 +120,10 @@ protected:
 	
 	//Trump card
 	void setTrumpCard( Card trumpCard ) { mTrumpCard = trumpCard; mTrumpCardSuit = mTrumpCard.getCardSuit(); }
-	Card getTrumpCard() const { return mTrumpCard; }
+	Card& getTrumpCard() { return mTrumpCard; }
 	void clearTrumpCard() { mTrumpCard = Card(); }
 	//
 	int changeTrumpCard();
-	//
 	
 	//Set selectable OR not selectable all avalibe card
 	void setSelectableAllCards( bool );
@@ -238,7 +237,7 @@ public:
 	void sendOpponentClickedToCloseButton(){ sendCommand( OPPONENT_CLICKED_TO_CLOSE_BUTTON_COMMAND ); }
 	
 	//
-	void sendSelectableTrumpCard(){ sendCommand( TRUMP_CARD_SELECTABLE_COMMAND ); }
+	void sendSelectableTrumpCard(){ mTrumpCard.setSelectable( true ); sendCommand( TRUMP_CARD_SELECTABLE_COMMAND ); }
 	void sendChangeTrumpCard(){ sendCommand( CHANGE_TRUMP_CARD_COMMAND ); }
 	//
 	
