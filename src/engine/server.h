@@ -52,7 +52,7 @@ class Server : public QTcpServer
 	bool mFortyButtonClickedThisTurn;
 	
 	bool mClickedToCloseButtonThisTurn;
-	bool mClickedToCloseButtonThisRound;
+	Player *mPlayerWhoClickedToCloseButtonThisRound;
 	//
 	
 	void roundOver();

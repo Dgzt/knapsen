@@ -15,8 +15,8 @@ Server::Server( QObject* parent ) :
 	mAdminName( "" ),
 	mTwentyButtonClickedThisTurn( false ),
 	mFortyButtonClickedThisTurn( false ),
-	mClickedToCloseButtonThisTurn( false ),
-	mClickedToCloseButtonThisRound( false ) 
+	mClickedToCloseButtonThisTurn( false )//,
+	//mClickedToCloseButtonThisRound( false ) 
 {
 	kDebug() << "Initialize.";
 
@@ -29,6 +29,7 @@ Server::Server( QObject* parent ) :
 	mTypeOfCards = Knapsen::GermanSuits;
 	
 	mDeck = 0;
+	mPlayerWhoClickedToCloseButtonThisRound = 0;
 	mWaitingMarriage = 0;
 }
 
@@ -46,6 +47,32 @@ Server::~Server()
 void Server::roundOver()
 {
 	kDebug() << "---- Round Over ----";
+	
+	Player *winnerPlayer = mGameSequence->getCurrentPlayer();
+	Player *looserPlayer = mGameSequence->getNextPlayer();
+	
+	if( mPlayerWhoClickedToCloseButtonThisRound == looserPlayer ){
+		Player *tmpPlayer = winnerPlayer;
+		winnerPlayer = looserPlayer;
+		looserPlayer = tmpPlayer;
+	}
+	
+	int scores( 0 );
+	
+	if( !mPlayerWhoClickedToCloseButtonThisRound ){
+		if( looserPlayer->getTricks() == 0 ){
+			scores = 3;
+		}else if( looserPlayer->getTricks() < 33 ){
+			scores = 2;
+		}else{ //  33 <= looserPlayer->getTricks() && looserPlayer->getTricks() < 66
+			scores = 1;
+		}
+	}else{
+		//Under developing.
+	}
+	
+	
+	
 }
 
 void Server::slotNewPlayer( Player* player )
@@ -182,7 +209,8 @@ void Server::slotPlayerSelectedCard( Card selectedCard, int cardPosition )
 		
 		mGameSequence->setCurrentPlayer( nextPlayer );
 		
-		if( !mClickedToCloseButtonThisRound && mDeck->getDeckSize() > 0 ){
+		//if( !mClickedToCloseButtonThisRound && mDeck->getDeckSize() > 0 ){
+		if( !mPlayerWhoClickedToCloseButtonThisRound && mDeck->getDeckSize() > 0 ){
 			nextPlayer->sendSelectableAllCards();
 		}else{ // mDeck->getDeckSize() == 0
 			nextPlayer->sendSelectableCertainCards();
@@ -215,7 +243,8 @@ void Server::slotPlayerClickedToCloseButton()
 {
 	kDebug() << mGameSequence->getCurrentPlayer()->getName() << "Clicked to close button.";
 	mClickedToCloseButtonThisTurn = true;
-	mClickedToCloseButtonThisRound = true;
+	//mClickedToCloseButtonThisRound = true;
+	mPlayerWhoClickedToCloseButtonThisRound = mGameSequence->getCurrentPlayer();
 }
 
 void Server::slotPlayerChangedTrumpCard( Card newTrumpCard )
@@ -268,14 +297,6 @@ void Server::slotCheckCentralCards()
 	kDebug() << mGameSequence->getCurrentPlayer()->getName() << "get" << centralCard1Point+centralCard2Point << "points.";
 	mGameSequence->getCurrentPlayer()->addTricks( centralCard1Point + centralCard2Point );
 	
-	/*if( mTwentyButtonClickedThisTurn ){
-		mTwentyButtonClickedThisTurn = false;
-	}
-		
-	if( mFortyButtonClickedThisTurn ){
-		mFortyButtonClickedThisTurn = false;
-	}*/
-	
 	if( mWaitingMarriage && mWaitingMarriage->first == mGameSequence->getCurrentPlayer() ){
 		mGameSequence->getCurrentPlayer()->addTricks( mWaitingMarriage->second );
 		delete mWaitingMarriage;
@@ -287,7 +308,7 @@ void Server::slotCheckCentralCards()
 	}
 		
 	if( mGameSequence->isRoundOver() ){
-		kDebug() << "--- Round end! ---";
+		roundOver();
 	}else{
 		kDebug() << "Start next turn";
 		
@@ -297,7 +318,8 @@ void Server::slotCheckCentralCards()
 			mPlayerList.at( i )->sendClearCentralCards();
 		}
 		
-		if( !mClickedToCloseButtonThisRound ){
+		//if( !mClickedToCloseButtonThisRound ){
+		if( !mPlayerWhoClickedToCloseButtonThisRound ){
 			//If the dech have card yet, then add new cards to players, frist who won the last turn
 			if( mDeck->getDeckSize() > 0 ){
 				mGameSequence->getCurrentPlayer()->sendNewCard( mDeck->getCard() );
@@ -329,7 +351,8 @@ void Server::slotCheckCentralCards()
 			mGameSequence->getCurrentPlayer()->sendFortyButtonVisible();
 		}
 		
-		if( !mClickedToCloseButtonThisRound && mDeck->getDeckSize() > 3 ){
+		//if( !mClickedToCloseButtonThisRound && mDeck->getDeckSize() > 3 ){
+		if( !mPlayerWhoClickedToCloseButtonThisRound && mDeck->getDeckSize() > 3 ){
 			mGameSequence->getCurrentPlayer()->sendCloseButtonVisible();
 		}
 		
