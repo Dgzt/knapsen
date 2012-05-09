@@ -44,12 +44,18 @@ class Server : public QTcpServer
 	QList<Card> mCentralCards;
 	
 	//
+	QPair<Player*, int> *mWaitingMarriage;
+	//
+	
+	//
 	bool mTwentyButtonClickedThisTurn;
 	bool mFortyButtonClickedThisTurn;
 	
 	bool mClickedToCloseButtonThisTurn;
 	bool mClickedToCloseButtonThisRound;
 	//
+	
+	void roundOver();
 	
 private slots:
 	void slotNewPlayer( Player* );

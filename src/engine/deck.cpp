@@ -50,11 +50,11 @@ void Deck::buildDeck()
 		}
 	}
 	
-	//mCards[19] = Card( 1 );
-	//mCards[17] = Card( 2 );
+	mCards[19] = Card( 1 );
+	mCards[17] = Card( 2 );
 	
-	mCards[19] = Card( 3 );
-	mCards[13] = Card( 4 );
+	//mCards[19] = Card( 3 );
+	//mCards[13] = Card( 4 );
 	
 	kDebug() << "Generated deck:";
 	for( int i = 0; i < mCards.size(); ++i ){

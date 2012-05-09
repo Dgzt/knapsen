@@ -178,6 +178,7 @@ public:
 	int getPositionOfPairOfCard( Card );
 	//
 	
+	void addTricks( int );
 	int getTricks() const{ return mTricks; }
 	
 	bool haveRegularMarriages() const;
@@ -224,8 +225,6 @@ public:
 	void sendOpponentAddNewCentralCard( Card );
 	
 	void sendOpponentDisconnected(){ sendCommand( OPPONENT_DISCONNECTED_COMMAND ); }
-	
-	void addTricks( int );
 	
 	void sendClearCentralCards();
 	

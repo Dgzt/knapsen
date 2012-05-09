@@ -29,6 +29,7 @@ Server::Server( QObject* parent ) :
 	mTypeOfCards = Knapsen::GermanSuits;
 	
 	mDeck = 0;
+	mWaitingMarriage = 0;
 }
 
 Server::~Server()
@@ -40,6 +41,11 @@ Server::~Server()
 	if( mDeck ){
 		delete mDeck;
 	}
+}
+
+void Server::roundOver()
+{
+	kDebug() << "---- Round Over ----";
 }
 
 void Server::slotNewPlayer( Player* player )
@@ -125,12 +131,46 @@ void Server::slotPlayerSelectedCard( Card selectedCard, int cardPosition )
 			kDebug() << "Pair this card position:" << currentPlayer->getPositionOfPairOfCard( selectedCard );
 			int posOfPairOfCard = currentPlayer->getPositionOfPairOfCard( selectedCard );
 			nextPlayer->sendVisibleOpponentCards( cardPosition, selectedCard, posOfPairOfCard, currentPlayer->getCard( posOfPairOfCard ) );
+		
+			//
+			if( currentPlayer->getTricks() > 0 ){
+				
+				currentPlayer->addTricks( 20 );
+				
+				if( mGameSequence->isRoundOver() ){
+					roundOver();
+				}
+				
+			}else{ //currentPlayer->getTricks() == 0
+				mWaitingMarriage = new QPair< Player*, int >;
+				mWaitingMarriage->first = currentPlayer;
+				mWaitingMarriage->second = 20;
+			}
+			
+			mTwentyButtonClickedThisTurn = false;
 		}
 		
 		if( mFortyButtonClickedThisTurn ){
 			kDebug() << "Pair this card position:" << currentPlayer->getPositionOfPairOfCard( selectedCard );
 			int posOfPairOfCard = currentPlayer->getPositionOfPairOfCard( selectedCard );
 			nextPlayer->sendVisibleOpponentCards( cardPosition, selectedCard, posOfPairOfCard, currentPlayer->getCard( posOfPairOfCard ) );
+			
+			//
+			if( currentPlayer->getTricks() > 0 ){
+				
+				currentPlayer->addTricks( 40 );
+				
+				if( mGameSequence->isRoundOver() ){
+					roundOver();
+				}
+				
+			}else{ //currentPlayer->getTricks() == 0
+				mWaitingMarriage = new QPair< Player*, int >;
+				mWaitingMarriage->first = currentPlayer;
+				mWaitingMarriage->second = 40;
+			}
+			
+			mFortyButtonClickedThisTurn = false;
 		}
 		
 		if( mClickedToCloseButtonThisTurn ){
@@ -228,12 +268,18 @@ void Server::slotCheckCentralCards()
 	kDebug() << mGameSequence->getCurrentPlayer()->getName() << "get" << centralCard1Point+centralCard2Point << "points.";
 	mGameSequence->getCurrentPlayer()->addTricks( centralCard1Point + centralCard2Point );
 	
-	if( mTwentyButtonClickedThisTurn ){
+	/*if( mTwentyButtonClickedThisTurn ){
 		mTwentyButtonClickedThisTurn = false;
 	}
 		
 	if( mFortyButtonClickedThisTurn ){
 		mFortyButtonClickedThisTurn = false;
+	}*/
+	
+	if( mWaitingMarriage && mWaitingMarriage->first == mGameSequence->getCurrentPlayer() ){
+		mGameSequence->getCurrentPlayer()->addTricks( mWaitingMarriage->second );
+		delete mWaitingMarriage;
+		mWaitingMarriage = 0;
 	}
 		
 	if( mClickedToCloseButtonThisTurn ){
