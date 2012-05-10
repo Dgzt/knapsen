@@ -23,7 +23,7 @@ public:
 	
 	Player* getNextPlayer();
 	
-	Player* isRoundOver();
+	bool isRoundOver();
 };
 
 #endif //GAMESEQUENCE_H

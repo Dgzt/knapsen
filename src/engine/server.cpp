@@ -48,14 +48,39 @@ void Server::roundOver()
 {
 	kDebug() << "---- Round Over ----";
 	
-	Player *winnerPlayer = mGameSequence->getCurrentPlayer();
-	Player *looserPlayer = mGameSequence->getNextPlayer();
+	//Player *winnerPlayer = mGameSequence->getCurrentPlayer();
+	//Player *looserPlayer = mGameSequence->getNextPlayer();
+	
+	Player *currentPlayer = mGameSequence->getCurrentPlayer();
+	Player *nextPlayer = mGameSequence->getNextPlayer();
+	
+	Player *winnerPlayer = 0; //Initialize with 0, becouse the compiler write warning.
+	Player *looserPlayer = 0; // --- || ---
+	
+	if( currentPlayer->getTricks() >= 66 ){
+		kDebug() << "Current player have more then 66 tricks.";
+		
+		winnerPlayer = currentPlayer;
+		looserPlayer = nextPlayer;
+	}else if( nextPlayer->getTricks() >= 66 ){
+		kDebug() << "Next player have more then 66 tricks.";
+		
+		winnerPlayer = nextPlayer;
+		looserPlayer = currentPlayer;
+	}else if( currentPlayer->getNumberOfCardsInHandNow() == 0 ){
+		kDebug() << "Players number of cards in hand now is 0";
+		
+		winnerPlayer = currentPlayer;
+		looserPlayer = nextPlayer;
+	}
 	
 	if( mPlayerWhoClickedToCloseButtonThisRound == looserPlayer ){
 		Player *tmpPlayer = winnerPlayer;
 		winnerPlayer = looserPlayer;
 		looserPlayer = tmpPlayer;
 	}
+	
+	kDebug() << "Win the round:" << winnerPlayer->getName();
 	
 	int scores( 0 );
 	
@@ -291,16 +316,17 @@ void Server::slotCheckCentralCards()
 		currentPlayerStartNextTurn = false;
 	}
 		
-		
 	if( !currentPlayerStartNextTurn ){
 		mGameSequence->setCurrentPlayer( mGameSequence->getNextPlayer() );
 	}
-		
-	kDebug() << mGameSequence->getCurrentPlayer()->getName() << "get" << centralCard1Point+centralCard2Point << "points.";
-	mGameSequence->getCurrentPlayer()->addTricks( centralCard1Point + centralCard2Point );
 	
-	if( mWaitingMarriage && mWaitingMarriage->first == mGameSequence->getCurrentPlayer() ){
-		mGameSequence->getCurrentPlayer()->addTricks( mWaitingMarriage->second );
+	Player* currentPlayer = mGameSequence->getCurrentPlayer();
+		
+	kDebug() << currentPlayer->getName() << "get" << centralCard1Point+centralCard2Point << "points.";
+	currentPlayer->addTricks( centralCard1Point + centralCard2Point );
+	
+	if( mWaitingMarriage && mWaitingMarriage->first == currentPlayer ){
+		currentPlayer->addTricks( mWaitingMarriage->second );
 		delete mWaitingMarriage;
 		mWaitingMarriage = 0;
 	}
@@ -324,7 +350,7 @@ void Server::slotCheckCentralCards()
 		if( !mPlayerWhoClickedToCloseButtonThisRound ){
 			//If the dech have card yet, then add new cards to players, frist who won the last turn
 			if( mDeck->getDeckSize() > 0 ){
-				mGameSequence->getCurrentPlayer()->sendNewCard( mDeck->getCard() );
+				currentPlayer->sendNewCard( mDeck->getCard() );
 			
 				if( mDeck->getDeckSize() > 0 ){
 					mGameSequence->getNextPlayer()->sendNewCard( mDeck->getCard() );
@@ -341,21 +367,26 @@ void Server::slotCheckCentralCards()
 			}
 		}
 		
-		mGameSequence->getCurrentPlayer()->sendSelectableAllCards();
+		currentPlayer->sendSelectableAllCards();
 		
-		if( mGameSequence->getCurrentPlayer()->haveRegularMarriages() ){
-			kDebug() << mGameSequence->getCurrentPlayer()->getName() << "have regular marriages.";
-			mGameSequence->getCurrentPlayer()->sendTwentyButtonVisible();
+		if( currentPlayer->haveRegularMarriages() ){
+			kDebug() << currentPlayer->getName() << "have regular marriages.";
+			currentPlayer->sendTwentyButtonVisible();
 		}
 	
-		if( mGameSequence->getCurrentPlayer()->haveTrumpMarriages() ){
-			kDebug() << mGameSequence->getCurrentPlayer()->getName() << "have trump marriages.";
-			mGameSequence->getCurrentPlayer()->sendFortyButtonVisible();
+		if( currentPlayer->haveTrumpMarriages() ){
+			kDebug() << currentPlayer->getName() << "have trump marriages.";
+			currentPlayer->sendFortyButtonVisible();
+		}
+		
+		if( currentPlayer->canChangeTrumpCard() ){
+			kDebug() << currentPlayer->getName() << "can change trump card.";
+			currentPlayer->sendSelectableTrumpCard();
 		}
 		
 		//if( !mClickedToCloseButtonThisRound && mDeck->getDeckSize() > 3 ){
 		if( !mPlayerWhoClickedToCloseButtonThisRound && mDeck->getDeckSize() > 3 ){
-			mGameSequence->getCurrentPlayer()->sendCloseButtonVisible();
+			currentPlayer->sendCloseButtonVisible();
 		}
 		
 	}

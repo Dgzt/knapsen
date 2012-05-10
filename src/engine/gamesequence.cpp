@@ -50,19 +50,19 @@ Player* GameSequence::getNextPlayer()
 	return mPlayers->at( nextPlayer );
 }
 
-Player* GameSequence::isRoundOver()
+bool GameSequence::isRoundOver()
 {
 	//If a player have equal or more then 66 tricks, will have win the round
-	/*for( int i = 0; i < mPlayers->size(); ++i ){
+	for( int i = 0; i < mPlayers->size(); ++i ){
 		if( mPlayers->at( i )->getTricks() >= 66 ){
-			return mPlayers->at( i );
+			return true;
 		}
-	}*/
+	}
 	
 	//If a player have not card in hand, then win the round who win the last turn
 	if( mPlayers->at( mCurrentPlayer )->getNumberOfCardsInHandNow()  == 0 ){
-		return getCurrentPlayer();
+		return true;
 	}
 	
-	return 0;
+	return false;
 }
