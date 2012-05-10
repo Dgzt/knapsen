@@ -59,7 +59,7 @@ void Server::roundOver()
 	
 	int scores( 0 );
 	
-	if( !mPlayerWhoClickedToCloseButtonThisRound ){
+	if( !mPlayerWhoClickedToCloseButtonThisRound || mPlayerWhoClickedToCloseButtonThisRound == winnerPlayer ){
 		if( looserPlayer->getTricks() == 0 ){
 			scores = 3;
 		}else if( looserPlayer->getTricks() < 33 ){
@@ -67,8 +67,10 @@ void Server::roundOver()
 		}else{ //  33 <= looserPlayer->getTricks() && looserPlayer->getTricks() < 66
 			scores = 1;
 		}
-	}else{
+	}else{ //The loser player closed the deck
+		
 		//Under developing.
+		
 	}
 	
 	
