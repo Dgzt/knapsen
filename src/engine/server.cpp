@@ -72,6 +72,9 @@ void Server::roundOver()
 		
 		winnerPlayer = currentPlayer;
 		looserPlayer = nextPlayer;
+	}else{
+		kDebug() << "ERROR! Undefined winning condition.";
+		return;
 	}
 	
 	if( mPlayerWhoClickedToCloseButtonThisRound == looserPlayer ){
