@@ -152,7 +152,9 @@ void MainWindow::setGameSignals()
 	connect( client, SIGNAL( signalCloseButtonVisible( bool ) ),								cWidget, SLOT( slotCloseButtonVisible( bool ) ) );
 	connect( client, SIGNAL( signalShowOpponentCards( int, QString, int, QString ) ),			cWidget, SLOT( slotShowOpponentCards( int, QString, int, QString ) ) );
 	connect( client, SIGNAL( signalStartGame() ),												cWidget, SLOT( slotStartGame() ) );
+	
 	connect( client, SIGNAL( signalOpponentDisconnected() ),									this,	 SLOT( slotOpponentDisconnected() ) );
+	connect( client, SIGNAL( signalEndRound( QString, int ) ),									this,	 SLOT( slotEndRound( QString, int ) ) );
 	
 	connect( cWidget, SIGNAL( signalSelectedCardId( int ) ),									client, SLOT( slotSelectedCardId( int ) ) );
 	connect( cWidget, SIGNAL( signalSelectedTrumpCard() ),										client, SLOT( slotSelectedTrumpCard() ) );
@@ -360,23 +362,14 @@ void MainWindow::slotOpponentDisconnected()
 	}
 }
 
-/*void MainWindow::endRoundSlot( QString winnerName, int scores )
+void MainWindow::slotEndRound( QString winnerName, int winnerScore )
 {
-	kDebug() << "End round slot.";
+	kDebug() << winnerName << "win the round with" << winnerScore << "scores.";
 	
-	EndRoundDialog erd( this, winnerName, scores );
+	EndRoundDialog endRoundDialog( this, winnerName, winnerScore );
 	
-	erd.exec();
-	
-	//Send ok to game
-	bool ret = game->startNextRoundSlot();
-	
-	if( !ret ){
-		kDebug() << "Show waiting dialog.";
-		// Under developing.
-	}
-	
-}*/
+	endRoundDialog.exec();
+}
 
 /*void MainWindow::endGameSlot( QString winnerName )
 {

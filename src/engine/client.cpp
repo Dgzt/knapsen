@@ -296,6 +296,23 @@ void Client::slotProcessCommands()
 			emit signalStartGame();
 		}
 		
+		if( getCommandPartOfCommand( commandList.first() ) == END_ROUND_COMMAND ){
+			kDebug() << getName() << "End round.";
+			
+			QString value = getValuePartOfCommand( commandList.first() );
+			
+			QString winnerName = value.mid( 0, value.indexOf( ',' ) );
+			
+			bool ok;
+			int winnerScore = value.mid( value.indexOf( ',' )+1 ).toInt( &ok );
+			if( ok ){
+				emit signalEndRound( winnerName, winnerScore );
+			}else{
+				kDebug() << "ERROR! Cannot convert winner scores command value to int!";
+			}
+			
+		}
+		
 		
 		
 		if( getName() != "Bot" && getCommandPartOfCommand( commandList.first() ) == VISIBLE_OPPONENT_CARDS_COMMAND ){

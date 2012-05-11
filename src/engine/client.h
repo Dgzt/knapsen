@@ -75,6 +75,10 @@ signals:
 	
 	void signalStartGame();
 	
+	//
+	void signalEndRound( QString, int );
+	//
+	
 	//For bot
 	void signalInAction();
 

@@ -62,6 +62,9 @@ static const QString CLOSE_BUTTON_VISIBLE_COMMAND = ":CLOSE_BUTTON_VISIBLE";
 static const QString CLOSE_BUTTON_CLICKED_COMMAND = ":CLOSE_BUTTON_CLICKED";
 static const QString OPPONENT_CLICKED_TO_CLOSE_BUTTON_COMMAND = ":OPPONENT_CLICKED_TO_CLOSE_BUTTON";
 
+//
+static const QString END_ROUND_COMMAND = ":END_ROUND=";
+
 static const QString COMMANDS_END_COMMAND = ":COMMANDS_END";
 
 
@@ -252,8 +255,11 @@ public:
 	void sendStartGame(){ sendCommand( START_GAME_COMMAND ); }
 	
 	//
-	void sendCommandsEnd(){ sendCommand( COMMANDS_END_COMMAND ); }
+	void sendEndRound( QString winnerName, int winnnerScores ){ sendCommand( END_ROUND_COMMAND+winnerName+","+QString::number( winnnerScores ) ); }
 	//
+	
+	
+	void sendCommandsEnd(){ sendCommand( COMMANDS_END_COMMAND ); }
 	
 signals:
 	//Signals to server

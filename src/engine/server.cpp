@@ -106,8 +106,14 @@ void Server::roundOver()
 		
 	}else{
 		
-		//Under developing.
+		for( int i = 0; i < mPlayerList.size(); ++i ){
+			mPlayerList.at( i )->sendEndRound( winnerPlayer->getName(), scores );
+		}
 		
+	}
+	
+	for( int i = 0; i < mPlayerList.size(); ++i ){
+		mPlayerList.at( i )->sendCommandsEnd();
 	}
 	
 }
@@ -203,6 +209,7 @@ void Server::slotPlayerSelectedCard( Card selectedCard, int cardPosition )
 				
 				if( mGameSequence->isRoundOver() ){
 					roundOver();
+					return;
 				}
 				
 			}else{ //currentPlayer->getTricks() == 0
@@ -226,6 +233,7 @@ void Server::slotPlayerSelectedCard( Card selectedCard, int cardPosition )
 				
 				if( mGameSequence->isRoundOver() ){
 					roundOver();
+					return;
 				}
 				
 			}else{ //currentPlayer->getTricks() == 0
@@ -347,6 +355,7 @@ void Server::slotCheckCentralCards()
 		
 	if( mGameSequence->isRoundOver() ){
 		roundOver();
+		return;
 	}else{
 		kDebug() << "Start next turn";
 		

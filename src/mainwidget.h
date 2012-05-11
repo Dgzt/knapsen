@@ -46,6 +46,8 @@ private slots:
 	
 	void slotOpponentDisconnected();
 	
+	void slotEndRound( QString, int );
+	
 	/*void endRoundSlot( QString, int );
 	void endGameSlot( QString );*/
 	
