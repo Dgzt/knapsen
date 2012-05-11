@@ -24,6 +24,7 @@ public:
 	Player* getNextPlayer();
 	
 	bool isRoundOver();
+	bool isGameOver();
 };
 
 #endif //GAMESEQUENCE_H

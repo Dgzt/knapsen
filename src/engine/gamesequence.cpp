@@ -66,3 +66,14 @@ bool GameSequence::isRoundOver()
 	
 	return false;
 }
+
+bool GameSequence::isGameOver()
+{
+	for( int i = 0; i < mPlayers->size(); ++i ){
+		if( mPlayers->at( i )->getScores() >= 7 ){
+			return true;
+		}
+	}
+	
+	return false;
+}

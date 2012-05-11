@@ -100,6 +100,16 @@ void Server::roundOver()
 	kDebug() << winnerPlayer->getName() << "win the round with" << scores << "scores.";
 	winnerPlayer->addScores( scores );
 	
+	if( mGameSequence->isGameOver() ){
+		
+		//Under developing.
+		
+	}else{
+		
+		//Under developing.
+		
+	}
+	
 }
 
 void Server::slotNewPlayer( Player* player )
