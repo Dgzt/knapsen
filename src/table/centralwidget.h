@@ -85,7 +85,11 @@ public slots:
 	
 	void slotOpponentTricksChanged( int );
 	
+	void slotOpponentScoresChanged( int );
+	
 	void slotPlayerTricksChanged( int );
+	
+	void slotPlayerScoresChanged( int );
 	
 	void slotDeckVisible( bool );
 	void slotCloseDeck();

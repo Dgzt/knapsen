@@ -5,7 +5,7 @@ Player::Player( QObject* parent ):
 	QTcpSocket( parent ),
 	mName( "" ),
 	mTricks( 0 ),
-	//mScores( 0 ),
+	mScores( 0 ),
 	mTrumpCard(),
 	mTwentyButtonVisible( false ),
 	mFortyButtonVisible( false ),
@@ -491,6 +491,13 @@ void Player::addTricks( int tricks )
 	setTricks( getTricks() + tricks );
 	sendCommand( PLAYER_TRICKS_CHANGED_COMMAND+QString::number( getTricks() ) );
 	mOpponent->sendCommand( OPPONENT_TRICKS_CHANGED_COMMAND+QString::number( getTricks() ) );
+}
+
+void Player::addScores( int scores )
+{
+	setScores( getScores() + scores );
+	sendCommand( PLAYER_SCORES_CHANGED_COMMAND+QString::number( getScores() ) );
+	mOpponent->sendCommand( OPPONENT_SCORES_CHANGED_COMMAND+QString::number( getScores() ) );
 }
 
 void Player::sendVisibleOpponentCards( int card1Pos, Card card1, int card2Pos, Card card2 )

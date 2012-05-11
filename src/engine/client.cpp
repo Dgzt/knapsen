@@ -243,6 +243,19 @@ void Client::slotProcessCommands()
 				kDebug() << "ERROR! Cannot convert player tricks changed command value to int!";
 			}
 		}
+		
+		if( getCommandPartOfCommand( commandList.first() ) == PLAYER_SCORES_CHANGED_COMMAND ){
+			kDebug() << getName() << "Player scores changed:" << getValuePartOfCommand( commandList.first() );
+			
+			bool ok;
+			int ret = getValuePartOfCommand( commandList.first() ).toInt( &ok );
+			if( ok ){
+				setScores( ret );
+				emit signalPlayerScoresChanged( ret );
+			}else{
+				kDebug() << "ERROR! Cannot convert player scores changed command value to int!";
+			}
+		}
 			
 		if( getCommandPartOfCommand( commandList.first() ) == OPPONENT_TRICKS_CHANGED_COMMAND ){
 			kDebug() << getName() << "Opponent tricks changed:" << getValuePartOfCommand( commandList.first() );
@@ -253,6 +266,18 @@ void Client::slotProcessCommands()
 				emit signalOpponentTricksChanged( ret );
 			}else{
 				kDebug() << "ERROR! Cannot convert opponent tricks changed command value to int!";
+			}
+		}
+		
+		if( getCommandPartOfCommand( commandList.first() ) == OPPONENT_SCORES_CHANGED_COMMAND ){
+			kDebug() << getName() << "Opponent scores changed:" << getValuePartOfCommand( commandList.first() );
+			
+			bool ok;
+			int ret = getValuePartOfCommand( commandList.first() ).toInt( &ok );
+			if( ok ){
+				emit signalOpponentScoresChanged( ret );
+			}else{
+				kDebug() << "ERROR! Cannot convert opponent scores changed command value to int!";
 			}
 		}
 		

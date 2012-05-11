@@ -41,6 +41,8 @@ static const QString OPPONENT_ADD_NEW_CENTRAL_CARD_COMMAND = ":OPPONENT_ADD_NEW_
 //
 static const QString PLAYER_TRICKS_CHANGED_COMMAND = ":PLAYER_TRICKS_CHANGED=";
 static const QString OPPONENT_TRICKS_CHANGED_COMMAND = ":OPPONENT_TRICKS_CHANGED=";
+static const QString PLAYER_SCORES_CHANGED_COMMAND = ":PLAYER_SCORES_CHANGED=";
+static const QString OPPONENT_SCORES_CHANGED_COMMAND = ":OPPONENT_SCORES_CHANGED=";
 
 //
 static const QString OPPONENT_DISCONNECTED_COMMAND = ":OPPONENT_DISCONNECTED";
@@ -83,7 +85,7 @@ class Player : public QTcpSocket
 	
 	int mTricks;
 	
-	//int mScores;
+	int mScores;
 	
 	//Trump card
 	Card mTrumpCard;
@@ -152,6 +154,7 @@ protected:
 	//
 	
 	void setTricks( int tricks ){ mTricks = tricks; }
+	void setScores( int scores ){ mScores = scores; }
 	
 	//Send command to socket
 	void sendCommand( QString command ){ write( command.toAscii() ); }
@@ -180,6 +183,8 @@ public:
 	
 	void addTricks( int );
 	int getTricks() const{ return mTricks; }
+	void addScores( int );
+	int getScores() const{ return mScores; }
 	
 	bool haveRegularMarriages() const;
 	bool haveTrumpMarriages() const;

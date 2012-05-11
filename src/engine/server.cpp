@@ -98,6 +98,7 @@ void Server::roundOver()
 	}
 	
 	kDebug() << winnerPlayer->getName() << "win the round with" << scores << "scores.";
+	winnerPlayer->addScores( scores );
 	
 }
 

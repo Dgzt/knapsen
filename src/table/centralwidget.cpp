@@ -403,9 +403,19 @@ void CentralWidget::slotOpponentTricksChanged( int tricks )
 	mOpponentScoreTable->setTricks( tricks );
 }
 
+void CentralWidget::slotOpponentScoresChanged( int scores )
+{
+	mOpponentScoreTable->setScores( scores );
+}
+
 void CentralWidget::slotPlayerTricksChanged( int tricks )
 {
 	mPlayerScoreTable->setTricks( tricks );
+}
+
+void CentralWidget::slotPlayerScoresChanged( int scores )
+{
+	mPlayerScoreTable->setScores( scores );
 }
 
 void CentralWidget::slotDeckVisible( bool visible )
@@ -486,13 +496,3 @@ void CentralWidget::slotCoverOpponentCards()
 	
 	emit signalHideShowedOpponentCards();
 }
-
-/*void CentralWidget::opponentScoresChanged( int scores )
-{
-	opponentScoreTable->setScores( scores );
-}*/
-
-/*void CentralWidget::playerScoresChanged( int scores )
-{
-	playerScoreTable->setScores( scores );
-}*/

@@ -56,7 +56,11 @@ signals:
 	
 	void signalOpponentTricksChanged( int );
 	
+	void signalOpponentScoresChanged( int );
+	
 	void signalPlayerTricksChanged( int );
+	
+	void signalPlayerScoresChanged( int );
 	
 	void signalDeckVisible( bool );
 	
