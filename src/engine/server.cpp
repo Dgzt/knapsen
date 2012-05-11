@@ -83,8 +83,6 @@ void Server::roundOver()
 		looserPlayer = tmpPlayer;
 	}
 	
-	kDebug() << "Win the round:" << winnerPlayer->getName();
-	
 	int scores( 0 );
 	
 	if( !mPlayerWhoClickedToCloseButtonThisRound || mPlayerWhoClickedToCloseButtonThisRound == winnerPlayer ){
@@ -96,12 +94,10 @@ void Server::roundOver()
 			scores = 1;
 		}
 	}else{ //The loser player closed the deck
-		
-		//Under developing.
-		
+		scores = 2;
 	}
 	
-	
+	kDebug() << winnerPlayer->getName() << "win the round with" << scores << "scores.";
 	
 }
 
