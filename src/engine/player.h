@@ -63,6 +63,7 @@ static const QString CLOSE_BUTTON_CLICKED_COMMAND = ":CLOSE_BUTTON_CLICKED";
 static const QString OPPONENT_CLICKED_TO_CLOSE_BUTTON_COMMAND = ":OPPONENT_CLICKED_TO_CLOSE_BUTTON";
 
 //
+static const QString NEW_ROUND_COMMAND = ":NEW_ROUND";
 static const QString END_ROUND_COMMAND = ":END_ROUND=";
 static const QString START_NEXT_ROUND_COMMAND = ":START_NEXT_ROUND";
 
@@ -119,6 +120,10 @@ protected:
 	
 	void setNumberOfCardsInHand( int );
 	int getNumberOfCardsInHand() const{ return mCards.size(); }
+	
+	//
+	void newRound();
+	//
 	
 	int addNewCard( Card );
 	//Card getCard( int id ){ return mCards.at( id ); }
@@ -252,12 +257,13 @@ public:
 	//If the opponent clicked to twenty or forty button, then show that cards
 	void sendVisibleOpponentCards( int, Card, int, Card );
 	
+	//
+	void sendNewRound(){ newRound(); sendCommand( NEW_ROUND_COMMAND ); }
+	//
 	
 	void sendStartGame(){ sendCommand( START_GAME_COMMAND ); }
 	
-	//
 	void sendEndRound( QString winnerName, int winnnerScores ){ sendCommand( END_ROUND_COMMAND+winnerName+","+QString::number( winnnerScores ) ); }
-	//
 	
 	
 	void sendCommandsEnd(){ sendCommand( COMMANDS_END_COMMAND ); }
@@ -272,7 +278,7 @@ signals:
 	void signalCloseButtonClicked();
 	void signalChangedTrumpCard( Card );
 	//
-	void signalStartNextRound();
+	void signalStartNextRound( Player* );
 	//
 	
 	//Signals to player

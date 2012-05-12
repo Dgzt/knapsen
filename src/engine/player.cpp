@@ -171,6 +171,20 @@ int Player::getNumberOfCardsInHandNow()
 	return ret;
 }
 
+void Player::newRound()
+{
+	//Clear cards in hand
+	for( int i = 0; i < mCards.size(); ++i ){
+		mCards[ i ] = Card();
+	}
+	
+	//Clear trump Card
+	setTrumpCard( Card() );
+	
+	//Clear tricks
+	setTricks( 0 );
+}
+
 int Player::getPositionOfPairOfCard( Card card )
 {
 	for( int i = 0; i < mCards.size(); ++i ){
@@ -399,7 +413,7 @@ void Player::newCommand( QString command )
 	if( getCommandPartOfCommand( command ) == START_NEXT_ROUND_COMMAND ){
 		kDebug() << getName() << "Start next round.";
 		
-		emit signalStartNextRound();
+		emit signalStartNextRound( this );
 	}
 	
 }

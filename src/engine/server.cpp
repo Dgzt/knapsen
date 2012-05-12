@@ -15,8 +15,7 @@ Server::Server( QObject* parent ) :
 	mAdminName( "" ),
 	mTwentyButtonClickedThisTurn( false ),
 	mFortyButtonClickedThisTurn( false ),
-	mClickedToCloseButtonThisTurn( false ),
-	mPlayerNumWhoWantStartNextRound( 0 ) 
+	mClickedToCloseButtonThisTurn( false )
 {
 	kDebug() << "Initialize.";
 
@@ -42,6 +41,56 @@ Server::~Server()
 	if( mDeck ){
 		delete mDeck;
 	}
+}
+
+void Server::newRound()
+{
+	kDebug() << "Start new round.";
+	
+	//Clear cards, tricks
+	for( int i = 0; i < mPlayerList.size(); ++i ){
+		mPlayerList.at( i )->sendNewRound();
+	}
+	
+	//Send cards to players
+	for( int i = 0; i < mNumberOfCardsInHand; ++i ){
+		
+		for( int j = 0; j < mPlayerList.size(); ++j ){
+			mPlayerList.at( j )->sendNewCard( mDeck->getCard() );
+		}
+		
+		//Get trump card
+		if( i == 2 ){
+			mTrumpCard = mDeck->getCard();
+			
+			for( int j = 0; j < mPlayerList.size(); ++j ){
+				mPlayerList.at( j )->sendNewTrumpCard( mTrumpCard );
+			}
+			
+		}
+		
+	}
+	
+	Player* currentPlayer = mGameSequence->getCurrentPlayer();
+	
+	if( currentPlayer->haveRegularMarriages() ){
+		kDebug() << currentPlayer->getName() << "have regular marriages.";
+		currentPlayer->sendTwentyButtonVisible();
+	}
+	
+	if( currentPlayer->haveTrumpMarriages() ){
+		kDebug() << currentPlayer->getName() << "have trump marriages.";
+		currentPlayer->sendFortyButtonVisible();
+	}
+	
+	if( currentPlayer->canChangeTrumpCard() ){
+		kDebug() << currentPlayer->getName() << "can change trump card.";
+		currentPlayer->sendSelectableTrumpCard();
+	}
+	
+	currentPlayer->sendCloseButtonVisible();
+	
+	currentPlayer->sendSelectableAllCards();
 }
 
 void Server::roundOver()
@@ -138,7 +187,7 @@ void Server::slotNewPlayer( Player* player )
 		connect( player, SIGNAL( signalFortyButtonClicked() ),			this, SLOT( slotPlayerFortyButtonClicked() ) );
 		connect( player, SIGNAL( signalCloseButtonClicked() ),			this, SLOT( slotPlayerClickedToCloseButton() ) );
 		connect( player, SIGNAL( signalChangedTrumpCard( Card ) ),		this, SLOT( slotPlayerChangedTrumpCard( Card ) ) );
-		connect( player, SIGNAL( signalStartNextRound() ),				this, SLOT( slotPlayerWantStartNextRound() ) );
+		connect( player, SIGNAL( signalStartNextRound( Player* ) ),		this, SLOT( slotPlayerWantStartNextRound( Player* ) ) );
 		
 		emit signalPlayerConnected( player->getName() );
 		
@@ -418,13 +467,29 @@ void Server::slotCheckCentralCards()
 	
 }
 
-void Server::slotPlayerWantStartNextRound()
+void Server::slotPlayerWantStartNextRound( Player* player )
 {
-	mPlayerNumWhoWantStartNextRound++;
+	bool playerOk = true;
 	
-	if( mPlayerNumWhoWantStartNextRound == mPlayerList.size() ){
+	for( int i = 0; i < mPlayerListWhoWantStartGame.size(); ++i ){
+		
+		if( player->getName() == mPlayerListWhoWantStartGame.at( i )->getName() ){
+			playerOk = false;
+		}
+		
+	}
+	
+	if( playerOk ){
+		mPlayerListWhoWantStartGame.append( player );
+	}else{
+		kDebug() << "ERROR!" << player->getName() << "more then once want start next round!";
+	}
+	
+	if( mPlayerListWhoWantStartGame.size() == mPlayerList.size() ){
+		mPlayerListWhoWantStartGame.clear();
 		kDebug() << "Start next round.";
 	}
+	
 }
 
 void Server::incomingConnection( int socketDescriptor )
@@ -475,45 +540,7 @@ void Server::startGame()
 		mPlayerList.at( i )->sendInitializeTable();
 	}
 	
-	//Send cards to players
-	for( int i = 0; i < mNumberOfCardsInHand; ++i ){
-		
-		for( int j = 0; j < mPlayerList.size(); ++j ){
-			mPlayerList.at( j )->sendNewCard( mDeck->getCard() );
-		}
-		
-		//Get trump card
-		if( i == 2 ){
-			mTrumpCard = mDeck->getCard();
-			
-			for( int j = 0; j < mPlayerList.size(); ++j ){
-				mPlayerList.at( j )->sendNewTrumpCard( mTrumpCard );
-			}
-			
-		}
-		
-	}
-	
-	Player* currentPlayer = mGameSequence->getCurrentPlayer();
-	
-	if( currentPlayer->haveRegularMarriages() ){
-		kDebug() << currentPlayer->getName() << "have regular marriages.";
-		currentPlayer->sendTwentyButtonVisible();
-	}
-	
-	if( currentPlayer->haveTrumpMarriages() ){
-		kDebug() << currentPlayer->getName() << "have trump marriages.";
-		currentPlayer->sendFortyButtonVisible();
-	}
-	
-	if( currentPlayer->canChangeTrumpCard() ){
-		kDebug() << currentPlayer->getName() << "can change trump card.";
-		currentPlayer->sendSelectableTrumpCard();
-	}
-	
-	currentPlayer->sendCloseButtonVisible();
-	
-	currentPlayer->sendSelectableAllCards();
+	newRound();
 	
 	//And finally send start the game
 	for( int i = 0; i < mPlayerList.size(); ++i ){

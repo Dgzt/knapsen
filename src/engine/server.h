@@ -56,9 +56,10 @@ class Server : public QTcpServer
 	//
 	
 	//
-	int mPlayerNumWhoWantStartNextRound;
+	QList<Player*> mPlayerListWhoWantStartGame;
 	//
 	
+	void newRound();
 	void roundOver();
 	
 private slots:
@@ -73,7 +74,7 @@ private slots:
 	void slotCheckCentralCards();
 	
 	//
-	void slotPlayerWantStartNextRound();
+	void slotPlayerWantStartNextRound( Player* );
 	//
 	
 protected:

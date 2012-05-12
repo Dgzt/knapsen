@@ -96,6 +96,11 @@ void Client::slotProcessCommands()
 				kDebug() << "ERROR! Cannot convert new player card value to int!";
 			}
 		}
+		
+		if( getCommandPartOfCommand( commandList.first() ) == NEW_ROUND_COMMAND ){
+			kDebug() << getName() << "New round.";
+			newRound();
+		}
 			
 		if( getCommandPartOfCommand( commandList.first() ) == NEW_OPPONENT_CARD_COMMAND_ID ){
 			kDebug() << getName() << "new opponent card id:" << getValuePartOfCommand( commandList.first() );
