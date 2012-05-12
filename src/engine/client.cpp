@@ -357,6 +357,11 @@ void Client::slotSelectedCardId( int id )
 		setCloseButtonVisible( false );
 	}
 	
+	if( getTrumpCard().isSelectable() ){
+		getTrumpCard().setSelectable( false );
+		emit signalTrumpCardSelectableChanged( false );
+	}
+	
 	sendCommand( SELECTED_CARD_ID_COMMAND+QString::number( id ) );
 }
 

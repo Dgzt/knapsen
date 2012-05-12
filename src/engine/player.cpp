@@ -330,6 +330,10 @@ void Player::newCommand( QString command )
 					setCloseButtonVisible( false );
 				}
 				
+				if( getTrumpCard().isSelectable() ){
+					getTrumpCard().setSelectable( false );
+				}
+				
 				Card selectedCard = getCard( ret );
 				addNewCentralCard( selectedCard );
 				removeCard( ret );
