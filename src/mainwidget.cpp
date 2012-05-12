@@ -1,3 +1,4 @@
+#include <QtCore/QTimer>
 #include <KDE/KConfigDialog>
 #include <KDE/KStatusBar>
 #include <KDE/KAction>
@@ -37,6 +38,9 @@ MainWindow::MainWindow( QWidget* parent ) : KXmlGuiWindow( parent )
 	server = 0;
 	client = 0;
 	bot = 0;
+	//
+	endRoundDialog = 0;
+	//
 	
 	//Initialize the data path (example pictures, icons, etc)
 	initializePaths();
@@ -362,13 +366,18 @@ void MainWindow::slotOpponentDisconnected()
 	}
 }
 
-void MainWindow::slotEndRound( QString winnerName, int winnerScore )
+void MainWindow::slotEndRound( QString winnerName, int scores )
 {
-	kDebug() << winnerName << "win the round with" << winnerScore << "scores.";
+	endRoundDialog = new EndRoundDialog( this, winnerName, scores );
+	QTimer::singleShot( 0, this, SLOT( slotEndRoundExec() ) );
+}
+
+void MainWindow::slotEndRoundExec()
+{	
+	endRoundDialog->exec();
 	
-	EndRoundDialog endRoundDialog( this, winnerName, winnerScore );
-	
-	endRoundDialog.exec();
+	delete endRoundDialog;
+	endRoundDialog = 0;
 }
 
 /*void MainWindow::endGameSlot( QString winnerName )

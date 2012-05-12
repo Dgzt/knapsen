@@ -1,7 +1,6 @@
 #ifndef mainwindow_h
 #define mainwindow_h
 
-
 #include <KXmlGuiWindow>
 
 class CentralWidget;
@@ -10,6 +9,9 @@ class KAction;
 class Server;
 class Client;
 class Bot;
+//
+class EndRoundDialog;
+//
 
 class MainWindow : public KXmlGuiWindow
 {
@@ -24,6 +26,10 @@ class MainWindow : public KXmlGuiWindow
 	Client* client;
 	
 	Bot* bot;
+	
+	//
+	EndRoundDialog *endRoundDialog;
+	//
 	
     //Initialize the data path
     void initializePaths();
@@ -47,6 +53,7 @@ private slots:
 	void slotOpponentDisconnected();
 	
 	void slotEndRound( QString, int );
+	void slotEndRoundExec();
 	
 	/*void endRoundSlot( QString, int );
 	void endGameSlot( QString );*/
