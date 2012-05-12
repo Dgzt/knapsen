@@ -6,8 +6,9 @@ Bot::Bot( QObject* parent ): Client( parent )
 {
 	kDebug() << "Initialize.";
 	
-	connect( this, SIGNAL( signalOpponentDisconnected() ),	this, SLOT( slotOpponentDisconnected() ) );
-	connect( this, SIGNAL( signalInAction() ),				this, SLOT( slotInAction() ) );
+	connect( this, SIGNAL( signalOpponentDisconnected() ),		this, SLOT( slotOpponentDisconnected() ) );
+	connect( this, SIGNAL( signalInAction() ),					this, SLOT( slotInAction() ) );
+	connect( this, SIGNAL( signalEndRound( QString, int ) ),	this, SLOT( slotEndRound( QString, int ) ) );
 }
 
 void Bot::slotOpponentDisconnected()
@@ -33,4 +34,9 @@ void Bot::slotSelectCard()
 			return;
 		}
 	}
+}
+
+void Bot::slotEndRound( QString , int )
+{
+	startNextRound();
 }

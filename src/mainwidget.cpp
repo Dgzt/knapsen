@@ -378,6 +378,9 @@ void MainWindow::slotEndRoundExec()
 	
 	delete endRoundDialog;
 	endRoundDialog = 0;
+	
+	client->startNextRound();
+	
 }
 
 /*void MainWindow::endGameSlot( QString winnerName )

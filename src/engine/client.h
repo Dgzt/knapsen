@@ -29,6 +29,8 @@ private slots:
 public:
     Client( QObject* parent = 0 );
 	
+	void startNextRound(){ sendCommand( START_NEXT_ROUND_COMMAND ); }
+	
 public slots:
 	void slotSelectedCardId( int );
 	void slotSelectedTrumpCard();

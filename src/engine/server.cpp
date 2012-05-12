@@ -15,8 +15,8 @@ Server::Server( QObject* parent ) :
 	mAdminName( "" ),
 	mTwentyButtonClickedThisTurn( false ),
 	mFortyButtonClickedThisTurn( false ),
-	mClickedToCloseButtonThisTurn( false )//,
-	//mClickedToCloseButtonThisRound( false ) 
+	mClickedToCloseButtonThisTurn( false ),
+	mPlayerNumWhoWantStartNextRound( 0 ) 
 {
 	kDebug() << "Initialize.";
 
@@ -138,6 +138,8 @@ void Server::slotNewPlayer( Player* player )
 		connect( player, SIGNAL( signalFortyButtonClicked() ),			this, SLOT( slotPlayerFortyButtonClicked() ) );
 		connect( player, SIGNAL( signalCloseButtonClicked() ),			this, SLOT( slotPlayerClickedToCloseButton() ) );
 		connect( player, SIGNAL( signalChangedTrumpCard( Card ) ),		this, SLOT( slotPlayerChangedTrumpCard( Card ) ) );
+		connect( player, SIGNAL( signalStartNextRound() ),				this, SLOT( slotPlayerWantStartNextRound() ) );
+		
 		emit signalPlayerConnected( player->getName() );
 		
 		if( mPlayerList.size() == MAX_PLAYERS ){
@@ -414,6 +416,15 @@ void Server::slotCheckCentralCards()
 		mPlayerList.at( i )->sendCommandsEnd();
 	}
 	
+}
+
+void Server::slotPlayerWantStartNextRound()
+{
+	mPlayerNumWhoWantStartNextRound++;
+	
+	if( mPlayerNumWhoWantStartNextRound == mPlayerList.size() ){
+		kDebug() << "Start next round.";
+	}
 }
 
 void Server::incomingConnection( int socketDescriptor )

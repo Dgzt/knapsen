@@ -14,6 +14,8 @@ private slots:
 	
 	void slotSelectCard();
 	
+	void slotEndRound( QString, int );
+	
 public:
     Bot( QObject* parent = 0 );
 	

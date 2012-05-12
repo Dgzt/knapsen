@@ -55,6 +55,10 @@ class Server : public QTcpServer
 	Player *mPlayerWhoClickedToCloseButtonThisRound;
 	//
 	
+	//
+	int mPlayerNumWhoWantStartNextRound;
+	//
+	
 	void roundOver();
 	
 private slots:
@@ -66,9 +70,10 @@ private slots:
 	void slotPlayerFortyButtonClicked();
 	void slotPlayerClickedToCloseButton();
 	void slotPlayerChangedTrumpCard( Card );
+	void slotCheckCentralCards();
 	
 	//
-	void slotCheckCentralCards();
+	void slotPlayerWantStartNextRound();
 	//
 	
 protected:

@@ -396,6 +396,12 @@ void Player::newCommand( QString command )
 		emit signalChangedTrumpCard( mTrumpCard );
 	}
 	
+	if( getCommandPartOfCommand( command ) == START_NEXT_ROUND_COMMAND ){
+		kDebug() << getName() << "Start next round.";
+		
+		emit signalStartNextRound();
+	}
+	
 }
 
 bool Player::setSelectableCardsWhatEqualSuit( Card::CardSuit cardSuit )

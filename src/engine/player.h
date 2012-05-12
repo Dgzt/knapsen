@@ -64,6 +64,7 @@ static const QString OPPONENT_CLICKED_TO_CLOSE_BUTTON_COMMAND = ":OPPONENT_CLICK
 
 //
 static const QString END_ROUND_COMMAND = ":END_ROUND=";
+static const QString START_NEXT_ROUND_COMMAND = ":START_NEXT_ROUND";
 
 static const QString COMMANDS_END_COMMAND = ":COMMANDS_END";
 
@@ -266,11 +267,12 @@ signals:
 	void signalNewPlayer( Player* );
 	void signalPlayerDisconnected( Player* );
 	void signalSelectedCard( Card, int );
-	//
 	void signalTwentyButtonClicked();
 	void signalFortyButtonClicked();
 	void signalCloseButtonClicked();
 	void signalChangedTrumpCard( Card );
+	//
+	void signalStartNextRound();
 	//
 	
 	//Signals to player
