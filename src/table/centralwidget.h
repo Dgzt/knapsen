@@ -11,6 +11,7 @@ class QSvgRenderer;
 class MyTextItem;
 class ScoreTable;
 //class QPushButton;
+//class QPair;
 
 class CentralWidget : public QGraphicsView
 {
@@ -21,7 +22,8 @@ class CentralWidget : public QGraphicsView
 	QSizeF mCardSize;
 	
 	//
-	int mShowOpponentCardsId[2];
+	//int mShowOpponentCardsId[2];
+	QPair< int, int > *mShowOpponentCardsId;
 	//
 	
 	MyTextItem* mOpponentName;

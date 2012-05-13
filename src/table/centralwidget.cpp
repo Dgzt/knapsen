@@ -41,6 +41,8 @@ CentralWidget::CentralWidget( QWidget* parent ):
 	mTwentyButton = 0;
 	mFortyButton = 0;
 	
+	mShowOpponentCardsId = 0;
+	
 	//Set View's stuff
 	setFrameStyle( QFrame::NoFrame );
 	setHorizontalScrollBarPolicy( Qt::ScrollBarAlwaysOff );
@@ -451,8 +453,11 @@ void CentralWidget::slotShowOpponentCards( int card1Pos, QString card1Text, int 
 	mOpponentCards[ card1Pos ].setElementId( card1Text );
 	mOpponentCards[ card2Pos ].setElementId( card2Text );
 	
-	mShowOpponentCardsId[0] = card1Pos;
-	mShowOpponentCardsId[1] = card2Pos;
+	//mShowOpponentCardsId[0] = card1Pos;
+	//mShowOpponentCardsId[1] = card2Pos;
+	mShowOpponentCardsId = new QPair< int, int >;
+	mShowOpponentCardsId->first = card1Pos;
+	mShowOpponentCardsId->second = card2Pos;
 	
 	QTimer::singleShot( 1000, this, SLOT( slotCoverOpponentCards() ) );
 }
@@ -514,8 +519,13 @@ void CentralWidget::slotClick( int id )
 
 void CentralWidget::slotCoverOpponentCards()
 {
-	mOpponentCards[ mShowOpponentCardsId[0] ].setElementId( "back" );
-	mOpponentCards[ mShowOpponentCardsId[1] ].setElementId( "back" );
+	//mOpponentCards[ mShowOpponentCardsId[0] ].setElementId( "back" );
+	//mOpponentCards[ mShowOpponentCardsId[1] ].setElementId( "back" );
+	mOpponentCards[ mShowOpponentCardsId->first ].setElementId( "back" );
+	mOpponentCards[ mShowOpponentCardsId->second ].setElementId( "back" );
+	
+	delete mShowOpponentCardsId;
+	mShowOpponentCardsId = 0;
 	
 	emit signalHideShowedOpponentCards();
 }
