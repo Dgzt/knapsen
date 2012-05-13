@@ -6,7 +6,7 @@ set(knapsen_HDRS
 	table/mysvgitem.h
 	engine/card.h
 	engine/deck.h
-	waitingforopponent.h
+	dialogs/waitingforopponent.h
 	dialogs/endgamedialog.h
 	dialogs/endrounddialog.h
 	engine/bot.h
@@ -27,7 +27,7 @@ set(knapsen_SRCS
 	table/mysvgitem.cpp
 	engine/card.cpp
 	engine/deck.cpp
-	waitingforopponent.cpp
+	dialogs/waitingforopponent.cpp
 	dialogs/endgamedialog.cpp
 	dialogs/endrounddialog.cpp
 	engine/bot.cpp

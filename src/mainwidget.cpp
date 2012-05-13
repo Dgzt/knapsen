@@ -28,7 +28,7 @@
 #include "dialogs/waitforclientdialog.h"
 #include "dialogs/endrounddialog.h"
 #include "dialogs/endgamedialog.h"
-#include "waitingforopponent.h"
+#include "dialogs/waitingforopponent.h"
 
 #include "ui_playersettingswidget.h"
 #include "ui_gamesettingswidget.h"
