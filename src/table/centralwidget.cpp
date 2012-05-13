@@ -457,6 +457,20 @@ void CentralWidget::slotShowOpponentCards( int card1Pos, QString card1Text, int 
 	QTimer::singleShot( 1000, this, SLOT( slotCoverOpponentCards() ) );
 }
 
+void CentralWidget::slotNewRound()
+{
+	for( int i = 0; i < mNumberOfCardsInHand; ++i ){
+		mOpponentCards[ i ].setVisible( false );
+		mPlayerCards[ i ].setVisible( false );
+	}
+	
+	mCentralCards[ 0 ].setVisible( false );
+	mCentralCards[ 1 ].setVisible( false );
+	
+	mOpponentScoreTable->setTricks( 0 );
+	mPlayerScoreTable->setTricks( 0 );
+}
+
 void CentralWidget::slotStartGame()
 {
 	kDebug() << "Start game.";

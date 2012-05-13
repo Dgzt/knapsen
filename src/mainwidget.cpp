@@ -155,6 +155,7 @@ void MainWindow::setGameSignals()
 	connect( client, SIGNAL( signalFortyButtonVisible( bool ) ),								cWidget, SLOT( slotFortyButtonVisible( bool ) ) );
 	connect( client, SIGNAL( signalCloseButtonVisible( bool ) ),								cWidget, SLOT( slotCloseButtonVisible( bool ) ) );
 	connect( client, SIGNAL( signalShowOpponentCards( int, QString, int, QString ) ),			cWidget, SLOT( slotShowOpponentCards( int, QString, int, QString ) ) );
+	connect( client, SIGNAL( signalNewRound() ),												cWidget, SLOT( slotNewRound() ) );
 	connect( client, SIGNAL( signalStartGame() ),												cWidget, SLOT( slotStartGame() ) );
 	
 	connect( client, SIGNAL( signalOpponentDisconnected() ),									this,	 SLOT( slotOpponentDisconnected() ) );

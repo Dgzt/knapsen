@@ -100,11 +100,12 @@ public slots:
 	
 	void slotShowOpponentCards( int, QString, int, QString );
 	
-	void slotStartGame();
+	//
+	void slotNewRound();
+	//
 	
-	//void opponentScoresChanged( int );
-	//void playerScoresChanged( int );
-		
+	void slotStartGame();
+
 signals:
 	void signalSelectedCardId( int );
 	void signalSelectedTrumpCard();
