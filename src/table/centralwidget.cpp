@@ -58,20 +58,6 @@ CentralWidget::CentralWidget( QWidget* parent ):
 	gScene->setBackgroundBrush( QBrush( backgroundImage ) );
 }
 
-/*CentralWidget::~CentralWidget()
-{
-	//delete cardDeck;
-	delete renderer;
-	delete cardDeckSvgItem;
-	
-	if( opponentCards )
-		delete[] opponentCards;
-	
-	if( playerCards )
-		delete[] playerCards;
-	
-}*/
-
 CentralWidget::~CentralWidget()
 {
 
@@ -469,13 +455,13 @@ void CentralWidget::slotNewRound()
 		mPlayerCards[ i ].setVisible( false );
 	}
 	
-	if( !mDeck->isVisible() ){
-		mDeck->setVisible( true );
-	}
-	
 	if( mTrumpCard->zValue() == 1 ){
 		mTrumpCard->setZValue( 0 );
 		mDeck->setZValue( 1 );
+	}
+	
+	if( !mDeck->isVisible() ){
+		mDeck->setVisible( true );
 	}
 	
 	mCentralCards[ 0 ].setVisible( false );
