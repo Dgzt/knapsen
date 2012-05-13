@@ -91,8 +91,8 @@ void Client::slotProcessCommands()
 				int cardId = addNewCard( Card( ret) );
 				emit signalNewPlayerCard( cardId, Card( ret ).getCardText( mTypeOfCards ) );
 					
-				mSizeOfDeck--;
-				if( mSizeOfDeck == 0 ){
+				mSizeOfDeckNow--;
+				if( mSizeOfDeckNow == 0 ){
 					//emit signalDeckVisible( false );
 					emit signalHideDeck();
 				}
@@ -116,8 +116,8 @@ void Client::slotProcessCommands()
 			if( ok ){
 				emit signalNewOpponentCardId( ret );
 					
-				mSizeOfDeck--;
-				if( mSizeOfDeck == 0 ){
+				mSizeOfDeckNow--;
+				if( mSizeOfDeckNow == 0 ){
 					//emit signalDeckVisible( false );
 					emit signalHideDeck();
 				}
