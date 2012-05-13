@@ -418,9 +418,9 @@ void CentralWidget::slotPlayerScoresChanged( int scores )
 	mPlayerScoreTable->setScores( scores );
 }
 
-void CentralWidget::slotDeckVisible( bool visible )
+void CentralWidget::slotHideDeck()
 {
-	mDeck->setVisible( visible );
+	mDeck->setVisible( false );
 }
 
 void CentralWidget::slotCloseDeck()
@@ -462,6 +462,15 @@ void CentralWidget::slotNewRound()
 	for( int i = 0; i < mNumberOfCardsInHand; ++i ){
 		mOpponentCards[ i ].setVisible( false );
 		mPlayerCards[ i ].setVisible( false );
+	}
+	
+	if( !mDeck->isVisible() ){
+		mDeck->setVisible( true );
+	}
+	
+	if( mTrumpCard->zValue() == 1 ){
+		mTrumpCard->setZValue( 0 );
+		mDeck->setZValue( 1 );
 	}
 	
 	mCentralCards[ 0 ].setVisible( false );

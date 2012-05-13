@@ -13,6 +13,7 @@ class Client : public Player
 	Knapsen::TypeOfCards mTypeOfCards;
 	
 	int mSizeOfDeck;
+	int mSizeOfDeckNow;
 	
 	//
 	QList<QString> commandList;
@@ -64,7 +65,8 @@ signals:
 	
 	void signalPlayerScoresChanged( int );
 	
-	void signalDeckVisible( bool );
+	//void signalDeckVisible( bool );
+	void signalHideDeck();
 	
 	void signalCloseDeck();
 	

@@ -4,16 +4,18 @@
 Client::Client( QObject* parent ) : 
 	Player( parent ),
 	mOpponentName( "" ),
-	mTypeOfCards( Knapsen::GermanSuits )
+	mTypeOfCards( Knapsen::GermanSuits ),
+	mSizeOfDeck( 0 ),
+	mSizeOfDeckNow( 0 )
 {
-	mSizeOfDeck = 0;
-	
 	connect( this, SIGNAL( connected() ), this, SLOT( slotConnected() ) );
 	connect( this, SIGNAL( signalCentralCardChanged( int, Card ) ), this, SLOT( slotCentralCardChanged( int, Card ) ) );
 }
 
 void Client::newCommand( QString command )
 {
+	kDebug() << command;
+	
 	if( getCommandPartOfCommand( command ) == OPPONENT_DISCONNECTED_COMMAND ){
 		kDebug() << getName() << "Opponent disconnected!";
 	
@@ -55,6 +57,7 @@ void Client::slotProcessCommands()
 		
 			if( ok ){
 				mSizeOfDeck = ret;
+				mSizeOfDeckNow = mSizeOfDeck;
 			}else{
 				kDebug() << "ERROR! Cannot convert size of deck value to int!";
 			}
@@ -90,7 +93,8 @@ void Client::slotProcessCommands()
 					
 				mSizeOfDeck--;
 				if( mSizeOfDeck == 0 ){
-					emit signalDeckVisible( false );
+					//emit signalDeckVisible( false );
+					emit signalHideDeck();
 				}
 			}else{
 				kDebug() << "ERROR! Cannot convert new player card value to int!";
@@ -100,6 +104,7 @@ void Client::slotProcessCommands()
 		if( getCommandPartOfCommand( commandList.first() ) == NEW_ROUND_COMMAND ){
 			kDebug() << getName() << "New round.";
 			newRound();
+			mSizeOfDeckNow = mSizeOfDeck;
 			emit signalNewRound();
 		}
 			
@@ -113,7 +118,8 @@ void Client::slotProcessCommands()
 					
 				mSizeOfDeck--;
 				if( mSizeOfDeck == 0 ){
-					emit signalDeckVisible( false );
+					//emit signalDeckVisible( false );
+					emit signalHideDeck();
 				}
 			}else{
 				kDebug() << "ERROR! Cannot covert new opponent card command id value to int!";

@@ -149,7 +149,7 @@ void MainWindow::setGameSignals()
 	connect( client, SIGNAL( signalOpponentScoresChanged( int ) ),								cWidget, SLOT( slotOpponentScoresChanged( int ) ) );
 	connect( client, SIGNAL( signalPlayerTricksChanged( int ) ),								cWidget, SLOT( slotPlayerTricksChanged( int ) ) );
 	connect( client, SIGNAL( signalPlayerScoresChanged( int ) ),								cWidget, SLOT( slotPlayerScoresChanged( int ) ) );
-	connect( client, SIGNAL( signalDeckVisible( bool ) ),										cWidget, SLOT( slotDeckVisible( bool ) ) );
+	connect( client, SIGNAL( signalHideDeck() ),												cWidget, SLOT( slotHideDeck() ) );
 	connect( client, SIGNAL( signalCloseDeck() ),												cWidget, SLOT( slotCloseDeck() ) );
 	connect( client, SIGNAL( signalTwentyButtonVisible( bool ) ),								cWidget, SLOT( slotTwentyButtonVisible( bool ) ) );
 	connect( client, SIGNAL( signalFortyButtonVisible( bool ) ),								cWidget, SLOT( slotFortyButtonVisible( bool ) ) );

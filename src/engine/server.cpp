@@ -53,6 +53,9 @@ void Server::newRound()
 	//Clear central cards
 	mCentralCards.clear();
 	
+	//Clear
+	mPlayerWhoClickedToCloseButtonThisRound = 0;
+	
 	//Clear cards, tricks
 	for( int i = 0; i < mPlayerList.size(); ++i ){
 		mPlayerList.at( i )->sendNewRound();

@@ -91,7 +91,7 @@ public slots:
 	
 	void slotPlayerScoresChanged( int );
 	
-	void slotDeckVisible( bool );
+	void slotHideDeck();
 	void slotCloseDeck();
 	
 	void slotTwentyButtonVisible( bool );
