@@ -3,13 +3,13 @@
 
 #include <KDE/KDialog>
 
-class Ui_WaitForServerWidgetUi;
+class Ui_WaitingWidgetUi;
 
 class WaitForServerDialog : public KDialog
 {
 	Q_OBJECT
 	
-	Ui_WaitForServerWidgetUi* waitForServerWidgetUi;
+	Ui_WaitingWidgetUi* waitingWidgetUi;
 	
 	bool connectionError;
 	

@@ -1,7 +1,7 @@
 #include <QtCore/QTimer>
 #include <KDE/KLocalizedString>
 #include <KDE/KDebug>
-#include "ui_waitforserverwidget.h"
+#include "ui_waitingwidget.h"
 #include "waitforserverdialog.h"
 
 WaitForServerDialog::WaitForServerDialog(): KDialog()
@@ -12,9 +12,9 @@ WaitForServerDialog::WaitForServerDialog(): KDialog()
 	
 	QWidget* mainWidget = new QWidget;
 	
-	waitForServerWidgetUi = new Ui_WaitForServerWidgetUi;
+	waitingWidgetUi = new Ui_WaitingWidgetUi;
 	
-	waitForServerWidgetUi->setupUi( mainWidget );
+	waitingWidgetUi->setupUi( mainWidget );
 	
 	setMainWidget( mainWidget );
 	
@@ -30,14 +30,14 @@ WaitForServerDialog::WaitForServerDialog(): KDialog()
 
 void WaitForServerDialog::waitingProgressBarTimeoutSlot()
 {
-	int num = waitForServerWidgetUi->waitintProgressBar->value();
+	int num = waitingWidgetUi->waitintProgressBar->value();
 
     if(num == 100){
         num = 0;
     }
 
     num++;
-    waitForServerWidgetUi->waitintProgressBar->setValue( num );
+    waitingWidgetUi->waitintProgressBar->setValue( num );
 }
 
 bool WaitForServerDialog::haveConnectionError() const

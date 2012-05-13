@@ -47,6 +47,12 @@ void Server::newRound()
 {
 	kDebug() << "Start new round.";
 	
+	//Build deck
+	mDeck->buildDeck();
+	
+	//Clear central cards
+	mCentralCards.clear();
+	
 	//Clear cards, tricks
 	for( int i = 0; i < mPlayerList.size(); ++i ){
 		mPlayerList.at( i )->sendNewRound();
@@ -488,6 +494,11 @@ void Server::slotPlayerWantStartNextRound( Player* player )
 	if( mPlayerListWhoWantStartGame.size() == mPlayerList.size() ){
 		mPlayerListWhoWantStartGame.clear();
 		kDebug() << "Start next round.";
+		newRound();
+		
+		for( int i = 0; i < mPlayerList.size(); ++i ){
+			mPlayerList.at( i )->sendCommandsEnd();
+		}
 	}
 	
 }
@@ -514,7 +525,7 @@ void Server::startGame()
 	
 	//Initialize deck
 	mDeck = new Deck( mSizeOfDeck, mTypeOfCards );
-	mDeck->buildDeck();
+	//mDeck->buildDeck();
 	
 	//To all players
 	for( int i = 0; i < mPlayerList.size(); ++i ){

@@ -3,11 +3,22 @@
 
 #include <KDE/KDialog>
 
-class WaitingForOpponent : public KDialog
+class Ui_WaitingWidgetUi;
+
+class WaitingForOpponentDialog : public KDialog
 {
+	Q_OBJECT
+	
+	Ui_WaitingWidgetUi *waitingWidgetUi;
+	
+private slots:
+	void waitingProgressBarTimeoutSlot();
 	
 public:
-    WaitingForOpponent( QWidget* parent = 0 );
+    WaitingForOpponentDialog( QWidget* parent = 0 );
+	
+public slots:
+	void slotNewRound();
 	
 };
 

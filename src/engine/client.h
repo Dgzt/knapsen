@@ -75,6 +75,10 @@ signals:
 	
 	void signalShowOpponentCards( int, QString, int, QString );
 	
+	//
+	void signalNewRound();
+	//
+	
 	void signalStartGame();
 	
 	//

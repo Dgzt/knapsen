@@ -178,6 +178,9 @@ void Player::newRound()
 		mCards[ i ] = Card();
 	}
 	
+	//Clear central cards
+	mCentralCards.clear();
+	
 	//Clear trump Card
 	setTrumpCard( Card() );
 	

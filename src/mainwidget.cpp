@@ -379,7 +379,13 @@ void MainWindow::slotEndRoundExec()
 	delete endRoundDialog;
 	endRoundDialog = 0;
 	
+	WaitingForOpponentDialog waitingForOpponentDialog( this );
+	
+	connect( client, SIGNAL( signalNewRound() ), &waitingForOpponentDialog, SLOT( slotNewRound() ) );
+	
 	client->startNextRound();
+	
+	waitingForOpponentDialog.exec();
 	
 }
 

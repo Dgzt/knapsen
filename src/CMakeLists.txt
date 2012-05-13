@@ -49,7 +49,7 @@ set(knapsen_UIS
 	dialogs/endgamewidget.ui
 	playersettingswidget.ui
 	gamesettingswidget.ui
-	dialogs/waitforserverwidget.ui
+	dialogs/waitingwidget.ui
 	dialogs/waitforclientwidget.ui
 )
 

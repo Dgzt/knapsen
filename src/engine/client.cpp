@@ -100,6 +100,7 @@ void Client::slotProcessCommands()
 		if( getCommandPartOfCommand( commandList.first() ) == NEW_ROUND_COMMAND ){
 			kDebug() << getName() << "New round.";
 			newRound();
+			emit signalNewRound();
 		}
 			
 		if( getCommandPartOfCommand( commandList.first() ) == NEW_OPPONENT_CARD_COMMAND_ID ){
