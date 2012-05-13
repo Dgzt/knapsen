@@ -410,6 +410,15 @@ void Player::newCommand( QString command )
 		kDebug() << getName() << "Change trump card.";
 		
 		changeTrumpCard();
+		
+		if( haveRegularMarriages() ){
+			setTwentyButtonVisible( true );
+		}
+		
+		if( haveTrumpMarriages() ){
+			setFortyButtonVisible( true );
+		}
+		
 		emit signalChangedTrumpCard( mTrumpCard );
 	}
 	

@@ -4,12 +4,12 @@
 
 const int CARD_NUMBERS = 24;
 
-const QString GERGMAN_SUIT_CARD_NAME[ CARD_NUMBERS ] = {
+/*const QString GERGMAN_SUIT_CARD_NAME[ CARD_NUMBERS ] = {
 	"1_heart", "king_heart", "queen_heart", "jack_heart", "10_heart", "9_heart", //heart
 	"1_diamond", "king_diamond", "queen_diamond", "jack_diamond", "10_diamond", "9_diamond", //diamond
 	"1_spade", "king_spade", "queen_spade", "jack_spade", "10_spade", "9_spade", //spade
 	"1_club", "king_club", "queen_club", "jack_club" , "10_club", "9_club" //club
-};
+};*/
 
 Deck::Deck( int deckSize, Knapsen::TypeOfCards typeOfCards )
 {
@@ -50,11 +50,10 @@ void Deck::buildDeck()
 		}
 	}
 	
-	//mCards[19] = Card( 1 );
-	//mCards[17] = Card( 2 );
 	
-	//mCards[19] = Card( 3 );
-	//mCards[13] = Card( 4 );
+	//mCards[19] = Card( 1 );
+	//mCards[17] = Card( 3 );
+	//mCards[13] = Card( 2 ); 
 	
 	kDebug() << "Generated deck:";
 	for( int i = 0; i < mCards.size(); ++i ){

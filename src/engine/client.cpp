@@ -386,6 +386,14 @@ void Client::slotSelectedTrumpCard()
 	emit signalNewTrumpCard( getTrumpCard().getCardText( mTypeOfCards ) );
 	emit signalTrumpCardSelectableChanged( false );
 	
+	if( haveRegularMarriages() ){
+		setTwentyButtonVisible( true );
+	}
+	
+	if( haveTrumpMarriages() ){
+		setFortyButtonVisible( true );
+	}
+	
 	sendChangeTrumpCard();
 }
 
