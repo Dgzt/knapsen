@@ -171,6 +171,14 @@ int Player::getNumberOfCardsInHandNow()
 	return ret;
 }
 
+void Player::newGame()
+{
+	//Clear scores
+	setScores( 0 );
+	
+	//Clear others in the 'newRound()'
+}
+
 void Player::newRound()
 {
 	//Clear cards in hand

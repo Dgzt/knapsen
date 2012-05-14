@@ -70,7 +70,7 @@ static const QString START_NEXT_ROUND_COMMAND = ":START_NEXT_ROUND";
 static const QString COMMANDS_END_COMMAND = ":COMMANDS_END";
 
 //
-static const QString START_GAME_COMMAND = ":START_GAME";
+static const QString NEW_GAME_COMMAND = ":NEW_GAME";
 
 //
 static const QString END_GAME_COMMAND = ":END_GAME=";
@@ -124,8 +124,9 @@ protected:
 	int getNumberOfCardsInHand() const{ return mCards.size(); }
 	
 	//
-	void newRound();
+	void newGame();
 	//
+	void newRound();
 	
 	int addNewCard( Card );
 	//Card getCard( int id ){ return mCards.at( id ); }
@@ -263,7 +264,7 @@ public:
 	void sendNewRound(){ newRound(); sendCommand( NEW_ROUND_COMMAND ); }
 	//
 	
-	void sendStartGame(){ sendCommand( START_GAME_COMMAND ); }
+	void sendNewGame(){ newGame(); sendCommand( NEW_GAME_COMMAND ); }
 	
 	void sendEndRound( QString winnerName, int winnnerScores ){ sendCommand( END_ROUND_COMMAND+winnerName+","+QString::number( winnnerScores ) ); }
 	

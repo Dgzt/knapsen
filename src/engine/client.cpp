@@ -303,8 +303,12 @@ void Client::slotProcessCommands()
 			clearCentralCards();
 		}
 		
-		if( getCommandPartOfCommand( commandList.first() ) == START_GAME_COMMAND ){
+		if( getCommandPartOfCommand( commandList.first() ) == NEW_GAME_COMMAND ){
 			kDebug() << getName() << "Start game.";
+			
+			newGame();
+			emit signalPlayerScoresChanged( getScores() );
+			
 			emit signalStartGame();
 		}
 		

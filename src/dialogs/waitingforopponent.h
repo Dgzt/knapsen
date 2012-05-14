@@ -1,5 +1,5 @@
-#ifndef WAITINGFOROPPONENT_H
-#define WAITINGFOROPPONENT_H
+#ifndef WAITINGFOROPPONENTDIALOG_H
+#define WAITINGFOROPPONENTDIALOG_H
 
 #include <KDE/KDialog>
 
@@ -17,9 +17,6 @@ private slots:
 public:
     WaitingForOpponentDialog( QWidget* parent = 0 );
 	
-public slots:
-	void slotNewRound();
-	
 };
 
-#endif //WAITINGFOROPPONENT_H
+#endif //WAITINGFOROPPONENTDIALOG_H

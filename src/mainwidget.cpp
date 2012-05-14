@@ -384,7 +384,7 @@ void MainWindow::slotEndRoundExec()
 	
 	WaitingForOpponentDialog waitingForOpponentDialog( this );
 	
-	connect( client, SIGNAL( signalNewRound() ), &waitingForOpponentDialog, SLOT( slotNewRound() ) );
+	connect( client, SIGNAL( signalNewRound() ), &waitingForOpponentDialog, SLOT( accept() ) );
 	
 	client->startNextRound();
 	
@@ -406,10 +406,19 @@ void MainWindow::slotEndGameExec()
 		
 		kDebug() << "Start next game.";
 		
+		WaitingForOpponentDialog waitForOpponentDialog( this );
+		
+		connect( client, SIGNAL( signalStartGame() ), &waitForOpponentDialog, SLOT( accept() ) );
+		
+		client->startNextGame();
+		
+		waitForOpponentDialog.exec();
 		
 	}else{
 		
 		kDebug() << "Close game.";
+		
+		closeGameSlot();
 		
 	}
 	
@@ -417,24 +426,3 @@ void MainWindow::slotEndGameExec()
 	endGameDialog = 0;
 	
 }
-
-/*void MainWindow::endGameSlot( QString winnerName )
-{
-	kDebug() << "Won the game slot.";
-	
-	EndGameDialog egd( this, winnerName );
-	
-	int ret = egd.exec();
-	
-	if( ret ){
-		kDebug() << "New game";
-		
-		//game->startGame( false );
-		
-	}else{
-		kDebug() << "Close";
-		//game->disconnect();
-		
-		closeGameSlot();
-	}
-}*/

@@ -36,8 +36,3 @@ void WaitingForOpponentDialog::waitingProgressBarTimeoutSlot()
     num++;
     waitingWidgetUi->waitintProgressBar->setValue( num );
 }
-
-void WaitingForOpponentDialog::slotNewRound()
-{
-	accept();
-}
