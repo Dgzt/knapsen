@@ -56,7 +56,8 @@ class Server : public QTcpServer
 	//
 	
 	//
-	QList<Player*> mPlayerListWhoWantStartGame;
+	QList<Player *> mPlayerListWhoWantResumeGame;
+	QList<Player *> mPlayerListWhoWantNewGame;
 	//
 	
 	void newRound();
@@ -75,6 +76,7 @@ private slots:
 	
 	//
 	void slotPlayerWantStartNextRound( Player* );
+	void slotPlayerWantStartNextGame( Player* );
 	//
 	
 protected:

@@ -74,6 +74,7 @@ static const QString START_GAME_COMMAND = ":START_GAME";
 
 //
 static const QString END_GAME_COMMAND = ":END_GAME=";
+static const QString START_NEXT_GAME_COMMAND = ":START_NEXT_GAME";
 //
 
 class Player : public QTcpSocket
@@ -283,6 +284,7 @@ signals:
 	void signalChangedTrumpCard( Card );
 	//
 	void signalStartNextRound( Player* );
+	void signalStartNextGame( Player* );
 	//
 	
 	//Signals to player

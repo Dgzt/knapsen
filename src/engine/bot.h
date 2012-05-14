@@ -16,6 +16,8 @@ private slots:
 	
 	void slotEndRound( QString, int );
 	
+	void slotendGame( QString );
+	
 public:
     Bot( QObject* parent = 0 );
 	

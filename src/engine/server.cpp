@@ -199,6 +199,7 @@ void Server::slotNewPlayer( Player* player )
 		connect( player, SIGNAL( signalCloseButtonClicked() ),			this, SLOT( slotPlayerClickedToCloseButton() ) );
 		connect( player, SIGNAL( signalChangedTrumpCard( Card ) ),		this, SLOT( slotPlayerChangedTrumpCard( Card ) ) );
 		connect( player, SIGNAL( signalStartNextRound( Player* ) ),		this, SLOT( slotPlayerWantStartNextRound( Player* ) ) );
+		connect( player, SIGNAL( signalStartNextGame( Player* ) ),		this, SLOT( slotPlayerWantStartNextGame( Player* ) ) );
 		
 		emit signalPlayerConnected( player->getName() );
 		
@@ -478,26 +479,26 @@ void Server::slotCheckCentralCards()
 	
 }
 
-void Server::slotPlayerWantStartNextRound( Player* player )
+void Server::slotPlayerWantStartNextRound( Player *player )
 {
 	bool playerOk = true;
 	
-	for( int i = 0; i < mPlayerListWhoWantStartGame.size(); ++i ){
+	for( int i = 0; i < mPlayerListWhoWantResumeGame.size(); ++i ){
 		
-		if( player->getName() == mPlayerListWhoWantStartGame.at( i )->getName() ){
+		if( player->getName() == mPlayerListWhoWantResumeGame.at( i )->getName() ){
 			playerOk = false;
 		}
 		
 	}
 	
 	if( playerOk ){
-		mPlayerListWhoWantStartGame.append( player );
+		mPlayerListWhoWantResumeGame.append( player );
 	}else{
 		kDebug() << "ERROR!" << player->getName() << "more then once want start next round!";
 	}
 	
-	if( mPlayerListWhoWantStartGame.size() == mPlayerList.size() ){
-		mPlayerListWhoWantStartGame.clear();
+	if( mPlayerListWhoWantResumeGame.size() == mPlayerList.size() ){
+		mPlayerListWhoWantResumeGame.clear();
 		kDebug() << "Start next round.";
 		newRound();
 		
@@ -505,8 +506,35 @@ void Server::slotPlayerWantStartNextRound( Player* player )
 			mPlayerList.at( i )->sendCommandsEnd();
 		}
 	}
+}
+
+void Server::slotPlayerWantStartNextGame( Player *player )
+{
+	bool playerOk = true;
+	
+	for( int i = 0; i < mPlayerListWhoWantNewGame.size(); ++i ){
+		
+		if( player->getName() == mPlayerListWhoWantNewGame.at( i )->getName() ){
+			playerOk = false;
+		}
+		
+	}
+	
+	if( playerOk ){
+		mPlayerListWhoWantNewGame.append( player );
+	}else{
+		kDebug() << "ERROR!" << player->getName() << "more then once want start new game!";
+	}
+	
+	if( mPlayerListWhoWantNewGame.size() == mPlayerList.size() ){
+		
+		mPlayerListWhoWantNewGame.clear();
+		kDebug() << "Start new game.";
+		
+	}
 	
 }
+
 
 void Server::incomingConnection( int socketDescriptor )
 {

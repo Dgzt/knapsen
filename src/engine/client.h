@@ -31,6 +31,7 @@ public:
     Client( QObject* parent = 0 );
 	
 	void startNextRound(){ sendCommand( START_NEXT_ROUND_COMMAND ); }
+	void startNextGame(){ sendCommand( START_NEXT_GAME_COMMAND ); }
 	
 public slots:
 	void slotSelectedCardId( int );

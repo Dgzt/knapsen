@@ -406,6 +406,7 @@ void MainWindow::slotEndGameExec()
 		
 		kDebug() << "Start next game.";
 		
+		
 	}else{
 		
 		kDebug() << "Close game.";

@@ -428,6 +428,12 @@ void Player::newCommand( QString command )
 		emit signalStartNextRound( this );
 	}
 	
+	if( getCommandPartOfCommand( command ) == START_NEXT_GAME_COMMAND ){
+		kDebug() << getName() << "Start next game.";
+		
+		emit signalStartNextGame( this );
+	}
+	
 }
 
 bool Player::setSelectableCardsWhatEqualSuit( Card::CardSuit cardSuit )
