@@ -325,6 +325,12 @@ void Client::slotProcessCommands()
 			
 		}
 		
+		if( getCommandPartOfCommand( commandList.first() ) == END_GAME_COMMAND ){
+			kDebug() << getName() << "End game.";
+			
+			emit signalEndGame( getValuePartOfCommand( commandList.first() ) );
+		}
+		
 		
 		
 		if( getName() != "Bot" && getCommandPartOfCommand( commandList.first() ) == VISIBLE_OPPONENT_CARDS_COMMAND ){

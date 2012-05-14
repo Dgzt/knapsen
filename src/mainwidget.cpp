@@ -40,6 +40,7 @@ MainWindow::MainWindow( QWidget* parent ) : KXmlGuiWindow( parent )
 	bot = 0;
 	//
 	endRoundDialog = 0;
+	endGameDialog = 0;
 	//
 	
 	//Initialize the data path (example pictures, icons, etc)
@@ -160,6 +161,7 @@ void MainWindow::setGameSignals()
 	
 	connect( client, SIGNAL( signalOpponentDisconnected() ),									this,	 SLOT( slotOpponentDisconnected() ) );
 	connect( client, SIGNAL( signalEndRound( QString, int ) ),									this,	 SLOT( slotEndRound( QString, int ) ) );
+	connect( client, SIGNAL( signalEndGame( QString ) ),										this,	 SLOT( slotEndGame( QString ) ) );
 	
 	connect( cWidget, SIGNAL( signalSelectedCardId( int ) ),									client, SLOT( slotSelectedCardId( int ) ) );
 	connect( cWidget, SIGNAL( signalSelectedTrumpCard() ),										client, SLOT( slotSelectedTrumpCard() ) );
@@ -367,9 +369,9 @@ void MainWindow::slotOpponentDisconnected()
 	}
 }
 
-void MainWindow::slotEndRound( QString winnerName, int scores )
+void MainWindow::slotEndRound( QString roundWinnerName, int scores )
 {
-	endRoundDialog = new EndRoundDialog( this, winnerName, scores );
+	endRoundDialog = new EndRoundDialog( this, roundWinnerName, scores );
 	QTimer::singleShot( 0, this, SLOT( slotEndRoundExec() ) );
 }
 
@@ -387,6 +389,31 @@ void MainWindow::slotEndRoundExec()
 	client->startNextRound();
 	
 	waitingForOpponentDialog.exec();
+	
+}
+
+void MainWindow::slotEndGame( QString gameWinnerName )
+{
+	endGameDialog = new EndGameDialog( this, gameWinnerName );
+	QTimer::singleShot( 0, this, SLOT( slotEndGameExec() ) );
+}
+
+void MainWindow::slotEndGameExec()
+{
+	int ret = endGameDialog->exec();
+	
+	if( ret ){
+		
+		kDebug() << "Start next game.";
+		
+	}else{
+		
+		kDebug() << "Close game.";
+		
+	}
+	
+	delete endGameDialog;
+	endGameDialog = 0;
 	
 }
 

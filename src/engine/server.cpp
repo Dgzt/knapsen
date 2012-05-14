@@ -160,7 +160,9 @@ void Server::roundOver()
 	
 	if( mGameSequence->isGameOver() ){
 		
-		//Under developing.
+		for( int i = 0; i < mPlayerList.size(); ++i ){
+			mPlayerList.at( i )->sendEndGame( winnerPlayer->getName() );
+		}
 		
 	}else{
 		

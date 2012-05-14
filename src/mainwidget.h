@@ -11,6 +11,7 @@ class Client;
 class Bot;
 //
 class EndRoundDialog;
+class EndGameDialog;
 //
 
 class MainWindow : public KXmlGuiWindow
@@ -29,6 +30,7 @@ class MainWindow : public KXmlGuiWindow
 	
 	//
 	EndRoundDialog *endRoundDialog;
+	EndGameDialog *endGameDialog;
 	//
 	
     //Initialize the data path
@@ -54,6 +56,9 @@ private slots:
 	
 	void slotEndRound( QString, int );
 	void slotEndRoundExec();
+	
+	void slotEndGame( QString );
+	void slotEndGameExec();
 	
 	/*void endRoundSlot( QString, int );
 	void endGameSlot( QString );*/

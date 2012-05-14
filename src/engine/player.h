@@ -69,11 +69,12 @@ static const QString START_NEXT_ROUND_COMMAND = ":START_NEXT_ROUND";
 
 static const QString COMMANDS_END_COMMAND = ":COMMANDS_END";
 
-
-
-
 //
 static const QString START_GAME_COMMAND = ":START_GAME";
+
+//
+static const QString END_GAME_COMMAND = ":END_GAME=";
+//
 
 class Player : public QTcpSocket
 {
@@ -265,6 +266,9 @@ public:
 	
 	void sendEndRound( QString winnerName, int winnnerScores ){ sendCommand( END_ROUND_COMMAND+winnerName+","+QString::number( winnnerScores ) ); }
 	
+	//
+	void sendEndGame( QString winnerName ){ sendCommand( END_GAME_COMMAND+winnerName ); }
+	//
 	
 	void sendCommandsEnd(){ sendCommand( COMMANDS_END_COMMAND ); }
 	
