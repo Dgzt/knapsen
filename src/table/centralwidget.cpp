@@ -19,12 +19,15 @@
 
 const int CENTRAL_CARDS_SIZE = 2;
 
-const double SCALE_VALUE = 0.6; //0.7
+//const double SCALE_VALUE = 0.6; //0.7
+const double GERMAN_CARDS_SCALE_VALUE = 0.6; //0.7
+const double FRENCH_CARDS_SCALE_VALUE = 1.4;
 
 CentralWidget::CentralWidget( QWidget* parent ): 
-	QGraphicsView( parent )
+	QGraphicsView( parent ),
+	mGameIsRunning( false ),
+	mScale( 0.0 )
 {
-	mGameIsRunning = false;
 	mOpponentName = 0;
 	mPlayerName = 0;
 	mRenderer = 0;
@@ -239,7 +242,17 @@ void CentralWidget::slotInitialize( QString playerName, QString opponentName, Kn
 		mRenderer = new QSvgRenderer( KGlobal::dirs()->findResource( "appdata", "pics/william-tell.svgz" ) );
 	}else{ // typeOfCards == Knapsen::FrenchSuits
 		//Under developing.
+		mRenderer = new QSvgRenderer( KGlobal::dirs()->findResource( "appdata", "pics/tigullio-bridge.svg" ) );
+		//
 	}
+	
+	//
+	if( typeOfCards == Knapsen::GermanSuits ){
+		mScale = GERMAN_CARDS_SCALE_VALUE;
+	}else{ //Knapsen::FrenchSuits
+		mScale = FRENCH_CARDS_SCALE_VALUE;
+	}
+	//
 	
 	//Set opponent's and player's cards
 	mNumberOfCardsInHand = numberOfCardsInHand;
@@ -250,14 +263,16 @@ void CentralWidget::slotInitialize( QString playerName, QString opponentName, Kn
 	for( int i = 0; i < mNumberOfCardsInHand; ++i ){
 		mOpponentCards[i].setSharedRenderer( mRenderer );
 		mOpponentCards[i].setElementId( "back" );
-		mOpponentCards[i].setScale( SCALE_VALUE );
+		//mOpponentCards[i].setScale( SCALE_VALUE );
+		mOpponentCards[i].setScale( mScale );
 		mOpponentCards[i].setVisible( false );
 		
 		scene()->addItem( &mOpponentCards[i] );
 		
 		mPlayerCards[i].setSharedRenderer( mRenderer );
 		mPlayerCards[i].setElementId( "back" );
-		mPlayerCards[i].setScale( SCALE_VALUE );
+		//mPlayerCards[i].setScale( SCALE_VALUE );
+		mPlayerCards[i].setScale( mScale );
 		mPlayerCards[i].setVisible( false );
 		mPlayerCards[i].setId( i );
 		mPlayerCards[i].setSelectable( false );
@@ -271,7 +286,8 @@ void CentralWidget::slotInitialize( QString playerName, QString opponentName, Kn
 	mDeck = new QGraphicsSvgItem;
 	mDeck->setSharedRenderer( mRenderer );
 	mDeck->setElementId( "back" );
-	mDeck->setScale( SCALE_VALUE );
+	//mDeck->setScale( SCALE_VALUE );
+	mDeck->setScale( mScale );
 		
 	scene()->addItem( mDeck );
 
@@ -279,7 +295,8 @@ void CentralWidget::slotInitialize( QString playerName, QString opponentName, Kn
 	mTrumpCard = new MySvgItem;
 	mTrumpCard->setSharedRenderer( mRenderer );
 	mTrumpCard->setElementId( "back" );
-	mTrumpCard->setScale( SCALE_VALUE );
+	//mTrumpCard->setScale( SCALE_VALUE );
+	mTrumpCard->setScale( mScale );
 	mTrumpCard->setTransformOriginPoint( 0, mTrumpCard->boundingRect().height()/2 );
 	mTrumpCard->setRotation( 90 );
 	mTrumpCard->setVisible( false );
@@ -294,7 +311,8 @@ void CentralWidget::slotInitialize( QString playerName, QString opponentName, Kn
 	mCentralCards = new QGraphicsSvgItem[ CENTRAL_CARDS_SIZE ];
 	for( int i = 0; i < CENTRAL_CARDS_SIZE; ++i ){
 		mCentralCards[i].setSharedRenderer( mRenderer );
-		mCentralCards[i].setScale( SCALE_VALUE );
+		//mCentralCards[i].setScale( SCALE_VALUE );
+		mCentralCards[i].setScale( mScale );
 		mCentralCards[i].setVisible( false );
 		mCentralCards[i].setElementId( "" );
 	
@@ -475,7 +493,8 @@ void CentralWidget::slotStartGame()
 {
 	kDebug() << "Start game.";
 	
-	mCardSize = mDeck->boundingRect().size()*SCALE_VALUE;
+	//mCardSize = mDeck->boundingRect().size()*SCALE_VALUE;
+	mCardSize = mDeck->boundingRect().size()*mScale;
 	
 	setInGamePositions();
 	

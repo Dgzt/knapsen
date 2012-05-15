@@ -83,6 +83,16 @@ void MainWindow::initializePaths()
 		
 		close();
 	}
+	
+	path = KGlobal::dirs()->findResource( "appdata", "pics/tigullio-bridge.svg" );
+	
+	if( path.isNull() ){
+		path = KNAPSEN_PREFIX "/share/apps/knapsen/pics/tigullio-bridge.svg";
+		
+		KMessageBox::error( this, i18n( "Knapsen not found the \"%1\"!", path ) );
+		
+		close();
+	}
 }
 
 void MainWindow::setupActions()

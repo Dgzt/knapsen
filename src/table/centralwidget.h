@@ -22,7 +22,10 @@ class CentralWidget : public QGraphicsView
 	QSizeF mCardSize;
 	
 	//
-	//int mShowOpponentCardsId[2];
+	double mScale;
+	//
+	
+	//
 	QPair< int, int > *mShowOpponentCardsId;
 	//
 	

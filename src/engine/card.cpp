@@ -3,7 +3,8 @@
 
 static const int INVALID_CARD_VALUE = -1;
 
-static const QString GERGMAN_SUIT_CARD_NAME[ Card::CARD_NUMBERS_WITH_9 ] = {
+//static const QString GERGMAN_SUIT_CARDS_NAME[ Card::CARD_NUMBERS_WITH_9 ] = {
+static const QString CARDS_NAME[ Card::CARD_NUMBERS_WITH_9 ] = {
 	"1_heart", "king_heart", "queen_heart", "jack_heart", "10_heart", //heart
 	"1_diamond", "king_diamond", "queen_diamond", "jack_diamond", "10_diamond", //diamond
 	"1_spade", "king_spade", "queen_spade", "jack_spade", "10_spade", //spade
@@ -34,12 +35,16 @@ QString Card::getCardText( Knapsen::TypeOfCards typeOfCards ) const
 {
 	QString retStr;
 	
-	if( mValue == INVALID_CARD_VALUE ){
+	/*if( mValue == INVALID_CARD_VALUE ){
 		retStr == "";
 	}else if( typeOfCards == Knapsen::GermanSuits ){
-		retStr = GERGMAN_SUIT_CARD_NAME[ mValue ];
+		retStr = GERGMAN_SUIT_CARDS_NAME[ mValue ];
 	}else{ //typeOfCards = Knapsen::FrenchSuits
 		//Under develop
+	}*/
+	
+	if( mValue != INVALID_CARD_VALUE ){
+		retStr = CARDS_NAME[ mValue ];
 	}
 	
 	return retStr;
