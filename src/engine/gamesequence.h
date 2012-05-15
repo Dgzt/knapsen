@@ -9,6 +9,11 @@ class GameSequence
 {	
 	QList<Player*> *mPlayers;
 	
+	//
+	int mGameStarterPlayer;
+	int mRoundStarterPlayer;
+	//
+	
 	int mCurrentPlayer;
 	
 public:
@@ -25,6 +30,11 @@ public:
 	
 	bool isRoundOver();
 	bool isGameOver();
+	
+	//
+	void nextPlayerStartRound();
+	//void nextPlayerStartGame();
+	//
 };
 
 #endif //GAMESEQUENCE_H

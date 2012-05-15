@@ -500,6 +500,11 @@ void Server::slotPlayerWantStartNextRound( Player *player )
 	if( mPlayerListWhoWantResumeGame.size() == mPlayerList.size() ){
 		mPlayerListWhoWantResumeGame.clear();
 		kDebug() << "Start next round.";
+		
+		//
+		mGameSequence->nextPlayerStartRound();
+		//
+		
 		newRound();
 		
 		for( int i = 0; i < mPlayerList.size(); ++i ){

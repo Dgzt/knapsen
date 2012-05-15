@@ -1,10 +1,11 @@
 #include "gamesequence.h"
 
-GameSequence::GameSequence()
+GameSequence::GameSequence() :
+	mGameStarterPlayer( 0 ),
+	mRoundStarterPlayer( 0 ),
+	mCurrentPlayer( 0 )
 {
 	mPlayers = 0;
-	
-	mCurrentPlayer = 0;
 }
 
 void GameSequence::setWhoStartGame( Knapsen::WhoStartGame whoStartGame )
@@ -20,12 +21,15 @@ void GameSequence::setWhoStartGame( Knapsen::WhoStartGame whoStartGame )
 	}
 	
 	if( whoStartGame == Knapsen::AdminPlayer ){
-		//Becouse the first player always the admin
-		mCurrentPlayer = 0;
+		//The first player always the admin
+		mGameStarterPlayer = 0;
 	}else{ //whoStartGame == Knapsen::OpponentPlayer
-		//Becouse the second player always the opponent
-		mCurrentPlayer = 1;
+		//The second player always the opponent
+		mGameStarterPlayer = 1;
 	}
+	
+	mRoundStarterPlayer = mGameStarterPlayer;
+	mCurrentPlayer = mRoundStarterPlayer;
 }
 
 void GameSequence::setCurrentPlayer( Player* player )
@@ -77,3 +81,26 @@ bool GameSequence::isGameOver()
 	
 	return false;
 }
+
+void GameSequence::nextPlayerStartRound()
+{
+	if( mRoundStarterPlayer == 0 ){
+		mRoundStarterPlayer = 1;
+	}else{
+		mRoundStarterPlayer = 0;
+	}
+	
+	mCurrentPlayer = mRoundStarterPlayer;
+}
+
+/*void GameSequence::nextPlayerStartGame()
+{
+	if( mGameStarterPlayer == 0 ){
+		mGameStarterPlayer = 1;
+	}else{
+		mGameStarterPlayer = 0;
+	}
+	
+	mRoundStarterPlayer = mGameStarterPlayer;
+	mCurrentPlayer = mRoundStarterPlayer;
+}*/
