@@ -93,7 +93,7 @@ void GameSequence::nextPlayerStartRound()
 	mCurrentPlayer = mRoundStarterPlayer;
 }
 
-/*void GameSequence::nextPlayerStartGame()
+void GameSequence::nextPlayerStartGame()
 {
 	if( mGameStarterPlayer == 0 ){
 		mGameStarterPlayer = 1;
@@ -103,4 +103,4 @@ void GameSequence::nextPlayerStartRound()
 	
 	mRoundStarterPlayer = mGameStarterPlayer;
 	mCurrentPlayer = mRoundStarterPlayer;
-}*/
+}

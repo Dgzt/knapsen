@@ -33,7 +33,7 @@ public:
 	
 	//
 	void nextPlayerStartRound();
-	//void nextPlayerStartGame();
+	void nextPlayerStartGame();
 	//
 };
 

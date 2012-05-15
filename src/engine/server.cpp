@@ -541,6 +541,10 @@ void Server::slotPlayerWantStartNextGame( Player *player )
 			mPlayerList.at( i )->sendNewGame();
 		}
 		
+		//
+		mGameSequence->nextPlayerStartGame();
+		//
+		
 		newRound();
 		
 		for( int i = 0; i < mPlayerList.size(); ++i ){
