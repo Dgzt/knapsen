@@ -106,44 +106,49 @@ void Server::roundOver()
 {
 	kDebug() << "---- Round Over ----";
 	
-	//Player *winnerPlayer = mGameSequence->getCurrentPlayer();
-	//Player *looserPlayer = mGameSequence->getNextPlayer();
-	
 	Player *currentPlayer = mGameSequence->getCurrentPlayer();
 	Player *nextPlayer = mGameSequence->getNextPlayer();
 	
 	Player *winnerPlayer = 0; //Initialize with 0, becouse the compiler write warning.
 	Player *looserPlayer = 0; // --- || ---
 	
-	if( currentPlayer->getTricks() >= 66 ){
-		kDebug() << "Current player have more then 66 tricks.";
+	//Who win the round
+	if( mPlayerWhoClickedToCloseButtonThisRound ){
 		
-		winnerPlayer = currentPlayer;
-		looserPlayer = nextPlayer;
-	}else if( nextPlayer->getTricks() >= 66 ){
-		kDebug() << "Next player have more then 66 tricks.";
+		if( mPlayerWhoClickedToCloseButtonThisRound == currentPlayer && currentPlayer->getTricks() >= 66 ){
+			winnerPlayer = currentPlayer;
+			looserPlayer = nextPlayer;
+		}else if( mPlayerWhoClickedToCloseButtonThisRound == nextPlayer && nextPlayer->getTricks() >= 66 ){
+			winnerPlayer = nextPlayer;
+			looserPlayer = currentPlayer;
+		}else if( mPlayerWhoClickedToCloseButtonThisRound == currentPlayer ){
+			winnerPlayer = nextPlayer;
+			looserPlayer = currentPlayer;
+		}else{
+			winnerPlayer = currentPlayer;
+			looserPlayer = nextPlayer;
+		}
 		
-		winnerPlayer = nextPlayer;
-		looserPlayer = currentPlayer;
-	}else if( currentPlayer->getNumberOfCardsInHandNow() == 0 ){
-		kDebug() << "Players number of cards in hand now is 0";
-		
-		winnerPlayer = currentPlayer;
-		looserPlayer = nextPlayer;
 	}else{
-		kDebug() << "ERROR! Undefined winning condition.";
-		return;
+		
+		if( currentPlayer->getTricks() >= 66 ){
+			winnerPlayer = currentPlayer;
+			looserPlayer = nextPlayer;
+		}else if( nextPlayer->getTricks() >= 66 ){
+			winnerPlayer = nextPlayer;
+			looserPlayer = currentPlayer;
+		}else if( currentPlayer->getNumberOfCardsInHandNow() == 0 ){
+			winnerPlayer = currentPlayer;
+			looserPlayer = nextPlayer;
+		}
+		
 	}
 	
-	if( mPlayerWhoClickedToCloseButtonThisRound == looserPlayer ){
-		Player *tmpPlayer = winnerPlayer;
-		winnerPlayer = looserPlayer;
-		looserPlayer = tmpPlayer;
-	}
+	//Winning scores
+	int scores = 0;
 	
-	int scores( 0 );
-	
-	if( !mPlayerWhoClickedToCloseButtonThisRound || mPlayerWhoClickedToCloseButtonThisRound == winnerPlayer ){
+	if( mPlayerWhoClickedToCloseButtonThisRound == winnerPlayer ){
+		
 		if( looserPlayer->getTricks() == 0 ){
 			scores = 3;
 		}else if( looserPlayer->getTricks() < 33 ){
@@ -151,8 +156,21 @@ void Server::roundOver()
 		}else{ //  33 <= looserPlayer->getTricks() && looserPlayer->getTricks() < 66
 			scores = 1;
 		}
-	}else{ //The loser player closed the deck
+		
+	}else if( mPlayerWhoClickedToCloseButtonThisRound == looserPlayer ){
+		
 		scores = 2;
+		
+	}else{ // !mPlayerWhoClickedToCloseButtonThisRound
+
+		if( looserPlayer->getTricks() == 0 ){
+			scores = 3;
+		}else if( looserPlayer->getTricks() < 33 ){
+			scores = 2;
+		}else{ //  33 <= looserPlayer->getTricks() && looserPlayer->getTricks() < 66
+			scores = 1;
+		}
+
 	}
 	
 	kDebug() << winnerPlayer->getName() << "win the round with" << scores << "scores.";
