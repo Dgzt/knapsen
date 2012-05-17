@@ -143,16 +143,17 @@ void CentralWidget::setInGamePositions()
 	mDeck->setPos( 20, height()/2-mCardSize.height()/2 );
 	
 	//Set position of opponent's cards and player's cards
-	/*QPoint opponentCard0Pos( halpOfWidth-mCardSize.width()/2-2*mCardSize.width()-2*cardDistance, 
-						nameDistance+mOpponentName->boundingRect().height()+nameDistance );
-	QPoint playerCard0Pos( opponentCard0Pos.x(), 
-					  height()-nameDistance-mPlayerName->boundingRect().height()-nameDistance-mCardSize.height());*/
-	//
-	QPoint opponentCard0Pos( halpOfWidth-((float)mNumberOfCardsInHand/2)*mCardSize.width()-(mNumberOfCardsInHand/2)*cardDistance,
+	float removeCardsDistance = 0.0;
+	if( mNumberOfCardsInHand == 5 ){
+		removeCardsDistance = 2 * cardDistance;
+	}else{ //mNumberOfCardsInHand == 6
+		removeCardsDistance = 2.5 * cardDistance;
+	}
+	
+	QPoint opponentCard0Pos( halpOfWidth-((float)mNumberOfCardsInHand/2)*mCardSize.width()-removeCardsDistance,
 						nameDistance+mOpponentName->boundingRect().height()+nameDistance );
 	QPoint playerCard0Pos( opponentCard0Pos.x(),
 					  height()-nameDistance-mPlayerName->boundingRect().height()-nameDistance-mCardSize.height() );
-	//
 	
 	
 	mOpponentCards[0].setPos( opponentCard0Pos );
@@ -199,15 +200,15 @@ void CentralWidget::setInGamePositions()
 	
 	//Set position of twenty button
 	QPoint twentyButtonPos;
-	twentyButtonPos.setX( mPlayerCards[2].scenePos().x()-mCardSize.width()/2-buttonDistance );
-	twentyButtonPos.setY( mPlayerCards[2].scenePos().y()-buttonDistance-20 );
+	twentyButtonPos.setX( halpOfWidth-cardDistance/2-mCardSize.width() );
+	twentyButtonPos.setY( mPlayerCards[0].scenePos().y()-buttonDistance-20 );
 	
 	mTwentyButton->setGeometry( QRect( twentyButtonPos, QSize( mCardSize.width(), 20 ) ) );
 	
 	//Set position of forty button
 	QPoint fortyButtonPos;
-	fortyButtonPos.setX( mPlayerCards[2].scenePos().x()+mCardSize.width()/2+buttonDistance );
-	fortyButtonPos.setY( mPlayerCards[2].scenePos().y()-buttonDistance-20 );
+	fortyButtonPos.setX( halpOfWidth+cardDistance/2 );
+	fortyButtonPos.setY( mPlayerCards[0].scenePos().y()-buttonDistance-20 );
 	
 	mFortyButton->setGeometry( QRect( fortyButtonPos, QSize( mCardSize.width(), 20 ) ) );
 	

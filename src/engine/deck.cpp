@@ -55,6 +55,9 @@ void Deck::buildDeck()
 	//mCards[17] = Card( 3 );
 	//mCards[13] = Card( 2 ); 
 	
+	//mCards[15] = Card( 6 );
+	//mCards[12] = Card( 7 );
+	
 	kDebug() << "Generated deck:";
 	for( int i = 0; i < mCards.size(); ++i ){
 		kDebug() << i << ":" << mCards.at( i ).getValue();
