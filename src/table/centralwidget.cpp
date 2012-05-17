@@ -178,9 +178,9 @@ void CentralWidget::setInGamePositions()
 	mPlayerScoreTable->setPos( playerScoreTablePos );
 	
 	//Set position of trump card
-	QPoint trumpPos;
-	trumpPos.setX( mDeck->scenePos().x()+mCardSize.width() );
-	trumpPos.setY( mDeck->scenePos().y()-(mDeck->boundingRect().height()-mCardSize.height()) );
+	QPoint trumpPos ;
+	trumpPos.setX( mDeck->scenePos().x() + 15 ); // +15 and about center of the deck the french and german suits cards 
+	trumpPos.setY( height()/2 + 45 ); // +24 and about center of the deck the french and german suits cards
 	
 	mTrumpCard->setPos( trumpPos );
 	
@@ -193,7 +193,7 @@ void CentralWidget::setInGamePositions()
 	
 	QPoint cenralCard2Pos;
 	cenralCard2Pos.setX( halpOfWidth );
-	cenralCard2Pos.setY( ( height()-mCardSize.height() ) / 2 );
+	cenralCard2Pos.setY( cenralCard1Pos.y() );
 
 	mCentralCards[1].setPos( cenralCard2Pos );
 	
@@ -306,8 +306,10 @@ void CentralWidget::slotInitialize( QString playerName, QString opponentName, Kn
 	mTrumpCard->setElementId( "back" );
 	//mTrumpCard->setScale( SCALE_VALUE );
 	mTrumpCard->setScale( mScale );
-	mTrumpCard->setTransformOriginPoint( 0, mTrumpCard->boundingRect().height()/2 );
-	mTrumpCard->setRotation( 90 );
+	//mTrumpCard->setTransformOriginPoint( 0, mTrumpCard->boundingRect().height()/2 );
+	mTrumpCard->setTransformOriginPoint( 0,0 );
+	//mTrumpCard->setRotation( 90 );
+	mTrumpCard->setRotation( -90 );
 	mTrumpCard->setVisible( false );
 	mTrumpCard->setSelectable( false );
 	mTrumpCard->setZValue( -1 );
