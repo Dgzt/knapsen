@@ -19,20 +19,22 @@
 
 const int CENTRAL_CARDS_SIZE = 2;
 
-//const double SCALE_VALUE = 0.6; //0.7
-const double GERMAN_CARDS_SCALE_VALUE = 0.6; //0.7
-const double FRENCH_CARDS_SCALE_VALUE = 1.4;
+const double GERMAN_CARDS_SCALE_VALUE = 0.6; //0.6
+const double FRENCH_CARDS_SCALE_VALUE = 1.4; //1.4
 
 CentralWidget::CentralWidget( QWidget* parent ): 
 	QGraphicsView( parent ),
 	mGameIsRunning( false ),
+	//mNumberOfCardsInHand( 0 ),
 	mScale( 0.0 )
 {
 	mOpponentName = 0;
 	mPlayerName = 0;
 	mRenderer = 0;
-	mOpponentCards = 0;
+	//
 	mNumberOfCardsInHand = 0;
+	//
+	mOpponentCards = 0;
 	mDeck = 0;
 	mPlayerCards = 0;
 	mTrumpCard = 0;
@@ -141,31 +143,38 @@ void CentralWidget::setInGamePositions()
 	mDeck->setPos( 20, height()/2-mCardSize.height()/2 );
 	
 	//Set position of opponent's cards and player's cards
-	QPoint posOpponent( halpOfWidth-mCardSize.width()/2-2*mCardSize.width()-2*cardDistance, 
+	/*QPoint opponentCard0Pos( halpOfWidth-mCardSize.width()/2-2*mCardSize.width()-2*cardDistance, 
 						nameDistance+mOpponentName->boundingRect().height()+nameDistance );
-	QPoint posPlayer( posOpponent.x(), 
-					  height()-nameDistance-mPlayerName->boundingRect().height()-nameDistance-mCardSize.height());
+	QPoint playerCard0Pos( opponentCard0Pos.x(), 
+					  height()-nameDistance-mPlayerName->boundingRect().height()-nameDistance-mCardSize.height());*/
+	//
+	QPoint opponentCard0Pos( halpOfWidth-((float)mNumberOfCardsInHand/2)*mCardSize.width()-(mNumberOfCardsInHand/2)*cardDistance,
+						nameDistance+mOpponentName->boundingRect().height()+nameDistance );
+	QPoint playerCard0Pos( opponentCard0Pos.x(),
+					  height()-nameDistance-mPlayerName->boundingRect().height()-nameDistance-mCardSize.height() );
+	//
 	
-	mOpponentCards[0].setPos( posOpponent );
-	mPlayerCards[0].setPos( posPlayer );
+	
+	mOpponentCards[0].setPos( opponentCard0Pos );
+	mPlayerCards[0].setPos( playerCard0Pos );
 	
 	for(int i = 1; i < mNumberOfCardsInHand; ++i){
-		posOpponent.rx() += cardDistance+mCardSize.width();
-		mOpponentCards[i].setPos( posOpponent );
+		opponentCard0Pos.rx() += cardDistance+mCardSize.width();
+		mOpponentCards[i].setPos( opponentCard0Pos );
 		
-		posPlayer.rx() += cardDistance+mCardSize.width();
-		mPlayerCards[i].setPos( posPlayer );
+		playerCard0Pos.rx() += cardDistance+mCardSize.width();
+		mPlayerCards[i].setPos( playerCard0Pos );
 	}
 	
 	//Set position of score tables
 	QPoint opponentScoreTablePos;
-	opponentScoreTablePos.setX( mOpponentCards[4].scenePos().x()+mCardSize.width()+scoreTableDistance );
-	opponentScoreTablePos.setY( mOpponentCards[4].scenePos().y() );
+	opponentScoreTablePos.setX( mOpponentCards[ mNumberOfCardsInHand-1 ].scenePos().x()+mCardSize.width()+scoreTableDistance );
+	opponentScoreTablePos.setY( mOpponentCards[ mNumberOfCardsInHand-1 ].scenePos().y() );
 	mOpponentScoreTable->setPos( opponentScoreTablePos );
 	
 	QPoint playerScoreTablePos;
-	playerScoreTablePos.setX( mPlayerCards[4].scenePos().x()+mCardSize.width()+scoreTableDistance );
-	playerScoreTablePos.setY( mPlayerCards[4].scenePos().y()+mCardSize.height()-mPlayerScoreTable->boundingRect().height() );
+	playerScoreTablePos.setX( mPlayerCards[ mNumberOfCardsInHand-1 ].scenePos().x()+mCardSize.width()+scoreTableDistance );
+	playerScoreTablePos.setY( mPlayerCards[ mNumberOfCardsInHand-1 ].scenePos().y()+mCardSize.height()-mPlayerScoreTable->boundingRect().height() );
 	mPlayerScoreTable->setPos( playerScoreTablePos );
 	
 	//Set position of trump card

@@ -35,7 +35,9 @@ class CentralWidget : public QGraphicsView
 	QSvgRenderer* mRenderer;
 	QGraphicsSvgItem* mDeck;
 	
+	//
 	int mNumberOfCardsInHand;
+	//
 	
 	QGraphicsSvgItem* mOpponentCards;
 	MySvgItem* mPlayerCards;
