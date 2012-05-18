@@ -298,6 +298,9 @@ void CentralWidget::slotInitialize( QString playerName, QString opponentName, Kn
 	mDeck->setElementId( "back" );
 	//mDeck->setScale( SCALE_VALUE );
 	mDeck->setScale( mScale );
+	//
+	mDeck->setZValue( 1 );
+	//
 		
 	scene()->addItem( mDeck );
 
@@ -313,7 +316,7 @@ void CentralWidget::slotInitialize( QString playerName, QString opponentName, Kn
 	mTrumpCard->setRotation( -90 );
 	mTrumpCard->setVisible( false );
 	mTrumpCard->setSelectable( false );
-	mTrumpCard->setZValue( -1 );
+	mTrumpCard->setZValue( 0 );
 	
 	connect( mTrumpCard, SIGNAL( click() ), this, SLOT( slotSelectedTrumpCardSlot() ) );
 
@@ -469,8 +472,6 @@ void CentralWidget::slotShowOpponentCards( int card1Pos, QString card1Text, int 
 	mOpponentCards[ card1Pos ].setElementId( card1Text );
 	mOpponentCards[ card2Pos ].setElementId( card2Text );
 	
-	//mShowOpponentCardsId[0] = card1Pos;
-	//mShowOpponentCardsId[1] = card2Pos;
 	mShowOpponentCardsId = new QPair< int, int >;
 	mShowOpponentCardsId->first = card1Pos;
 	mShowOpponentCardsId->second = card2Pos;
@@ -536,8 +537,6 @@ void CentralWidget::slotClick( int id )
 
 void CentralWidget::slotCoverOpponentCards()
 {
-	//mOpponentCards[ mShowOpponentCardsId[0] ].setElementId( "back" );
-	//mOpponentCards[ mShowOpponentCardsId[1] ].setElementId( "back" );
 	mOpponentCards[ mShowOpponentCardsId->first ].setElementId( "back" );
 	mOpponentCards[ mShowOpponentCardsId->second ].setElementId( "back" );
 	
