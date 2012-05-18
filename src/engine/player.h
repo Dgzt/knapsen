@@ -87,6 +87,10 @@ class Player : public QTcpSocket
 	//The opponent, send to whan player get new card, selected card, etc
 	Player* mOpponent;
 	
+	//
+	Card::CardType mLowstCardType;
+	//
+	
 	//Player's cards
 	QList<Card> mCards;
 	
@@ -123,10 +127,12 @@ protected:
 	void setNumberOfCardsInHand( int );
 	int getNumberOfCardsInHand() const{ return mCards.size(); }
 	
-	//
 	void newGame();
-	//
 	void newRound();
+	
+	//
+	void setLowestCard( int );
+	//
 	
 	int addNewCard( Card );
 	//Card getCard( int id ){ return mCards.at( id ); }
@@ -214,7 +220,7 @@ public:
 	void sendTypeOfCard( Knapsen::TypeOfCards );
 	
 	//Send 20 or 24 cards in deck
-	void sendSizeOfDeck( int size ){ sendCommand( SIZE_OF_DECK_COMMAND+QString::number( size ) ); }
+	void sendSizeOfDeck( int size ){ setLowestCard( size ); sendCommand( SIZE_OF_DECK_COMMAND+QString::number( size ) ); }
 	
 	//Send play with 5 or 6 cards in hand
 	void sendNumberOfCardsInHand( int size );

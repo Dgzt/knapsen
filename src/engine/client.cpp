@@ -58,6 +58,8 @@ void Client::slotProcessCommands()
 			if( ok ){
 				mSizeOfDeck = ret;
 				mSizeOfDeckNow = mSizeOfDeck;
+				
+				setLowestCard( mSizeOfDeck );
 			}else{
 				kDebug() << "ERROR! Cannot convert size of deck value to int!";
 			}
