@@ -18,7 +18,7 @@ class MainWindow : public KXmlGuiWindow
 {
     Q_OBJECT
     
-    KAction* closeGameAction;
+    KAction* mCloseGameAction;
     
     CentralWidget* cWidget;
 	

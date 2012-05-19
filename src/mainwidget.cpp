@@ -98,11 +98,11 @@ void MainWindow::initializePaths()
 void MainWindow::setupActions()
 {
 	//Game menu
-	KStandardGameAction::gameNew(               this, SLOT( newGameSlot()  ), actionCollection() );
-	closeGameAction = KStandardGameAction::end( this, SLOT(closeGameSlot() ), actionCollection() );
-	KStandardGameAction::quit(                  this, SLOT( close()        ), actionCollection() );
+	KStandardGameAction::gameNew(					this, SLOT( newGameSlot()  ), actionCollection() );
+	mCloseGameAction = KStandardGameAction::end(	this, SLOT(closeGameSlot() ), actionCollection() );
+	KStandardGameAction::quit(						this, SLOT( close()        ), actionCollection() );
 	
-	closeGameAction->setEnabled( false );
+	mCloseGameAction->setEnabled( false );
 	
 	//Settings menu
 	KStandardAction::preferences(this, SLOT(optionsPreferences()), actionCollection());
@@ -185,6 +185,20 @@ void MainWindow::setGameSignals()
 void MainWindow::newGameSlot()
 {
 	kDebug() << "New game.";
+	
+	if( mCloseGameAction->isEnabled() ){
+		
+		int ret = KMessageBox::questionYesNo( this, i18n( "Really want to start a new game?" ) );
+
+		if( ret == KMessageBox::Yes ){ //Close the current game and start new game
+			closeGameSlot();
+		}else{
+			return;
+		}
+
+		
+	}
+	
 
 	NewGameDialog newGameDialog( this );
 	
@@ -243,7 +257,7 @@ void MainWindow::newGameSlot()
 			client->connectToHost( newGameDialog.getClient_ServerAddress(), newGameDialog.getClient_ServerPort() );
 			
 			if( waitForServerDialog.exec() ){
-				closeGameAction->setEnabled( true );
+				mCloseGameAction->setEnabled( true );
 			}else{
 				kDebug() << "WaitForServerDialog - Cancel button.";
 				client->disconnectFromHost();
@@ -316,7 +330,7 @@ void MainWindow::closeGameSlot()
 	client->deleteLater();
 	client = 0;
 	
-	closeGameAction->setEnabled( false );
+	mCloseGameAction->setEnabled( false );
 }
 
 
@@ -351,7 +365,7 @@ void MainWindow::slotStartGame()
 	
 	server->startGame();
 	
-	closeGameAction->setEnabled( true );
+	mCloseGameAction->setEnabled( true );
 }
 
 void MainWindow::slotServerEmpty()
@@ -373,7 +387,7 @@ void MainWindow::slotOpponentDisconnected()
 	kDebug() << "Opponent disconnected!";
 	
 	//If the game is running, then will shor message
-	if( closeGameAction->isEnabled() ){
+	if( mCloseGameAction->isEnabled() ){
 		KMessageBox::information( this, i18n( "The opponent disconnected!" ) );
 		closeGameSlot();
 	}
