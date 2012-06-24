@@ -10,8 +10,8 @@ class MySvgItem;
 class QSvgRenderer;
 class MyTextItem;
 class ScoreTable;
-//class QPushButton;
-//class QPair;
+
+//class MyGraphicsProxyWidget;
 
 class CentralWidget : public QGraphicsView
 {
@@ -50,6 +50,7 @@ class CentralWidget : public QGraphicsView
 	QGraphicsSvgItem* mCentralCards;
 	
 	QGraphicsProxyWidget* mCloseButton;
+	//MyGraphicsProxyWidget* mCloseButton;
 	QGraphicsProxyWidget* mTwentyButton;
 	QGraphicsProxyWidget* mFortyButton;
 	

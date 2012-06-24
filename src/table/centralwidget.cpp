@@ -15,6 +15,7 @@
 #include "table/mysvgitem.h"
 #include "table/mytextitem.h"
 #include "table/scoretable.h"
+
 #include "table/centralwidget.h"
 
 const int CENTRAL_CARDS_SIZE = 2;
@@ -346,21 +347,24 @@ void CentralWidget::slotInitialize( QString playerName, QString opponentName, Kn
 	
 	//Set twenty button
 	QPushButton *twentyButton = new QPushButton( i18n( "Twenty" ) );
+	twentyButton->setAttribute( Qt::WA_NoSystemBackground );
 	mTwentyButton = scene()->addWidget( twentyButton );
 	mTwentyButton->setVisible( false );
 	connect( twentyButton, SIGNAL( clicked() ), this, SLOT( slotTwentyButtonClicked() ) );
 	
 	//Set forty button
 	QPushButton *fortyButton = new QPushButton( i18n( "Forty" ) );
+	fortyButton->setAttribute( Qt::WA_NoSystemBackground );
 	mFortyButton = scene()->addWidget( fortyButton );
 	mFortyButton->setVisible( false );
 	connect( fortyButton, SIGNAL(clicked()), this, SLOT( slotFortyButtonClicked() ) );
 	
 	//Set close button
 	QPushButton *closeButton = new QPushButton( i18n( "Close" ) );
-	mCloseButton = scene()->addWidget( closeButton );
+	closeButton->setAttribute( Qt::WA_NoSystemBackground );
+	mCloseButton = /*(MyGraphicsProxyWidget*)*/ scene()->addWidget( closeButton );
 	mCloseButton->setVisible( false );
-	connect( closeButton, SIGNAL( clicked() ), this, SLOT( slotCloseButtonClicked() ) ); 
+	connect( closeButton, SIGNAL( clicked() ), this, SLOT( slotCloseButtonClicked() ) );
 }
 
 void CentralWidget::slotNewPlayerCard( int id , QString card )
