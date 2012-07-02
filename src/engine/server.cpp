@@ -15,7 +15,8 @@ Server::Server( QObject* parent ) :
 	mAdminName( "" ),
 	mTwentyButtonClickedThisTurn( false ),
 	mFortyButtonClickedThisTurn( false ),
-	mClickedToCloseButtonThisTurn( false )
+	mClickedToCloseButtonThisTurn( false ),
+	mOpponentHaveNotTricksBeforePlayerClickedToCloseButton( false )
 {
 	kDebug() << "Initialize.";
 
@@ -159,7 +160,13 @@ void Server::roundOver()
 		
 	}else if( mPlayerWhoClickedToCloseButtonThisRound == looserPlayer ){
 		
-		scores = 2;
+		//scores = 2;
+		if( mOpponentHaveNotTricksBeforePlayerClickedToCloseButton ){
+			scores = 3;
+		}else{
+			scores = 2;
+		}
+		
 		
 	}else{ // !mPlayerWhoClickedToCloseButtonThisRound
 
@@ -369,7 +376,21 @@ void Server::slotPlayerClickedToCloseButton()
 {
 	kDebug() << mGameSequence->getCurrentPlayer()->getName() << "Clicked to close button.";
 	mClickedToCloseButtonThisTurn = true;
-	//mClickedToCloseButtonThisRound = true;
+	
+	//
+	for( int i = 0; i < mPlayerList.size(); ++i ){
+		if( mPlayerList.at( i ) != mGameSequence->getCurrentPlayer() ){
+			
+			if( mPlayerList.at( i )->getTricks() == 0 ){
+				mOpponentHaveNotTricksBeforePlayerClickedToCloseButton = true;
+			}else{
+				mOpponentHaveNotTricksBeforePlayerClickedToCloseButton = false;
+			}
+			
+		}
+	}
+	//
+	
 	mPlayerWhoClickedToCloseButtonThisRound = mGameSequence->getCurrentPlayer();
 }
 
@@ -446,9 +467,9 @@ void Server::slotCheckCentralCards()
 			mPlayerList.at( i )->sendClearCentralCards();
 		}
 		
-		//if( !mClickedToCloseButtonThisRound ){
+		//If player closed the deck
 		if( !mPlayerWhoClickedToCloseButtonThisRound ){
-			//If the dech have card yet, then add new cards to players, frist who won the last turn
+			//If the dech have card yet, then add new cards to players, first who won the last turn
 			if( mDeck->getDeckSize() > 0 ){
 				currentPlayer->sendNewCard( mDeck->getCard() );
 			

@@ -47,13 +47,21 @@ class Server : public QTcpServer
 	QPair<Player*, int> *mWaitingMarriage;
 	//
 	
-	//
 	bool mTwentyButtonClickedThisTurn;
 	bool mFortyButtonClickedThisTurn;
 	
+	//Closing deck
 	bool mClickedToCloseButtonThisTurn;
+	
+	/* The closer fails and before he/she closed the deck:
+	 *   -the opponent had got tricks, the opponent get 2 scores
+	 *   -the opponent hadn't got tricks, the opponent get 3 scores
+	 */
+	bool mOpponentHaveNotTricksBeforePlayerClickedToCloseButton;
+	
+	
 	Player *mPlayerWhoClickedToCloseButtonThisRound;
-	//
+	
 	
 	//
 	QList<Player *> mPlayerListWhoWantResumeGame;
