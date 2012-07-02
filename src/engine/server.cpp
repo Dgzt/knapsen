@@ -55,6 +55,7 @@ void Server::newRound()
 	mCentralCards.clear();
 	
 	//Clear
+	mOpponentHaveNotTricksBeforePlayerClickedToCloseButton = false;
 	mPlayerWhoClickedToCloseButtonThisRound = 0;
 	
 	//Clear cards, tricks
