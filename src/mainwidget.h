@@ -2,12 +2,14 @@
 #define mainwindow_h
 
 #include <KXmlGuiWindow>
+#include "engine/client.h"
 
 class CentralWidget;
 class KAction;
 
 class Server;
-class Client;
+//class Client;
+
 class Bot;
 //
 class EndRoundDialog;
@@ -52,17 +54,14 @@ private slots:
 	
 	void slotServerEmpty();
 	
-	void slotOpponentDisconnected();
+	void slotSocketError( QAbstractSocket::SocketError );
+	void slotGameError( Client::GameErrorType );
 	
 	void slotEndRound( QString, int );
 	void slotEndRoundExec();
 	
 	void slotEndGame( QString );
 	void slotEndGameExec();
-	
-	/*void endRoundSlot( QString, int );
-	void endGameSlot( QString );*/
-	
 	
 public:
     MainWindow(QWidget* parent = 0);

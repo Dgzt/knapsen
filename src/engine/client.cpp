@@ -12,6 +12,7 @@ Client::Client( QObject* parent ) :
 	connect( this, SIGNAL( signalCentralCardChanged( int, Card ) ), this, SLOT( slotCentralCardChanged( int, Card ) ) );
 }
 
+
 void Client::newCommand( QString command )
 {
 	kDebug() << command;
@@ -19,7 +20,18 @@ void Client::newCommand( QString command )
 	if( getCommandPartOfCommand( command ) == OPPONENT_DISCONNECTED_COMMAND ){
 		kDebug() << getName() << "Opponent disconnected!";
 	
-		emit signalOpponentDisconnected();
+		//emit signalOpponentDisconnected();
+		emit signalGameError( Client::OpponentDisconnected );
+		
+		return;
+	}
+	
+	if( getCommandPartOfCommand( command ) == NAME_IS_BUSY_COMMAND ){
+		kDebug() << getName() << "Name is busy command.";
+	
+		emit signalGameError( Client::NameIsBusy );
+		
+		return;
 	}
 	
 	if( getCommandPartOfCommand( command ) == COMMANDS_END_COMMAND ){

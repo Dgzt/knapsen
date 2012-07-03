@@ -28,7 +28,9 @@ private slots:
 	void slotCentralCardChanged( int, Card );
 	
 public:
-    Client( QObject* parent = 0 );
+    enum GameErrorType{ NameIsBusy, OpponentDisconnected };
+	
+	Client( QObject* parent = 0 );
 	
 	void startNextRound(){ sendCommand( START_NEXT_ROUND_COMMAND ); }
 	void startNextGame(){ sendCommand( START_NEXT_GAME_COMMAND ); }
@@ -44,6 +46,11 @@ public slots:
 	//
 	
 signals:
+	//Error signals
+	//void signalClientError();
+	void signalGameError( Client::GameErrorType );
+	//
+	
 	void signalInitialize( QString, QString, Knapsen::TypeOfCards, int );
 	
 	void signalNewOpponentCardId( int );
@@ -56,7 +63,7 @@ signals:
 	
 	void signalOpponentSelectedCardId( int );
 	
-	void signalOpponentDisconnected();
+	//void signalOpponentDisconnected();
 	
 	void signalOpponentTricksChanged( int );
 	

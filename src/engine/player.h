@@ -7,6 +7,9 @@
 
 //Names
 static const QString NAME_COMMAND = ":NAME=";
+//
+static const QString NAME_IS_BUSY_COMMAND =":NAME_IS_BUSY";
+//
 static const QString OPPONENT_NAME_COMMAND = ":OPPONENT_NAME=";
 
 //Configs
@@ -212,6 +215,10 @@ public:
 	//
 	
 	//-- Commands --
+	
+	//
+	void sendNameIsBusy(){ sendCommand( NAME_IS_BUSY_COMMAND ); }
+	//
 	
 	//Send the opponent's name
 	void sendOpponentName(){ sendCommand( OPPONENT_NAME_COMMAND+mOpponent->getName() ); }

@@ -213,6 +213,7 @@ void Server::slotNewPlayer( Player* player )
 		for( int i = 0; i < mPlayerList.size(); ++i ){
 			if( mPlayerList.at(i)->getName() == player->getName() ){
 				kDebug() << "The \"" << player->getName() << "\" name is busy.";
+				player->sendNameIsBusy();
 				return;
 			}
 		}

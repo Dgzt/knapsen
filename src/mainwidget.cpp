@@ -169,7 +169,10 @@ void MainWindow::setGameSignals()
 	connect( client, SIGNAL( signalNewRound() ),												cWidget, SLOT( slotNewRound() ) );
 	connect( client, SIGNAL( signalStartGame() ),												cWidget, SLOT( slotStartGame() ) );
 	
-	connect( client, SIGNAL( signalOpponentDisconnected() ),									this,	 SLOT( slotOpponentDisconnected() ) );
+	//
+	connect( client, SIGNAL( error( QAbstractSocket::SocketError ) ),							this,	SLOT( slotSocketError( QAbstractSocket::SocketError ) ) );
+	connect( client, SIGNAL( signalGameError( Client::GameErrorType ) ),						this,	SLOT( slotGameError( Client::GameErrorType ) ) );
+	//
 	connect( client, SIGNAL( signalEndRound( QString, int ) ),									this,	 SLOT( slotEndRound( QString, int ) ) );
 	connect( client, SIGNAL( signalEndGame( QString ) ),										this,	 SLOT( slotEndGame( QString ) ) );
 	
@@ -253,6 +256,9 @@ void MainWindow::newGameSlot()
 			WaitForServerDialog waitForServerDialog;
 			
 			connect( client, SIGNAL( signalStartGame() ), &waitForServerDialog, SLOT( slotStartGame() ) );
+			connect( client, SIGNAL( error( QAbstractSocket::SocketError ) ), &waitForServerDialog, SLOT( reject() ) );
+			connect( client, SIGNAL( signalGameError( Client::GameErrorType ) ), &waitForServerDialog, SLOT( reject() ) );
+			
 			
 			client->connectToHost( newGameDialog.getClient_ServerAddress(), newGameDialog.getClient_ServerPort() );
 			
@@ -382,14 +388,31 @@ void MainWindow::slotServerEmpty()
 	server = 0;
 }
 
-void MainWindow::slotOpponentDisconnected()
+void MainWindow::slotSocketError( QAbstractSocket::SocketError socketError )
 {
-	kDebug() << "Opponent disconnected!";
+	kDebug() << socketError;
 	
-	//If the game is running, then will shor message
-	if( mCloseGameAction->isEnabled() ){
-		KMessageBox::information( this, i18n( "The opponent disconnected!" ) );
-		closeGameSlot();
+	if( socketError == QAbstractSocket::ConnectionRefusedError ){
+		KMessageBox::error( this, i18n( "The connection was refused!" ) );
+	}
+	
+}
+
+void MainWindow::slotGameError( Client::GameErrorType gameErrorType )
+{
+	if( gameErrorType == Client::NameIsBusy ){
+		kDebug() << "Name is busy!";
+		KMessageBox::error( this, i18n( "The name is busy!" ) );
+	}
+	
+	if( gameErrorType == Client::OpponentDisconnected ){
+		kDebug() << "Opponent disconnected!";
+		
+		if( mCloseGameAction->isEnabled() ){
+			KMessageBox::information( this, i18n( "The opponent disconnected!" ) );
+			closeGameSlot();
+		}
+		
 	}
 }
 
