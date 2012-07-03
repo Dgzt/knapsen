@@ -392,8 +392,11 @@ void MainWindow::slotSocketError( QAbstractSocket::SocketError socketError )
 {
 	kDebug() << socketError;
 	
-	if( socketError == QAbstractSocket::ConnectionRefusedError ){
-		KMessageBox::error( this, i18n( "The connection was refused!" ) );
+	switch( socketError ){
+		case QAbstractSocket::ConnectionRefusedError : KMessageBox::error( this, i18n( "The connection was refused!" ) ); break;
+		case QAbstractSocket::HostNotFoundError : KMessageBox::error( this, i18n( "The host not found!" ) ); break;
+		
+		default: KMessageBox::error( this, i18n( "Undefined error!" ) );
 	}
 	
 }
