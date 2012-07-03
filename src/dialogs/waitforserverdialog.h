@@ -21,9 +21,6 @@ public:
 	
 	bool haveConnectionError() const;
 	
-public slots:
-	void slotStartGame();
-	
 };
 
 #endif //WAITFORSERVERDIALOG_H

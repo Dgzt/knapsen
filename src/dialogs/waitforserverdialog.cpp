@@ -44,8 +44,3 @@ bool WaitForServerDialog::haveConnectionError() const
 {
 	return connectionError;
 }
-
-void WaitForServerDialog::slotStartGame()
-{
-	accept();
-}

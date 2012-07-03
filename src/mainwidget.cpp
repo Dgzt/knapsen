@@ -255,10 +255,9 @@ void MainWindow::newGameSlot()
 			
 			WaitForServerDialog waitForServerDialog;
 			
-			connect( client, SIGNAL( signalStartGame() ), &waitForServerDialog, SLOT( slotStartGame() ) );
 			connect( client, SIGNAL( error( QAbstractSocket::SocketError ) ), &waitForServerDialog, SLOT( reject() ) );
 			connect( client, SIGNAL( signalGameError( Client::GameErrorType ) ), &waitForServerDialog, SLOT( reject() ) );
-			
+			connect( client, SIGNAL( signalStartGame() ), &waitForServerDialog, SLOT( accept() ) );
 			
 			client->connectToHost( newGameDialog.getClient_ServerAddress(), newGameDialog.getClient_ServerPort() );
 			
