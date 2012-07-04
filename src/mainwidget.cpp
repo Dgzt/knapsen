@@ -19,7 +19,6 @@
 #include "settings.h"
 #include "config-knapsen.h"
 
-#include "engine/bot.h"
 #include "engine/client.h"
 #include "engine/server.h"
 
@@ -37,7 +36,7 @@ MainWindow::MainWindow( QWidget* parent ) : KXmlGuiWindow( parent )
 {
 	server = 0;
 	client = 0;
-	bot = 0;
+
 	//
 	endRoundDialog = 0;
 	endGameDialog = 0;
@@ -226,7 +225,7 @@ void MainWindow::newGameSlot()
 			
 				kDebug() << "Server port:" << server->serverPort();
 
-				server->setAdminName( client->getName() );
+				//server->setAdminName( client->getName() );
 				
 				//
 				setServerConfig();
@@ -234,10 +233,7 @@ void MainWindow::newGameSlot()
 			
 				client->connectToHost( "127.0.0.1", server->serverPort() );
 
-				bot = new Bot( this );
-				bot->setName( Settings::botName() );
-			
-				bot->connectToHost( "127.0.0.1", server->serverPort() );
+				server->addBot( Settings::botName() );
 			
 			}else{
 				kDebug() << "Server listen error!";
@@ -281,7 +277,7 @@ void MainWindow::newGameSlot()
 			
 			if( server->listen( QHostAddress::Any, newGameDialog.getServer_ServerPort() ) ){
 
-				server->setAdminName( client->getName() );
+				//server->setAdminName( client->getName() );
 				
 				//
 				setServerConfig();
@@ -376,11 +372,6 @@ void MainWindow::slotStartGame()
 void MainWindow::slotServerEmpty()
 {
 	kDebug() << "Server is empty!";
-	
-	if( bot ){
-		delete bot;
-		bot = 0;
-	}
 	
 	server->close();
 	server->deleteLater();

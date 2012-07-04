@@ -10,8 +10,6 @@ class KAction;
 class Server;
 //class Client;
 
-class Bot;
-//
 class EndRoundDialog;
 class EndGameDialog;
 //
@@ -27,8 +25,6 @@ class MainWindow : public KXmlGuiWindow
 	Server* server;
 	
 	Client* client;
-	
-	Bot* bot;
 	
 	//
 	EndRoundDialog *endRoundDialog;

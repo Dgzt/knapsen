@@ -8,6 +8,9 @@
 class GameSequence;
 
 class Player;
+//
+class Bot;
+//
 class Deck;
 
 class Server : public QTcpServer
@@ -24,7 +27,11 @@ class Server : public QTcpServer
 	
 	GameSequence* mGameSequence;
 	
-	QString mAdminName;
+	//QString mAdminName;
+	
+	//
+	Bot *mBot;
+	//
 	
 	//SizeOfDeck mSizeOfDeck;
 	int mSizeOfDeck;
@@ -95,7 +102,7 @@ public:
 	~Server();
 	
 	//Set the admin name
-	void setAdminName( QString adminName ){ mAdminName = adminName; }
+	//void setAdminName( QString adminName ){ mAdminName = adminName; }
 
 	//Set who start the game, the first round
 	//void setWhoStartGame( Knapsen::WhoStartGame whoStartGame ){ mWhoStartGame = whoStartGame; }
@@ -110,6 +117,10 @@ public:
 	
 	//Set type of cards, german suits or french suits
 	void setTypeOfCards( Knapsen::TypeOfCards typeOfCards ){ mTypeOfCards = typeOfCards; }
+	
+	//
+	void addBot( QString );
+	//
 	
 	void startGame();
 	

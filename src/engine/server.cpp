@@ -2,6 +2,9 @@
 #include <KDE/KDebug>
 #include "gamesequence.h"
 #include "deck.h"
+//
+#include "bot.h"
+//
 #include "player.h"
 #include "server.h"
 
@@ -12,7 +15,7 @@ const int MAX_CENTRAL_CARDS_SIZE = 2;
 
 Server::Server( QObject* parent ) :
 	QTcpServer( parent ),
-	mAdminName( "" ),
+	//mAdminName( "" ),
 	mTwentyButtonClickedThisTurn( false ),
 	mFortyButtonClickedThisTurn( false ),
 	mClickedToCloseButtonThisTurn( false ),
@@ -28,6 +31,10 @@ Server::Server( QObject* parent ) :
 	mNumberOfCardsInHand = 5;
 	mTypeOfCards = Knapsen::GermanSuits;
 	
+	//
+	mBot = 0;
+	//
+	
 	mDeck = 0;
 	mPlayerWhoClickedToCloseButtonThisRound = 0;
 	mWaitingMarriage = 0;
@@ -36,6 +43,9 @@ Server::Server( QObject* parent ) :
 Server::~Server()
 {
 	kDebug() << "Server is deleting.";
+	if( mBot ){
+		delete mBot;
+	}
 	if( mGameSequence ){
 		delete mGameSequence;
 	}
@@ -259,6 +269,14 @@ void Server::slotPlayerDisconnected( Player* player )
 	//
 	
 	emit signalPlayerDisconnected( player->getName() );
+	
+	//
+	if( mBot ){
+		mBot->disconnectFromHost();
+		mBot->deleteLater();
+		mBot = 0;
+	}
+	//
 	
 	if( mPlayerList.isEmpty() ){
 		kDebug() << "Server is empty!";
@@ -612,6 +630,14 @@ void Server::incomingConnection( int socketDescriptor )
 void Server::setWhoStartGame( Knapsen::WhoStartGame whoStartGame )
 {
 	mGameSequence->setWhoStartGame( whoStartGame );
+}
+
+void Server::addBot( QString botName )
+{
+	mBot = new Bot( this );
+	mBot->setName( botName );
+	
+	mBot->connectToHost( "127.0.0.1", serverPort() );
 }
 
 void Server::startGame()
