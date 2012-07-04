@@ -12,7 +12,7 @@ class MySvgItem : public QGraphicsSvgItem
 	bool mSelectable;
 	
 protected:
-	void mousePressEvent ( QGraphicsSceneMouseEvent * );
+	void mousePressEvent( QGraphicsSceneMouseEvent * );
 	
 public:
     MySvgItem();
