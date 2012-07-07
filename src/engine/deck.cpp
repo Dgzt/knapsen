@@ -51,12 +51,19 @@ void Deck::buildDeck()
 	}
 	
 	
-	//mCards[19] = Card( 1 );
-	//mCards[17] = Card( 3 );
-	//mCards[13] = Card( 2 ); 
+	mCards[19] = Card( 0  ); //Player  1. card  (Szív ász)
+	mCards[18] = Card( 5  ); //Bot     1. card  (Tök ász)
+	mCards[17] = Card( 1  ); //Player  2. card  (Szív király)
+	mCards[16] = Card( 10 ); //Bot     2. card  (Levél ász)
+	mCards[15] = Card( 2  ); //Player  3. card  (Szív felső)
+	mCards[14] = Card( 15 ); //bot     3. card  (Makk ász)
 	
-	//mCards[15] = Card( 6 );
-	//mCards[12] = Card( 7 );
+	mCards[13] = Card( 3  ); //Adu              (Szív alsó)
+	
+	mCards[12] = Card( 6  ); //Player  4. card  (Tök király)
+	mCards[11] = Card( 19 ); //Bot     4. card  (Makk 10)
+	mCards[10] = Card( 7  ); //Player  5. card  (Tök felső)
+	mCards[ 9] = Card( 18 ); //Bot     5. card  (Makk alsó)
 	
 	kDebug() << "Generated deck:";
 	for( int i = 0; i < mCards.size(); ++i ){

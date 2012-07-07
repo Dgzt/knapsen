@@ -53,20 +53,7 @@ QString Card::getCardText( Knapsen::TypeOfCards typeOfCards ) const
 int Card::getCardPoint() const
 {
 	int ret = 0;
-	
-	/*if( mValue == 0 || mValue == 5 || mValue == 10 || mValue == 15 ){ //Ace
-		ret = 11;
-	}else if( mValue == 1 || mValue == 6 || mValue == 11 || mValue == 16 ){ //King
-		ret = 4;
-	}else if ( mValue == 2 || mValue == 7 || mValue == 12 || mValue == 17 ){ //Queen
-		ret = 3;
-	}else if( mValue == 3 || mValue == 8 || mValue == 13 || mValue == 18 ){ // Jack
-		ret = 2;
-	}else if( mValue == 4 || mValue == 9 || mValue == 14 || mValue == 19 ){ //10
-		ret = 10;
-	}else{ // mValue == 20 || mValue == 21 || mValue == 22 || mValue == 23 // 9
-		ret = 0;
-	}*/
+
 	switch( getCardType() ){
 		case Card::Ace : ret = 11; break;
 		case Card::King : ret = 4; break;

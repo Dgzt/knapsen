@@ -64,9 +64,12 @@ void Server::newRound()
 	//Clear central cards
 	mCentralCards.clear();
 	
-	//Clear
+	//Clear variables
 	mOpponentHaveNotTricksBeforePlayerClickedToCloseButton = false;
 	mPlayerWhoClickedToCloseButtonThisRound = 0;
+	mTwentyButtonClickedThisTurn = false;
+	mFortyButtonClickedThisTurn = false;
+	mClickedToCloseButtonThisTurn = false;
 	
 	//Clear cards, tricks
 	for( int i = 0; i < mPlayerList.size(); ++i ){
