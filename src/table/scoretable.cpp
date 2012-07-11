@@ -8,14 +8,11 @@
 const QString TRICKS_TEXT = i18n( "Tricks:" );
 const QString SCORE_TEXT = i18n( "Score:" );
 
-//const int SCORE_TABLE_FRAME = 5;
-
 ScoreTable::ScoreTable()
 {
-	tricksItem = new QGraphicsTextItem(this);
-	scoreItem = new QGraphicsTextItem(this);
+	tricksItem = new QGraphicsTextItem( this );
+	scoreItem = new QGraphicsTextItem( this );
 	
-	//tricksItem->setPlainText( TRICKS_TEXT+" "+QString::number( 0 ) );
 	setTricks( 0 );
 	scoreItem->setPlainText( SCORE_TEXT+" "+QString::number( 0 ) );
 	
@@ -44,17 +41,18 @@ QRectF ScoreTable::boundingRect() const
 void ScoreTable::setTricks( int tricks )
 {
 	tricksItem->setPlainText( TRICKS_TEXT+" "+QString::number( tricks ) );
+	
+	update();
 }
 
 void ScoreTable::setScores( int scores )
 {
 	scoreItem->setPlainText( SCORE_TEXT+" "+QString::number( scores ) );
+
+	update();
 }
 
-void ScoreTable::paint(QPainter * painter, const QStyleOptionGraphicsItem * option, QWidget * widget  )
+void ScoreTable::paint(QPainter * painter, const QStyleOptionGraphicsItem *, QWidget * )
 {
-	Q_UNUSED( option );
-	Q_UNUSED( widget );
-	
 	painter->fillRect( boundingRect(), Qt::white );
 }

@@ -75,9 +75,7 @@ class Server : public QTcpServer
 	QList<Player *> mPlayerListWhoWantNewGame;
 	//
 	
-	//
 	void newGame();
-	//
 	void newRound();
 	void roundOver();
 	
