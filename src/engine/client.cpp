@@ -322,6 +322,7 @@ void Client::slotProcessCommands()
 			
 			newGame();
 			emit signalPlayerScoresChanged( getScores() );
+			emit signalOpponentScoresChanged( 0 );
 			
 			emit signalStartGame();
 		}

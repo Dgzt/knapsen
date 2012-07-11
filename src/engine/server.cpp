@@ -54,6 +54,19 @@ Server::~Server()
 	}
 }
 
+void Server::newGame()
+{
+	kDebug() << "Start new game.";
+	
+	
+	for( int i = 0; i < mPlayerList.size(); ++i ){
+		mPlayerList.at( i )->sendNewGame();
+	}
+	
+	newRound();
+	
+}
+
 void Server::newRound()
 {
 	kDebug() << "Start new round.";
@@ -599,20 +612,14 @@ void Server::slotPlayerWantStartNextGame( Player *player )
 		kDebug() << "Start new game.";
 		
 		//
-		for( int i = 0; i < mPlayerList.size(); ++i ){
-			mPlayerList.at( i )->sendNewGame();
-		}
-		
-		//
 		mGameSequence->nextPlayerStartGame();
 		//
 		
-		newRound();
+		newGame();
 		
 		for( int i = 0; i < mPlayerList.size(); ++i ){
 			mPlayerList.at( i )->sendCommandsEnd();
 		}
-		//
 		
 	}
 	
@@ -675,13 +682,13 @@ void Server::startGame()
 		mPlayerList.at( i )->sendInitializeTable();
 	}
 	
-	//
-	for( int i = 0; i < mPlayerList.size(); ++i ){
+	/*for( int i = 0; i < mPlayerList.size(); ++i ){
 		mPlayerList.at( i )->sendNewGame();
 	}
-	//
 	
-	newRound();
+	newRound();*/
+	
+	newGame();
 	
 	////And finally send start the game
 	for( int i = 0; i < mPlayerList.size(); ++i ){
