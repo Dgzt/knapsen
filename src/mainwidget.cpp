@@ -417,19 +417,32 @@ void MainWindow::slotEndRound( QString roundWinnerName, int scores )
 
 void MainWindow::slotEndRoundExec()
 {	
-	endRoundDialog->exec();
+	connect( client, SIGNAL( signalGameError( Client::GameErrorType ) ), endRoundDialog, SLOT( reject() ) );
+	connect( client, SIGNAL( error( QAbstractSocket::SocketError ) ), endRoundDialog, SLOT( reject() ) );
+
+	int ret = endRoundDialog->exec();
 	
 	delete endRoundDialog;
 	endRoundDialog = 0;
 	
-	WaitingForOpponentDialog waitingForOpponentDialog( this );
+	if( ret ){
+		WaitingForOpponentDialog waitingForOpponentDialog( this );
+		
+		connect( client, SIGNAL( signalGameError( Client::GameErrorType ) ), &waitingForOpponentDialog, SLOT( accept() ) );
+		connect( client, SIGNAL( error( QAbstractSocket::SocketError ) ), &waitingForOpponentDialog, SLOT( accept() ) );
 	
-	connect( client, SIGNAL( signalNewRound() ), &waitingForOpponentDialog, SLOT( accept() ) );
+		connect( client, SIGNAL( signalNewRound() ), &waitingForOpponentDialog, SLOT( accept() ) );
 	
-	client->startNextRound();
+		client->startNextRound();
 	
-	waitingForOpponentDialog.exec();
-	
+		waitingForOpponentDialog.exec();
+	}else{
+		
+		if( mCloseGameAction->isEnabled() ){
+			closeGameSlot();
+		}
+		
+	}
 }
 
 void MainWindow::slotEndGame( QString gameWinnerName )
