@@ -103,8 +103,9 @@ void Client::slotProcessCommands()
 			int ret = getValuePartOfCommand( commandList.first() ).toInt( &ok );
 			if( ok ){
 				int cardId = addNewCard( Card( ret) );
-				emit signalNewPlayerCard( cardId, Card( ret ).getCardText( mTypeOfCards ) );
-					
+				//emit signalNewPlayerCard( cardId, Card( ret ).getCardText( mTypeOfCards ) );
+				emit signalNewPlayerCard( cardId, Card( ret ).getCardText() );
+				
 				mSizeOfDeckNow--;
 				if( mSizeOfDeckNow == 0 ){
 					//emit signalDeckVisible( false );
@@ -147,7 +148,8 @@ void Client::slotProcessCommands()
 			int ret = getValuePartOfCommand( commandList.first() ).toInt( &ok );
 			if( ok ){
 				setTrumpCard( Card( ret ) );
-				emit signalNewTrumpCard( getTrumpCard().getCardText( mTypeOfCards ) );
+				//emit signalNewTrumpCard( getTrumpCard().getCardText( mTypeOfCards ) );
+				emit signalNewTrumpCard( getTrumpCard().getCardText() );
 			}else{
 				kDebug() << "ERROR! Cannot convert new trump card command value to int!";
 			}
@@ -250,7 +252,8 @@ void Client::slotProcessCommands()
 				kDebug() << card2Pos;
 				kDebug() << card2Value;
 				
-				emit signalShowOpponentCards( card1Pos, Card(card1Value).getCardText( mTypeOfCards ), card2Pos, Card(card2Value).getCardText( mTypeOfCards ) );
+				//emit signalShowOpponentCards( card1Pos, Card(card1Value).getCardText( mTypeOfCards ), card2Pos, Card(card2Value).getCardText( mTypeOfCards ) );
+				emit signalShowOpponentCards( card1Pos, Card(card1Value).getCardText(), card2Pos, Card(card2Value).getCardText() );
 			}else{
 				kDebug() << "ERROR! Wrong value in visible cards command!";
 			}
@@ -372,7 +375,8 @@ void Client::slotConnected()
 
 void Client::slotCentralCardChanged( int id, Card card )
 {
-	emit signalCentralCardChanged( id, card.getCardText( mTypeOfCards ) );
+	//emit signalCentralCardChanged( id, card.getCardText( mTypeOfCards ) );
+	emit signalCentralCardChanged( id, card.getCardText() );
 }
 
 void Client::slotSelectedCardId( int id )
@@ -407,8 +411,10 @@ void Client::slotSelectedTrumpCard()
 	kDebug() << "Selected trump card.";
 	
 	int ret = changeTrumpCard();
-	emit signalNewPlayerCard( ret, getCard(ret).getCardText( mTypeOfCards ) );
-	emit signalNewTrumpCard( getTrumpCard().getCardText( mTypeOfCards ) );
+	//emit signalNewPlayerCard( ret, getCard(ret).getCardText( mTypeOfCards ) );
+	emit signalNewPlayerCard( ret, getCard(ret).getCardText() );
+	//emit signalNewTrumpCard( getTrumpCard().getCardText( mTypeOfCards ) );
+	emit signalNewTrumpCard( getTrumpCard().getCardText() );
 	emit signalTrumpCardSelectableChanged( false );
 	
 	if( haveRegularMarriages() ){

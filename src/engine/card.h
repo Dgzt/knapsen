@@ -30,7 +30,7 @@ public:
 	
 	bool isSelectable() const{ return mSelectable; }
 	
-	QString getCardText( Knapsen::TypeOfCards ) const;
+	QString getCardText(/* Knapsen::TypeOfCards */) const;
 	
 	int getCardPoint() const;
 	

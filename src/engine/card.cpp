@@ -31,18 +31,10 @@ bool Card::isValid() const
 	return true;
 }
 
-QString Card::getCardText( Knapsen::TypeOfCards typeOfCards ) const
+QString Card::getCardText(/* Knapsen::TypeOfCards typeOfCards */) const
 {
 	QString retStr;
-	
-	/*if( mValue == INVALID_CARD_VALUE ){
-		retStr == "";
-	}else if( typeOfCards == Knapsen::GermanSuits ){
-		retStr = GERGMAN_SUIT_CARDS_NAME[ mValue ];
-	}else{ //typeOfCards = Knapsen::FrenchSuits
-		//Under develop
-	}*/
-	
+
 	if( mValue != INVALID_CARD_VALUE ){
 		retStr = CARDS_NAME[ mValue ];
 	}

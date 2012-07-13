@@ -308,7 +308,8 @@ void Server::slotPlayerDisconnected( Player* player )
 
 void Server::slotPlayerSelectedCard( Card selectedCard, int cardPosition )
 {
-	kDebug() << "Selected card:" << selectedCard.getCardText( mTypeOfCards );
+	//kDebug() << "Selected card:" << selectedCard.getCardText( mTypeOfCards );
+	kDebug() << "Selected card:" << selectedCard.getCardText();
 	
 	mCentralCards.append( selectedCard );
 	
