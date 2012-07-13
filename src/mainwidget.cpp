@@ -9,7 +9,7 @@
 #include <KDE/KStandardDirs>
 #include <KDE/KMessageBox>
 #include <KDE/KDebug>
-#include <KDE/KPageDialog>
+//#include <KDE/KPageDialog>
 #include <KDE/KAction>
 
 #include <KDE/KGame/KMessageServer>
@@ -217,7 +217,7 @@ void MainWindow::newGameSlot()
 		if( newGameDialog.getGameMode() == NewGameDialog::LocalMode ){
 			kDebug() << "Game mode: local";
 			
-			server = new Server/*( this )*/;
+			server = new Server;
 			connect( server, SIGNAL( signalServerFull() ), this, SLOT( slotStartGame() ) );
 			connect( server, SIGNAL( signalServerEmpty() ), this, SLOT( slotServerEmpty() ) );
 			
@@ -271,7 +271,7 @@ void MainWindow::newGameSlot()
 		}else{ //newGameDialog.getGameMode() == NewGameDialog::ServerMode
 			kDebug() << "Game mode: server";
 			
-			server = new Server/*( this )*/;
+			server = new Server;
 			
 			connect( server, SIGNAL( signalServerEmpty() ), this, SLOT( slotServerEmpty() ) );
 			

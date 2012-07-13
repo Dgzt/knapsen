@@ -1,30 +1,32 @@
 #ifndef NEWGAMEDIALOG_H
 #define NEWGAMEDIALOG_H
 
-#include <KDE/KDialog>
+#include <KDE/KPageDialog>
 
-class Ui_NewGameWidgetUi;
+class Ui_NewGameWidgetUi_client;
+class Ui_NewGameWidgetUi_server;
 
-class NewGameDialog : public KDialog
+class NewGameDialog : public KPageDialog
 {
-	
-	Ui_NewGameWidgetUi *mainWidgetUi;
+	Ui_NewGameWidgetUi_client *mClientWidgetUi;
+	Ui_NewGameWidgetUi_server *mServerWidgetUi;
 	
 public:
 	enum GameMode { LocalMode, ClientMode, ServerMode };
 	
-    NewGameDialog( QWidget* parent = 0 );
+    explicit NewGameDialog(QWidget* parent = 0, Qt::WFlags flags = 0);
 	
-	//Return the selected game mode
 	GameMode getGameMode() const;
+	
 	
 	//-Client mode-
 	//Return the server address
 	QString getClient_ServerAddress() const;
+	//Return the server port
 	int getClient_ServerPort() const;
 	
 	//-Server mode-
-	//Return the selected server port - Server mode
+	//Return the selected server port
 	int getServer_ServerPort() const;
 	
 };

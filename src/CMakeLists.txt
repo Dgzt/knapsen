@@ -44,7 +44,9 @@ set(knapsen_SRCS
 )
 
 set(knapsen_UIS
-	dialogs/newgamewidget.ui
+	#dialogs/newgamewidget.ui
+	dialogs/newgamewidget_client.ui
+	dialogs/newgamewidget_server.ui
 	dialogs/endroundwidget.ui
 	dialogs/endgamewidget.ui
 	playersettingswidget.ui

@@ -1,43 +1,68 @@
-#include <QtGui/QListWidget>
-#include "ui_newgamewidget.h"
-#include "newgamedialog.h"
+#include <KDE/KLocalizedString>
+#include "dialogs/newgamedialog.h"
 
+#include "ui_newgamewidget_client.h"
+#include "ui_newgamewidget_server.h"
 
-NewGameDialog::NewGameDialog( QWidget* parent ): KDialog( parent )
+const QString LOCAL_STRING = i18n( "Local" );
+const QString CLIENT_STRING = i18n( "Client" );
+const QString SERVER_STRING = i18n( "Server" );
+
+NewGameDialog::NewGameDialog( QWidget* parent, Qt::WFlags flags ): KPageDialog( parent, flags )
 {
-	setWindowTitle( i18n( "New Game" ) );
+	setWindowTitle( i18n( "New game dialog" ) );
+	resize( 400, 300 );
 	
-	mainWidgetUi = new Ui_NewGameWidgetUi;
+	//Local
+	KPageWidgetItem *localPageWidgetItem = new KPageWidgetItem( new QWidget, LOCAL_STRING );
+	localPageWidgetItem->setIcon( KIcon( "localmode.png" ) );
 	
-	QWidget *mainWidget = new QWidget;
+	addPage( localPageWidgetItem );
+
+	//Client
+	mClientWidgetUi = new Ui_NewGameWidgetUi_client;
 	
-	mainWidgetUi->setupUi( mainWidget );
+	QWidget *clientWidget = new QWidget;
+	mClientWidgetUi->setupUi( clientWidget );
 	
-	setMainWidget( mainWidget );
+	KPageWidgetItem *clientPageWidgetItem = new KPageWidgetItem( clientWidget, CLIENT_STRING );
+	clientPageWidgetItem->setIcon( KIcon( "clientmode.png" ) );
+	
+	addPage( clientPageWidgetItem );
+	
+	//Server
+	mServerWidgetUi = new Ui_NewGameWidgetUi_server;
+	
+	QWidget *serverWidget = new QWidget;
+	mServerWidgetUi->setupUi( serverWidget );
+	
+	KPageWidgetItem *serverPageWidgetItem = new KPageWidgetItem( serverWidget, SERVER_STRING );
+	serverPageWidgetItem->setIcon( KIcon( "servermode.png" ) );
+	
+	addPage( serverPageWidgetItem );
 }
 
 NewGameDialog::GameMode NewGameDialog::getGameMode() const
 {
-	if( mainWidgetUi->listWidget->currentRow() == 0 ){
-		return NewGameDialog::LocalMode;
-	}else if( mainWidgetUi->listWidget->currentRow() == 1 ){
-		return NewGameDialog::ClientMode;
+	if( currentPage()->name() == LOCAL_STRING ){
+		return LocalMode;
+	}else if( currentPage()->name() == CLIENT_STRING ){
+		return ClientMode;
 	}//else
-	
-	return NewGameDialog::ServerMode;
+	return ServerMode;
 }
 
 QString NewGameDialog::getClient_ServerAddress() const
 {
-	return mainWidgetUi->client_ipAddressLineEdit->text();
+	return mClientWidgetUi->client_ipAddressLineEdit->text();
 }
 
 int NewGameDialog::getClient_ServerPort() const
 {
-	return mainWidgetUi->client_portSpinBox->value();
+	return mClientWidgetUi->client_portSpinBox->value();
 }
 
 int NewGameDialog::getServer_ServerPort() const
 {
-	return mainWidgetUi->server_portSpinBox->value();
+	return mServerWidgetUi->server_portSpinBox->value();
 }
