@@ -161,6 +161,8 @@ protected:
 	//Add new card to central cards
 	void addNewCentralCard( Card );
 	void clearCentralCards();
+	int getCentralCardsSize(){ return mCentralCards.size(); }
+	
 	
 	//
 	void setTwentyButtonVisible( bool );
