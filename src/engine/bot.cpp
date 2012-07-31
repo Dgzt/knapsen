@@ -118,7 +118,7 @@ void Bot::slotSelectCard()
 			
 			Card::CardSuit trumpCardSuit = getTrumpCard().getCardSuit();
 			
-			kDebug() << "If bot have ace, and the type is not equal with type of trump card.";
+			kDebug() << "If bot have ace, and the type is not equal with type of trump card then select ace.";
 			for( int i = 0; i < getNumberOfCardsInHand(); ++i ){
 				
 				Card card = getCard( i );
@@ -130,7 +130,7 @@ void Bot::slotSelectCard()
 				
 			}
 			
-			kDebug() << "If bot have ten, and the type is not equal type of trump card.";
+			kDebug() << "If bot have ten, and the type is not equal type of trump card then select ten.";
 			for( int i = 0; i < getNumberOfCardsInHand(); ++i ){
 				
 				Card card = getCard( i );
@@ -142,7 +142,7 @@ void Bot::slotSelectCard()
 				
 			}
 			
-			kDebug() << "If bot have king, and the pair of king was in the central cards _or_ the deck of cards count 0, put the king.";
+			kDebug() << "If bot have king, and the pair of king was in the central cards _or_ the deck of cards count 0 then select king.";
 			for( int i = 0; i < getNumberOfCardsInHand(); ++i ){
 				
 				Card card = getCard( i );
@@ -154,7 +154,7 @@ void Bot::slotSelectCard()
 				
 			}
 			
-			kDebug() << "If bot have queen, and the pair of queen was in the central cards _or_ the deck of cards count 0, put the over.";
+			kDebug() << "If bot have queen, and the pair of queen was in the central cards _or_ the deck of cards count 0 then select queen.";
 			for( int i = 0; i < getNumberOfCardsInHand(); ++i ){
 				
 				Card card = getCard( i );
@@ -166,7 +166,7 @@ void Bot::slotSelectCard()
 				
 			}
 			
-			kDebug() << "If bot have ace, (and the type is equal the type of trump card) put ace.";
+			kDebug() << "If bot have ace, (and the type is equal the type of trump card) then select ace.";
 			for( int i = 0; i < getNumberOfCardsInHand(); ++i ){
 				
 				Card card = getCard( i );
@@ -178,7 +178,7 @@ void Bot::slotSelectCard()
 				
 			}
 			
-			kDebug() << "If bot have ten, (and the type is equal the type of trump card) put ten.";
+			kDebug() << "If bot have ten, (and the type is equal the type of trump card) then select ten.";
 			for( int i = 0; i < getNumberOfCardsInHand(); ++i ){
 				
 				Card card = getCard( i );
@@ -189,7 +189,7 @@ void Bot::slotSelectCard()
 				}
 			}
 			
-			kDebug() << "If bot have king, and have not pair of king, then put the king.";
+			kDebug() << "If bot have king, and have not pair of king, then select king.";
 			for( int i = 0; i < getNumberOfCardsInHand(); ++i ){
 				
 				Card card = getCard( i );
@@ -241,7 +241,7 @@ void Bot::slotSelectCard()
 				
 			}
 			
-			kDebug() << "Finally put everithing.";
+			kDebug() << "Finally select anything.";
 			for( int i = 0; i < getNumberOfCardsInHand(); ++i ){
 				
 				if( getCard( i ).isSelectable() ){
