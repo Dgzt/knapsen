@@ -91,7 +91,7 @@ class Player : public QTcpSocket
 	Player* mOpponent;
 	
 	//
-	Card::CardType mLowstCardType;
+	Card::CardType mLowestCardType;
 	//
 	
 	//Player's cards
@@ -135,6 +135,7 @@ protected:
 	
 	//
 	void setLowestCard( int );
+	Card::CardType getLowestCardType(){ return mLowestCardType; }
 	//
 	
 	int addNewCard( Card );

@@ -5,7 +5,7 @@ Player::Player( QObject* parent ):
 	QTcpSocket( parent ),
 	mName( "" ),
 	//
-	mLowstCardType( Card::Jack ),
+	mLowestCardType( Card::Jack ),
 	//
 	mTricks( 0 ),
 	mScores( 0 ),
@@ -66,7 +66,7 @@ int Player::changeTrumpCard()
 	for( int i = 0; i < mCards.size(); ++i ){
 		
 		//if( mCards.at(i).isValid() && mCards.at(i).getCardSuit() == mTrumpCardSuit && mCards.at(i).getCardType() == Card::Jack ){
-		if( mCards.at(i).isValid() && mCards.at(i).getCardSuit() == mTrumpCardSuit && mCards.at(i).getCardType() == mLowstCardType ){
+		if( mCards.at(i).isValid() && mCards.at(i).getCardSuit() == mTrumpCardSuit && mCards.at(i).getCardType() == mLowestCardType ){
 			kDebug() << i;
 			
 			Card tmpCard = mTrumpCard;
@@ -203,9 +203,9 @@ void Player::newRound()
 void Player::setLowestCard( int sizeOfDeck )
 {
 	if( sizeOfDeck == 20 ){
-		mLowstCardType = Card::Jack;
+		mLowestCardType = Card::Jack;
 	}else{ // sizeOfDeck == 24
-		mLowstCardType = Card::Nine;
+		mLowestCardType = Card::Nine;
 	}
 }
 
@@ -269,7 +269,7 @@ bool Player::canChangeTrumpCard() const
 	for( int i = 0; i < mCards.size(); ++i ){
 		
 		//if( mCards.at(i).isValid() && mCards.at(i).getCardSuit() == mTrumpCardSuit && mCards.at(i).getCardType() == Card::Jack ){
-		if( mCards.at(i).isValid() && mCards.at(i).getCardSuit() == mTrumpCardSuit && mCards.at(i).getCardType() == mLowstCardType ){
+		if( mCards.at(i).isValid() && mCards.at(i).getCardSuit() == mTrumpCardSuit && mCards.at(i).getCardType() == mLowestCardType ){
 			canChange = true;
 		}
 		

@@ -241,6 +241,29 @@ void Bot::slotSelectCard()
 				
 			}
 			
+			kDebug() << "If bot have jack, then select jack.";
+			for( int i = 0; i < getNumberOfCardsInHand(); ++i ){
+				Card card = getCard( i );
+				
+				if( card.isSelectable() && card.getCardType() == Card::Jack ){
+					slotSelectedCardId( i );
+					return;
+				}
+			}
+			
+			if( getLowestCardType() == Card::Nine ){
+				kDebug() << "If bot have nine, then select nine.";
+				
+				for( int i = 0; i < getNumberOfCardsInHand(); ++i ){
+					Card card = getCard( i );
+					
+					if( card.isSelectable() && card.getCardType() == Card::Nine ){
+						slotSelectedCardId( i );
+						return;
+					}
+				}
+			}
+			
 			kDebug() << "Finally select anything.";
 			for( int i = 0; i < getNumberOfCardsInHand(); ++i ){
 				
