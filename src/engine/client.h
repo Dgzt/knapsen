@@ -24,8 +24,12 @@ class Client : public Player
 private slots:
 	void slotConnected();
 	
-	//void slotNewCentralCard( int, Card );
 	void slotCentralCardChanged( int, Card );
+	
+protected:
+	//
+	int getSizeOfDeckNow(){ return mSizeOfDeckNow; }
+	//
 	
 public:
     enum GameErrorType{ NameIsBusy, OpponentDisconnected };
