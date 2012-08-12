@@ -12,8 +12,6 @@
 //#include <KDE/KPageDialog>
 #include <KDE/KAction>
 
-#include <KDE/KGame/KMessageServer>
-
 #include "mainwidget.h"
 #include "table/centralwidget.h"
 #include "settings.h"

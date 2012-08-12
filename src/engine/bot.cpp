@@ -2,18 +2,21 @@
 #include <KDE/KDebug>
 #include "bot.h"
 
-Bot::Bot( QObject* parent ): Client( parent )
+Bot::Bot( QObject* parent ): 
+	Client( parent ),
+	deckIsClosed( false ) 
 {
 	kDebug() << "Initialize.";
 	
-	connect( this, SIGNAL( signalOpponentDisconnected() ),		this, SLOT( slotOpponentDisconnected() ) );
-	connect( this, SIGNAL( signalInAction() ),					this, SLOT( slotInAction() ) );
+	connect( this, SIGNAL( signalOpponentDisconnected() ),			this, SLOT( slotOpponentDisconnected() ) );
+	connect( this, SIGNAL( signalInAction() ),						this, SLOT( slotInAction() ) );
+	connect( this, SIGNAL( signalNewRound() ),						this, SLOT( slotNewRound() ) );
 	//
-	connect( this, SIGNAL( signalNewRound() ),					this, SLOT( slotNewRound() ) );
+	connect( this, SIGNAL( signalCloseDeck() ),						this, SLOT( slotCloseDeck() ) );
+	//
 	connect( this, SIGNAL( signalCentralCardChanged( int, Card ) ),	this, SLOT( slotCentralCardChanged( int, Card ) ) );
-	//
-	connect( this, SIGNAL( signalEndRound( QString, int ) ),	this, SLOT( slotEndRound( QString, int ) ) );
-	connect( this, SIGNAL( signalEndGame( QString ) ),			this, SLOT( slotendGame( QString ) ) );
+	connect( this, SIGNAL( signalEndRound( QString, int ) ),		this, SLOT( slotEndRound( QString, int ) ) );
+	connect( this, SIGNAL( signalEndGame( QString ) ),				this, SLOT( slotendGame( QString ) ) );
 	
 	//
 	pairOfQueenWasInCentralCards[0].first = pairOfKingWasInCentralCards[0].first = Card::Heart;
@@ -46,7 +49,7 @@ bool Bot::getPairOfQueenWasInCentralCards( Card::CardSuit cardSuit )
 
 void Bot::slotOpponentDisconnected()
 {
-	kDebug() << "Opponent disconnected. Me too disconnect.";
+	kDebug() << "Opponent disconnected. Disconnect me too.";
 	
 	disconnectFromHost();
 }
@@ -105,7 +108,7 @@ void Bot::slotSelectCard()
 				
 				Card card = getCard( i );
 				
-				if( card.isValid() && card.isSelectable() && card.getCardType() == Card::King ){
+				if( card.isSelectable() && card.getCardType() == Card::King ){
 					
 					slotSelectedCardId( i );
 				}
@@ -273,12 +276,142 @@ void Bot::slotSelectCard()
 				}
 			}
 			
-			
 		}
 		
 		
 	}else{ // getCentralCardsSize == 1
 		kDebug() << "Central cards size: 1";
+		
+		Card centralCard = getCentralCard( 0 );
+		Card card;
+		
+		kDebug() << "-Firstly try select the card, which points of card bigger then points of central card (and the suits of cards are equal).";
+		for( int i = 0; i < getNumberOfCardsInHand(); ++i ){
+			
+			card = getCard( i );
+			
+			if( card.isSelectable() && card.getCardSuit() == centralCard.getCardSuit() && card.getCardPoint() > centralCard.getCardPoint() ){
+				
+				if( getSizeOfDeckNow() == 0 || deckIsClosed ){
+					//If size of deck now is 0 or closed, then can select king or queen card too
+					
+					slotSelectedCardId( i );
+					return;
+					
+				}else{ //getSizeOfDeckNow() != 0 || deckIsClosed == false
+					//If size of deck is not 0 or closed, then can't select king or queen if these' pairs wasn't in the central card.
+					
+					if( ( card.getCardType() == Card::King && getPairOfKingWasInCentralCards( card.getCardSuit() ) ) ||
+						( card.getCardType() == Card::Queen && getPairOfQueenWasInCentralCards( card.getCardSuit() ) ) ||
+						( card.getCardType() != Card::King && card.getCardType() != Card::Queen ) )
+					{
+						slotSelectedCardId( i );
+						return;
+					}
+
+				}
+				
+				
+				
+			}
+			
+		}
+		
+		kDebug() << "-Secondly if the suit of central card is not equal with suit of trump card, then select the card, which suit is equal with suit of trump card.";
+		//If suit of centralCard is not equal with suit of trump card
+		if( getTrumpCard().getCardSuit() != centralCard.getCardSuit() ){
+			
+			int selectedCardId = -1;
+			
+			for( int i = 0; i < getNumberOfCardsInHand(); ++i ){
+				card = getCard( i );
+				
+				if( card.isSelectable() && card.getCardSuit() == getTrumpCard().getCardSuit() ){
+					
+					if( getSizeOfDeckNow() == 0 || deckIsClosed ){
+						
+						if( !getCard( selectedCardId ).isValid() ){
+							selectedCardId = i;
+						}else{ // getCard( selectedCardId ).isValid()
+							
+							if( card.getCardType() < getCard( selectedCardId ).getCardType() ){
+								selectedCardId = i;
+							}
+							
+						}
+						
+					}else{
+						
+						if( ( card.getCardType() == Card::King && getPairOfKingWasInCentralCards( card.getCardSuit() ) ) ||
+							( card.getCardType() == Card::Queen && getPairOfQueenWasInCentralCards( card.getCardSuit() ) ) ||
+							( card.getCardType() != Card::King && card.getCardType() != Card::Queen ) )
+						{
+							//selectedCardId = i;
+							if( !getCard( selectedCardId ).isValid() ){
+								selectedCardId = i;
+							}else{ // getCard( selectedCardId ).isValid()
+							
+								if( card.getCardType() < getCard( selectedCardId ).getCardType() ){
+									selectedCardId = i;
+								}
+							
+							}
+							
+						}
+						
+					}
+					
+				}
+				
+			}
+			
+			if( selectedCardId != -1 ){
+				slotSelectedCardId( selectedCardId );
+				return;
+			}
+			
+		}
+		
+		kDebug() << "Thirdly, I cannot win, i'm selecting a smallest points of card.";
+		int selectedCardId = -1;
+		
+		for( int i = 0; i < getNumberOfCardsInHand(); ++i ){
+			Card card = getCard( i );
+			
+			if( card.isSelectable() ){
+				
+				if( selectedCardId == -1 ){
+					selectedCardId = i;
+				}else{ // selectedCardId != -1
+					
+					if( getSizeOfDeckNow() == 0 || deckIsClosed ){
+						
+						if( card.getCardType() < getCard( selectedCardId ).getCardType() ){
+							selectedCardId = i;
+						} 
+						
+					}else{ // getSizeOfDeckNow() != 0 && deckIsClosed == false
+						
+						if( ( card.getCardType() == Card::King && getPairOfKingWasInCentralCards( card.getCardSuit() ) ) ||
+							( card.getCardType() == Card::Queen && getPairOfQueenWasInCentralCards( card.getCardSuit() ) ) ||
+							( card.getCardType() != Card::King && card.getCardType() != Card::Queen ) )
+						{
+							
+							if( card.getCardType() < getCard( selectedCardId ).getCardType() ){
+								selectedCardId = i;
+							}
+							
+						}
+						
+					}
+					
+				}
+				
+			}
+			
+		}
+		
+		slotSelectedCardId( selectedCardId );
 		
 	}
 	
@@ -286,10 +419,17 @@ void Bot::slotSelectCard()
 
 void Bot::slotNewRound()
 {
+	deckIsClosed = false;
+	
 	pairOfQueenWasInCentralCards[0].second = pairOfKingWasInCentralCards[0].second = false;
 	pairOfQueenWasInCentralCards[1].second = pairOfKingWasInCentralCards[1].second = false;
 	pairOfQueenWasInCentralCards[2].second = pairOfKingWasInCentralCards[2].second = false;
 	pairOfQueenWasInCentralCards[3].second = pairOfKingWasInCentralCards[3].second = false;
+}
+
+void Bot::slotCloseDeck()
+{
+	deckIsClosed = true;
 }
 
 void Bot::slotCentralCardChanged( int , Card card )

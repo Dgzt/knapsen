@@ -163,7 +163,9 @@ protected:
 	void addNewCentralCard( Card );
 	void clearCentralCards();
 	int getCentralCardsSize(){ return mCentralCards.size(); }
-	
+	//
+	Card getCentralCard( int id ){ return mCentralCards.at( id ); }
+	//
 	
 	//
 	void setTwentyButtonVisible( bool );

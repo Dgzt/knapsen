@@ -7,6 +7,8 @@ class Bot : public Client
 {
 	Q_OBJECT
 	
+	bool deckIsClosed;
+	
 	//
 	QPair< Card::CardSuit, bool > pairOfKingWasInCentralCards[4];
 	QPair< Card::CardSuit, bool > pairOfQueenWasInCentralCards[4];
@@ -22,10 +24,13 @@ private slots:
 	
 	void slotSelectCard();
 	
-	//
 	void slotNewRound();
-	void slotCentralCardChanged( int, Card );
+	
 	//
+	void slotCloseDeck();
+	//
+	
+	void slotCentralCardChanged( int, Card );
 	
 	void slotEndRound( QString, int );
 	
