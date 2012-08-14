@@ -1,5 +1,6 @@
 set(knapsen_PICS
 	background.png
+	arrow.png
 	localmode.png
 	clientmode.png
 	servermode.png
