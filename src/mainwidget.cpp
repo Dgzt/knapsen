@@ -90,6 +90,17 @@ void MainWindow::initializePaths()
 		
 		close();
 	}
+	
+	//
+	path = KGlobal::dirs()->findResource( "appdata", "pics/arrow.png" );
+	
+	if( path.isNull() ){
+		path = KNAPSEN_PREFIX "/share/apps/knapsen/pics/arrow.png";
+		
+		KMessageBox::error( this, i18n( "Knapsen not found the \"%1\"!", path ) );
+		
+		close();
+	}
 }
 
 void MainWindow::setupActions()
@@ -163,6 +174,10 @@ void MainWindow::setGameSignals()
 	connect( client, SIGNAL( signalFortyButtonVisible( bool ) ),								cWidget, SLOT( slotFortyButtonVisible( bool ) ) );
 	connect( client, SIGNAL( signalCloseButtonVisible( bool ) ),								cWidget, SLOT( slotCloseButtonVisible( bool ) ) );
 	connect( client, SIGNAL( signalShowOpponentCards( int, QString, int, QString ) ),			cWidget, SLOT( slotShowOpponentCards( int, QString, int, QString ) ) );
+	//
+	connect( client, SIGNAL( signalPlayerInAction() ),											cWidget, SLOT( slotPlayerInAction() ) );
+	connect( client, SIGNAL( signalOpponentInAction() ),										cWidget, SLOT( slotOpponentinAction() ) );
+	//
 	connect( client, SIGNAL( signalNewRound() ),												cWidget, SLOT( slotNewRound() ) );
 	connect( client, SIGNAL( signalStartGame() ),												cWidget, SLOT( slotStartGame() ) );
 	

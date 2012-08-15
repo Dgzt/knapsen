@@ -41,6 +41,11 @@ CentralWidget::CentralWidget( QWidget* parent ):
 	mTrumpCard = 0;
 	mCentralCards = 0;
 	
+	//
+	mPlayerArrow = 0;
+	mOpponentArrow = 0;
+	//
+	
 	mOpponentScoreTable = 0;
 	mPlayerScoreTable = 0;
 	
@@ -83,6 +88,10 @@ void CentralWidget::clearWidget()
 		scene()->removeItem( &mPlayerCards[i] );
 	}
 	scene()->removeItem( mTrumpCard );
+	//
+	scene()->removeItem( mPlayerArrow );
+	scene()->removeItem( mOpponentArrow );
+	//
 	scene()->removeItem( mOpponentScoreTable );
 	scene()->removeItem( mPlayerScoreTable );
 	for( int i = 0; i < CENTRAL_CARDS_SIZE; ++i ){
@@ -99,6 +108,8 @@ void CentralWidget::clearWidget()
 	delete[] mOpponentCards;
 	delete[] mPlayerCards;
 	delete mTrumpCard;
+	delete mPlayerArrow;
+	delete mOpponentArrow;
 	delete mOpponentScoreTable;
 	delete mPlayerScoreTable;
 	delete[] mCentralCards;
@@ -113,6 +124,8 @@ void CentralWidget::clearWidget()
 	mOpponentCards = 0;
 	mPlayerCards = 0;
 	mTrumpCard = 0;
+	mPlayerArrow = 0;
+	mOpponentArrow = 0;
 	mOpponentScoreTable = 0;
 	mPlayerScoreTable = 0;
 	mCentralCards = 0;
@@ -167,6 +180,17 @@ void CentralWidget::setInGamePositions()
 		playerCard0Pos.rx() += cardDistance+mCardSize.width();
 		mPlayerCards[i].setPos( playerCard0Pos );
 	}
+	
+	//Set position of arrows
+	QPoint opponentArrowPoint;
+	opponentArrowPoint.setX( mOpponentCards[ mNumberOfCardsInHand-1 ].scenePos().x()+mCardSize.width()+scoreTableDistance );
+	opponentArrowPoint.setY( mOpponentCards[ mNumberOfCardsInHand-1 ].scenePos().y()+mCardSize.height()-mOpponentArrow->boundingRect().height() );
+	mOpponentArrow->setPos( opponentArrowPoint );
+	
+	QPoint playerArrowPoint;
+	playerArrowPoint.setX( mPlayerCards[ mNumberOfCardsInHand-1 ].scenePos().x()+mCardSize.width()+scoreTableDistance );
+	playerArrowPoint.setY( mPlayerCards[ mNumberOfCardsInHand-1 ].scenePos().y() );
+	mPlayerArrow->setPos( playerArrowPoint );
 	
 	//Set position of score tables
 	QPoint opponentScoreTablePos;
@@ -335,6 +359,14 @@ void CentralWidget::slotInitialize( QString playerName, QString opponentName, Kn
 		scene()->addItem( &mCentralCards[i] );
 	}
 	
+	//Arrows
+	QPixmap arrowImage( KGlobal::dirs()->findResource( "appdata", "pics/arrow.png" ) );
+	mPlayerArrow = scene()->addPixmap( arrowImage );
+	mOpponentArrow = scene()->addPixmap( arrowImage );
+	
+	mPlayerArrow->setVisible( false );
+	mOpponentArrow->setVisible( false );
+	
 	//Setup score tables
 	mOpponentScoreTable = new ScoreTable;
 	mPlayerScoreTable = new ScoreTable;
@@ -421,6 +453,9 @@ void CentralWidget::slotCentralCardChanged( int id, QString cardText )
 void CentralWidget::slotOpponentSelectedCardId( int id )
 {
 	mOpponentCards[ id ].setVisible( false );
+	
+	//
+	mOpponentArrow->setVisible( false );
 }
 
 void CentralWidget::slotOpponentTricksChanged( int tricks )
@@ -483,6 +518,20 @@ void CentralWidget::slotShowOpponentCards( int card1Pos, QString card1Text, int 
 	QTimer::singleShot( 1000, this, SLOT( slotCoverOpponentCards() ) );
 }
 
+void CentralWidget::slotPlayerInAction()
+{
+	kDebug() << "Player in action.";
+	
+	mPlayerArrow->setVisible( true );
+}
+
+void CentralWidget::slotOpponentinAction()
+{
+	kDebug() << "Opponent in action.";
+	
+	mOpponentArrow->setVisible( true );
+}
+
 void CentralWidget::slotNewRound()
 {
 	for( int i = 0; i < mNumberOfCardsInHand; ++i ){
@@ -537,6 +586,9 @@ void CentralWidget::slotClick( int id )
 {
 	emit signalSelectedCardId( id );
 	mPlayerCards[ id ].setVisible( false );
+	
+	//
+	mPlayerArrow->setVisible( false );
 }
 
 void CentralWidget::slotCoverOpponentCards()

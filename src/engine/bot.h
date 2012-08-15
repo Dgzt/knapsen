@@ -20,7 +20,7 @@ class Bot : public Client
 private slots:
 	void slotOpponentDisconnected();
 	
-	void slotInAction();
+	void slotPlayerInAction();
 	
 	void slotSelectCard();
 	

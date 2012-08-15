@@ -9,7 +9,7 @@ Bot::Bot( QObject* parent ):
 	kDebug() << "Initialize.";
 	
 	connect( this, SIGNAL( signalOpponentDisconnected() ),			this, SLOT( slotOpponentDisconnected() ) );
-	connect( this, SIGNAL( signalInAction() ),						this, SLOT( slotInAction() ) );
+	connect( this, SIGNAL( signalPlayerInAction() ),				this, SLOT( slotPlayerInAction() ) );
 	connect( this, SIGNAL( signalNewRound() ),						this, SLOT( slotNewRound() ) );
 	//
 	connect( this, SIGNAL( signalCloseDeck() ),						this, SLOT( slotCloseDeck() ) );
@@ -54,7 +54,7 @@ void Bot::slotOpponentDisconnected()
 	disconnectFromHost();
 }
 
-void Bot::slotInAction()
+void Bot::slotPlayerInAction()
 {
 	QTimer::singleShot( 1000, this, SLOT( slotSelectCard() ) );
 }

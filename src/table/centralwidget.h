@@ -11,6 +11,8 @@ class QSvgRenderer;
 class MyTextItem;
 class ScoreTable;
 
+//class QGraphicsPixmapItem;
+
 //class MyGraphicsProxyWidget;
 
 class CentralWidget : public QGraphicsView
@@ -42,6 +44,11 @@ class CentralWidget : public QGraphicsView
 	QGraphicsSvgItem* mOpponentCards;
 	MySvgItem* mPlayerCards;
 	
+	//
+	QGraphicsPixmapItem* mPlayerArrow;
+	QGraphicsPixmapItem* mOpponentArrow;
+	//
+	
 	ScoreTable* mOpponentScoreTable;
 	ScoreTable* mPlayerScoreTable;
 	
@@ -50,12 +57,10 @@ class CentralWidget : public QGraphicsView
 	QGraphicsSvgItem* mCentralCards;
 	
 	QGraphicsProxyWidget* mCloseButton;
-	//MyGraphicsProxyWidget* mCloseButton;
 	QGraphicsProxyWidget* mTwentyButton;
 	QGraphicsProxyWidget* mFortyButton;
 	
 	void setInGamePositions();
-	//void setTrumpCardPosition();
 	
 public:
 	CentralWidget( QWidget* parent = 0 );
@@ -107,6 +112,11 @@ public slots:
 	void slotCloseButtonVisible( bool );
 	
 	void slotShowOpponentCards( int, QString, int, QString );
+	
+	//
+	void slotPlayerInAction();
+	void slotOpponentinAction();
+	//
 	
 	//
 	void slotNewRound();

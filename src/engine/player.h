@@ -37,6 +37,10 @@ static const QString SELECTABLE_ALL_CARDS_COMMAND = ":SELECTABLE_ALL_CARDS";
 //Selectable cards that's type equal with trump card's type or central card's type
 static const QString SELECTABLE_CERTAIN_CARDS_COMMAND = ":SELECTABLE_CERTAIN_CARDS";
 
+//
+static const QString OPPONENT_IN_ACTION_COMMAND = ":OPPONENT_IN_ACTION";
+//
+
 static const QString SELECTED_CARD_ID_COMMAND = ":SELECTED_CARD_ID=";
 static const QString OPPONENT_SELECTED_CARD_ID_COMMAND = ":OPPONENT_SELECTED_CARD_ID=";
 static const QString OPPONENT_ADD_NEW_CENTRAL_CARD_COMMAND = ":OPPONENT_ADD_NEW_CENTRAL_CARD=";

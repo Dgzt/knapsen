@@ -192,14 +192,20 @@ void Client::slotProcessCommands()
 			setSelectableAllCards( true );
 			
 			//Emit for bot, it in action
-			emit signalInAction();
+			emit signalPlayerInAction();
 		}
 			
 		if( getCommandPartOfCommand( commandList.first() ) == SELECTABLE_CERTAIN_CARDS_COMMAND ){
 			kDebug() << getName() << "Selectable certan cards.";
 			
 			setSelectableCertainCards();
-			emit signalInAction();
+			emit signalPlayerInAction();
+		}
+		
+		if( getCommandPartOfCommand( commandList.first() ) == OPPONENT_IN_ACTION_COMMAND ){
+			kDebug() << getName() << "Opponent in action.";
+			
+			emit signalOpponentInAction();
 		}
 			
 		if( getCommandPartOfCommand( commandList.first() ) == OPPONENT_SELECTED_CARD_ID_COMMAND ){

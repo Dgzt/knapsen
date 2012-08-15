@@ -385,8 +385,9 @@ void Server::slotPlayerSelectedCard( Card selectedCard, int cardPosition )
 		}else{ // mDeck->getDeckSize() == 0
 			nextPlayer->sendSelectableCertainCards();
 		}
-	
-		//The commands end command send in the player class
+		
+		//Show opponent's arrow and send commands end
+		currentPlayer->sendCommandsEnd();
 		
 	}else{
 		nextPlayer->sendOpponentSelectedCardId( cardPosition );

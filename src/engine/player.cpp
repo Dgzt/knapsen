@@ -535,12 +535,17 @@ void Player::sendSelectableAllCards()
 {
 	setSelectableAllCards( true );
 	sendCommand( SELECTABLE_ALL_CARDS_COMMAND );
+	
+	//
+	mOpponent->sendCommand( OPPONENT_IN_ACTION_COMMAND );
 }
 
 void Player::sendSelectableCertainCards()
 {
 	setSelectableCertainCards();
 	sendCommand( SELECTABLE_CERTAIN_CARDS_COMMAND );
+	
+	mOpponent->sendCommand( OPPONENT_IN_ACTION_COMMAND );
 }
 
 void Player::sendOpponentAddNewCentralCard( Card card )

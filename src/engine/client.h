@@ -93,6 +93,11 @@ signals:
 	void signalNewRound();
 	//
 	
+	void signalPlayerInAction();
+	//
+	void signalOpponentInAction();
+	//
+	
 	void signalStartGame();
 	
 	//
@@ -103,9 +108,6 @@ signals:
 	void signalEndGame( QString );
 	//
 	
-	//For bot
-	void signalInAction();
-
 };	
 	
 #endif //CLIENT_H
