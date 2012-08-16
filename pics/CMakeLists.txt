@@ -1,6 +1,8 @@
 set(knapsen_PICS
 	background.png
 	arrow.png
+	tigullio-bridge.svg
+	william-tell.svgz
 	localmode.png
 	clientmode.png
 	servermode.png
