@@ -68,7 +68,7 @@ void MainWindow::initializePaths()
 		
 		KMessageBox::error( this, i18n( "Knapsen not found the \"%1\"!", path ) );
 
-		close();
+		exit(0);
 	}
 	
 	path = KGlobal::dirs()->findResource( "appdata", "pics/william-tell.svgz" );
@@ -78,7 +78,7 @@ void MainWindow::initializePaths()
 		
 		KMessageBox::error( this, i18n( "Knapsen not found the \"%1\"!", path ) );
 		
-		close();
+		exit(0);
 	}
 	
 	path = KGlobal::dirs()->findResource( "appdata", "pics/tigullio-bridge.svg" );
@@ -88,7 +88,7 @@ void MainWindow::initializePaths()
 		
 		KMessageBox::error( this, i18n( "Knapsen not found the \"%1\"!", path ) );
 		
-		close();
+		exit(0);
 	}
 	
 	//
@@ -99,7 +99,7 @@ void MainWindow::initializePaths()
 		
 		KMessageBox::error( this, i18n( "Knapsen not found the \"%1\"!", path ) );
 		
-		close();
+		exit(0);
 	}
 }
 
