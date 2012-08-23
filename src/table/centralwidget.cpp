@@ -42,6 +42,10 @@ CentralWidget::CentralWidget( QWidget* parent ):
 	mCentralCards = 0;
 	
 	//
+	mOpponentCardsShowTimer = 0;
+	//
+	
+	//
 	mPlayerArrow = 0;
 	mOpponentArrow = 0;
 	//
@@ -100,6 +104,14 @@ void CentralWidget::clearWidget()
 	scene()->removeItem( mTwentyButton );
 	scene()->removeItem( mFortyButton );
 	scene()->removeItem( mCloseButton );
+	
+	//
+	if( mOpponentCardsShowTimer ){
+		mOpponentCardsShowTimer->stop();
+		delete mOpponentCardsShowTimer;
+		mOpponentCardsShowTimer = 0;
+	}
+	//
 	
 	delete mOpponentName;
 	delete mPlayerName;
@@ -515,7 +527,14 @@ void CentralWidget::slotShowOpponentCards( int card1Pos, QString card1Text, int 
 	mShowOpponentCardsId->first = card1Pos;
 	mShowOpponentCardsId->second = card2Pos;
 	
-	QTimer::singleShot( 1000, this, SLOT( slotCoverOpponentCards() ) );
+	//QTimer::singleShot( 1000, this, SLOT( slotCoverOpponentCards() ) );
+	mOpponentCardsShowTimer = new QTimer( this );
+	mOpponentCardsShowTimer->setSingleShot( true );
+	mOpponentCardsShowTimer->setInterval( 1000 );
+	
+	connect( mOpponentCardsShowTimer, SIGNAL( timeout() ), this, SLOT( slotCoverOpponentCards() ) );
+	
+	mOpponentCardsShowTimer->start();
 }
 
 void CentralWidget::slotPlayerInAction()
@@ -598,6 +617,9 @@ void CentralWidget::slotCoverOpponentCards()
 	
 	delete mShowOpponentCardsId;
 	mShowOpponentCardsId = 0;
+	
+	delete mOpponentCardsShowTimer;
+	mOpponentCardsShowTimer = 0;
 	
 	emit signalHideShowedOpponentCards();
 }

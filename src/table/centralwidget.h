@@ -10,10 +10,10 @@ class MySvgItem;
 class QSvgRenderer;
 class MyTextItem;
 class ScoreTable;
-
-//class QGraphicsPixmapItem;
-
-//class MyGraphicsProxyWidget;
+class QGraphicsPixmapItem;
+//
+class QTimer;
+//
 
 class CentralWidget : public QGraphicsView
 {
@@ -43,6 +43,10 @@ class CentralWidget : public QGraphicsView
 	
 	QGraphicsSvgItem* mOpponentCards;
 	MySvgItem* mPlayerCards;
+	
+	//
+	QTimer *mOpponentCardsShowTimer;
+	//
 	
 	//
 	QGraphicsPixmapItem* mPlayerArrow;
