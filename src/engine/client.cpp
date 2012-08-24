@@ -34,6 +34,14 @@ void Client::newCommand( QString command )
 		return;
 	}
 	
+	if( getCommandPartOfCommand( command ) == SERVER_IS_FULL_COMMAND ){
+		kDebug() << getName() << "Server is full.";
+		
+		emit signalGameError( Client::ServerIsFull );
+		
+		return;
+	}
+	
 	if( getCommandPartOfCommand( command ) == COMMANDS_END_COMMAND ){
 		
 		slotProcessCommands();

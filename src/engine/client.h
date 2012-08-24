@@ -32,7 +32,7 @@ protected:
 	//
 	
 public:
-    enum GameErrorType{ NameIsBusy, OpponentDisconnected };
+    enum GameErrorType{ NameIsBusy, ServerIsFull, OpponentDisconnected };
 	
 	Client( QObject* parent = 0 );
 	

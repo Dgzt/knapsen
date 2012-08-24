@@ -245,7 +245,7 @@ void Server::slotNewPlayer( Player* player )
 		}
 		
 		mPlayerList.append( player );
-		connect( player, SIGNAL( signalPlayerDisconnected( Player* ) ),	this, SLOT( slotPlayerDisconnected( Player* ) ) );
+		//connect( player, SIGNAL( signalPlayerDisconnected( Player* ) ),	this, SLOT( slotPlayerDisconnected( Player* ) ) );
 		connect( player, SIGNAL( signalSelectedCard( Card, int ) ),		this, SLOT( slotPlayerSelectedCard( Card, int ) ) ); 
 		connect( player, SIGNAL( signalTwentyButtonClicked() ),			this, SLOT( slotPlayerTwentyButtonClicked() ) );
 		connect( player, SIGNAL( signalFortyButtonClicked() ),			this, SLOT( slotPlayerFortyButtonClicked() ) );
@@ -264,13 +264,15 @@ void Server::slotNewPlayer( Player* player )
 		
 	}else{
 		kDebug() << "The server is full, no free slot.";
+		player->sendServerIsFull();
+		//player->deleteLater();
 	}
 	
 }
 
 void Server::slotPlayerDisconnected( Player* player )
 {
-	kDebug() << player->getName() << "disconnected.";
+	/*kDebug() << player->getName() << "disconnected.";
 	
 	int i = 0;
 	while( mPlayerList.at(i)->getName() != player->getName() ){
@@ -303,7 +305,53 @@ void Server::slotPlayerDisconnected( Player* player )
 			mPlayerList.at( i )->sendOpponentDisconnected();
 		}
 		
+	}*/
+	
+	kDebug() << player->getName() << "disconnected.";
+	
+	const int INVALID_ID = -1;
+	
+	int id = INVALID_ID;
+	
+	for( int i = 0; i < mPlayerList.size(); ++i ){
+		if( player == mPlayerList.at( i ) ){
+			id = i;
+		}
 	}
+	
+	if( id != INVALID_ID ){
+		
+		mPlayerList.removeAt( id );
+	
+		//Delete player
+		player->disconnectFromHost();
+		player->deleteLater();
+		
+		emit signalPlayerDisconnected( player->getName() );
+		
+		//If the opponent is bot, then delete bot
+		if( mBot ){
+			mBot->disconnectFromHost();
+			mBot->deleteLater();
+			mBot = 0;
+		}
+		
+		if( mPlayerList.isEmpty() ){
+			kDebug() << "Server is empty!";
+			emit signalServerEmpty();
+		}else{
+			
+			for( int i = 0; i < mPlayerList.size(); ++i ){
+				mPlayerList.at( i )->sendOpponentDisconnected();
+			}
+			
+		}
+		
+	}else{ // id == INVALID_ID
+		player->disconnectFromHost();
+		player->deleteLater();
+	}
+	
 }
 
 void Server::slotPlayerSelectedCard( Card selectedCard, int cardPosition )
@@ -637,6 +685,8 @@ void Server::incomingConnection( int socketDescriptor )
 	
 	//If the player have name, then will be a player
 	connect( player, SIGNAL( signalNewPlayer( Player* ) ), this, SLOT( slotNewPlayer( Player* ) ) );
+	//
+	connect( player, SIGNAL( signalPlayerDisconnected( Player* ) ), this, SLOT( slotPlayerDisconnected( Player* ) ) );
 }
 
 void Server::setWhoStartGame( Knapsen::WhoStartGame whoStartGame )

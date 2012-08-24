@@ -420,6 +420,11 @@ void MainWindow::slotGameError( Client::GameErrorType gameErrorType )
 		}
 		
 	}
+	
+	if( gameErrorType == Client::ServerIsFull ){
+		kDebug() << "Name is busy!";
+		KMessageBox::error( this, i18n( "The server is full!" ) );
+	}
 }
 
 void MainWindow::slotEndRound( QString roundWinnerName, int scores )

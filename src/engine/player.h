@@ -12,6 +12,10 @@ static const QString NAME_IS_BUSY_COMMAND =":NAME_IS_BUSY";
 //
 static const QString OPPONENT_NAME_COMMAND = ":OPPONENT_NAME=";
 
+//
+static const QString SERVER_IS_FULL_COMMAND = ":SERVER_IS_FULL";
+//
+
 //Configs
 static const QString TYPE_OF_CARDS_COMMAND = ":TYPE_OF_CARD=";
 static const QString TYPE_OF_CARDS_GERMAN_SUITS_VALUE = "GERMAN_SUIT";
@@ -227,6 +231,8 @@ public:
 	
 	//
 	void sendNameIsBusy(){ sendCommand( NAME_IS_BUSY_COMMAND ); }
+	
+	void sendServerIsFull(){ sendCommand( SERVER_IS_FULL_COMMAND ); }
 	//
 	
 	//Send the opponent's name
