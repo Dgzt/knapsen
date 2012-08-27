@@ -61,7 +61,8 @@ kde4_add_ui_files(knapsen_SRCS ${knapsen_UIS} )
 
 kde4_add_executable(knapsen ${knapsen_SRCS} )
 
-target_link_libraries(knapsen ${QT_QTSVG_LIBRARY} ${QT_QTNETWORK_LIBRARY} ${KDE4_KDEUI_LIBS} kdegames )
+#target_link_libraries(knapsen ${QT_QTSVG_LIBRARY} ${QT_QTNETWORK_LIBRARY} ${KDE4_KDEUI_LIBS} kdegames )
+target_link_libraries(knapsen ${QT_QTSVG_LIBRARY} ${QT_QTNETWORK_LIBRARY} ${KDE4_KDEUI_LIBS} ${KDEGAMES_LIBRARY} )
 
 ########### install files ###############
 

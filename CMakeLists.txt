@@ -2,15 +2,26 @@ project(knapsen)
 
 cmake_minimum_required( VERSION 2.6 )
 
+find_package( Qt4 "4.6" REQUIRED)
 find_package( KDE4 "4.6" REQUIRED )
-find_package( KDEGames REQUIRED )
+#find_package( KDEGames REQUIRED )
+
+FIND_PACKAGE (LibKDEGames)
+
+IF (KDEGAMES_FOUND)
+        ADD_DEFINITIONS(-DOLD_LIBKDEGAMES)
+ELSE (KDEGAMES_FOUND)
+        FIND_PACKAGE (KDEGames REQUIRED)
+        ADD_DEFINITIONS (-DNEW_LIBKDEGAMES)
+ENDIF (KDEGAMES_FOUND)
+
 
 include( KDE4Defaults )
 
 include_directories( ${QT_QTSVG_INCLUDE_DIR} )
 include_directories( ${QT_QTNETWORK_INCLUDE_DIR} )
 include_directories( ${KDE4_INCLUDES} )
-
+include_directories( ${KDEGAMES_INCLUDE_DIRS} )
 
 
 # Generate config-kmess.h
