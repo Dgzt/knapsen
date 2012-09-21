@@ -3,15 +3,28 @@ PROJECT(knapsen)
 CMAKE_MINIMUM_REQUIRED( VERSION 2.6 )
 
 FIND_PACKAGE( Qt4 )
-IF( NOT QT4_FOUND )
-    MESSAGE( FATAL_ERROR 
+#IF( NOT QT4_FOUND )
+#    MESSAGE( FATAL_ERROR 
+#"----------------------------------------------------------
+#    Qt4 development files not found!
+#
+#    Ubuntu: apt-get install libqt4-dev
+#    Debian: apt-get install libqt4-dev
+#----------------------------------------------------------" )
+#ENDIF( NOT QT4_FOUND )
+if( QT4_FOUND )
+	if( ${QT_VERSION_MAJOR}.${QT_VERSION_MINOR}.${QT_VERSION_PATCH} VERSION_LESS "4.6.0" )
+		message( FATAL_ERROR "Qt is too old. Minimum version is 4.6.0." )
+	endif( ${QT_VERSION_MAJOR}.${QT_VERSION_MINOR}.${QT_VERSION_PATCH} VERSION_LESS "4.6.0" )
+else( QT4_FOUND )
+	MESSAGE( FATAL_ERROR 
 "----------------------------------------------------------
     Qt4 development files not found!
 
     Ubuntu: apt-get install libqt4-dev
     Debian: apt-get install libqt4-dev
 ----------------------------------------------------------" )
-ENDIF( NOT QT4_FOUND )
+endif( QT4_FOUND )
 
 FIND_PACKAGE( KDE4 )
 IF( NOT KDE4_FOUND )
@@ -26,6 +39,7 @@ ENDIF( NOT KDE4_FOUND )
 
 #++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 #              KDEGames >= 4.9
+#++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 #FIND_PACKAGE( KDEGames )
 #IF( NOT KDEGAMES_FOUND )
 #    MESSAGE( FATAL_ERROR 
@@ -40,6 +54,7 @@ FIND_PACKAGE( KDEGames REQUIRED )
 
 #++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 #               KDEGames < 4.9
+#++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 #FIND_PACKAGE( LibKDEGames REQUIRED )
 #++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
