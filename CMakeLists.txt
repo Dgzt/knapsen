@@ -2,6 +2,16 @@ project( knapsen )
 
 cmake_minimum_required( VERSION 2.6 )
 
+if( NOT CMAKE_CXX_COMPILER )
+	message( FATAL_ERROR
+"----------------------------------------------------------
+    g++ is not found!
+
+    Ubuntu: apt-get install g++
+    Debian: apt-get install g++
+----------------------------------------------------------" )
+endif( NOT CMAKE_CXX_COMPILER )
+
 find_package( Qt4 )
 if( QT4_FOUND )
 	if( ${QT_VERSION_MAJOR}.${QT_VERSION_MINOR}.${QT_VERSION_PATCH} VERSION_LESS "4.6.0" )
@@ -26,7 +36,7 @@ if( KDE4_FOUND )
 		message( FATAL_ERROR 
 "----------------------------------------------------------
 	KDE4 is too old! Minimum version is 4.6.0!
-----------------------------------------------------------	" )
+----------------------------------------------------------" )
 	endif( ${KDE_VERSION_MAJOR}.${KDE_VERSION_MINOR}.${KDE_VERSION_RELEASE} VERSION_LESS "4.6.0" )
 else( KDE4_FOUND )
 	message( FATAL_ERROR 
@@ -50,6 +60,9 @@ endif( KDE4_FOUND )
 #    Ubuntu: sudo apt-get install libkdegames-dev
 #----------------------------------------------------------" )
 #ENDIF( NOT KDEGAMES_FOUND )
+#
+#This is not work... :\
+#
 FIND_PACKAGE( KDEGames REQUIRED )
 #++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
