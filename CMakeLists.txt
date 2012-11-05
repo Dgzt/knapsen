@@ -51,19 +51,15 @@ endif( KDE4_FOUND )
 #++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 #              KDEGames >= 4.9
 #++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-#FIND_PACKAGE( KDEGames )
-#IF( NOT KDEGAMES_FOUND )
-#    MESSAGE( FATAL_ERROR 
-#"----------------------------------------------------------
-#    KDEGames library not found!
-#
-#    Ubuntu: sudo apt-get install libkdegames-dev
-#----------------------------------------------------------" )
-#ENDIF( NOT KDEGAMES_FOUND )
-#
-#This is not work... :\
-#
-FIND_PACKAGE( KDEGames REQUIRED )
+find_package( KDEGames )
+if( NOT KDEGames_FOUND )
+    message( FATAL_ERROR 
+"----------------------------------------------------------
+    KDEGames library development files not found!
+
+    Ubuntu: sudo apt-get install libkdegames-dev
+----------------------------------------------------------" )
+endif( NOT KDEGames_FOUND )
 #++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
 #++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
