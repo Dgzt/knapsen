@@ -138,6 +138,10 @@ void Client::slotProcessCommands()
 		if( getCommandPartOfCommand( commandList.first() ) == NEW_ROUND_COMMAND ){
 			kDebug() << getName() << "New round.";
 			newRound();
+			
+			mCentralCards->clear();
+			emit signalClearCentralCards();
+			
 			mSizeOfDeckNow = mSizeOfDeck;
 			emit signalNewRound();
 		}
