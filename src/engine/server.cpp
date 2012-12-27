@@ -3,6 +3,10 @@
 #include "gamesequence.h"
 #include "deck.h"
 //
+#include "centralcards.h"
+//
+
+//
 #include "bot.h"
 //
 #include "player.h"
@@ -11,7 +15,7 @@
 //Only 2 players game, 4 players maybe in the future...
 const int MAX_PLAYERS = 2;
 
-const int MAX_CENTRAL_CARDS_SIZE = 2;
+//const int MAX_CENTRAL_CARDS_SIZE = 2;
 
 Server::Server( QObject* parent ) :
 	QTcpServer( parent ),
@@ -35,6 +39,11 @@ Server::Server( QObject* parent ) :
 	mBot = 0;
 	//
 	
+	//
+	//mCentralCards = new CentralCards;
+	mCentralCards = 0;
+	//
+	
 	mDeck = 0;
 	mPlayerWhoClickedToCloseButtonThisRound = 0;
 	mWaitingMarriage = 0;
@@ -52,6 +61,9 @@ Server::~Server()
 	if( mDeck ){
 		delete mDeck;
 	}
+	if( mCentralCards ){
+		delete mCentralCards;
+	}
 }
 
 void Server::newGame()
@@ -62,6 +74,8 @@ void Server::newGame()
 	for( int i = 0; i < mPlayerList.size(); ++i ){
 		mPlayerList.at( i )->sendNewGame();
 	}
+	
+	mCentralCards = new CentralCards;
 	
 	newRound();
 	
@@ -75,7 +89,7 @@ void Server::newRound()
 	mDeck->buildDeck();
 	
 	//Clear central cards
-	mCentralCards.clear();
+	mCentralCards->clear();
 	
 	//Clear variables
 	mOpponentHaveNotTricksBeforePlayerClickedToCloseButton = false;
@@ -359,11 +373,13 @@ void Server::slotPlayerSelectedCard( Card selectedCard, int cardPosition )
 	//kDebug() << "Selected card:" << selectedCard.getCardText( mTypeOfCards );
 	kDebug() << "Selected card:" << selectedCard.getCardText();
 	
-	mCentralCards.append( selectedCard );
+	//mCentralCards.append( selectedCard );
+	mCentralCards->add( selectedCard );
 	
 	Player* nextPlayer = mGameSequence->getNextPlayer();
 	
-	if( mCentralCards.size() != MAX_CENTRAL_CARDS_SIZE ){
+	//if( mCentralCards.size() != MAX_CENTRAL_CARDS_SIZE ){
+	if( !mCentralCards->isFull() ){
 		kDebug() << "Next player step.";
 		
 		Player* currentPlayer = mGameSequence->getCurrentPlayer();
@@ -437,7 +453,7 @@ void Server::slotPlayerSelectedCard( Card selectedCard, int cardPosition )
 		//Show opponent's arrow and send commands end
 		currentPlayer->sendCommandsEnd();
 		
-	}else{
+	}else{ // mCentralCards->isFull()
 		nextPlayer->sendOpponentSelectedCardId( cardPosition );
 		nextPlayer->sendOpponentAddNewCentralCard( selectedCard );
 		QTimer::singleShot( 1000, this, SLOT( slotCheckCentralCards() ) );
@@ -498,20 +514,33 @@ void Server::slotCheckCentralCards()
 	
 	kDebug() << "Check the central cards.";
 		
-	int centralCard1Point = mCentralCards.at(0).getCardPoint();
-	int centralCard2Point = mCentralCards.at(1).getCardPoint();
+	//int centralCard1Point = mCentralCards.at(0).getCardPoint();
+	int centralCard1Point = mCentralCards->at( 0 ).getCardPoint();
+	//int centralCard2Point = mCentralCards.at(1).getCardPoint();
+	int centralCard2Point = mCentralCards->at(1).getCardPoint();
 		
 	kDebug() << "centralCard1Point" << centralCard1Point;
 	kDebug() << "centralCard2Point" << centralCard2Point;
-		
+	
+	//
+	Card::CardSuit centralCard0Suit = mCentralCards->at( 0 ).getCardSuit();
+	Card::CardSuit centralCard1Suit = mCentralCards->at( 1 ).getCardSuit();
+	//
+	
 	bool currentPlayerStartNextTurn;
-		
-	if( mTrumpCard.getCardSuit() == mCentralCards.at(0).getCardSuit() && mTrumpCard.getCardSuit() != mCentralCards.at(1).getCardSuit() ){
+	
+	/*if( mTrumpCard.getCardSuit() == mCentralCards.at(0).getCardSuit() && mTrumpCard.getCardSuit() != mCentralCards.at(1).getCardSuit() ){
 		currentPlayerStartNextTurn = false;
 	}else if( mTrumpCard.getCardSuit() != mCentralCards.at(0).getCardSuit() && mTrumpCard.getCardSuit() == mCentralCards.at(1).getCardSuit() ){
 		currentPlayerStartNextTurn = true;
 	}else if( mCentralCards.at(0).getCardSuit() == mCentralCards.at(1).getCardSuit() ){
-		
+	*/	
+	if( mTrumpCard.getCardSuit() == centralCard0Suit && mTrumpCard.getCardSuit() != centralCard1Suit ){
+		currentPlayerStartNextTurn = false;
+	}else if( mTrumpCard.getCardSuit() != centralCard0Suit && mTrumpCard.getCardSuit() == centralCard1Suit ){
+		currentPlayerStartNextTurn = true;
+	}else if( centralCard0Suit == centralCard1Suit ){
+	
 		if( centralCard1Point < centralCard2Point ){
 			currentPlayerStartNextTurn = true;
 		}else{
@@ -548,7 +577,9 @@ void Server::slotCheckCentralCards()
 		kDebug() << "Start next turn";
 		
 		//Clear central cards
-		mCentralCards.clear();
+		//mCentralCards.clear();
+		mCentralCards->clear();
+		
 		for( int i = 0; i < mPlayerList.size(); ++i ){
 			mPlayerList.at( i )->sendClearCentralCards();
 		}

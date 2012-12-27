@@ -13,6 +13,10 @@ class Bot;
 //
 class Deck;
 
+//
+class CentralCards;
+//
+
 class Server : public QTcpServer
 {
 //public:
@@ -48,7 +52,8 @@ class Server : public QTcpServer
 	//QString mTrumpCard;
 	Card mTrumpCard;
 	
-	QList<Card> mCentralCards;
+	//QList<Card> mCentralCards;
+	CentralCards *mCentralCards;
 	
 	//
 	QPair<Player*, int> *mWaitingMarriage;
