@@ -88,6 +88,8 @@ static const QString END_GAME_COMMAND = ":END_GAME=";
 static const QString START_NEXT_GAME_COMMAND = ":START_NEXT_GAME";
 //
 
+class CentralCards;
+
 class Player : public QTcpSocket
 {
 	Q_OBJECT
@@ -105,19 +107,21 @@ class Player : public QTcpSocket
 	//Player's cards
 	QList<Card> mCards;
 	
+	//Player's tricks
 	int mTricks;
 	
+	//Player's scores
 	int mScores;
 	
 	//Trump card
 	Card mTrumpCard;
 	Card::CardSuit mTrumpCardSuit;
 	
-	//Central cards
-	QList<Card> mCentralCards;
-	
+	//If this variable is visible, then visible the twenty button
 	bool mTwentyButtonVisible;
+	//If this variable is visible, then visible the forty button
 	bool mFortyButtonVisible;
+	//If this variable is visible, then visible the close button
 	bool mCloseButtonVisible;
 	
 	virtual void newCommand( QString );
@@ -160,19 +164,11 @@ protected:
 	//Set selectable OR not selectable all avalibe card
 	void setSelectableAllCards( bool );
 	//Set selectable cards, which suit of cards equal the suit of central card or suit of trump card
-	void setSelectableCertainCards();
+	void setSelectableCertainCards( CentralCards * );
 	
 	//
 	void setSelectableRegularMarriagesCards();
 	void setSelectableTrumpMarriagesCards();
-	//
-	
-	//Add new card to central cards
-	void addNewCentralCard( Card );
-	void clearCentralCards();
-	int getCentralCardsSize(){ return mCentralCards.size(); }
-	//
-	Card getCentralCard( int id ){ return mCentralCards.at( id ); }
 	//
 	
 	//
@@ -262,7 +258,8 @@ public:
 	//Set and send enabled all card
 	void sendSelectableAllCards();
 	//
-	void sendSelectableCertainCards();
+	//void sendSelectableCertainCards();
+	void sendSelectableCertainCards( CentralCards * );
 	//
 	
 	void sendOpponentSelectedCardId( int id ){ sendCommand( OPPONENT_SELECTED_CARD_ID_COMMAND+QString::number( id ) ); }
@@ -321,7 +318,7 @@ signals:
 	void signalTwentyButtonVisible( bool );
 	void signalFortyButtonVisible( bool );
 	void signalCloseButtonVisible( bool );
-	void signalCentralCardChanged( int, Card );
+	
 };
 
 #endif //PLAYER_H

@@ -447,7 +447,8 @@ void Server::slotPlayerSelectedCard( Card selectedCard, int cardPosition )
 		if( !mPlayerWhoClickedToCloseButtonThisRound && mDeck->getDeckSize() > 0 ){
 			nextPlayer->sendSelectableAllCards();
 		}else{ // mDeck->getDeckSize() == 0
-			nextPlayer->sendSelectableCertainCards();
+			//nextPlayer->sendSelectableCertainCards();
+			nextPlayer->sendSelectableCertainCards( mCentralCards );
 		}
 		
 		//Show opponent's arrow and send commands end
@@ -515,16 +516,16 @@ void Server::slotCheckCentralCards()
 	kDebug() << "Check the central cards.";
 		
 	//int centralCard1Point = mCentralCards.at(0).getCardPoint();
-	int centralCard1Point = mCentralCards->at( 0 ).getCardPoint();
+	int centralCard1Point = mCentralCards->getCard( 0 ).getCardPoint();
 	//int centralCard2Point = mCentralCards.at(1).getCardPoint();
-	int centralCard2Point = mCentralCards->at(1).getCardPoint();
+	int centralCard2Point = mCentralCards->getCard(1).getCardPoint();
 		
 	kDebug() << "centralCard1Point" << centralCard1Point;
 	kDebug() << "centralCard2Point" << centralCard2Point;
 	
 	//
-	Card::CardSuit centralCard0Suit = mCentralCards->at( 0 ).getCardSuit();
-	Card::CardSuit centralCard1Suit = mCentralCards->at( 1 ).getCardSuit();
+	Card::CardSuit centralCard0Suit = mCentralCards->getCard( 0 ).getCardSuit();
+	Card::CardSuit centralCard1Suit = mCentralCards->getCard( 1 ).getCardSuit();
 	//
 	
 	bool currentPlayerStartNextTurn;

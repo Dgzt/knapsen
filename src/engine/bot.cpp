@@ -1,5 +1,6 @@
 #include <QtCore/QTimer>
 #include <KDE/KDebug>
+#include "centralcards.h"
 #include "bot.h"
 
 Bot::Bot( QObject* parent ): 
@@ -72,7 +73,8 @@ void Bot::slotSelectCard()
 	}*/
 	// /TMP
 	
-	if( getCentralCardsSize() == 0 ){
+	//if( getCentralCardsSize() == 0 ){
+	if( getCentralCards()->isEmpty() ){
 		kDebug() << "Central cards size: 0";
 		
 		//If the bot can change card, then change card
@@ -279,10 +281,12 @@ void Bot::slotSelectCard()
 		}
 		
 		
-	}else{ // getCentralCardsSize == 1
+	//}else{ // getCentralCardsSize == 1
+	}else{ // !getCentralCard()->isEmpty()
 		kDebug() << "Central cards size: 1";
 		
-		Card centralCard = getCentralCard( 0 );
+		//Card centralCard = getCentralCard( 0 );
+		Card centralCard0 = getCentralCards()->getCard( 0 );
 		Card card;
 		
 		kDebug() << "-Firstly try select the card, which points of card bigger then points of central card (and the suits of cards are equal).";
@@ -290,7 +294,7 @@ void Bot::slotSelectCard()
 			
 			card = getCard( i );
 			
-			if( card.isSelectable() && card.getCardSuit() == centralCard.getCardSuit() && card.getCardPoint() > centralCard.getCardPoint() ){
+			if( card.isSelectable() && card.getCardSuit() == centralCard0.getCardSuit() && card.getCardPoint() > centralCard0.getCardPoint() ){
 				
 				if( getSizeOfDeckNow() == 0 || deckIsClosed ){
 					//If size of deck now is 0 or closed, then can select king or queen card too
@@ -319,7 +323,7 @@ void Bot::slotSelectCard()
 		
 		kDebug() << "-Secondly if the suit of central card is not equal with suit of trump card, then select the card, which suit is equal with suit of trump card.";
 		//If suit of centralCard is not equal with suit of trump card
-		if( getTrumpCard().getCardSuit() != centralCard.getCardSuit() ){
+		if( getTrumpCard().getCardSuit() != centralCard0.getCardSuit() ){
 			
 			int selectedCardId = -1;
 			

@@ -451,14 +451,17 @@ void CentralWidget::slotPlayerCardSelectableChanged( int id , bool selectable )
 	mPlayerCards[ id ].setSelectable( selectable );
 }
 
-void CentralWidget::slotCentralCardChanged( int id, QString cardText )
+void CentralWidget::slotNewCentralCard( int id, QString cardText )
 {
-	if( cardText.isEmpty() ){
-		mCentralCards[ id ].setElementId( cardText );
-		mCentralCards[ id ].setVisible( false );
-	}else{
-		mCentralCards[ id ].setElementId( cardText );
-		mCentralCards[ id ].setVisible( true );
+	mCentralCards[ id ].setElementId( cardText );
+	mCentralCards[ id ].setVisible( true );
+}
+
+void CentralWidget::slotClearCentralCards()
+{
+	for( int i = 0; i < CENTRAL_CARDS_SIZE; ++i ){
+		mCentralCards[ i ].setElementId( "back" );
+		mCentralCards[ i ].setVisible( false );
 	}
 }
 

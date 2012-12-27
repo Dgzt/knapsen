@@ -12,12 +12,15 @@ public:
 	CentralCards();
 	~CentralCards();
 	
-	void add( Card );
+	int add( Card );
 	void clear();
 	
+	//int getSize();
+	
+	bool isEmpty();
 	bool isFull();
 	
-	Card at( int );
+	Card getCard( int );
 	
 };
 

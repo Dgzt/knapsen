@@ -162,7 +162,11 @@ void MainWindow::setGameSignals()
 	connect( client, SIGNAL( signalTrumpCardHide() ),											cWidget, SLOT( slotTrumpCardHide() ) );
 	connect( client, SIGNAL( signalTrumpCardSelectableChanged( bool ) ),						cWidget, SLOT( slotTrumpCardSelectableChanged( bool ) ) );
 	connect( client, SIGNAL( signalPlayerCardSelectableChanged( int, bool ) ),					cWidget, SLOT( slotPlayerCardSelectableChanged( int, bool ) ) );
-	connect( client, SIGNAL( signalCentralCardChanged( int, QString ) ),						cWidget, SLOT( slotCentralCardChanged( int, QString ) ) );
+	//connect( client, SIGNAL( signalCentralCardChanged( int, QString ) ),						cWidget, SLOT( slotCentralCardChanged( int, QString ) ) );
+	//
+	connect( client, SIGNAL( signalNewCentralCard( int, QString ) ),							cWidget, SLOT( slotNewCentralCard( int, QString) ) );
+	connect( client, SIGNAL( signalClearCentralCards() ),										cWidget, SLOT( slotClearCentralCards() ) );
+	//
 	connect( client, SIGNAL( signalOpponentSelectedCardId( int ) ),								cWidget, SLOT( slotOpponentSelectedCardId( int ) ) );
 	connect( client, SIGNAL( signalOpponentTricksChanged( int ) ),								cWidget, SLOT( slotOpponentTricksChanged( int ) ) );
 	connect( client, SIGNAL( signalOpponentScoresChanged( int ) ),								cWidget, SLOT( slotOpponentScoresChanged( int ) ) );

@@ -1,4 +1,5 @@
 #include <KDE/KDebug>
+#include "centralcards.h"
 #include "client.h"
 
 Client::Client( QObject* parent ) : 
@@ -8,10 +9,20 @@ Client::Client( QObject* parent ) :
 	mSizeOfDeck( 0 ),
 	mSizeOfDeckNow( 0 )
 {
+	//
+	mCentralCards = 0;
+	//
+	
 	connect( this, SIGNAL( connected() ), this, SLOT( slotConnected() ) );
-	connect( this, SIGNAL( signalCentralCardChanged( int, Card ) ), this, SLOT( slotCentralCardChanged( int, Card ) ) );
 }
 
+Client::~Client()
+{
+	if( mCentralCards ){
+		delete mCentralCards;
+		mCentralCards = 0;
+	}
+}
 
 void Client::newCommand( QString command )
 {
@@ -206,7 +217,8 @@ void Client::slotProcessCommands()
 		if( getCommandPartOfCommand( commandList.first() ) == SELECTABLE_CERTAIN_CARDS_COMMAND ){
 			kDebug() << getName() << "Selectable certan cards.";
 			
-			setSelectableCertainCards();
+			//setSelectableCertainCards();
+			setSelectableCertainCards( mCentralCards );
 			emit signalPlayerInAction();
 		}
 		
@@ -234,7 +246,9 @@ void Client::slotProcessCommands()
 			bool ok;
 			int ret = getValuePartOfCommand( commandList.first() ).toInt( &ok );
 			if( ok ){
-				addNewCentralCard( Card( ret ) );
+				//addNewCentralCard( Card( ret ) );
+				int pos = mCentralCards->add( Card( ret ) );
+				emit signalNewCentralCard( pos, mCentralCards->getCard( pos ).getCardText() );
 			}
 		}
 
@@ -331,13 +345,18 @@ void Client::slotProcessCommands()
 			
 		if( getCommandPartOfCommand( commandList.first() ) == CLEAR_CENTRAL_CARDS_COMMAND ){
 			kDebug() << getName() << "Clear central cards command.";
-			clearCentralCards();
+			//clearCentralCards();
+			mCentralCards->clear();
+			emit signalClearCentralCards();
 		}
 		
 		if( getCommandPartOfCommand( commandList.first() ) == NEW_GAME_COMMAND ){
 			kDebug() << getName() << "Start game.";
 			
 			newGame();
+			//
+			mCentralCards = new CentralCards;
+			//
 			emit signalPlayerScoresChanged( getScores() );
 			emit signalOpponentScoresChanged( 0 );
 			
@@ -387,17 +406,12 @@ void Client::slotConnected()
 	sendCommand( NAME_COMMAND+getName() );
 }
 
-void Client::slotCentralCardChanged( int id, Card card )
-{
-	//emit signalCentralCardChanged( id, card.getCardText( mTypeOfCards ) );
-	emit signalCentralCardChanged( id, card.getCardText() );
-}
-
 void Client::slotSelectedCardId( int id )
 {
 	kDebug() << "Selected card:" << id;
 	setSelectableAllCards( false );
-	addNewCentralCard( getCard( id ) );
+	int pos = mCentralCards->add( getCard( id ) );
+	emit signalNewCentralCard( pos, mCentralCards->getCard( pos ).getCardText() );
 	removeCard( id );
 	
 	if( isTwentyButtonVisible() ){

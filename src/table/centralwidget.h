@@ -96,7 +96,8 @@ public slots:
 	
 	void slotPlayerCardSelectableChanged( int, bool );
 
-	void slotCentralCardChanged( int, QString );
+	void slotNewCentralCard( int, QString );
+	void slotClearCentralCards();
 	
 	void slotOpponentSelectedCardId( int );
 	

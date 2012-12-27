@@ -1,4 +1,5 @@
 #include <KDE/KDebug>
+#include "centralcards.h"
 #include "player.h"
 
 Player::Player( QObject* parent ): 
@@ -94,10 +95,10 @@ void Player::setSelectableAllCards( bool enabled )
 	}
 }
 
-void Player::setSelectableCertainCards()
+void Player::setSelectableCertainCards( CentralCards *centralCards )
 {
 	//Set true, which cards equal type whit central card
-	if( setSelectableCardsWhatEqualSuit( mCentralCards.at( 0 ).getCardSuit() ) == false ){
+	if( setSelectableCardsWhatEqualSuit( centralCards->getCard( 0 ).getCardSuit() ) == false ){
 		//If have not cards which equal type whith central card, then set true, which equal type whith trump card 
 		if( setSelectableCardsWhatEqualSuit( mTrumpCardSuit ) == false ){
 			//If have not that cards, then equal all card
@@ -190,9 +191,6 @@ void Player::newRound()
 		mCards[ i ] = Card();
 	}
 	
-	//Clear central cards
-	mCentralCards.clear();
-	
 	//Clear trump Card
 	setTrumpCard( Card() );
 	
@@ -278,26 +276,6 @@ bool Player::canChangeTrumpCard() const
 	return canChange;
 }
 
-void Player::addNewCentralCard( Card card )
-{
-	mCentralCards.append( card );
-	
-	emit signalCentralCardChanged( mCentralCards.size()-1, card );
-}
-
-void Player::clearCentralCards()
-{
-	/*for( int i = 0; i < mCentralCards.size(); ++i ){
-		mCentralCards[ i ] = Card();
-		emit signalCentralCardChanged( i, mCentralCards.at( i ) );
-	}*/
-	for( int i = 0; i < mCentralCards.size(); ++i ){
-		mCentralCards[ i ] = Card();
-		emit signalCentralCardChanged( i, mCentralCards.at( i ) );
-	}
-	mCentralCards.clear();
-}
-
 void Player::setTwentyButtonVisible( bool twentyButtonVisible )
 {
 	mTwentyButtonVisible = twentyButtonVisible;
@@ -374,7 +352,7 @@ void Player::newCommand( QString command )
 				}
 				
 				Card selectedCard = getCard( ret );
-				addNewCentralCard( selectedCard );
+				//addNewCentralCard( selectedCard );
 				removeCard( ret );
 				
 				emit signalSelectedCard( selectedCard, ret );
@@ -540,18 +518,18 @@ void Player::sendSelectableAllCards()
 	mOpponent->sendCommand( OPPONENT_IN_ACTION_COMMAND );
 }
 
-void Player::sendSelectableCertainCards()
+void Player::sendSelectableCertainCards( CentralCards *centralCards )
 {
-	setSelectableCertainCards();
+	setSelectableCertainCards( centralCards );
 	sendCommand( SELECTABLE_CERTAIN_CARDS_COMMAND );
 	
 	mOpponent->sendCommand( OPPONENT_IN_ACTION_COMMAND );
 }
 
+
 void Player::sendOpponentAddNewCentralCard( Card card )
 {
 	kDebug() << getName() << "Opponent add new central card.";
-	addNewCentralCard( card );
 	sendCommand( OPPONENT_ADD_NEW_CENTRAL_CARD_COMMAND+QString::number( card.getValue() ) );
 }
 
@@ -578,7 +556,6 @@ void Player::sendVisibleOpponentCards( int card1Pos, Card card1, int card2Pos, C
 
 void Player::sendClearCentralCards()
 {
-	clearCentralCards();
 	sendCommand( CLEAR_CENTRAL_CARDS_COMMAND );
 }
 

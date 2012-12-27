@@ -3,6 +3,8 @@
 
 #include "player.h"
 #include "enums.h"
+
+class CentralCards;
 	
 class Client : public Player
 {
@@ -15,6 +17,8 @@ class Client : public Player
 	int mSizeOfDeck;
 	int mSizeOfDeckNow;
 	
+	CentralCards *mCentralCards;
+	
 	//
 	QList<QString> commandList;
 	//
@@ -24,17 +28,18 @@ class Client : public Player
 private slots:
 	void slotConnected();
 	
-	void slotCentralCardChanged( int, Card );
-	
 protected:
 	//
 	int getSizeOfDeckNow(){ return mSizeOfDeckNow; }
 	//
 	
+	CentralCards* getCentralCards(){ return mCentralCards; }
+	
 public:
     enum GameErrorType{ NameIsBusy, ServerIsFull, OpponentDisconnected };
 	
 	Client( QObject* parent = 0 );
+    /*virtual */~Client();
 	
 	void startNextRound(){ sendCommand( START_NEXT_ROUND_COMMAND ); }
 	void startNextGame(){ sendCommand( START_NEXT_GAME_COMMAND ); }
@@ -63,7 +68,9 @@ signals:
 	
 	void signalNewTrumpCard( QString );
 	
-	void signalCentralCardChanged( int, QString );
+	void signalNewCentralCard( int, QString );
+	
+	void signalClearCentralCards();
 	
 	void signalOpponentSelectedCardId( int );
 	
