@@ -1,6 +1,7 @@
 #include <QtCore/QTimer>
 #include <KDE/KDebug>
 #include "centralcards.h"
+#include "trumpcard.h"
 #include "bot.h"
 
 Bot::Bot( QObject* parent ): 
@@ -78,7 +79,9 @@ void Bot::slotSelectCard()
 		kDebug() << "Central cards size: 0";
 		
 		//If the bot can change card, then change card
-		if( getTrumpCard().isSelectable() ){
+		//if( getTrumpCard().isSelectable() ){
+		//if( !getTrumpCard()->isEmpty() && getTrumpCard()->isSelectable() ){
+		if( !getTrumpCard()->isEmpty() && getTrumpCard()->getCard()->isSelectable() ){
 			kDebug() << "Can change trump card. Change it.";
 			
 			slotSelectedTrumpCard();
@@ -123,7 +126,8 @@ void Bot::slotSelectCard()
 		}else{ //clicktedToFortyOrTwentyButton == false
 			kDebug() << "Don't clicked to forty or twenty button.";
 			
-			Card::CardSuit trumpCardSuit = getTrumpCard().getCardSuit();
+			//Card::CardSuit trumpCardSuit = getTrumpCard().getCardSuit();
+			Card::CardSuit trumpCardSuit = getTrumpCard()->getCardSuit();
 			
 			kDebug() << "If bot have ace, and the type is not equal with type of trump card then select ace.";
 			for( int i = 0; i < getNumberOfCardsInHand(); ++i ){
@@ -349,15 +353,16 @@ void Bot::slotSelectCard()
 		
 		kDebug() << "-Secondly if the suit of central card is not equal with suit of trump card, then select the card, which suit is equal with suit of trump card.";
 		//If suit of centralCard is not equal with suit of trump card
-		if( getTrumpCard().getCardSuit() != centralCard0.getCardSuit() ){
-			
+		//if( getTrumpCard().getCardSuit() != centralCard0.getCardSuit() ){
+		if( getTrumpCard()->getCardSuit() != centralCard0.getCardSuit() ){ 	
 			int selectedCardId = -1;
 			
 			for( int i = 0; i < getNumberOfCardsInHand(); ++i ){
 				card = getCard( i );
 				
 				//if( card.isSelectable() && card.getCardSuit() == getTrumpCard().getCardSuit() ){
-				if( card != 0 && card->isSelectable() && card->getCardSuit() == getTrumpCard().getCardSuit() ){
+				//if( card != 0 && card->isSelectable() && card->getCardSuit() == getTrumpCard().getCardSuit() ){
+				if( card != 0 && card->isSelectable() && card->getCardSuit() == getTrumpCard()->getCardSuit() ){
 					
 					if( getSizeOfDeckNow() == 0 || deckIsClosed ){
 						

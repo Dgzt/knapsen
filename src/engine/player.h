@@ -90,6 +90,8 @@ static const QString START_NEXT_GAME_COMMAND = ":START_NEXT_GAME";
 
 class CentralCards;
 
+class TrumpCard;
+
 class Player : public QTcpSocket
 {
 	Q_OBJECT
@@ -116,8 +118,8 @@ class Player : public QTcpSocket
 	int mScores;
 	
 	//Trump card
-	Card mTrumpCard;
-	Card::CardSuit mTrumpCardSuit;
+	//Card mTrumpCard;
+	//Card::CardSuit mTrumpCardSuit;
 	
 	//If this variable is visible, then visible the twenty button
 	bool mTwentyButtonVisible;
@@ -153,25 +155,29 @@ protected:
 	Card::CardType getLowestCardType(){ return mLowestCardType; }
 	//
 	
-	int addNewCard( Card );
+	//int addNewCard( Card );
+	int addNewCard( Card* );
 	//void removeCard( int id ){ mCards[ id ] = Card(); }
 	void removeCard( int );
 	
 	//Trump card
-	void setTrumpCard( Card trumpCard ) { mTrumpCard = trumpCard; mTrumpCardSuit = mTrumpCard.getCardSuit(); }
-	Card& getTrumpCard() { return mTrumpCard; }
-	void clearTrumpCard() { mTrumpCard = Card(); }
+	//void setTrumpCard( Card trumpCard ) { mTrumpCard = trumpCard; mTrumpCardSuit = mTrumpCard.getCardSuit(); }
+	//Card& getTrumpCard() { return mTrumpCard; }
+	//void clearTrumpCard() { mTrumpCard = Card(); }
 	//
-	int changeTrumpCard();
+	//int changeTrumpCard();
+	//int changeTrumpCard( TrumpCard * );
 	
 	//Set selectable OR not selectable all avalibe card
 	void setSelectableAllCards( bool );
 	//Set selectable cards, which suit of cards equal the suit of central card or suit of trump card
-	void setSelectableCertainCards( CentralCards * );
+	void setSelectableCertainCards( CentralCards *, TrumpCard * );
 	
 	//
-	void setSelectableRegularMarriagesCards();
-	void setSelectableTrumpMarriagesCards();
+	//void setSelectableRegularMarriagesCards();
+	void setSelectableRegularMarriagesCards( TrumpCard * );
+	//void setSelectableTrumpMarriagesCards();
+	void setSelectableTrumpMarriagesCards( TrumpCard * );
 	//
 	
 	//
@@ -221,11 +227,16 @@ public:
 	void addScores( int );
 	int getScores() const{ return mScores; }
 	
-	bool haveRegularMarriages() const;
-	bool haveTrumpMarriages() const;
+	//bool haveRegularMarriages() const;
+	bool haveRegularMarriages( TrumpCard * ) const;
+	//bool haveTrumpMarriages() const;
+	bool haveTrumpMarriages( TrumpCard * ) const;
 	
 	//
-	bool canChangeTrumpCard() const;
+	//bool canChangeTrumpCard() const;
+	bool canChangeTrumpCard( TrumpCard * ) const;
+	
+	int changeTrumpCard( TrumpCard * );
 	//
 	
 	//-- Commands --
@@ -252,10 +263,13 @@ public:
 	void sendInitializeTable(){ sendCommand( INITIALIZE_TABLE_COMMAND ); }
 	
 	//Set and send the new card
-	void sendNewCard( const Card );
+	//void sendNewCard( const Card );
+	void sendNewCard( Card* );
 	
 	//Set and send the new trump card
-	void sendNewTrumpCard( const Card );
+	//void sendNewTrumpCard( const Card );
+	void sendNewTrumpCard( TrumpCard* );
+	
 	//
 	void sendClearTrumpCard();
 	//
@@ -264,7 +278,7 @@ public:
 	void sendSelectableAllCards();
 	//
 	//void sendSelectableCertainCards();
-	void sendSelectableCertainCards( CentralCards * );
+	void sendSelectableCertainCards( CentralCards *, TrumpCard * );
 	//
 	
 	void sendOpponentSelectedCardId( int id ){ sendCommand( OPPONENT_SELECTED_CARD_ID_COMMAND+QString::number( id ) ); }
@@ -283,7 +297,8 @@ public:
 	void sendOpponentClickedToCloseButton(){ sendCommand( OPPONENT_CLICKED_TO_CLOSE_BUTTON_COMMAND ); }
 	
 	//
-	void sendSelectableTrumpCard(){ mTrumpCard.setSelectable( true ); sendCommand( TRUMP_CARD_SELECTABLE_COMMAND ); }
+	//void sendSelectableTrumpCard(){ mTrumpCard.setSelectable( true ); sendCommand( TRUMP_CARD_SELECTABLE_COMMAND ); }
+	void sendSelectableTrumpCard(){ sendCommand( TRUMP_CARD_SELECTABLE_COMMAND ); }
 	void sendChangeTrumpCard(){ sendCommand( CHANGE_TRUMP_CARD_COMMAND ); }
 	//
 	
@@ -313,7 +328,8 @@ signals:
 	void signalTwentyButtonClicked();
 	void signalFortyButtonClicked();
 	void signalCloseButtonClicked();
-	void signalChangedTrumpCard( Card );
+	//void signalChangedTrumpCard( Card );
+	void signalChangedTrumpCard();
 	//
 	void signalStartNextRound( Player* );
 	void signalStartNextGame( Player* );

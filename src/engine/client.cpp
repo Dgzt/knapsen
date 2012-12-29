@@ -1,5 +1,6 @@
 #include <KDE/KDebug>
 #include "centralcards.h"
+#include "trumpcard.h"
 #include "client.h"
 
 Client::Client( QObject* parent ) : 
@@ -10,7 +11,12 @@ Client::Client( QObject* parent ) :
 	mSizeOfDeckNow( 0 )
 {
 	//
-	mCentralCards = 0;
+	//mCentralCards = 0;
+	mCentralCards = new CentralCards;
+	//
+	//
+	//mTrumpCard = 0;
+	mTrumpCard = new TrumpCard;
 	//
 	
 	connect( this, SIGNAL( connected() ), this, SLOT( slotConnected() ) );
@@ -18,10 +24,12 @@ Client::Client( QObject* parent ) :
 
 Client::~Client()
 {
-	if( mCentralCards ){
+	/*if( mCentralCards ){
 		delete mCentralCards;
 		mCentralCards = 0;
-	}
+	}*/
+	delete mCentralCards;
+	delete mTrumpCard;
 }
 
 void Client::newCommand( QString command )
@@ -121,9 +129,11 @@ void Client::slotProcessCommands()
 			bool ok;
 			int ret = getValuePartOfCommand( commandList.first() ).toInt( &ok );
 			if( ok ){
-				int cardId = addNewCard( Card( ret) );
-				//emit signalNewPlayerCard( cardId, Card( ret ).getCardText( mTypeOfCards ) );
-				emit signalNewPlayerCard( cardId, Card( ret ).getCardText() );
+				//int cardId = addNewCard( Card( ret) );
+				int cardId = addNewCard( new Card( ret ) );
+				//emit signalNewPlayerCard( cardId, Card( ret ).getCardText() );
+				emit signalNewPlayerCard( cardId, getCard( cardId )->getCardText() );
+				
 				
 				mSizeOfDeckNow--;
 				if( mSizeOfDeckNow == 0 ){
@@ -170,9 +180,11 @@ void Client::slotProcessCommands()
 			bool ok;
 			int ret = getValuePartOfCommand( commandList.first() ).toInt( &ok );
 			if( ok ){
-				setTrumpCard( Card( ret ) );
-				//emit signalNewTrumpCard( getTrumpCard().getCardText( mTypeOfCards ) );
-				emit signalNewTrumpCard( getTrumpCard().getCardText() );
+				//setTrumpCard( Card( ret ) );
+				mTrumpCard->addNewCard( new Card( ret ) );
+				
+				//emit signalNewTrumpCard( getTrumpCard().getCardText() );
+				emit signalNewTrumpCard( getTrumpCard()->getCard()->getCardText() );
 			}else{
 				kDebug() << "ERROR! Cannot convert new trump card command value to int!";
 			}
@@ -199,14 +211,17 @@ void Client::slotProcessCommands()
 		if( getCommandPartOfCommand( commandList.first() ) == CLEAR_TRUMP_CARD_COMMAND ){
 			kDebug() << getName() << "Clear trump card.";
 			
-			clearTrumpCard();
+			//clearTrumpCard();
+			mTrumpCard->clearTrumpCard();
 			emit signalTrumpCardHide();
 		}
 		
 		if( getCommandPartOfCommand( commandList.first() ) == TRUMP_CARD_SELECTABLE_COMMAND ){
 			kDebug() << getName() << "Selectable trump card.";
-			getTrumpCard().setSelectable( true );
-			emit signalTrumpCardSelectableChanged( getTrumpCard().isSelectable() );
+			//getTrumpCard().setSelectable( true );
+			getTrumpCard()->getCard()->setSelectable( true );
+			//emit signalTrumpCardSelectableChanged( getTrumpCard().isSelectable() );
+			emit signalTrumpCardSelectableChanged( getTrumpCard()->getCard()->isSelectable() );
 		}
 			
 		if( getCommandPartOfCommand( commandList.first() ) == SELECTABLE_ALL_CARDS_COMMAND ){
@@ -222,7 +237,7 @@ void Client::slotProcessCommands()
 			kDebug() << getName() << "Selectable certan cards.";
 			
 			//setSelectableCertainCards();
-			setSelectableCertainCards( mCentralCards );
+			setSelectableCertainCards( mCentralCards , mTrumpCard );
 			emit signalPlayerInAction();
 		}
 		
@@ -359,7 +374,7 @@ void Client::slotProcessCommands()
 			
 			newGame();
 			//
-			mCentralCards = new CentralCards;
+			//mCentralCards = new CentralCards;
 			//
 			emit signalPlayerScoresChanged( getScores() );
 			emit signalOpponentScoresChanged( 0 );
@@ -432,8 +447,9 @@ void Client::slotSelectedCardId( int id )
 		setCloseButtonVisible( false );
 	}
 	
-	if( getTrumpCard().isSelectable() ){
-		getTrumpCard().setSelectable( false );
+	//if( getTrumpCard().isSelectable() ){
+	if( !getTrumpCard()->isEmpty() && getTrumpCard()->getCard()->isSelectable() ){
+		getTrumpCard()->getCard()->setSelectable( false );
 		emit signalTrumpCardSelectableChanged( false );
 	}
 	
@@ -444,19 +460,22 @@ void Client::slotSelectedTrumpCard()
 {
 	kDebug() << "Selected trump card.";
 	
-	int ret = changeTrumpCard();
+	//int ret = changeTrumpCard();
+	int ret = changeTrumpCard( getTrumpCard() );
 	//emit signalNewPlayerCard( ret, getCard(ret).getCardText( mTypeOfCards ) );
 	//emit signalNewPlayerCard( ret, getCard(ret).getCardText() );
 	emit signalNewPlayerCard( ret, getCard(ret)->getCardText() );
 	//emit signalNewTrumpCard( getTrumpCard().getCardText( mTypeOfCards ) );
-	emit signalNewTrumpCard( getTrumpCard().getCardText() );
+	emit signalNewTrumpCard( getTrumpCard()->getCard()->getCardText() );
 	emit signalTrumpCardSelectableChanged( false );
 	
-	if( haveRegularMarriages() ){
+	//if( haveRegularMarriages( mTrumpCard ) ){
+	if( haveRegularMarriages( mTrumpCard ) ){
 		setTwentyButtonVisible( true );
 	}
 	
-	if( haveTrumpMarriages() ){
+	//if( haveTrumpMarriages() ){
+	if( haveTrumpMarriages( mTrumpCard ) ){
 		setFortyButtonVisible( true );
 	}
 	
@@ -481,10 +500,10 @@ void Client::slotCloseButtonClicked()
 	setCloseButtonVisible( false );
 	emit signalCloseDeck();
 	
-	kDebug() << getTrumpCard().isSelectable();
-	if( getTrumpCard().isSelectable() ){
-		getTrumpCard().setSelectable( false );
-		emit signalTrumpCardSelectableChanged( getTrumpCard().isSelectable() );
+	kDebug() << getTrumpCard()->getCard()->isSelectable();
+	if( getTrumpCard()->getCard()->isSelectable() ){
+		getTrumpCard()->getCard()->setSelectable( false );
+		emit signalTrumpCardSelectableChanged( getTrumpCard()->getCard()->isSelectable() );
 	}
 	
 	sendCommand( CLOSE_BUTTON_CLICKED_COMMAND );

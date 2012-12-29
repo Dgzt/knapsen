@@ -1,5 +1,6 @@
 #include <KDE/KDebug>
 #include "centralcards.h"
+#include "trumpcard.h"
 #include "player.h"
 
 Player::Player( QObject* parent ): 
@@ -13,7 +14,7 @@ Player::Player( QObject* parent ):
 	//
 	mTricks( 0 ),
 	mScores( 0 ),
-	mTrumpCard(),
+	//mTrumpCard(),
 	mTwentyButtonVisible( false ),
 	mFortyButtonVisible( false ),
 	mCloseButtonVisible( false )
@@ -65,22 +66,20 @@ void Player::setNumberOfCardsInHand( int size )
 
 /*int Player::addNewCard( Card card )
 {
-	for( int i = 0; i < mCards.size(); ++i ){
-		if( !mCards.at( i ).isValid() ){
-			mCards[ i ] = card;
-			//emit signalNewPlayerCard();
-			return i;
-		}
-	}
-	
-	return -1;
-}*/
-
-int Player::addNewCard( Card card )
-{
 	for( int i = 0; i < mNumberOfCardsInHand; ++i ){
 		if( mCards[ i ] == 0 ){
 			mCards[ i ] = new Card( card.getValue() );
+			return i;
+		}
+	}
+	return -1;
+}*/
+
+int Player::addNewCard( Card *card )
+{
+	for( int i = 0; i < mNumberOfCardsInHand; ++i ){
+		if( mCards[ i ] == 0 ){
+			mCards[ i ] = card;
 			return i;
 		}
 	}
@@ -97,15 +96,15 @@ void Player::removeCard( int id )
 {
 	int ret = -1;
 	
-	for( int i = 0; i < mCards.size(); ++i ){
+	for( int i = 0; i < mNumberOfCardsInHand; ++i ){
 		
-		if( mCards.at(i).isValid() && mCards.at(i).getCardSuit() == mTrumpCardSuit && mCards.at(i).getCardType() == mLowestCardType ){
+		if( mCards[i] != 0 && mCards[i]->getCardSuit() == mTrumpCardSuit && mCards[i]->getCardType() == mLowestCardType ){
 			kDebug() << i;
 			
 			Card tmpCard = mTrumpCard;
-			mTrumpCard = mCards.at(i);
+			mTrumpCard = Card( mCards[i]->getValue() );
 			removeCard( i );
-			ret = addNewCard( tmpCard );
+			ret = addNewCard( new Card( tmpCard.getValue() ) );
 			
 			break;
 		}
@@ -117,27 +116,23 @@ void Player::removeCard( int id )
 	return ret;
 }*/
 
-int Player::changeTrumpCard()
+int Player::changeTrumpCard( TrumpCard *trumpCard )
 {
+	//This value will be modify. Only for don't write warning the compiler.
 	int ret = -1;
 	
 	for( int i = 0; i < mNumberOfCardsInHand; ++i ){
-		
-		if( mCards[i] != 0 && mCards[i]->getCardSuit() == mTrumpCardSuit && mCards[i]->getCardType() == mLowestCardType ){
+		if( mCards[i] != 0 && mCards[i]->getCardSuit() == trumpCard->getCardSuit() && mCards[i]->getCardType() == mLowestCardType ){
 			kDebug() << i;
 			
-			Card tmpCard = mTrumpCard;
-			mTrumpCard = Card( mCards[i]->getValue() );
-			removeCard( i );
-			ret = addNewCard( tmpCard );
+			Card *tmpCard = trumpCard->getCard();
+			trumpCard->addNewCard( mCards[i] );
+			mCards[i]=tmpCard;
 			
 			break;
 		}
-		
 	}
 	
-	mTrumpCard.setSelectable( false );
-
 	return ret;
 }
 
@@ -161,12 +156,13 @@ void Player::setSelectableAllCards( bool enabled )
 	}
 }
 
-void Player::setSelectableCertainCards( CentralCards *centralCards )
+void Player::setSelectableCertainCards( CentralCards *centralCards, TrumpCard *trumpCard )
 {
 	//Set true, which cards equal type whit central card
 	if( setSelectableCardsWhatEqualSuit( centralCards->getCard( 0 ).getCardSuit() ) == false ){
 		//If have not cards which equal type whith central card, then set true, which equal type whith trump card 
-		if( setSelectableCardsWhatEqualSuit( mTrumpCardSuit ) == false ){
+		//if( setSelectableCardsWhatEqualSuit( mTrumpCardSuit ) == false ){
+		if( setSelectableCardsWhatEqualSuit( trumpCard->getCardSuit() ) == false ){
 			//If have not that cards, then equal all card
 			setSelectableAllCards( true );
 			
@@ -202,12 +198,39 @@ void Player::setSelectableCertainCards( CentralCards *centralCards )
 	}
 }*/
 
-void Player::setSelectableRegularMarriagesCards()
+/*void Player::setSelectableRegularMarriagesCards()
 {
 	for( int i = 0; i < mNumberOfCardsInHand; ++i ){
 		
 		if( mCards[ i ] != 0 && 
 			mCards[ i ]->getCardSuit() != mTrumpCardSuit && 
+			mCards[ i ]->getCardType() == Card::King
+		){
+			for( int j = 0; j < mNumberOfCardsInHand; ++j ){
+				
+				if( mCards[ j ] != 0 &&
+					mCards[ j ]->getCardSuit() == mCards[ i ]->getCardSuit() &&
+					mCards[ j ]->getCardType() == Card::Queen
+					
+				){
+					mCards[ i ]->setSelectable( true );
+					mCards[ j ]->setSelectable( true );
+					emit signalPlayerCardSelectableChanged( i, mCards[ i ]->isSelectable() );
+					emit signalPlayerCardSelectableChanged( j, mCards[ j ]->isSelectable() );
+				}
+				
+			}
+		}
+		
+	}
+}*/
+
+void Player::setSelectableRegularMarriagesCards( TrumpCard *trumpCard )
+{
+	for( int i = 0; i < mNumberOfCardsInHand; ++i ){
+		
+		if( mCards[ i ] != 0 && 
+			mCards[ i ]->getCardSuit() != trumpCard->getCardSuit() && 
 			mCards[ i ]->getCardType() == Card::King
 		){
 			for( int j = 0; j < mNumberOfCardsInHand; ++j ){
@@ -256,12 +279,12 @@ void Player::setSelectableRegularMarriagesCards()
 	}
 }*/
 
-void Player::setSelectableTrumpMarriagesCards()
+void Player::setSelectableTrumpMarriagesCards( TrumpCard *trumpCard )
 {
 	for( int i = 0; i < mNumberOfCardsInHand; ++i ){
 		
 		if( mCards[ i ] != 0 && 
-			mCards[ i ]->getCardSuit() == mTrumpCardSuit && 
+			mCards[ i ]->getCardSuit() == trumpCard->getCardSuit() && 
 			mCards[ i ]->getCardType() == Card::King
 		){
 			for( int j = 0; j < mNumberOfCardsInHand; ++j ){
@@ -340,7 +363,7 @@ void Player::newRound()
 	}
 	
 	//Clear trump Card
-	setTrumpCard( Card() );
+	//setTrumpCard( Card() );
 	
 	//Clear tricks
 	setTricks( 0 );
@@ -404,12 +427,12 @@ int Player::getPositionOfPairOfCard( Card card )
 	return ret;
 }*/
 
-bool Player::haveRegularMarriages() const
+bool Player::haveRegularMarriages( TrumpCard *trumpCard ) const
 {
 	bool ret = false;
 	
 	for( int i = 0; i < mNumberOfCardsInHand; ++i ){
-		if( mCards[ i ] != 0 && mCards[ i ]->getCardSuit() != mTrumpCardSuit && mCards[ i ]->getCardType() == Card::King ){
+		if( mCards[ i ] != 0 && mCards[ i ]->getCardSuit() != trumpCard->getCardSuit() && mCards[ i ]->getCardType() == Card::King ){
 			
 			for( int j = 0; j < mNumberOfCardsInHand; ++j ){
 				if( mCards[j] != 0 && mCards[j]->getCardType() == Card::Queen && mCards[j]->getCardSuit() == mCards[i]->getCardSuit() ){
@@ -442,12 +465,31 @@ bool Player::haveRegularMarriages() const
 	return ret;
 }*/
 
-bool Player::haveTrumpMarriages() const
+/*bool Player::haveTrumpMarriages() const
 {
 	bool ret = false;
 	
 	for( int i = 0; i < mNumberOfCardsInHand; ++i ){
 		if( mCards[ i ] != 0 && mCards[ i ]->getCardSuit() == mTrumpCardSuit && mCards[ i ]->getCardType() == Card::King ){
+			
+			for( int j = 0; j < mNumberOfCardsInHand; ++j ){
+				if( mCards[j] != 0 && mCards[j]->getCardType() == Card::Queen && mCards[j]->getCardSuit() == mCards[i]->getCardSuit() ){
+					ret = true;
+				}
+			}
+			
+		}
+	}
+
+	return ret;
+}*/
+
+bool Player::haveTrumpMarriages( TrumpCard *trumpCard ) const
+{
+	bool ret = false;
+	
+	for( int i = 0; i < mNumberOfCardsInHand; ++i ){
+		if( mCards[ i ] != 0 && mCards[ i ]->getCardSuit() == trumpCard->getCardSuit() && mCards[ i ]->getCardType() == Card::King ){
 			
 			for( int j = 0; j < mNumberOfCardsInHand; ++j ){
 				if( mCards[j] != 0 && mCards[j]->getCardType() == Card::Queen && mCards[j]->getCardSuit() == mCards[i]->getCardSuit() ){
@@ -477,13 +519,28 @@ bool Player::haveTrumpMarriages() const
 	return canChange;
 }*/
 
-bool Player::canChangeTrumpCard() const
+/*bool Player::canChangeTrumpCard() const
 {
 	bool canChange = false;
 	
 	for( int i = 0; i < mNumberOfCardsInHand; ++i ){
 		
 		if( mCards[i] != 0 && mCards[i]->getCardSuit() == mTrumpCardSuit && mCards[i]->getCardType() == mLowestCardType ){
+			canChange = true;
+		}
+		
+	}
+	
+	return canChange;
+}*/
+
+bool Player::canChangeTrumpCard( TrumpCard *trumpCard ) const
+{
+	bool canChange = false;
+	
+	for( int i = 0; i < mNumberOfCardsInHand; ++i ){
+		
+		if( mCards[i] != 0 && mCards[i]->getCardSuit() == trumpCard->getCardSuit() && mCards[i]->getCardType() == mLowestCardType ){
 			canChange = true;
 		}
 		
@@ -513,7 +570,7 @@ void Player::twentyButtonClicked()
 	}
 	
 	setSelectableAllCards( false );
-	setSelectableRegularMarriagesCards();
+	//setSelectableRegularMarriagesCards();             //Ez meg nincs megoldva a trump card miatt
 }
 
 void Player::fortyButtonClicked()
@@ -525,7 +582,7 @@ void Player::fortyButtonClicked()
 	}
 	
 	setSelectableAllCards( false );
-	setSelectableTrumpMarriagesCards();
+	//setSelectableTrumpMarriagesCards();              //Ez meg nincs megoldva a trump card miatt
 }
 
 /*void Player::newCommand( QString command )
@@ -687,9 +744,9 @@ void Player::newCommand( QString command )
 					setCloseButtonVisible( false );
 				}
 				
-				if( getTrumpCard().isSelectable() ){
+				/*if( getTrumpCard().isSelectable() ){
 					getTrumpCard().setSelectable( false );
-				}
+				}*/
 				
 				//Card selectedCard = getCard( ret );
 				Card selectedCard = Card( getCard( ret )->getValue() );
@@ -736,9 +793,9 @@ void Player::newCommand( QString command )
 		if( isCloseButtonVisible() ){
 			setCloseButtonVisible( false );
 			
-			if( getTrumpCard().isSelectable() ){
+			/*if( getTrumpCard().isSelectable() ){
 				getTrumpCard().setSelectable( false );
-			}
+			}*/
 			
 			emit signalCloseButtonClicked();
 		}else{
@@ -747,7 +804,7 @@ void Player::newCommand( QString command )
 
 	}
 	
-	if( getCommandPartOfCommand( command ) == CHANGE_TRUMP_CARD_COMMAND ){
+	/*if( getCommandPartOfCommand( command ) == CHANGE_TRUMP_CARD_COMMAND ){
 		kDebug() << getName() << "Change trump card.";
 		
 		changeTrumpCard();
@@ -761,6 +818,23 @@ void Player::newCommand( QString command )
 		}
 		
 		emit signalChangedTrumpCard( mTrumpCard );
+	}*/
+	
+	if( getCommandPartOfCommand( command ) == CHANGE_TRUMP_CARD_COMMAND ){
+		kDebug() << getName() << "Change trump card.";
+		
+		//changeTrumpCard();
+		emit signalChangedTrumpCard();
+		
+		/*if( haveRegularMarriages() ){
+			setTwentyButtonVisible( true );
+		}
+		
+		if( haveTrumpMarriages() ){
+			setFortyButtonVisible( true );
+		}*/
+		
+		//emit signalChangedTrumpCard( mTrumpCard );
 	}
 	
 	if( getCommandPartOfCommand( command ) == START_NEXT_ROUND_COMMAND ){
@@ -847,23 +921,43 @@ void Player::sendNumberOfCardsInHand( int size )
 	sendCommand( NUMBER_OF_CARDS_IN_HAND_COMMAND+QString::number( size ) );
 }
 
-void Player::sendNewCard( const Card card )
+/*void Player::sendNewCard( const Card card )
 {
 	int id = addNewCard( card );
 	
 	sendCommand( NEW_PLAYER_CARD_COMMAND+QString::number( card.getValue() ) );
 	sendNewOpponentCard( id );
+}*/
+
+void Player::sendNewCard( Card *card )
+{
+	int id = addNewCard( card );
+	
+	//sendCommand( NEW_PLAYER_CARD_COMMAND+QString::number( card.getValue() ) );
+	sendCommand( NEW_PLAYER_CARD_COMMAND+QString::number( getCard( id )->getValue() ) );
+	sendNewOpponentCard( id );
 }
 
-void Player::sendNewTrumpCard( const Card trumpCard )
+/*void Player::sendNewTrumpCard( const Card trumpCard )
 {
 	setTrumpCard( trumpCard );
 	sendCommand( NEW_TRUMP_CARD_COMMAND+QString::number( mTrumpCard.getValue() ) );
+}*/
+
+void Player::sendNewTrumpCard( TrumpCard *trumpCard )
+{
+	//setTrumpCard( trumpCard );
+	sendCommand( NEW_TRUMP_CARD_COMMAND+QString::number( trumpCard->getCard()->getValue() ) );
 }
+
+/*void Player::sendClearTrumpCard()
+{
+	clearTrumpCard();
+	sendCommand( CLEAR_TRUMP_CARD_COMMAND );
+}*/
 
 void Player::sendClearTrumpCard()
 {
-	clearTrumpCard();
 	sendCommand( CLEAR_TRUMP_CARD_COMMAND );
 }
 
@@ -876,9 +970,9 @@ void Player::sendSelectableAllCards()
 	mOpponent->sendCommand( OPPONENT_IN_ACTION_COMMAND );
 }
 
-void Player::sendSelectableCertainCards( CentralCards *centralCards )
+void Player::sendSelectableCertainCards( CentralCards *centralCards, TrumpCard *trumpCard )
 {
-	setSelectableCertainCards( centralCards );
+	setSelectableCertainCards( centralCards, trumpCard );
 	sendCommand( SELECTABLE_CERTAIN_CARDS_COMMAND );
 	
 	mOpponent->sendCommand( OPPONENT_IN_ACTION_COMMAND );

@@ -45,8 +45,8 @@ class Server : public QTcpServer
 	//Deck
 	Deck *mDeck;
 	
-	Card mTrumpCard;
-	//TrumpCard *mTrumpCard;
+	//Card mTrumpCard;
+	TrumpCard *mTrumpCard;
 
 	//Central cards
 	CentralCards *mCentralCards;
@@ -87,7 +87,9 @@ private slots:
 	void slotPlayerTwentyButtonClicked();
 	void slotPlayerFortyButtonClicked();
 	void slotPlayerClickedToCloseButton();
-	void slotPlayerChangedTrumpCard( Card );
+	//void slotPlayerChangedTrumpCard( Card );
+	void slotPlayerChangedTrumpCard( Player* );
+	
 	void slotCheckCentralCards();
 	
 	//

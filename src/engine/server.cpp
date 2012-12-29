@@ -5,7 +5,9 @@
 //
 #include "centralcards.h"
 //
-
+//
+#include "trumpcard.h"
+//
 //
 #include "bot.h"
 //
@@ -44,6 +46,10 @@ Server::Server( QObject* parent ) :
 	mCentralCards = 0;
 	//
 	
+	//
+	mTrumpCard = 0;
+	//
+	
 	mDeck = 0;
 	mPlayerWhoClickedToCloseButtonThisRound = 0;
 	mWaitingMarriage = 0;
@@ -63,6 +69,9 @@ Server::~Server()
 	}
 	if( mCentralCards ){
 		delete mCentralCards;
+	}
+	if( mTrumpCard ){
+		delete mTrumpCard;
 	}
 }
 
@@ -112,7 +121,8 @@ void Server::newRound()
 		
 		//Get trump card
 		if( i == 2 ){
-			mTrumpCard = mDeck->getCard();
+			//mTrumpCard = mDeck->getCard();
+			mTrumpCard->addNewCard( mDeck->getCard() );
 			
 			for( int j = 0; j < mPlayerList.size(); ++j ){
 				mPlayerList.at( j )->sendNewTrumpCard( mTrumpCard );
@@ -124,17 +134,20 @@ void Server::newRound()
 	
 	Player* currentPlayer = mGameSequence->getCurrentPlayer();
 	
-	if( currentPlayer->haveRegularMarriages() ){
+	//if( currentPlayer->haveRegularMarriages() ){
+	if( currentPlayer->haveRegularMarriages( mTrumpCard ) ){
 		kDebug() << currentPlayer->getName() << "have regular marriages.";
 		currentPlayer->sendTwentyButtonVisible();
 	}
 	
-	if( currentPlayer->haveTrumpMarriages() ){
+	//if( currentPlayer->haveTrumpMarriages() ){
+	if( currentPlayer->haveTrumpMarriages( mTrumpCard ) ){
 		kDebug() << currentPlayer->getName() << "have trump marriages.";
 		currentPlayer->sendFortyButtonVisible();
 	}
 	
-	if( currentPlayer->canChangeTrumpCard() ){
+	//if( currentPlayer->canChangeTrumpCard() ){
+	if( currentPlayer->canChangeTrumpCard( mTrumpCard ) ){
 		kDebug() << currentPlayer->getName() << "can change trump card.";
 		currentPlayer->sendSelectableTrumpCard();
 	}
@@ -264,7 +277,7 @@ void Server::slotNewPlayer( Player* player )
 		connect( player, SIGNAL( signalTwentyButtonClicked() ),			this, SLOT( slotPlayerTwentyButtonClicked() ) );
 		connect( player, SIGNAL( signalFortyButtonClicked() ),			this, SLOT( slotPlayerFortyButtonClicked() ) );
 		connect( player, SIGNAL( signalCloseButtonClicked() ),			this, SLOT( slotPlayerClickedToCloseButton() ) );
-		connect( player, SIGNAL( signalChangedTrumpCard( Card ) ),		this, SLOT( slotPlayerChangedTrumpCard( Card ) ) );
+		//connect( player, SIGNAL( signalChangedTrumpCard( Card ) ),		this, SLOT( slotPlayerChangedTrumpCard( Card ) ) );
 		connect( player, SIGNAL( signalStartNextRound( Player* ) ),		this, SLOT( slotPlayerWantStartNextRound( Player* ) ) );
 		connect( player, SIGNAL( signalStartNextGame( Player* ) ),		this, SLOT( slotPlayerWantStartNextGame( Player* ) ) );
 		
@@ -452,7 +465,7 @@ void Server::slotPlayerSelectedCard( Card selectedCard, int cardPosition )
 			nextPlayer->sendSelectableAllCards();
 		}else{ // mDeck->getDeckSize() == 0
 			//nextPlayer->sendSelectableCertainCards();
-			nextPlayer->sendSelectableCertainCards( mCentralCards );
+			nextPlayer->sendSelectableCertainCards( mCentralCards, mTrumpCard );
 		}
 		
 		//Show opponent's arrow and send commands end
@@ -501,13 +514,31 @@ void Server::slotPlayerClickedToCloseButton()
 	mPlayerWhoClickedToCloseButtonThisRound = mGameSequence->getCurrentPlayer();
 }
 
-void Server::slotPlayerChangedTrumpCard( Card newTrumpCard )
+/*void Server::slotPlayerChangedTrumpCard( Card newTrumpCard )
 {
 	mTrumpCard = newTrumpCard;
 	
 	for( int i = 0; i < mPlayerList.size(); ++i ){
 		
 		if( mPlayerList.at(i) != mGameSequence->getCurrentPlayer() ){
+			mPlayerList.at(i)->sendNewTrumpCard( mTrumpCard );
+		}
+		
+	}
+}*/
+
+void Server::slotPlayerChangedTrumpCard( Player *player )
+{
+	//Check
+	if( !player->canChangeTrumpCard( mTrumpCard ) ){
+		kDebug() << "ERROR";
+	}
+	
+	/*int pos = */player->changeTrumpCard( mTrumpCard );
+	
+	for( int i = 0; i < mPlayerList.size(); ++i ){
+		
+		if( mPlayerList.at(i) != player ){
 			mPlayerList.at(i)->sendNewTrumpCard( mTrumpCard );
 		}
 		
@@ -540,9 +571,15 @@ void Server::slotCheckCentralCards()
 		currentPlayerStartNextTurn = true;
 	}else if( mCentralCards.at(0).getCardSuit() == mCentralCards.at(1).getCardSuit() ){
 	*/	
-	if( mTrumpCard.getCardSuit() == centralCard0Suit && mTrumpCard.getCardSuit() != centralCard1Suit ){
+	/*if( mTrumpCard.getCardSuit() == centralCard0Suit && mTrumpCard.getCardSuit() != centralCard1Suit ){
 		currentPlayerStartNextTurn = false;
 	}else if( mTrumpCard.getCardSuit() != centralCard0Suit && mTrumpCard.getCardSuit() == centralCard1Suit ){
+		currentPlayerStartNextTurn = true;
+	}else if( centralCard0Suit == centralCard1Suit ){
+	*/
+	if( mTrumpCard->getCard()->getCardSuit() == centralCard0Suit && mTrumpCard->getCard()->getCardSuit() != centralCard1Suit ){
+		currentPlayerStartNextTurn = false;
+	}else if( mTrumpCard->getCard()->getCardSuit() != centralCard0Suit && mTrumpCard->getCard()->getCardSuit() == centralCard1Suit ){
 		currentPlayerStartNextTurn = true;
 	}else if( centralCard0Suit == centralCard1Suit ){
 	
@@ -598,9 +635,11 @@ void Server::slotCheckCentralCards()
 				if( mDeck->getDeckSize() > 0 ){
 					mGameSequence->getNextPlayer()->sendNewCard( mDeck->getCard() );
 				}else{
-					mGameSequence->getNextPlayer()->sendNewCard( mTrumpCard );
-					mTrumpCard = Card();
-				
+					//mGameSequence->getNextPlayer()->sendNewCard( mTrumpCard );
+					mGameSequence->getNextPlayer()->sendNewCard( mTrumpCard->getCard() );
+					//mTrumpCard = Card();
+					mTrumpCard->clearTrumpCard();
+					
 					for( int i = 0; i < mPlayerList.size(); ++i ){
 						mPlayerList.at( i )->sendClearTrumpCard();
 					}
@@ -612,17 +651,20 @@ void Server::slotCheckCentralCards()
 		
 		currentPlayer->sendSelectableAllCards();
 		
-		if( currentPlayer->haveRegularMarriages() ){
+		//if( currentPlayer->haveRegularMarriages() ){
+		if( currentPlayer->haveRegularMarriages( mTrumpCard ) ){
 			kDebug() << currentPlayer->getName() << "have regular marriages.";
 			currentPlayer->sendTwentyButtonVisible();
 		}
 	
-		if( currentPlayer->haveTrumpMarriages() ){
+		//if( currentPlayer->haveTrumpMarriages() ){
+		if( currentPlayer->haveTrumpMarriages( mTrumpCard ) ){
 			kDebug() << currentPlayer->getName() << "have trump marriages.";
 			currentPlayer->sendFortyButtonVisible();
 		}
 		
-		if( currentPlayer->canChangeTrumpCard() ){
+		//if( currentPlayer->canChangeTrumpCard() ){
+		if( currentPlayer->canChangeTrumpCard( mTrumpCard ) ){
 			kDebug() << currentPlayer->getName() << "can change trump card.";
 			currentPlayer->sendSelectableTrumpCard();
 		}
@@ -743,8 +785,13 @@ void Server::startGame()
 	kDebug() << "Start game.";
 	
 	//Initialize deck
-	mDeck = new Deck( mSizeOfDeck, mTypeOfCards );
+	//mDeck = new Deck( mSizeOfDeck, mTypeOfCards );
+	mDeck = new Deck( mSizeOfDeck );
 	//mDeck->buildDeck();
+	
+	//
+	mTrumpCard = new TrumpCard;
+	//
 	
 	//To all players
 	for( int i = 0; i < mPlayerList.size(); ++i ){
