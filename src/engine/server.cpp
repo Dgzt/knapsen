@@ -389,8 +389,10 @@ void Server::slotPlayerSelectedCard( Card selectedCard, int cardPosition )
 		if( mTwentyButtonClickedThisTurn ){
 			kDebug() << "Pair this card position:" << currentPlayer->getPositionOfPairOfCard( selectedCard );
 			int posOfPairOfCard = currentPlayer->getPositionOfPairOfCard( selectedCard );
+			//nextPlayer->sendVisibleOpponentCards( cardPosition, selectedCard, posOfPairOfCard, currentPlayer->getCard( posOfPairOfCard ) );
 			nextPlayer->sendVisibleOpponentCards( cardPosition, selectedCard, posOfPairOfCard, currentPlayer->getCard( posOfPairOfCard ) );
 		
+			
 			//
 			if( currentPlayer->getTricks() > 0 ){
 				
@@ -413,7 +415,9 @@ void Server::slotPlayerSelectedCard( Card selectedCard, int cardPosition )
 		if( mFortyButtonClickedThisTurn ){
 			kDebug() << "Pair this card position:" << currentPlayer->getPositionOfPairOfCard( selectedCard );
 			int posOfPairOfCard = currentPlayer->getPositionOfPairOfCard( selectedCard );
+			//nextPlayer->sendVisibleOpponentCards( cardPosition, selectedCard, posOfPairOfCard, currentPlayer->getCard( posOfPairOfCard ) );
 			nextPlayer->sendVisibleOpponentCards( cardPosition, selectedCard, posOfPairOfCard, currentPlayer->getCard( posOfPairOfCard ) );
+			
 			
 			//
 			if( currentPlayer->getTricks() > 0 ){
@@ -766,19 +770,10 @@ void Server::startGame()
 		mPlayerList.at( i )->sendInitializeTable();
 	}
 	
-	/*for( int i = 0; i < mPlayerList.size(); ++i ){
-		mPlayerList.at( i )->sendNewGame();
-	}
-	
-	newRound();*/
-	
 	newGame();
 	
-	////And finally send start the game
 	for( int i = 0; i < mPlayerList.size(); ++i ){
-		//mPlayerList.at( i )->sendStartGame();
 		mPlayerList.at( i )->sendCommandsEnd();
 	}
-	
-	
+
 }

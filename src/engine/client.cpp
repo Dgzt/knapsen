@@ -414,7 +414,9 @@ void Client::slotSelectedCardId( int id )
 {
 	kDebug() << "Selected card:" << id;
 	setSelectableAllCards( false );
-	int pos = mCentralCards->add( getCard( id ) );
+	//int pos = mCentralCards->add( getCard( id ) );
+	int pos = mCentralCards->add( Card( getCard( id )->getValue() ) );
+	
 	emit signalNewCentralCard( pos, mCentralCards->getCard( pos ).getCardText() );
 	removeCard( id );
 	
@@ -444,7 +446,8 @@ void Client::slotSelectedTrumpCard()
 	
 	int ret = changeTrumpCard();
 	//emit signalNewPlayerCard( ret, getCard(ret).getCardText( mTypeOfCards ) );
-	emit signalNewPlayerCard( ret, getCard(ret).getCardText() );
+	//emit signalNewPlayerCard( ret, getCard(ret).getCardText() );
+	emit signalNewPlayerCard( ret, getCard(ret)->getCardText() );
 	//emit signalNewTrumpCard( getTrumpCard().getCardText( mTypeOfCards ) );
 	emit signalNewTrumpCard( getTrumpCard().getCardText() );
 	emit signalTrumpCardSelectableChanged( false );

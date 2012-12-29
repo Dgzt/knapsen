@@ -108,9 +108,11 @@ void Bot::slotSelectCard()
 			
 			for( int i = 0; i < getNumberOfCardsInHand(); ++i ){
 				
-				Card card = getCard( i );
+				//Card card = getCard( i );
+				Card *card = getCard( i );
 				
-				if( card.isSelectable() && card.getCardType() == Card::King ){
+				//if( card.isSelectable() && card.getCardType() == Card::King ){
+				if( card != 0 && card->isSelectable() && card->getCardType() == Card::King ){
 					
 					slotSelectedCardId( i );
 				}
@@ -126,9 +128,11 @@ void Bot::slotSelectCard()
 			kDebug() << "If bot have ace, and the type is not equal with type of trump card then select ace.";
 			for( int i = 0; i < getNumberOfCardsInHand(); ++i ){
 				
-				Card card = getCard( i );
+				//Card card = getCard( i );
+				Card *card = getCard( i );
 				
-				if( card.isSelectable() && ( card.getCardSuit() != trumpCardSuit ) && ( card.getCardType() == Card::Ace ) ){
+				//if( card.isSelectable() && ( card.getCardSuit() != trumpCardSuit ) && ( card.getCardType() == Card::Ace ) ){
+				if( card != 0 && card->isSelectable() && ( card->getCardSuit() != trumpCardSuit ) && ( card->getCardType() == Card::Ace ) ){
 					slotSelectedCardId( i );
 					return;
 				}
@@ -138,9 +142,11 @@ void Bot::slotSelectCard()
 			kDebug() << "If bot have ten, and the type is not equal type of trump card then select ten.";
 			for( int i = 0; i < getNumberOfCardsInHand(); ++i ){
 				
-				Card card = getCard( i );
+				//Card card = getCard( i );
+				Card *card = getCard( i );
 				
-				if( card.isSelectable() && ( card.getCardSuit() != trumpCardSuit ) && ( card.getCardType() == Card::Ten ) ){
+				//if( card.isSelectable() && ( card.getCardSuit() != trumpCardSuit ) && ( card.getCardType() == Card::Ten ) ){
+				if( card != 0 && card->isSelectable() && ( card->getCardSuit() != trumpCardSuit ) && ( card->getCardType() == Card::Ten ) ){
 					slotSelectedCardId( i );
 					return;
 				}
@@ -150,9 +156,11 @@ void Bot::slotSelectCard()
 			kDebug() << "If bot have king, and the pair of king was in the central cards _or_ the deck of cards count 0 then select king.";
 			for( int i = 0; i < getNumberOfCardsInHand(); ++i ){
 				
-				Card card = getCard( i );
+				//Card card = getCard( i );
+				Card *card = getCard( i );
 				
-				if( card.isSelectable() && ( card.getCardType() == Card::King ) && ( getSizeOfDeckNow() == 0 || getPairOfKingWasInCentralCards( card.getCardSuit() ) ) ){
+				//if( card.isSelectable() && ( card.getCardType() == Card::King ) && ( getSizeOfDeckNow() == 0 || getPairOfKingWasInCentralCards( card.getCardSuit() ) ) ){
+				if( card != 0 && card->isSelectable() && ( card->getCardType() == Card::King ) && ( getSizeOfDeckNow() == 0 || getPairOfKingWasInCentralCards( card->getCardSuit() ) ) ){
 					slotSelectedCardId( i );
 					return;
 				}
@@ -162,9 +170,10 @@ void Bot::slotSelectCard()
 			kDebug() << "If bot have queen, and the pair of queen was in the central cards _or_ the deck of cards count 0 then select queen.";
 			for( int i = 0; i < getNumberOfCardsInHand(); ++i ){
 				
-				Card card = getCard( i );
+				//Card card = getCard( i );
+				Card *card = getCard( i );
 				
-				if( card.isSelectable() && ( card.getCardType() == Card::Queen ) && ( getSizeOfDeckNow() == 0 || getPairOfQueenWasInCentralCards( card.getCardSuit() ) ) ){
+				if( card->isSelectable() && ( card->getCardType() == Card::Queen ) && ( getSizeOfDeckNow() == 0 || getPairOfQueenWasInCentralCards( card->getCardSuit() ) ) ){
 					slotSelectedCardId( i );
 					return;
 				}
@@ -174,9 +183,11 @@ void Bot::slotSelectCard()
 			kDebug() << "If bot have ace, (and the type is equal the type of trump card) then select ace.";
 			for( int i = 0; i < getNumberOfCardsInHand(); ++i ){
 				
-				Card card = getCard( i );
+				//Card card = getCard( i );
+				Card *card = getCard( i );
 				
-				if( card.isSelectable() && card.getCardType() == Card::Ace ){
+				//if( card.isSelectable() && card.getCardType() == Card::Ace ){
+				if( card != 0 && card->isSelectable() && card->getCardType() == Card::Ace ){
 					slotSelectedCardId( i );
 					return;
 				}
@@ -186,9 +197,11 @@ void Bot::slotSelectCard()
 			kDebug() << "If bot have ten, (and the type is equal the type of trump card) then select ten.";
 			for( int i = 0; i < getNumberOfCardsInHand(); ++i ){
 				
-				Card card = getCard( i );
+				//Card card = getCard( i );
+				Card *card = getCard( i );
 				
-				if( card.isSelectable() && card.getCardType() == Card::Ten ){
+				//if( card.isSelectable() && card.getCardType() == Card::Ten ){
+				if( card != 0 && card->isSelectable() && card->getCardType() == Card::Ten ){
 					slotSelectedCardId( i );
 					return;
 				}
@@ -197,15 +210,18 @@ void Bot::slotSelectCard()
 			kDebug() << "If bot have king, and have not pair of king, then select king.";
 			for( int i = 0; i < getNumberOfCardsInHand(); ++i ){
 				
-				Card card = getCard( i );
+				//Card card = getCard( i );
+				Card *card = getCard( i );
 				
-				if( card.isSelectable() && card.getCardType() == Card::King ){
+				//if( card.isSelectable() && card.getCardType() == Card::King ){
+				if( card != 0 && card->isSelectable() && card->getCardType() == Card::King ){
 					
 					bool ok = true;
 					
 					for( int j = 0; j < getNumberOfCardsInHand(); ++j ){
 						
-						if( getCard( j ).isValid() && getCard( j ).getCardSuit() == card.getCardSuit() && getCard( j ).getCardType() == Card::Queen ){
+						//if( getCard( j ).isValid() && getCard( j ).getCardSuit() == card.getCardSuit() && getCard( j ).getCardType() == Card::Queen ){
+						if( getCard( j ) != 0 && getCard( j )->getCardSuit() == card->getCardSuit() && getCard( j )->getCardType() == Card::Queen ){
 							ok = false;
 						}
 						
@@ -223,15 +239,18 @@ void Bot::slotSelectCard()
 			kDebug() << "If bot have queen, and have not pair of queen, then put the queen.";
 			for( int i = 0; i < getNumberOfCardsInHand(); ++i ){
 				
-				Card card = getCard( i );
+				//Card card = getCard( i );
+				Card *card = getCard( i );
 				
-				if( card.isSelectable() && card.getCardType() == Card::Queen ){
-					
+				//if( card.isSelectable() && card.getCardType() == Card::Queen ){
+				if( card != 0 && card->isSelectable() && card->getCardType() == Card::Queen ){
+						
 					bool ok = true;
 					
 					for( int j = 0; j < getNumberOfCardsInHand(); ++j ){
 						
-						if( getCard( j ).isValid() && getCard( j ).getCardSuit() == card.getCardSuit() && getCard( j ).getCardType() == Card::King ){
+						//if( getCard( j ).isValid() && getCard( j ).getCardSuit() == card.getCardSuit() && getCard( j ).getCardType() == Card::King ){
+						if( getCard( j ) != 0 && getCard( j )->getCardSuit() == card->getCardSuit() && getCard( j )->getCardType() == Card::King ){
 							ok = false;
 						}
 						
@@ -248,9 +267,11 @@ void Bot::slotSelectCard()
 			
 			kDebug() << "If bot have jack, then select jack.";
 			for( int i = 0; i < getNumberOfCardsInHand(); ++i ){
-				Card card = getCard( i );
+				//Card card = getCard( i );
+				Card *card = getCard( i );
 				
-				if( card.isSelectable() && card.getCardType() == Card::Jack ){
+				//if( card.isSelectable() && card.getCardType() == Card::Jack ){
+				if( card != 0 && card->isSelectable() && card->getCardType() == Card::Jack ){
 					slotSelectedCardId( i );
 					return;
 				}
@@ -260,9 +281,11 @@ void Bot::slotSelectCard()
 				kDebug() << "If bot have nine, then select nine.";
 				
 				for( int i = 0; i < getNumberOfCardsInHand(); ++i ){
-					Card card = getCard( i );
+					//Card card = getCard( i );
+					Card *card = getCard( i );
 					
-					if( card.isSelectable() && card.getCardType() == Card::Nine ){
+					//if( card.isSelectable() && card.getCardType() == Card::Nine ){
+					if( card != 0 && card->isSelectable() && card->getCardType() == Card::Nine ){
 						slotSelectedCardId( i );
 						return;
 					}
@@ -272,7 +295,8 @@ void Bot::slotSelectCard()
 			kDebug() << "Finally select anything.";
 			for( int i = 0; i < getNumberOfCardsInHand(); ++i ){
 				
-				if( getCard( i ).isSelectable() ){
+				//if( getCard( i ).isSelectable() ){
+				if( getCard( i ) != 0 && getCard( i )->isSelectable() ){
 					slotSelectedCardId( i );
 					return;
 				}
@@ -281,21 +305,23 @@ void Bot::slotSelectCard()
 		}
 		
 		
-	//}else{ // getCentralCardsSize == 1
 	}else{ // !getCentralCard()->isEmpty()
 		kDebug() << "Central cards size: 1";
 		
 		//Card centralCard = getCentralCard( 0 );
 		Card centralCard0 = getCentralCards()->getCard( 0 );
-		Card card;
+		//Card card;
+		Card *card;
+		
 		
 		kDebug() << "-Firstly try select the card, which points of card bigger then points of central card (and the suits of cards are equal).";
 		for( int i = 0; i < getNumberOfCardsInHand(); ++i ){
 			
 			card = getCard( i );
 			
-			if( card.isSelectable() && card.getCardSuit() == centralCard0.getCardSuit() && card.getCardPoint() > centralCard0.getCardPoint() ){
-				
+			//if( card.isSelectable() && card.getCardSuit() == centralCard0.getCardSuit() && card.getCardPoint() > centralCard0.getCardPoint() ){
+			if( card != 0 && card->isSelectable() && card->getCardSuit() == centralCard0.getCardSuit() && card->getCardPoint() > centralCard0.getCardPoint() ){
+			
 				if( getSizeOfDeckNow() == 0 || deckIsClosed ){
 					//If size of deck now is 0 or closed, then can select king or queen card too
 					
@@ -305,9 +331,9 @@ void Bot::slotSelectCard()
 				}else{ //getSizeOfDeckNow() != 0 || deckIsClosed == false
 					//If size of deck is not 0 or closed, then can't select king or queen if these' pairs wasn't in the central card.
 					
-					if( ( card.getCardType() == Card::King && getPairOfKingWasInCentralCards( card.getCardSuit() ) ) ||
-						( card.getCardType() == Card::Queen && getPairOfQueenWasInCentralCards( card.getCardSuit() ) ) ||
-						( card.getCardType() != Card::King && card.getCardType() != Card::Queen ) )
+					if( ( card->getCardType() == Card::King && getPairOfKingWasInCentralCards( card->getCardSuit() ) ) ||
+						( card->getCardType() == Card::Queen && getPairOfQueenWasInCentralCards( card->getCardSuit() ) ) ||
+						( card->getCardType() != Card::King && card->getCardType() != Card::Queen ) )
 					{
 						slotSelectedCardId( i );
 						return;
@@ -330,15 +356,16 @@ void Bot::slotSelectCard()
 			for( int i = 0; i < getNumberOfCardsInHand(); ++i ){
 				card = getCard( i );
 				
-				if( card.isSelectable() && card.getCardSuit() == getTrumpCard().getCardSuit() ){
+				//if( card.isSelectable() && card.getCardSuit() == getTrumpCard().getCardSuit() ){
+				if( card != 0 && card->isSelectable() && card->getCardSuit() == getTrumpCard().getCardSuit() ){
 					
 					if( getSizeOfDeckNow() == 0 || deckIsClosed ){
 						
-						if( !getCard( selectedCardId ).isValid() ){
+						if( !getCard( selectedCardId )->isValid() ){
 							selectedCardId = i;
 						}else{ // getCard( selectedCardId ).isValid()
 							
-							if( card.getCardType() < getCard( selectedCardId ).getCardType() ){
+							if( card->getCardType() < getCard( selectedCardId )->getCardType() ){
 								selectedCardId = i;
 							}
 							
@@ -346,16 +373,16 @@ void Bot::slotSelectCard()
 						
 					}else{
 						
-						if( ( card.getCardType() == Card::King && getPairOfKingWasInCentralCards( card.getCardSuit() ) ) ||
-							( card.getCardType() == Card::Queen && getPairOfQueenWasInCentralCards( card.getCardSuit() ) ) ||
-							( card.getCardType() != Card::King && card.getCardType() != Card::Queen ) )
+						if( ( card->getCardType() == Card::King && getPairOfKingWasInCentralCards( card->getCardSuit() ) ) ||
+							( card->getCardType() == Card::Queen && getPairOfQueenWasInCentralCards( card->getCardSuit() ) ) ||
+							( card->getCardType() != Card::King && card->getCardType() != Card::Queen ) )
 						{
 							//selectedCardId = i;
-							if( !getCard( selectedCardId ).isValid() ){
+							if( !getCard( selectedCardId )->isValid() ){
 								selectedCardId = i;
 							}else{ // getCard( selectedCardId ).isValid()
 							
-								if( card.getCardType() < getCard( selectedCardId ).getCardType() ){
+								if( card->getCardType() < getCard( selectedCardId )->getCardType() ){
 									selectedCardId = i;
 								}
 							
@@ -380,28 +407,30 @@ void Bot::slotSelectCard()
 		int selectedCardId = -1;
 		
 		for( int i = 0; i < getNumberOfCardsInHand(); ++i ){
-			Card card = getCard( i );
+			//Card card = getCard( i );
+			card = getCard( i );
 			
-			if( card.isSelectable() ){
-				
+			//if( card.isSelectable() ){
+			if( card != 0 && card->isSelectable() ){
+					
 				if( selectedCardId == -1 ){
 					selectedCardId = i;
 				}else{ // selectedCardId != -1
 					
 					if( getSizeOfDeckNow() == 0 || deckIsClosed ){
 						
-						if( card.getCardType() < getCard( selectedCardId ).getCardType() ){
+						if( card->getCardType() < getCard( selectedCardId )->getCardType() ){
 							selectedCardId = i;
 						} 
 						
 					}else{ // getSizeOfDeckNow() != 0 && deckIsClosed == false
 						
-						if( ( card.getCardType() == Card::King && getPairOfKingWasInCentralCards( card.getCardSuit() ) ) ||
-							( card.getCardType() == Card::Queen && getPairOfQueenWasInCentralCards( card.getCardSuit() ) ) ||
-							( card.getCardType() != Card::King && card.getCardType() != Card::Queen ) )
+						if( ( card->getCardType() == Card::King && getPairOfKingWasInCentralCards( card->getCardSuit() ) ) ||
+							( card->getCardType() == Card::Queen && getPairOfQueenWasInCentralCards( card->getCardSuit() ) ) ||
+							( card->getCardType() != Card::King && card->getCardType() != Card::Queen ) )
 						{
 							
-							if( card.getCardType() < getCard( selectedCardId ).getCardType() ){
+							if( card->getCardType() < getCard( selectedCardId )->getCardType() ){
 								selectedCardId = i;
 							}
 							

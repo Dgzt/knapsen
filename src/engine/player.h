@@ -105,7 +105,9 @@ class Player : public QTcpSocket
 	//
 	
 	//Player's cards
-	QList<Card> mCards;
+	//QList<Card> mCards;
+	int mNumberOfCardsInHand;
+	Card* *mCards;
 	
 	//Player's tricks
 	int mTricks;
@@ -140,7 +142,8 @@ protected:
 	QString getValuePartOfCommand( QString );
 	
 	void setNumberOfCardsInHand( int );
-	int getNumberOfCardsInHand() const{ return mCards.size(); }
+	//int getNumberOfCardsInHand() const{ return mCards.size(); }
+	int getNumberOfCardsInHand() const{ return mNumberOfCardsInHand; }
 	
 	void newGame();
 	void newRound();
@@ -151,8 +154,8 @@ protected:
 	//
 	
 	int addNewCard( Card );
-	//Card getCard( int id ){ return mCards.at( id ); }
-	void removeCard( int id ){ mCards[ id ] = Card(); }
+	//void removeCard( int id ){ mCards[ id ] = Card(); }
+	void removeCard( int );
 	
 	//Trump card
 	void setTrumpCard( Card trumpCard ) { mTrumpCard = trumpCard; mTrumpCardSuit = mTrumpCard.getCardSuit(); }
@@ -204,7 +207,9 @@ public:
 	
 	int getNumberOfCardsInHandNow();
 	
-	Card getCard( int id ){ return mCards.at( id ); }
+	//Card getCard( int id ){ return mCards.at( id ); }
+	//Card getCard( int );
+	Card* getCard( int );
 	
 	//If this card is king, then return equal suit of queen, 
 	//else this card is queen, then return equal suit of king
@@ -283,7 +288,8 @@ public:
 	//
 	
 	//If the opponent clicked to twenty or forty button, then show that cards
-	void sendVisibleOpponentCards( int, Card, int, Card );
+	//void sendVisibleOpponentCards( int, Card, int, Card );
+	void sendVisibleOpponentCards( int, Card, int, Card* );
 	
 	//
 	void sendNewRound(){ newRound(); sendCommand( NEW_ROUND_COMMAND ); }

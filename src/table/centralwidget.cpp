@@ -181,10 +181,9 @@ void CentralWidget::setInGamePositions()
 	QPoint playerCard0Pos( opponentCard0Pos.x(),
 					  height()-nameDistance-mPlayerName->boundingRect().height()-nameDistance-mCardSize.height() );
 	
-	
 	mOpponentCards[0].setPos( opponentCard0Pos );
 	mPlayerCards[0].setPos( playerCard0Pos );
-	
+
 	for(int i = 1; i < mNumberOfCardsInHand; ++i){
 		opponentCard0Pos.rx() += cardDistance+mCardSize.width();
 		mOpponentCards[i].setPos( opponentCard0Pos );
@@ -583,14 +582,14 @@ void CentralWidget::slotStartGame()
 	
 	//mCardSize = mDeck->boundingRect().size()*SCALE_VALUE;
 	mCardSize = mDeck->boundingRect().size()*mScale;
-	
+
 	setInGamePositions();
-	
+
 	mOpponentName->setVisible( true );
 	mPlayerName->setVisible( true );
 	
 	mDeck->setVisible( true );
-	
+
 	for( int i = 0; i < mNumberOfCardsInHand; ++i ){
 		mPlayerCards[ i ].setVisible( true );
 		mOpponentCards[ i ].setVisible( true );

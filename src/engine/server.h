@@ -17,45 +17,42 @@ class Deck;
 class CentralCards;
 //
 
+//
+class TrumpCard;
+//
+
 class Server : public QTcpServer
 {
-//public:
-	//enum WhoStartGame{ AdminPlayer, OpponentPlayer, RandomPlayer };
-	//enum SizeOfDeck{ Number20, Number24 };
-	//enum CardsInHand{ Number5, Number6 };
-	//enum TypeOfCards{ GermanSuits, FrenchSuits }; In enums.h
-	
-//private:
-	
 	Q_OBJECT
 	
 	GameSequence* mGameSequence;
 	
-	//QString mAdminName;
-	
-	//
+	//The bot, if play multiplayer game, then this is an unused variable(pointer)
 	Bot *mBot;
-	//
 	
-	//SizeOfDeck mSizeOfDeck;
+	//Size of deck, 20 or 24
 	int mSizeOfDeck;
 	
-	//CardsInHand mCardsInHand;
+	//Number of cards in hand, 5 or 6
 	int mNumberOfCardsInHand;
 	
+	//Type of cards, German suits or french suits
 	Knapsen::TypeOfCards mTypeOfCards;
 
+	//The player lists
 	QList<Player*> mPlayerList;
 	
+	//Deck
 	Deck *mDeck;
 	
-	//QString mTrumpCard;
 	Card mTrumpCard;
-	
-	//QList<Card> mCentralCards;
+	//TrumpCard *mTrumpCard;
+
+	//Central cards
 	CentralCards *mCentralCards;
 	
 	//
+	//Live this pointer, when someone clicked to 20 or 40 button
 	QPair<Player*, int> *mWaitingMarriage;
 	//
 	
@@ -71,9 +68,7 @@ class Server : public QTcpServer
 	 */
 	bool mOpponentHaveNotTricksBeforePlayerClickedToCloseButton;
 	
-	
 	Player *mPlayerWhoClickedToCloseButtonThisRound;
-	
 	
 	//
 	QList<Player *> mPlayerListWhoWantResumeGame;
@@ -106,9 +101,6 @@ protected:
 public:
     Server(QObject* parent = 0);
 	~Server();
-	
-	//Set the admin name
-	//void setAdminName( QString adminName ){ mAdminName = adminName; }
 
 	//Set who start the game, the first round
 	//void setWhoStartGame( Knapsen::WhoStartGame whoStartGame ){ mWhoStartGame = whoStartGame; }
