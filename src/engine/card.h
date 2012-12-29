@@ -2,7 +2,7 @@
 #define CARD_H
 
 #include <QtCore/QString>
-#include "enums.h"
+//#include "enums.h"
 
 class Card
 {	
