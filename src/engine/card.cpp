@@ -22,14 +22,14 @@ Card::Card( int value ) :
 	mSelectable( false )
 {}
 
-bool Card::isValid() const
+/*bool Card::isValid() const
 {
 	if( mValue == INVALID_CARD_VALUE ){
 		return false;
 	}
 	
 	return true;
-}
+}*/
 
 QString Card::getCardText(/* Knapsen::TypeOfCards typeOfCards */) const
 {

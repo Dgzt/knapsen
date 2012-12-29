@@ -361,7 +361,8 @@ void Bot::slotSelectCard()
 					
 					if( getSizeOfDeckNow() == 0 || deckIsClosed ){
 						
-						if( !getCard( selectedCardId )->isValid() ){
+						//if( !getCard( selectedCardId )->isValid() ){
+						if( selectedCardId == -1 ){
 							selectedCardId = i;
 						}else{ // getCard( selectedCardId ).isValid()
 							
@@ -378,7 +379,8 @@ void Bot::slotSelectCard()
 							( card->getCardType() != Card::King && card->getCardType() != Card::Queen ) )
 						{
 							//selectedCardId = i;
-							if( !getCard( selectedCardId )->isValid() ){
+							//if( !getCard( selectedCardId )->isValid() ){
+							if( selectedCardId == -1 ){
 								selectedCardId = i;
 							}else{ // getCard( selectedCardId ).isValid()
 							

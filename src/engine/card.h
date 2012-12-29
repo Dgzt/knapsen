@@ -24,7 +24,7 @@ public:
 	
 	int getValue() const{ return mValue; }
 	
-	bool isValid() const;
+	//bool isValid() const;
 	
 	void setSelectable( bool selectable ){ mSelectable = selectable; }
 	
