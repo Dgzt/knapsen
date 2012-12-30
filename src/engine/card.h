@@ -18,13 +18,10 @@ private:
 public:
 	static const int CARD_NUMBERS_WITHOUT_9 = 20;
 	static const int CARD_NUMBERS_WITH_9 = 24;
-	
-	Card();
+
 	Card( int );
 	
 	int getValue() const{ return mValue; }
-	
-	//bool isValid() const;
 	
 	void setSelectable( bool selectable ){ mSelectable = selectable; }
 	

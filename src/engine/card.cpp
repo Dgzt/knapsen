@@ -1,9 +1,6 @@
 #include <KDE/KDebug>
 #include "card.h"
 
-static const int INVALID_CARD_VALUE = -1;
-
-//static const QString GERGMAN_SUIT_CARDS_NAME[ Card::CARD_NUMBERS_WITH_9 ] = {
 static const QString CARDS_NAME[ Card::CARD_NUMBERS_WITH_9 ] = {
 	"1_heart", "king_heart", "queen_heart", "jack_heart", "10_heart", //heart
 	"1_diamond", "king_diamond", "queen_diamond", "jack_diamond", "10_diamond", //diamond
@@ -12,34 +9,14 @@ static const QString CARDS_NAME[ Card::CARD_NUMBERS_WITH_9 ] = {
 	"9_heart",  "9_diamond",  "9_spade", "9_club" //nines
 };
 
-Card::Card() :
-	mValue( INVALID_CARD_VALUE ),
-	mSelectable( false )
-{}
-
 Card::Card( int value ) : 
 	mValue( value ),
 	mSelectable( false )
 {}
 
-/*bool Card::isValid() const
-{
-	if( mValue == INVALID_CARD_VALUE ){
-		return false;
-	}
-	
-	return true;
-}*/
-
 QString Card::getCardText(/* Knapsen::TypeOfCards typeOfCards */) const
-{
-	QString retStr;
-
-	if( mValue != INVALID_CARD_VALUE ){
-		retStr = CARDS_NAME[ mValue ];
-	}
-	
-	return retStr;
+{	
+	return CARDS_NAME[ mValue ];
 }
 
 int Card::getCardPoint() const
