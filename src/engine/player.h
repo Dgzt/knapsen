@@ -100,7 +100,7 @@ class Player : public QTcpSocket
 	QString mName;
 	
 	//The opponent, send to whan player get new card, selected card, etc
-	Player* mOpponent;
+	//Player* mOpponent;
 	
 	//
 	Card::CardType mLowestCardType;
@@ -117,10 +117,6 @@ class Player : public QTcpSocket
 	//Player's scores
 	int mScores;
 	
-	//Trump card
-	//Card mTrumpCard;
-	//Card::CardSuit mTrumpCardSuit;
-	
 	//If this variable is visible, then visible the twenty button
 	bool mTwentyButtonVisible;
 	//If this variable is visible, then visible the forty button
@@ -129,9 +125,6 @@ class Player : public QTcpSocket
 	bool mCloseButtonVisible;
 	
 	virtual void newCommand( QString );
-	
-	//Send to player the new opponent card id
-	void sendNewOpponentCard( int id ){ mOpponent->sendCommand( NEW_OPPONENT_CARD_COMMAND_ID+QString::number( id ) ); }
 	
 	bool setSelectableCardsWhatEqualSuit( Card::CardSuit );
 	
@@ -159,14 +152,7 @@ protected:
 	int addNewCard( Card* );
 	//void removeCard( int id ){ mCards[ id ] = Card(); }
 	void removeCard( int );
-	
-	//Trump card
-	//void setTrumpCard( Card trumpCard ) { mTrumpCard = trumpCard; mTrumpCardSuit = mTrumpCard.getCardSuit(); }
-	//Card& getTrumpCard() { return mTrumpCard; }
-	//void clearTrumpCard() { mTrumpCard = Card(); }
-	//
-	//int changeTrumpCard();
-	//int changeTrumpCard( TrumpCard * );
+
 	
 	//Set selectable OR not selectable all avalibe card
 	void setSelectableAllCards( bool );
@@ -203,7 +189,7 @@ public:
 	~Player();
 	
 	//Set opponent's socket
-	void setOpponent( Player* opponent ){ mOpponent = opponent; }
+	//void setOpponent( Player* opponent ){ mOpponent = opponent; }
 	
 	//Set nickname
 	void setName( QString name ){ mName = name; }
@@ -248,7 +234,8 @@ public:
 	//
 	
 	//Send the opponent's name
-	void sendOpponentName(){ sendCommand( OPPONENT_NAME_COMMAND+mOpponent->getName() ); }
+	//void sendOpponentName(){ sendCommand( OPPONENT_NAME_COMMAND+mOpponent->getName() ); }
+	void sendOpponentName( QString name ){ sendCommand( OPPONENT_NAME_COMMAND+name ); }
 	
 	//Send play with german suits cards or french suits cards
 	void sendTypeOfCard( Knapsen::TypeOfCards );
@@ -264,14 +251,19 @@ public:
 	
 	//Set and send the new card
 	//void sendNewCard( const Card );
-	void sendNewCard( Card* );
+	//void sendNewCard( Card* );
+	int sendNewCard( Card* );
+	
+	//Send to player the new opponent card id
+	void sendNewOpponentCard( int id ){ sendCommand( NEW_OPPONENT_CARD_COMMAND_ID+QString::number( id ) ); }
+	
 	
 	//Set and send the new trump card
 	//void sendNewTrumpCard( const Card );
 	void sendNewTrumpCard( TrumpCard* );
 	
 	//
-	void sendClearTrumpCard();
+	void sendClearTrumpCard(){ sendCommand( CLEAR_TRUMP_CARD_COMMAND ); }
 	//
 	
 	//Set and send enabled all card
@@ -281,13 +273,15 @@ public:
 	void sendSelectableCertainCards( CentralCards *, TrumpCard * );
 	//
 	
+	void sendOpponentInAction(){ sendCommand( OPPONENT_IN_ACTION_COMMAND ); }
+	
 	void sendOpponentSelectedCardId( int id ){ sendCommand( OPPONENT_SELECTED_CARD_ID_COMMAND+QString::number( id ) ); }
 	
 	void sendOpponentAddNewCentralCard( Card );
 	
 	void sendOpponentDisconnected(){ sendCommand( OPPONENT_DISCONNECTED_COMMAND ); }
 	
-	void sendClearCentralCards();
+	void sendClearCentralCards(){ sendCommand( CLEAR_CENTRAL_CARDS_COMMAND ); }
 	
 	void sendTwentyButtonVisible();
 	void sendFortyButtonVisible();

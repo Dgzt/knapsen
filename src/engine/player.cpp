@@ -18,9 +18,7 @@ Player::Player( QObject* parent ):
 	mTwentyButtonVisible( false ),
 	mFortyButtonVisible( false ),
 	mCloseButtonVisible( false )
-{
-	mOpponent = 0;
-	
+{	
 	mCards = 0;
 	
 	connect( this, SIGNAL( readyRead() ), this, SLOT( slotReadyRead() ) );
@@ -46,13 +44,6 @@ QString Player::getValuePartOfCommand( QString text )
 	return text.mid( text.indexOf( '=' )+1 );
 }
 
-/*void Player::setNumberOfCardsInHand( int size )
-{
-	for( int i = 0; i < size; ++i ){
-		mCards.append( Card() );
-	}
-}*/
-
 void Player::setNumberOfCardsInHand( int size )
 {
 	mNumberOfCardsInHand = size;
@@ -63,17 +54,6 @@ void Player::setNumberOfCardsInHand( int size )
 		mCards[ i ] = 0;
 	}
 }
-
-/*int Player::addNewCard( Card card )
-{
-	for( int i = 0; i < mNumberOfCardsInHand; ++i ){
-		if( mCards[ i ] == 0 ){
-			mCards[ i ] = new Card( card.getValue() );
-			return i;
-		}
-	}
-	return -1;
-}*/
 
 int Player::addNewCard( Card *card )
 {
@@ -91,30 +71,6 @@ void Player::removeCard( int id )
 	delete mCards[ id ];
 	mCards[ id ] = 0;
 }
-
-/*int Player::changeTrumpCard()
-{
-	int ret = -1;
-	
-	for( int i = 0; i < mNumberOfCardsInHand; ++i ){
-		
-		if( mCards[i] != 0 && mCards[i]->getCardSuit() == mTrumpCardSuit && mCards[i]->getCardType() == mLowestCardType ){
-			kDebug() << i;
-			
-			Card tmpCard = mTrumpCard;
-			mTrumpCard = Card( mCards[i]->getValue() );
-			removeCard( i );
-			ret = addNewCard( new Card( tmpCard.getValue() ) );
-			
-			break;
-		}
-		
-	}
-	
-	mTrumpCard.setSelectable( false );
-
-	return ret;
-}*/
 
 int Player::changeTrumpCard( TrumpCard *trumpCard )
 {
@@ -135,16 +91,6 @@ int Player::changeTrumpCard( TrumpCard *trumpCard )
 	
 	return ret;
 }
-
-/*void Player::setSelectableAllCards( bool enabled )
-{
-	for( int i = 0; i < mCards.size(); ++i ){
-		if( mCards.at( i ).isValid() ){
-			mCards[ i ].setSelectable( enabled );
-			emit signalPlayerCardSelectableChanged( i, enabled );
-		}
-	}
-}*/
 
 void Player::setSelectableAllCards( bool enabled )
 {
@@ -929,13 +875,22 @@ void Player::sendNumberOfCardsInHand( int size )
 	sendNewOpponentCard( id );
 }*/
 
-void Player::sendNewCard( Card *card )
+/*void Player::sendNewCard( Card *card )
 {
 	int id = addNewCard( card );
 	
 	//sendCommand( NEW_PLAYER_CARD_COMMAND+QString::number( card.getValue() ) );
 	sendCommand( NEW_PLAYER_CARD_COMMAND+QString::number( getCard( id )->getValue() ) );
-	sendNewOpponentCard( id );
+	//sendNewOpponentCard( id );
+}*/
+
+int Player::sendNewCard( Card *card )
+{
+	int id = addNewCard( card );
+	
+	sendCommand( NEW_PLAYER_CARD_COMMAND+QString::number( getCard( id )->getValue() ) );
+	
+	return id;
 }
 
 /*void Player::sendNewTrumpCard( const Card trumpCard )
@@ -956,26 +911,16 @@ void Player::sendNewTrumpCard( TrumpCard *trumpCard )
 	sendCommand( CLEAR_TRUMP_CARD_COMMAND );
 }*/
 
-void Player::sendClearTrumpCard()
-{
-	sendCommand( CLEAR_TRUMP_CARD_COMMAND );
-}
-
 void Player::sendSelectableAllCards()
 {
 	setSelectableAllCards( true );
 	sendCommand( SELECTABLE_ALL_CARDS_COMMAND );
-	
-	//
-	mOpponent->sendCommand( OPPONENT_IN_ACTION_COMMAND );
 }
 
 void Player::sendSelectableCertainCards( CentralCards *centralCards, TrumpCard *trumpCard )
 {
 	setSelectableCertainCards( centralCards, trumpCard );
 	sendCommand( SELECTABLE_CERTAIN_CARDS_COMMAND );
-	
-	mOpponent->sendCommand( OPPONENT_IN_ACTION_COMMAND );
 }
 
 
@@ -989,14 +934,14 @@ void Player::addTricks( int tricks )
 {
 	setTricks( getTricks() + tricks );
 	sendCommand( PLAYER_TRICKS_CHANGED_COMMAND+QString::number( getTricks() ) );
-	mOpponent->sendCommand( OPPONENT_TRICKS_CHANGED_COMMAND+QString::number( getTricks() ) );
+	//mOpponent->sendCommand( OPPONENT_TRICKS_CHANGED_COMMAND+QString::number( getTricks() ) );
 }
 
 void Player::addScores( int scores )
 {
 	setScores( getScores() + scores );
 	sendCommand( PLAYER_SCORES_CHANGED_COMMAND+QString::number( getScores() ) );
-	mOpponent->sendCommand( OPPONENT_SCORES_CHANGED_COMMAND+QString::number( getScores() ) );
+	//mOpponent->sendCommand( OPPONENT_SCORES_CHANGED_COMMAND+QString::number( getScores() ) );
 }
 
 /*void Player::sendVisibleOpponentCards( int card1Pos, Card card1, int card2Pos, Card card2 )
@@ -1011,11 +956,6 @@ void Player::sendVisibleOpponentCards( int card1Pos, Card card1, int card2Pos, C
 	sendCommand( VISIBLE_OPPONENT_CARDS_COMMAND+QString::number( card1Pos )+","+QString::number( card1.getValue() )+","+
 												QString::number( card2Pos )+","+QString::number( card2->getValue() )
 	);
-}
-
-void Player::sendClearCentralCards()
-{
-	sendCommand( CLEAR_CENTRAL_CARDS_COMMAND );
 }
 
 void Player::sendTwentyButtonVisible()

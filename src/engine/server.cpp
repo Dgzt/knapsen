@@ -116,7 +116,14 @@ void Server::newRound()
 	for( int i = 0; i < mNumberOfCardsInHand; ++i ){
 		
 		for( int j = 0; j < mPlayerList.size(); ++j ){
-			mPlayerList.at( j )->sendNewCard( mDeck->getCard() );
+			//mPlayerList.at( j )->sendNewCard( mDeck->getCard() );
+			int cardId = mPlayerList.at( j )->sendNewCard( mDeck->getCard() );
+			
+			for( int k = 0; k < mPlayerList.size(); ++k ){
+				if( mPlayerList.at( k ) != mPlayerList.at( j ) ){
+					mPlayerList.at( k )->sendNewOpponentCard( cardId );
+				}
+			}
 		}
 		
 		//Get trump card
@@ -155,6 +162,12 @@ void Server::newRound()
 	currentPlayer->sendCloseButtonVisible();
 	
 	currentPlayer->sendSelectableAllCards();
+	for( int i = 0; i < mPlayerList.size(); ++i ){
+		if( mPlayerList.at( i ) != currentPlayer ){
+			mPlayerList.at( i )->sendOpponentInAction();
+		}
+	}
+	
 }
 
 void Server::roundOver()
@@ -463,9 +476,19 @@ void Server::slotPlayerSelectedCard( Card selectedCard, int cardPosition )
 		//if( !mClickedToCloseButtonThisRound && mDeck->getDeckSize() > 0 ){
 		if( !mPlayerWhoClickedToCloseButtonThisRound && mDeck->getDeckSize() > 0 ){
 			nextPlayer->sendSelectableAllCards();
+			for( int i = 0; i < mPlayerList.size(); ++i ){
+				if( mPlayerList.at( i ) != currentPlayer ){
+					mPlayerList.at( i )->sendOpponentInAction();
+				}
+			}
 		}else{ // mDeck->getDeckSize() == 0
 			//nextPlayer->sendSelectableCertainCards();
 			nextPlayer->sendSelectableCertainCards( mCentralCards, mTrumpCard );
+			for( int i = 0; i < mPlayerList.size(); ++i ){
+				if( mPlayerList.at( i ) != currentPlayer ){
+					mPlayerList.at( i )->sendOpponentInAction();
+				}
+			}
 		}
 		
 		//Show opponent's arrow and send commands end
@@ -630,14 +653,35 @@ void Server::slotCheckCentralCards()
 		if( !mPlayerWhoClickedToCloseButtonThisRound ){
 			//If the dech have card yet, then add new cards to players, first who won the last turn
 			if( mDeck->getDeckSize() > 0 ){
-				currentPlayer->sendNewCard( mDeck->getCard() );
+				//currentPlayer->sendNewCard( mDeck->getCard() );
+				int cardId = currentPlayer->sendNewCard( mDeck->getCard() );
+				
+				for( int i = 0; i < mPlayerList.size(); ++i ){
+					if( mPlayerList.at( i ) != currentPlayer ){
+						mPlayerList.at( i )->sendNewOpponentCard( cardId );
+					}
+				}
 			
 				if( mDeck->getDeckSize() > 0 ){
-					mGameSequence->getNextPlayer()->sendNewCard( mDeck->getCard() );
+					//mGameSequence->getNextPlayer()->sendNewCard( mDeck->getCard() );
+					cardId = mGameSequence->getNextPlayer()->sendNewCard( mDeck->getCard() );
+					
+					for( int i = 0; i < mPlayerList.size(); ++i ){
+						if( mPlayerList.at( i ) != mGameSequence->getNextPlayer() ){
+							mPlayerList.at( i )->sendNewOpponentCard( cardId );
+						}
+					}
+					
 				}else{
-					//mGameSequence->getNextPlayer()->sendNewCard( mTrumpCard );
-					mGameSequence->getNextPlayer()->sendNewCard( mTrumpCard->getCard() );
-					//mTrumpCard = Card();
+					//mGameSequence->getNextPlayer()->sendNewCard( mTrumpCard->getCard() );
+					cardId = mGameSequence->getNextPlayer()->sendNewCard( mTrumpCard->getCard() );
+					
+					for( int i = 0; i < mPlayerList.size(); ++i ){
+						if( mPlayerList.at( i ) != mGameSequence->getNextPlayer() ){
+							mPlayerList.at( i )->sendNewOpponentCard( cardId );
+						}
+					}
+					
 					mTrumpCard->clearTrumpCard();
 					
 					for( int i = 0; i < mPlayerList.size(); ++i ){
@@ -650,6 +694,11 @@ void Server::slotCheckCentralCards()
 		}
 		
 		currentPlayer->sendSelectableAllCards();
+		for( int i = 0; i < mPlayerList.size(); ++i ){
+			if( mPlayerList.at( i ) != currentPlayer ){
+				mPlayerList.at( i )->sendOpponentInAction();
+			}
+		}
 		
 		//if( currentPlayer->haveRegularMarriages() ){
 		if( currentPlayer->haveRegularMarriages( mTrumpCard ) ){
@@ -785,26 +834,19 @@ void Server::startGame()
 	kDebug() << "Start game.";
 	
 	//Initialize deck
-	//mDeck = new Deck( mSizeOfDeck, mTypeOfCards );
 	mDeck = new Deck( mSizeOfDeck );
-	//mDeck->buildDeck();
-	
-	//
+
 	mTrumpCard = new TrumpCard;
-	//
-	
+
 	//To all players
 	for( int i = 0; i < mPlayerList.size(); ++i ){
 		
-		//Set opponent
+		//Send the opponent player's name
 		for( int j = 0; j < mPlayerList.size(); ++j ){
-			if( j != i ){
-				mPlayerList.at( i )->setOpponent( mPlayerList.at( j ) );
+			if( mPlayerList.at( j ) != mPlayerList.at( i ) ){
+				mPlayerList.at( j )->sendOpponentName( mPlayerList.at( i )->getName() );
 			}
 		}
-		
-		//Send the opponent player's name
-		mPlayerList.at( i )->sendOpponentName();
 		
 		//Send the type of cards
 		mPlayerList.at( i )->sendTypeOfCard( mTypeOfCards );
