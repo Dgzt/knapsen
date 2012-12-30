@@ -286,7 +286,6 @@ void Server::slotNewPlayer( Player* player )
 		
 		mPlayerList.append( player );
 		//connect( player, SIGNAL( signalPlayerDisconnected( Player* ) ),	this, SLOT( slotPlayerDisconnected( Player* ) ) );
-		//connect( player, SIGNAL( signalSelectedCard( Card, int ) ),		this, SLOT( slotPlayerSelectedCard( Card, int ) ) ); 
 		connect( player, SIGNAL( signalSelectedCard( Card*, int ) ),		this, SLOT( slotPlayerSelectedCard( Card*, int ) ) ); 
 		connect( player, SIGNAL( signalTwentyButtonClicked() ),				this, SLOT( slotPlayerTwentyButtonClicked() ) );
 		connect( player, SIGNAL( signalFortyButtonClicked() ),				this, SLOT( slotPlayerFortyButtonClicked() ) );
@@ -582,10 +581,14 @@ void Server::slotPlayerSelectedCard( Card* selectedCard, int cardPosition )
 		nextPlayer->sendOpponentAddNewCentralCard( selectedCard );
 		
 		mGameSequence->setCurrentPlayer( nextPlayer );
+		//
+		currentPlayer = mGameSequence->getCurrentPlayer();
+		//
 		
 		//if( !mClickedToCloseButtonThisRound && mDeck->getDeckSize() > 0 ){
 		if( !mPlayerWhoClickedToCloseButtonThisRound && mDeck->getDeckSize() > 0 ){
-			nextPlayer->sendSelectableAllCards();
+			//nextPlayer->sendSelectableAllCards();
+			currentPlayer->sendSelectableAllCards();
 			for( int i = 0; i < mPlayerList.size(); ++i ){
 				if( mPlayerList.at( i ) != currentPlayer ){
 					mPlayerList.at( i )->sendOpponentInAction();
@@ -593,7 +596,8 @@ void Server::slotPlayerSelectedCard( Card* selectedCard, int cardPosition )
 			}
 		}else{ // mDeck->getDeckSize() == 0
 			//nextPlayer->sendSelectableCertainCards();
-			nextPlayer->sendSelectableCertainCards( mCentralCards, mTrumpCard );
+			//nextPlayer->sendSelectableCertainCards( mCentralCards, mTrumpCard );
+			currentPlayer->sendSelectableCertainCards( mCentralCards, mTrumpCard );
 			for( int i = 0; i < mPlayerList.size(); ++i ){
 				if( mPlayerList.at( i ) != currentPlayer ){
 					mPlayerList.at( i )->sendOpponentInAction();
@@ -602,7 +606,10 @@ void Server::slotPlayerSelectedCard( Card* selectedCard, int cardPosition )
 		}
 		
 		//Show opponent's arrow and send commands end
-		currentPlayer->sendCommandsEnd();
+		//currentPlayer->sendCommandsEnd();
+		for( int i = 0; i < mPlayerList.size(); ++i ){
+			mPlayerList.at( i )->sendCommandsEnd();
+		}
 		
 	}else{ // mCentralCards->isFull()
 		nextPlayer->sendOpponentSelectedCardId( cardPosition );
