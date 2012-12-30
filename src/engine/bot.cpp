@@ -313,7 +313,8 @@ void Bot::slotSelectCard()
 		kDebug() << "Central cards size: 1";
 		
 		//Card centralCard = getCentralCard( 0 );
-		Card centralCard0 = getCentralCards()->getCard( 0 );
+		//Card centralCard0 = getCentralCards()->getCard( 0 );
+		const Card* centralCard0 = getCentralCards()->getCard( 0 );
 		//Card card;
 		Card *card;
 		
@@ -324,7 +325,8 @@ void Bot::slotSelectCard()
 			card = getCard( i );
 			
 			//if( card.isSelectable() && card.getCardSuit() == centralCard0.getCardSuit() && card.getCardPoint() > centralCard0.getCardPoint() ){
-			if( card != 0 && card->isSelectable() && card->getCardSuit() == centralCard0.getCardSuit() && card->getCardPoint() > centralCard0.getCardPoint() ){
+			//if( card != 0 && card->isSelectable() && card->getCardSuit() == centralCard0.getCardSuit() && card->getCardPoint() > centralCard0.getCardPoint() ){
+			if( card != 0 && card->isSelectable() && card->getCardSuit() == centralCard0->getCardSuit() && card->getCardPoint() > centralCard0->getCardPoint() ){
 			
 				if( getSizeOfDeckNow() == 0 || deckIsClosed ){
 					//If size of deck now is 0 or closed, then can select king or queen card too
@@ -354,7 +356,8 @@ void Bot::slotSelectCard()
 		kDebug() << "-Secondly if the suit of central card is not equal with suit of trump card, then select the card, which suit is equal with suit of trump card.";
 		//If suit of centralCard is not equal with suit of trump card
 		//if( getTrumpCard().getCardSuit() != centralCard0.getCardSuit() ){
-		if( getTrumpCard()->getCardSuit() != centralCard0.getCardSuit() ){ 	
+		//if( getTrumpCard()->getCardSuit() != centralCard0.getCardSuit() ){ 	
+		if( getTrumpCard()->getCardSuit() != centralCard0->getCardSuit() ){ 	
 			int selectedCardId = -1;
 			
 			for( int i = 0; i < getNumberOfCardsInHand(); ++i ){

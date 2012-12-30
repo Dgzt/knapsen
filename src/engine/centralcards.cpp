@@ -1,58 +1,103 @@
-//#include <KDE/KDebug>
+#include <KDE/KDebug>
 #include "centralcards.h"
 
 const int MAX_CENTRALCARDS = 2;
 
 CentralCards::CentralCards()
 {
-	mCards = new QList<Card>;
+	kDebug() << "Begin.";
+	
+	mCards = new Card*[ MAX_CENTRALCARDS ];
+	for( int i = 0; i < MAX_CENTRALCARDS; ++i ){
+		mCards[i] = 0;
+	}
+	
+	kDebug() << "End.";
 }
 
 CentralCards::~CentralCards()
 {
+	kDebug() << "Begin.";
+	
+	for( int i = 0; i < MAX_CENTRALCARDS; ++i ){
+		if( mCards[i] != 0 ){
+			delete mCards[i];
+		}
+	}
+	
 	delete mCards;
-	mCards = 0;
+	
+	kDebug() << "End.";
 }
 
-/*void CentralCards::add( Card card )
+int CentralCards::add( Card *card )
 {
-	mCards->append( card );
-}*/
-
-int CentralCards::add( Card card )
-{
-	mCards->append( card );
-
-	return mCards->size()-1;
+	kDebug() << "Begin.";
+	
+	//Default value only for the compiler
+	int pos = -1;
+	
+	for( int i = 0; i < MAX_CENTRALCARDS; ++i ){
+		if( mCards[i] == 0 ){
+			mCards[i] = card;
+			pos = i;
+			break;
+		}
+	}
+	
+	kDebug() << "End.";
+	return pos;
 }
 
 void CentralCards::clear()
 {
-	mCards->clear();
+	kDebug() << "Begin.";
+	
+	for( int i = 0; i < MAX_CENTRALCARDS; ++i ){
+		if( mCards[i] != 0 ){
+			delete mCards[i];
+			mCards[i] = 0;
+		}
+	}
+	
+	kDebug() << "End.";
 }
-
-/*int CentralCards::getSize()
-{
-	return mCards->size();
-}*/
 
 bool CentralCards::isEmpty()
 {
-	if( mCards->size() == 0 ){
-		return true;
-	}//else
-	return false;
+	kDebug() << "Begin.";
+	
+	bool empty = true;
+	
+	for( int i = 0; i < MAX_CENTRALCARDS; ++i ){
+		if( mCards[i] != 0 ){
+			empty = false;
+		}
+	}
+	
+	kDebug() << "End.";
+	return empty;
 }
 
 bool CentralCards::isFull()
 {
-	if( mCards->size() == MAX_CENTRALCARDS ){
-		return true;
-	}//else
-	return false;
+	kDebug() << "Begin.";
+	
+	bool full = true;
+	
+	for( int i = 0; i < MAX_CENTRALCARDS; ++i ){
+		if( mCards[i] == 0 ){
+			full = false;
+		}
+	}
+	
+	kDebug() << "End.";
+	return full;
 }
 
-Card CentralCards::getCard( int pos )
+Card* CentralCards::getCard( int pos )
 {
-	return mCards->at( pos );
+	kDebug() << "Begin.";
+	kDebug() << "End.";
+	return mCards[pos];
 }

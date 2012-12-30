@@ -266,8 +266,10 @@ void Client::slotProcessCommands()
 			int ret = getValuePartOfCommand( commandList.first() ).toInt( &ok );
 			if( ok ){
 				//addNewCentralCard( Card( ret ) );
-				int pos = mCentralCards->add( Card( ret ) );
-				emit signalNewCentralCard( pos, mCentralCards->getCard( pos ).getCardText() );
+				//int pos = mCentralCards->add( Card( ret ) );
+				int pos = mCentralCards->add( new Card( ret ) );
+				//emit signalNewCentralCard( pos, mCentralCards->getCard( pos ).getCardText() );
+				emit signalNewCentralCard( pos, mCentralCards->getCard( pos )->getCardText() );
 			}
 		}
 
@@ -429,12 +431,13 @@ void Client::slotSelectedCardId( int id )
 {
 	kDebug() << "Selected card:" << id;
 	setSelectableAllCards( false );
-	//int pos = mCentralCards->add( getCard( id ) );
-	int pos = mCentralCards->add( Card( getCard( id )->getValue() ) );
-	
-	emit signalNewCentralCard( pos, mCentralCards->getCard( pos ).getCardText() );
+	//int pos = mCentralCards->add( Card( getCard( id )->getValue() ) );
+	int pos = mCentralCards->add( getCard( id ) );
 	removeCard( id );
 	
+	//emit signalNewCentralCard( pos, mCentralCards->getCard( pos ).getCardText() );
+	emit signalNewCentralCard( pos, mCentralCards->getCard( pos )->getCardText() );
+
 	if( isTwentyButtonVisible() ){
 		setTwentyButtonVisible( false );
 	}

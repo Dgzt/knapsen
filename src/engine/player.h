@@ -185,7 +185,8 @@ public:
 	
 	//If this card is king, then return equal suit of queen, 
 	//else this card is queen, then return equal suit of king
-	int getPositionOfPairOfCard( Card );
+	//int getPositionOfPairOfCard( Card );
+	int getPositionOfPairOfCard( const Card* );
 	
 	void addTricks( int );
 	int getTricks() const{ return mTricks; }
@@ -244,7 +245,8 @@ public:
 	
 	void sendOpponentSelectedCardId( int id ){ sendCommand( OPPONENT_SELECTED_CARD_ID_COMMAND+QString::number( id ) ); }
 	
-	void sendOpponentAddNewCentralCard( Card );
+	//void sendOpponentAddNewCentralCard( Card );
+	void sendOpponentAddNewCentralCard( const Card* );
 	
 	void sendOpponentDisconnected(){ sendCommand( OPPONENT_DISCONNECTED_COMMAND ); }
 	
@@ -262,7 +264,8 @@ public:
 
 	
 	//If the opponent clicked to twenty or forty button, then show that cards
-	void sendVisibleOpponentCards( int, Card, int, Card* );
+	//void sendVisibleOpponentCards( int, Card, int, Card* );
+	void sendVisibleOpponentCards( int, Card*, int, Card* );
 	
 	void sendNewRound(){ newRound(); sendCommand( NEW_ROUND_COMMAND ); }
 	
@@ -278,7 +281,10 @@ signals:
 	//Signals to server
 	void signalNewPlayer( Player* );
 	void signalPlayerDisconnected( Player* );
-	void signalSelectedCard( Card, int );
+	//void signalSelectedCard( Card, int );
+	//
+	void signalSelectedCard( Card*, int );
+	//
 	void signalTwentyButtonClicked();
 	void signalFortyButtonClicked();
 	void signalCloseButtonClicked();

@@ -286,13 +286,14 @@ void Server::slotNewPlayer( Player* player )
 		
 		mPlayerList.append( player );
 		//connect( player, SIGNAL( signalPlayerDisconnected( Player* ) ),	this, SLOT( slotPlayerDisconnected( Player* ) ) );
-		connect( player, SIGNAL( signalSelectedCard( Card, int ) ),		this, SLOT( slotPlayerSelectedCard( Card, int ) ) ); 
-		connect( player, SIGNAL( signalTwentyButtonClicked() ),			this, SLOT( slotPlayerTwentyButtonClicked() ) );
-		connect( player, SIGNAL( signalFortyButtonClicked() ),			this, SLOT( slotPlayerFortyButtonClicked() ) );
-		connect( player, SIGNAL( signalCloseButtonClicked() ),			this, SLOT( slotPlayerClickedToCloseButton() ) );
+		//connect( player, SIGNAL( signalSelectedCard( Card, int ) ),		this, SLOT( slotPlayerSelectedCard( Card, int ) ) ); 
+		connect( player, SIGNAL( signalSelectedCard( Card*, int ) ),		this, SLOT( slotPlayerSelectedCard( Card*, int ) ) ); 
+		connect( player, SIGNAL( signalTwentyButtonClicked() ),				this, SLOT( slotPlayerTwentyButtonClicked() ) );
+		connect( player, SIGNAL( signalFortyButtonClicked() ),				this, SLOT( slotPlayerFortyButtonClicked() ) );
+		connect( player, SIGNAL( signalCloseButtonClicked() ),				this, SLOT( slotPlayerClickedToCloseButton() ) );
 		//connect( player, SIGNAL( signalChangedTrumpCard( Card ) ),		this, SLOT( slotPlayerChangedTrumpCard( Card ) ) );
-		connect( player, SIGNAL( signalStartNextRound( Player* ) ),		this, SLOT( slotPlayerWantStartNextRound( Player* ) ) );
-		connect( player, SIGNAL( signalStartNextGame( Player* ) ),		this, SLOT( slotPlayerWantStartNextGame( Player* ) ) );
+		connect( player, SIGNAL( signalStartNextRound( Player* ) ),			this, SLOT( slotPlayerWantStartNextRound( Player* ) ) );
+		connect( player, SIGNAL( signalStartNextGame( Player* ) ),			this, SLOT( slotPlayerWantStartNextGame( Player* ) ) );
 		
 		emit signalPlayerConnected( player->getName() );
 		
@@ -394,10 +395,119 @@ void Server::slotPlayerDisconnected( Player* player )
 	
 }
 
-void Server::slotPlayerSelectedCard( Card selectedCard, int cardPosition )
+/*void Server::slotPlayerSelectedCard( Card selectedCard, int cardPosition )
 {
 	//kDebug() << "Selected card:" << selectedCard.getCardText( mTypeOfCards );
 	kDebug() << "Selected card:" << selectedCard.getCardText();
+	
+	//mCentralCards.append( selectedCard );
+	mCentralCards->add( selectedCard );
+	
+	Player* nextPlayer = mGameSequence->getNextPlayer();
+	
+	//if( mCentralCards.size() != MAX_CENTRAL_CARDS_SIZE ){
+	if( !mCentralCards->isFull() ){
+		kDebug() << "Next player step.";
+		
+		Player* currentPlayer = mGameSequence->getCurrentPlayer();
+		//Player* nextPlayer = mGameSequence->getNextPlayer();
+		
+		//If the previous player clicked to twenty/forty button, then show that card to current player
+		if( mTwentyButtonClickedThisTurn ){
+			kDebug() << "Pair this card position:" << currentPlayer->getPositionOfPairOfCard( selectedCard );
+			int posOfPairOfCard = currentPlayer->getPositionOfPairOfCard( selectedCard );
+			//nextPlayer->sendVisibleOpponentCards( cardPosition, selectedCard, posOfPairOfCard, currentPlayer->getCard( posOfPairOfCard ) );
+			nextPlayer->sendVisibleOpponentCards( cardPosition, selectedCard, posOfPairOfCard, currentPlayer->getCard( posOfPairOfCard ) );
+		
+			
+			//
+			if( currentPlayer->getTricks() > 0 ){
+				
+				currentPlayer->addTricks( 20 );
+				
+				if( mGameSequence->isRoundOver() ){
+					roundOver();
+					return;
+				}
+				
+			}else{ //currentPlayer->getTricks() == 0
+				mWaitingMarriage = new QPair< Player*, int >;
+				mWaitingMarriage->first = currentPlayer;
+				mWaitingMarriage->second = 20;
+			}
+			
+			mTwentyButtonClickedThisTurn = false;
+		}
+		
+		if( mFortyButtonClickedThisTurn ){
+			kDebug() << "Pair this card position:" << currentPlayer->getPositionOfPairOfCard( selectedCard );
+			int posOfPairOfCard = currentPlayer->getPositionOfPairOfCard( selectedCard );
+			//nextPlayer->sendVisibleOpponentCards( cardPosition, selectedCard, posOfPairOfCard, currentPlayer->getCard( posOfPairOfCard ) );
+			nextPlayer->sendVisibleOpponentCards( cardPosition, selectedCard, posOfPairOfCard, currentPlayer->getCard( posOfPairOfCard ) );
+			
+			
+			//
+			if( currentPlayer->getTricks() > 0 ){
+				
+				currentPlayer->addTricks( 40 );
+				
+				if( mGameSequence->isRoundOver() ){
+					roundOver();
+					return;
+				}
+				
+			}else{ //currentPlayer->getTricks() == 0
+				mWaitingMarriage = new QPair< Player*, int >;
+				mWaitingMarriage->first = currentPlayer;
+				mWaitingMarriage->second = 40;
+			}
+			
+			mFortyButtonClickedThisTurn = false;
+		}
+		
+		if( mClickedToCloseButtonThisTurn ){
+			nextPlayer->sendOpponentClickedToCloseButton();
+		}
+		
+		nextPlayer->sendOpponentSelectedCardId( cardPosition );
+		nextPlayer->sendOpponentAddNewCentralCard( selectedCard );
+		
+		mGameSequence->setCurrentPlayer( nextPlayer );
+		
+		//if( !mClickedToCloseButtonThisRound && mDeck->getDeckSize() > 0 ){
+		if( !mPlayerWhoClickedToCloseButtonThisRound && mDeck->getDeckSize() > 0 ){
+			nextPlayer->sendSelectableAllCards();
+			for( int i = 0; i < mPlayerList.size(); ++i ){
+				if( mPlayerList.at( i ) != currentPlayer ){
+					mPlayerList.at( i )->sendOpponentInAction();
+				}
+			}
+		}else{ // mDeck->getDeckSize() == 0
+			//nextPlayer->sendSelectableCertainCards();
+			nextPlayer->sendSelectableCertainCards( mCentralCards, mTrumpCard );
+			for( int i = 0; i < mPlayerList.size(); ++i ){
+				if( mPlayerList.at( i ) != currentPlayer ){
+					mPlayerList.at( i )->sendOpponentInAction();
+				}
+			}
+		}
+		
+		//Show opponent's arrow and send commands end
+		currentPlayer->sendCommandsEnd();
+		
+	}else{ // mCentralCards->isFull()
+		nextPlayer->sendOpponentSelectedCardId( cardPosition );
+		nextPlayer->sendOpponentAddNewCentralCard( selectedCard );
+		QTimer::singleShot( 1000, this, SLOT( slotCheckCentralCards() ) );
+	}
+	
+	nextPlayer->sendCommandsEnd();
+}*/
+
+void Server::slotPlayerSelectedCard( Card* selectedCard, int cardPosition )
+{
+	//kDebug() << "Selected card:" << selectedCard.getCardText( mTypeOfCards );
+	kDebug() << "Selected card:" << selectedCard->getCardText();
 	
 	//mCentralCards.append( selectedCard );
 	mCentralCards->add( selectedCard );
@@ -574,16 +684,20 @@ void Server::slotCheckCentralCards()
 	kDebug() << "Check the central cards.";
 		
 	//int centralCard1Point = mCentralCards.at(0).getCardPoint();
-	int centralCard1Point = mCentralCards->getCard( 0 ).getCardPoint();
+	//int centralCard1Point = mCentralCards->getCard( 0 ).getCardPoint();
+	const int centralCard1Point = mCentralCards->getCard( 0 )->getCardPoint();
 	//int centralCard2Point = mCentralCards.at(1).getCardPoint();
-	int centralCard2Point = mCentralCards->getCard(1).getCardPoint();
-		
+	//int centralCard2Point = mCentralCards->getCard(1).getCardPoint();
+	const int centralCard2Point = mCentralCards->getCard(1)->getCardPoint();
+	
 	kDebug() << "centralCard1Point" << centralCard1Point;
 	kDebug() << "centralCard2Point" << centralCard2Point;
 	
 	//
-	Card::CardSuit centralCard0Suit = mCentralCards->getCard( 0 ).getCardSuit();
-	Card::CardSuit centralCard1Suit = mCentralCards->getCard( 1 ).getCardSuit();
+	//Card::CardSuit centralCard0Suit = mCentralCards->getCard( 0 ).getCardSuit();
+	const Card::CardSuit centralCard0Suit = mCentralCards->getCard( 0 )->getCardSuit();
+	//Card::CardSuit centralCard1Suit = mCentralCards->getCard( 1 ).getCardSuit();
+	const Card::CardSuit centralCard1Suit = mCentralCards->getCard( 1 )->getCardSuit();
 	//
 	
 	bool currentPlayerStartNextTurn;

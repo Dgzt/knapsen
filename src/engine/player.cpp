@@ -72,8 +72,8 @@ int Player::addNewCard( Card *card )
 
 void Player::removeCard( int id )
 {
-	delete mCards[ id ];
-	mCards[ id ] = 0;
+	//Why not delete? Becouse when call the removeCard(int) function when move the card to central cards 
+	mCards[ id ] = 0;  
 }
 
 int Player::changeTrumpCard( TrumpCard *trumpCard )
@@ -109,7 +109,8 @@ void Player::setSelectableAllCards( bool enabled )
 void Player::setSelectableCertainCards( CentralCards *centralCards, TrumpCard *trumpCard )
 {
 	//Set true, which cards equal type whit central card
-	if( setSelectableCardsWhatEqualSuit( centralCards->getCard( 0 ).getCardSuit() ) == false ){
+	//if( setSelectableCardsWhatEqualSuit( centralCards->getCard( 0 ).getCardSuit() ) == false ){
+	if( setSelectableCardsWhatEqualSuit( centralCards->getCard( 0 )->getCardSuit() ) == false ){
 		//If have not cards which equal type whith central card, then set true, which equal type whith trump card 
 		//if( setSelectableCardsWhatEqualSuit( mTrumpCardSuit ) == false ){
 		if( setSelectableCardsWhatEqualSuit( trumpCard->getCardSuit() ) == false ){
@@ -225,12 +226,27 @@ void Player::setLowestCard( int sizeOfDeck )
 	}
 }
 
-int Player::getPositionOfPairOfCard( Card card )
+/*int Player::getPositionOfPairOfCard( Card card )
 {
 	for( int i = 0; i < mNumberOfCardsInHand; ++i ){
 		if( mCards[i] != 0 && card.getCardSuit() == mCards[i]->getCardSuit() &&
 			( ( card.getCardType() == Card::King && mCards[i]->getCardType() == Card::Queen ) ||
 			  ( card.getCardType() == Card::Queen && mCards[i]->getCardType() == Card::King ) )
+		){
+			return i;
+		}
+	}
+	
+	//Error
+	return -1;
+}*/
+
+int Player::getPositionOfPairOfCard( const Card* card )
+{
+	for( int i = 0; i < mNumberOfCardsInHand; ++i ){
+		if( mCards[i] != 0 && card->getCardSuit() == mCards[i]->getCardSuit() &&
+			( ( card->getCardType() == Card::King && mCards[i]->getCardType() == Card::Queen ) ||
+			  ( card->getCardType() == Card::Queen && mCards[i]->getCardType() == Card::King ) )
 		){
 			return i;
 		}
@@ -364,12 +380,13 @@ void Player::newCommand( QString command )
 					setCloseButtonVisible( false );
 				}
 				
-				//Card selectedCard = getCard( ret );
-				Card selectedCard = Card( getCard( ret )->getValue() );
-				//addNewCentralCard( selectedCard );
+				/*Card selectedCard = Card( getCard( ret )->getValue() );
 				removeCard( ret );
 				
-				emit signalSelectedCard( selectedCard, ret );
+				emit signalSelectedCard( selectedCard, ret );*/
+				
+				emit signalSelectedCard( getCard( ret ), ret );
+				removeCard( ret );
 			}else{
 				kDebug() << "ERROR!" << getName() << "selected" << ret << "card id, but this is not selectable!";
 			}
@@ -527,10 +544,16 @@ void Player::sendSelectableCertainCards( CentralCards *centralCards, TrumpCard *
 }
 
 
-void Player::sendOpponentAddNewCentralCard( Card card )
+/*void Player::sendOpponentAddNewCentralCard( Card card )
 {
 	kDebug() << getName() << "Opponent add new central card.";
 	sendCommand( OPPONENT_ADD_NEW_CENTRAL_CARD_COMMAND+QString::number( card.getValue() ) );
+}*/
+
+void Player::sendOpponentAddNewCentralCard( const Card *card )
+{
+	kDebug() << getName() << "Opponent add new central card.";
+	sendCommand( OPPONENT_ADD_NEW_CENTRAL_CARD_COMMAND+QString::number( card->getValue() ) );
 }
 
 void Player::addTricks( int tricks )
@@ -545,9 +568,16 @@ void Player::addScores( int scores )
 	sendCommand( PLAYER_SCORES_CHANGED_COMMAND+QString::number( getScores() ) );
 }
 
-void Player::sendVisibleOpponentCards( int card1Pos, Card card1, int card2Pos, Card *card2 )
+/*void Player::sendVisibleOpponentCards( int card1Pos, Card card1, int card2Pos, Card *card2 )
 {
 	sendCommand( VISIBLE_OPPONENT_CARDS_COMMAND+QString::number( card1Pos )+","+QString::number( card1.getValue() )+","+
+												QString::number( card2Pos )+","+QString::number( card2->getValue() )
+	);
+}*/
+
+void Player::sendVisibleOpponentCards( int card1Pos, Card* card1, int card2Pos, Card* card2 )
+{
+	sendCommand( VISIBLE_OPPONENT_CARDS_COMMAND+QString::number( card1Pos )+","+QString::number( card1->getValue() )+","+
 												QString::number( card2Pos )+","+QString::number( card2->getValue() )
 	);
 }

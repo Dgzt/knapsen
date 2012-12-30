@@ -10,21 +10,6 @@ class TrumpCard
 	Card::CardSuit mCardSuit;
 	
 public:
-	/*TrumpCard();
-	
-	void addNewTrumpCard( Card* );
-	//Card* getCard(){ return mCard; }
-	
-	void setSelectable( const bool );
-	bool isSelectable();
-	QString getCardText();
-	
-	Card::CardSuit getCardSuit(){ return mCardSuit; }
-	
-	void clearTrumpCard();
-	
-	bool isEmpty();*/
-	
 	TrumpCard();
 	
 	void addNewCard( Card* );

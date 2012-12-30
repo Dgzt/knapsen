@@ -6,21 +6,19 @@
 
 class CentralCards
 {
-	QList<Card> *mCards;
-
+	Card** mCards;
+	
 public:
 	CentralCards();
 	~CentralCards();
 	
-	int add( Card );
+	int add( Card* );
 	void clear();
-	
-	//int getSize();
 	
 	bool isEmpty();
 	bool isFull();
 	
-	Card getCard( int );
+	Card* getCard( int );
 	
 };
 
