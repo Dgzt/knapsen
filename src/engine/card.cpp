@@ -74,12 +74,11 @@ Card::CardType Card::getCardType() const
 	return ret;
 }
 
-bool Card::operator==( const Card& card )
+/*bool Card::operator==( const Card *card )
 {
-	if( mValue == card.mValue ){
+	if( mValue == card->mValue ){
 		return true;
 	}//else
-	
 	return false;
-}
+}*/
 

@@ -34,7 +34,7 @@ public:
 	CardSuit getCardSuit() const;
 	CardType getCardType() const;
 
-	bool operator==( const Card& );
+	//bool operator==( const Card * );
 };
 
 #endif //CARD_H

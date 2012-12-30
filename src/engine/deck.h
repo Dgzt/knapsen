@@ -10,20 +10,15 @@ class Deck
 {
 	int mDeckSize;
 	
-	//QList<Card> mCards;
 	QList<Card*> mCards;
-	
-	Knapsen::TypeOfCards mTypeOfCards;
 		
 public:
-	//Deck( int, Knapsen::TypeOfCards );
 	Deck( int );
 	
 	void buildDeck();
 	
 	int getDeckSize() const{ return mCards.size(); }
 	
-	//Card getCard(){ return mCards.takeLast(); }
 	Card* getCard(){ return mCards.takeLast(); }
 	
 };
