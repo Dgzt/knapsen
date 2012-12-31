@@ -826,7 +826,8 @@ void Server::slotCheckCentralCards()
 						}
 					}
 					
-					mTrumpCard->clearTrumpCard();
+					//mTrumpCard->clearTrumpCard();
+					mTrumpCard->clearTrumpCard( false );
 					
 					for( int i = 0; i < mPlayerList.size(); ++i ){
 						mPlayerList.at( i )->sendClearTrumpCard();

@@ -19,9 +19,6 @@ public:
 	
 	bool isEmpty();
 	
-	//Don't delete the mCard data, when add the card to player when the deck is empty.
-	void clearTrumpCard();
-	//Delete the mCard data, when at the player clear the trump card.
 	void clearTrumpCard( bool );
 	
 };

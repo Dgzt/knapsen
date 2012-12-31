@@ -180,10 +180,12 @@ void Client::slotProcessCommands()
 			bool ok;
 			int ret = getValuePartOfCommand( commandList.first() ).toInt( &ok );
 			if( ok ){
-				//setTrumpCard( Card( ret ) );
+				if( !mTrumpCard->isEmpty() ){
+					mTrumpCard->clearTrumpCard( true );
+				}
+				
 				mTrumpCard->addNewCard( new Card( ret ) );
 				
-				//emit signalNewTrumpCard( getTrumpCard().getCardText() );
 				emit signalNewTrumpCard( getTrumpCard()->getCard()->getCardText() );
 			}else{
 				kDebug() << "ERROR! Cannot convert new trump card command value to int!";
@@ -211,16 +213,14 @@ void Client::slotProcessCommands()
 		if( getCommandPartOfCommand( commandList.first() ) == CLEAR_TRUMP_CARD_COMMAND ){
 			kDebug() << getName() << "Clear trump card.";
 			
-			//clearTrumpCard();
-			mTrumpCard->clearTrumpCard();
+			mTrumpCard->clearTrumpCard( true );
 			emit signalTrumpCardHide();
 		}
 		
 		if( getCommandPartOfCommand( commandList.first() ) == TRUMP_CARD_SELECTABLE_COMMAND ){
 			kDebug() << getName() << "Selectable trump card.";
-			//getTrumpCard().setSelectable( true );
+			
 			getTrumpCard()->getCard()->setSelectable( true );
-			//emit signalTrumpCardSelectableChanged( getTrumpCard().isSelectable() );
 			emit signalTrumpCardSelectableChanged( getTrumpCard()->getCard()->isSelectable() );
 		}
 			
