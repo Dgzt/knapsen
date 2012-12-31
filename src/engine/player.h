@@ -257,8 +257,8 @@ public:
 	
 	void sendClearCentralCards(){ sendCommand( CLEAR_CENTRAL_CARDS_COMMAND ); }
 	
-	void sendTwentyButtonVisible();
-	void sendFortyButtonVisible();
+	void sendTwentyButtonVisible(){ sendCommand( TWENTY_BUTTON_VISIBLE_COMMAND ); }
+	void sendFortyButtonVisible(){ sendCommand( FORTY_BUTTON_VISIBLE_COMMAND ); }
 
 	void sendCloseButtonVisible();
 	

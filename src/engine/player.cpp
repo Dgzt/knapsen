@@ -435,18 +435,7 @@ void Player::newCommand( QString command )
 	if( getCommandPartOfCommand( command ) == CHANGE_TRUMP_CARD_COMMAND ){
 		kDebug() << getName() << "Change trump card.";
 		
-		//changeTrumpCard();
 		emit signalChangeTrumpCard( this );
-		
-		/*
-		 * 
-		 * 
-		 * 
-		 * 
-		 * 
-		 * 
-		 * 
-		 */
 	}
 	
 	if( getCommandPartOfCommand( command ) == START_NEXT_ROUND_COMMAND ){
@@ -579,18 +568,6 @@ void Player::sendVisibleOpponentCards( int card1Pos, Card* card1, int card2Pos, 
 	sendCommand( VISIBLE_OPPONENT_CARDS_COMMAND+QString::number( card1Pos )+","+QString::number( card1->getValue() )+","+
 												QString::number( card2Pos )+","+QString::number( card2->getValue() )
 	);
-}
-
-void Player::sendTwentyButtonVisible()
-{
-	//setTwentyButtonVisible( true );
-	sendCommand( TWENTY_BUTTON_VISIBLE_COMMAND );
-}
-
-void Player::sendFortyButtonVisible()
-{
-	//setFortyButtonVisible( true );
-	sendCommand( FORTY_BUTTON_VISIBLE_COMMAND );
 }
 
 void Player::sendCloseButtonVisible()
