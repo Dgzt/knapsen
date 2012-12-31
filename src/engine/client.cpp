@@ -490,6 +490,7 @@ void Client::slotSelectedTrumpCard()
 void Client::slotTwentyButtonClicked()
 {
 	twentyButtonClicked();
+	setSelectableRegularMarriagesCards( mTrumpCard );
 	sendCommand( TWENTY_BUTTON_CLICKED_COMMAND );
 }
 
@@ -497,6 +498,7 @@ void Client::slotFortyButtonClicked()
 {
 	kDebug();
 	fortyButtonClicked();
+	setSelectableTrumpMarriagesCards( mTrumpCard );
 	sendCommand( FORTY_BUTTON_CLICKED_COMMAND );
 }
 

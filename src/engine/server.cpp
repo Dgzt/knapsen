@@ -626,12 +626,16 @@ void Server::slotPlayerSelectedCard( Card* selectedCard, int cardPosition )
 void Server::slotPlayerTwentyButtonClicked()
 {
 	kDebug() << mGameSequence->getCurrentPlayer()->getName() << "Clicked to twenty button.";
+	mGameSequence->getCurrentPlayer()->setSelectableRegularMarriagesCards( mTrumpCard );
+	
 	mTwentyButtonClickedThisTurn = true;
 }
 
 void Server::slotPlayerFortyButtonClicked()
 {
 	kDebug() << mGameSequence->getCurrentPlayer()->getName() << "Clicked to forty button.";
+	mGameSequence->getCurrentPlayer()->setSelectableTrumpMarriagesCards( mTrumpCard );
+	
 	mFortyButtonClickedThisTurn = true;
 }
 

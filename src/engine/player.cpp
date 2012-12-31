@@ -398,7 +398,7 @@ void Player::newCommand( QString command )
 	if( getCommandPartOfCommand( command ) == TWENTY_BUTTON_CLICKED_COMMAND ){
 		kDebug() << getName() << "Twenty button clicked.";
 		
-		if( mTwentyButtonVisible ){
+		if( isTwentyButtonVisible() ){
 			twentyButtonClicked();
 			//mOpponent->OpponentTwentyButtonClicked();
 			emit signalTwentyButtonClicked();
@@ -410,7 +410,7 @@ void Player::newCommand( QString command )
 	if( getCommandPartOfCommand( command ) == FORTY_BUTTON_CLICKED_COMMAND ){
 		kDebug() << getName() << "Forty button clicked.";
 		
-		if( mFortyButtonVisible ){
+		if( isFortyButtonVisible() ){
 			fortyButtonClicked();
 			//mOpponent->sendOpponentFortyButtonClicked();
 			emit signalFortyButtonClicked();

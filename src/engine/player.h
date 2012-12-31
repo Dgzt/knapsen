@@ -149,10 +149,10 @@ protected:
 	//Set selectable cards, which suit of cards equal the suit of central card or suit of trump card
 	void setSelectableCertainCards( CentralCards *, TrumpCard * );
 	
-	//void setSelectableRegularMarriagesCards();
+	/*//void setSelectableRegularMarriagesCards();
 	void setSelectableRegularMarriagesCards( TrumpCard * );
 	//void setSelectableTrumpMarriagesCards();
-	void setSelectableTrumpMarriagesCards( TrumpCard * );
+	void setSelectableTrumpMarriagesCards( TrumpCard * );*/
 	
 	/*void setTwentyButtonVisible( bool );
 	bool isTwentyButtonVisible() const{ return mTwentyButtonVisible; }
@@ -203,6 +203,9 @@ public:
 	bool isTwentyButtonVisible() const{ return mTwentyButtonVisible; }
 	void setFortyButtonVisible( bool );
 	bool isFortyButtonVisible() const{ return mFortyButtonVisible; }
+	
+	void setSelectableRegularMarriagesCards( TrumpCard * );
+	void setSelectableTrumpMarriagesCards( TrumpCard * );
 	
 	//-- Commands --
 	

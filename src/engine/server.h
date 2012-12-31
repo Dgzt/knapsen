@@ -8,18 +8,10 @@
 class GameSequence;
 
 class Player;
-//
 class Bot;
-//
 class Deck;
-
-//
 class CentralCards;
-//
-
-//
 class TrumpCard;
-//
 
 class Server : public QTcpServer
 {
@@ -115,7 +107,6 @@ public:
 	void setNumberOfCardsInHand( int numberOfCardsInHand ){ mNumberOfCardsInHand = numberOfCardsInHand; }
 	
 	//Set the size of deck, 20 or 24
-	//void setSizeOfDeck( SizeOfDeck sizeOfDeck ){ mSizeOfDeck = sizeOfDeck; }
 	void setSizeOfDeck( int sizeOfDeck ){ mSizeOfDeck = sizeOfDeck; }
 	
 	//Set type of cards, german suits or french suits
