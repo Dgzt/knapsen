@@ -102,7 +102,7 @@ class Player : public QTcpSocket
 	Card::CardType mLowestCardType;
 	
 	int mNumberOfCardsInHand;
-	Card* *mCards;
+	Card** mCards;
 	
 	//Player's tricks
 	int mTricks;
@@ -154,10 +154,10 @@ protected:
 	//void setSelectableTrumpMarriagesCards();
 	void setSelectableTrumpMarriagesCards( TrumpCard * );
 	
-	void setTwentyButtonVisible( bool );
+	/*void setTwentyButtonVisible( bool );
 	bool isTwentyButtonVisible() const{ return mTwentyButtonVisible; }
 	void setFortyButtonVisible( bool );
-	bool isFortyButtonVisible() const{ return mFortyButtonVisible; }
+	bool isFortyButtonVisible() const{ return mFortyButtonVisible; }*/
 	void twentyButtonClicked();
 	void fortyButtonClicked();
 	void setCloseButtonVisible( bool visible ){ mCloseButtonVisible = visible; emit signalCloseButtonVisible( visible ); }
@@ -198,6 +198,11 @@ public:
 	
 	bool canChangeTrumpCard( TrumpCard * ) const;
 	int changeTrumpCard( TrumpCard * );
+	
+	void setTwentyButtonVisible( bool );
+	bool isTwentyButtonVisible() const{ return mTwentyButtonVisible; }
+	void setFortyButtonVisible( bool );
+	bool isFortyButtonVisible() const{ return mFortyButtonVisible; }
 	
 	//-- Commands --
 	
@@ -288,7 +293,7 @@ signals:
 	void signalTwentyButtonClicked();
 	void signalFortyButtonClicked();
 	void signalCloseButtonClicked();
-	void signalChangedTrumpCard();
+	void signalChangeTrumpCard( Player* );
 
 	void signalStartNextRound( Player* );
 	void signalStartNextGame( Player* );

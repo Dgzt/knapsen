@@ -144,12 +144,14 @@ void Server::newRound()
 	//if( currentPlayer->haveRegularMarriages() ){
 	if( currentPlayer->haveRegularMarriages( mTrumpCard ) ){
 		kDebug() << currentPlayer->getName() << "have regular marriages.";
+		currentPlayer->setTwentyButtonVisible( true );
 		currentPlayer->sendTwentyButtonVisible();
 	}
 	
 	//if( currentPlayer->haveTrumpMarriages() ){
 	if( currentPlayer->haveTrumpMarriages( mTrumpCard ) ){
 		kDebug() << currentPlayer->getName() << "have trump marriages.";
+		currentPlayer->setFortyButtonVisible( true );
 		currentPlayer->sendFortyButtonVisible();
 	}
 	
@@ -291,6 +293,7 @@ void Server::slotNewPlayer( Player* player )
 		connect( player, SIGNAL( signalFortyButtonClicked() ),				this, SLOT( slotPlayerFortyButtonClicked() ) );
 		connect( player, SIGNAL( signalCloseButtonClicked() ),				this, SLOT( slotPlayerClickedToCloseButton() ) );
 		//connect( player, SIGNAL( signalChangedTrumpCard( Card ) ),		this, SLOT( slotPlayerChangedTrumpCard( Card ) ) );
+		connect( player, SIGNAL( signalChangeTrumpCard( Player* ) ),		this, SLOT( slotPlayerChangeTrumpCard( Player* ) ) );
 		connect( player, SIGNAL( signalStartNextRound( Player* ) ),			this, SLOT( slotPlayerWantStartNextRound( Player* ) ) );
 		connect( player, SIGNAL( signalStartNextGame( Player* ) ),			this, SLOT( slotPlayerWantStartNextGame( Player* ) ) );
 		
@@ -667,14 +670,32 @@ void Server::slotPlayerClickedToCloseButton()
 	}
 }*/
 
-void Server::slotPlayerChangedTrumpCard( Player *player )
+void Server::slotPlayerChangeTrumpCard( Player *player )
 {
+	kDebug() << "Begin.";
+	
 	//Check
+	if( mGameSequence->getCurrentPlayer() != player ){
+		kDebug() << "ERROR! Not the current player want change trump card!";
+		return;
+	}
+	
 	if( !player->canChangeTrumpCard( mTrumpCard ) ){
-		kDebug() << "ERROR";
+		kDebug() << "ERROR! The current player can't change trump card, but he/she want!";
+		return;
 	}
 	
 	/*int pos = */player->changeTrumpCard( mTrumpCard );
+	
+	mTrumpCard->getCard()->setSelectable( false );
+	
+	if( player->haveRegularMarriages( mTrumpCard ) ){
+		player->setTwentyButtonVisible( true );
+	}
+	
+	if( player->haveTrumpMarriages( mTrumpCard ) ){
+		player->setFortyButtonVisible( true );
+	}
 	
 	for( int i = 0; i < mPlayerList.size(); ++i ){
 		
@@ -683,6 +704,8 @@ void Server::slotPlayerChangedTrumpCard( Player *player )
 		}
 		
 	}
+	
+	kDebug() << "End.";
 }
 
 void Server::slotCheckCentralCards()
@@ -824,12 +847,14 @@ void Server::slotCheckCentralCards()
 		//if( currentPlayer->haveRegularMarriages() ){
 		if( currentPlayer->haveRegularMarriages( mTrumpCard ) ){
 			kDebug() << currentPlayer->getName() << "have regular marriages.";
+			currentPlayer->setTwentyButtonVisible( true );
 			currentPlayer->sendTwentyButtonVisible();
 		}
 	
 		//if( currentPlayer->haveTrumpMarriages() ){
 		if( currentPlayer->haveTrumpMarriages( mTrumpCard ) ){
 			kDebug() << currentPlayer->getName() << "have trump marriages.";
+			currentPlayer->setFortyButtonVisible( true );
 			currentPlayer->sendFortyButtonVisible();
 		}
 		

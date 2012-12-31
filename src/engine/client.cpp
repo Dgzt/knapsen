@@ -463,14 +463,16 @@ void Client::slotSelectedTrumpCard()
 {
 	kDebug() << "Selected trump card.";
 	
-	//int ret = changeTrumpCard();
 	int ret = changeTrumpCard( getTrumpCard() );
-	//emit signalNewPlayerCard( ret, getCard(ret).getCardText( mTypeOfCards ) );
-	//emit signalNewPlayerCard( ret, getCard(ret).getCardText() );
+	
 	emit signalNewPlayerCard( ret, getCard(ret)->getCardText() );
-	//emit signalNewTrumpCard( getTrumpCard().getCardText( mTypeOfCards ) );
 	emit signalNewTrumpCard( getTrumpCard()->getCard()->getCardText() );
+	
+	mTrumpCard->getCard()->setSelectable( false );
 	emit signalTrumpCardSelectableChanged( false );
+	
+	getCard( ret )->setSelectable( true );
+	emit signalPlayerCardSelectableChanged( ret, true );
 	
 	//if( haveRegularMarriages( mTrumpCard ) ){
 	if( haveRegularMarriages( mTrumpCard ) ){

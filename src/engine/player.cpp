@@ -79,7 +79,6 @@ void Player::removeCard( int id )
 int Player::changeTrumpCard( TrumpCard *trumpCard )
 {
 	//This value will be modify. Only for don't write warning the compiler.
-	int ret = -1;
 	
 	for( int i = 0; i < mNumberOfCardsInHand; ++i ){
 		if( mCards[i] != 0 && mCards[i]->getCardSuit() == trumpCard->getCardSuit() && mCards[i]->getCardType() == mLowestCardType ){
@@ -89,11 +88,11 @@ int Player::changeTrumpCard( TrumpCard *trumpCard )
 			trumpCard->addNewCard( mCards[i] );
 			mCards[i]=tmpCard;
 			
-			break;
+			return i;
 		}
 	}
 	
-	return ret;
+	return -1; //If this function return this value, then this is a bug.
 }
 
 void Player::setSelectableAllCards( bool enabled )
@@ -437,7 +436,7 @@ void Player::newCommand( QString command )
 		kDebug() << getName() << "Change trump card.";
 		
 		//changeTrumpCard();
-		emit signalChangedTrumpCard();
+		emit signalChangeTrumpCard( this );
 		
 		/*
 		 * 
@@ -584,13 +583,13 @@ void Player::sendVisibleOpponentCards( int card1Pos, Card* card1, int card2Pos, 
 
 void Player::sendTwentyButtonVisible()
 {
-	setTwentyButtonVisible( true );
+	//setTwentyButtonVisible( true );
 	sendCommand( TWENTY_BUTTON_VISIBLE_COMMAND );
 }
 
 void Player::sendFortyButtonVisible()
 {
-	setFortyButtonVisible( true );
+	//setFortyButtonVisible( true );
 	sendCommand( FORTY_BUTTON_VISIBLE_COMMAND );
 }
 
