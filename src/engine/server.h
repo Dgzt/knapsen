@@ -113,7 +113,8 @@ public:
 	void setTypeOfCards( Knapsen::TypeOfCards typeOfCards ){ mTypeOfCards = typeOfCards; }
 	
 	//
-	void addBot( QString );
+	//void addBot( QString );
+	void addBot( QString, Knapsen::GameDifficulty );
 	//
 	
 	void startGame();

@@ -53,6 +53,7 @@ set(knapsen_SRCS
 
 set(knapsen_UIS
 	#dialogs/newgamewidget.ui
+	dialogs/newgamewidget_local.ui
 	dialogs/newgamewidget_client.ui
 	dialogs/newgamewidget_server.ui
 	dialogs/endroundwidget.ui

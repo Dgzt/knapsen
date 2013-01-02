@@ -4,8 +4,32 @@
 #include "trumpcard.h"
 #include "bot.h"
 
-Bot::Bot( QObject* parent ): 
+/*Bot::Bot( QObject* parent ): 
 	Client( parent ),
+	deckIsClosed( false ) 
+{
+	kDebug() << "Initialize.";
+	
+	connect( this, SIGNAL( signalOpponentDisconnected() ),			this, SLOT( slotOpponentDisconnected() ) );
+	connect( this, SIGNAL( signalPlayerInAction() ),				this, SLOT( slotPlayerInAction() ) );
+	connect( this, SIGNAL( signalNewRound() ),						this, SLOT( slotNewRound() ) );
+	//
+	connect( this, SIGNAL( signalCloseDeck() ),						this, SLOT( slotCloseDeck() ) );
+	//
+	connect( this, SIGNAL( signalCentralCardChanged( int, Card ) ),	this, SLOT( slotCentralCardChanged( int, Card ) ) );
+	connect( this, SIGNAL( signalEndRound( QString, int ) ),		this, SLOT( slotEndRound( QString, int ) ) );
+	connect( this, SIGNAL( signalEndGame( QString ) ),				this, SLOT( slotendGame( QString ) ) );
+	
+	//
+	pairOfQueenWasInCentralCards[0].first = pairOfKingWasInCentralCards[0].first = Card::Heart;
+	pairOfQueenWasInCentralCards[1].first = pairOfKingWasInCentralCards[1].first = Card::Diamond;
+	pairOfQueenWasInCentralCards[2].first = pairOfKingWasInCentralCards[2].first = Card::Spade;
+	pairOfQueenWasInCentralCards[3].first = pairOfKingWasInCentralCards[3].first = Card::Club;
+}*/
+
+Bot::Bot( QString name, Knapsen::GameDifficulty difficulty ):
+	Client( name ),
+	mDifficulty( difficulty ),
 	deckIsClosed( false ) 
 {
 	kDebug() << "Initialize.";

@@ -3,9 +3,11 @@
 #include "trumpcard.h"
 #include "player.h"
 
-Player::Player( QObject* parent ): 
-	QTcpSocket( parent ),
-	mName( "" ),
+//Player::Player( QObject* parent ): 
+//	QTcpSocket( parent ),
+Player::Player( QString name ): 
+	//mName( "" ),
+	mName( name ),
 	mLowestCardType( Card::Jack ),
 	mNumberOfCardsInHand( 0 ),
 	mTricks( 0 ),
@@ -351,7 +353,8 @@ void Player::newCommand( QString command )
 	if( getCommandPartOfCommand( command ) == NAME_COMMAND ){
 		kDebug() << getName() << "name:" << getValuePartOfCommand( command );
 		
-		setName( getValuePartOfCommand( command ) );
+		//setName( getValuePartOfCommand( command ) );
+		mName = getValuePartOfCommand( command );
 		
 		emit signalNewPlayer( this );
 	}

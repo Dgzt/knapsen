@@ -3,21 +3,17 @@
 #include "trumpcard.h"
 #include "client.h"
 
-Client::Client( QObject* parent ) : 
-	Player( parent ),
+//Client::Client( QObject* parent ) : 
+//	Player( parent ),
+Client::Client( QString name ): 
+	Player( name ),
 	mOpponentName( "" ),
 	mTypeOfCards( Knapsen::GermanSuits ),
 	mSizeOfDeck( 0 ),
 	mSizeOfDeckNow( 0 )
 {
-	//
-	//mCentralCards = 0;
 	mCentralCards = new CentralCards;
-	//
-	//
-	//mTrumpCard = 0;
 	mTrumpCard = new TrumpCard;
-	//
 	
 	connect( this, SIGNAL( connected() ), this, SLOT( slotConnected() ) );
 }
@@ -75,6 +71,7 @@ void Client::slotProcessCommands()
 	do{
 		if( getCommandPartOfCommand( commandList.first() ) == OPPONENT_NAME_COMMAND ){
 			kDebug() << getName() << "opponent name:" << getValuePartOfCommand( commandList.first() );
+			
 			mOpponentName = getValuePartOfCommand( commandList.first() );
 		}
 	
@@ -119,7 +116,7 @@ void Client::slotProcessCommands()
 		
 		if( getCommandPartOfCommand( commandList.first() ) == INITIALIZE_TABLE_COMMAND ){
 			kDebug() << getName() << "Initialize table.";
-		
+
 			emit signalInitialize( getName(), mOpponentName, mTypeOfCards, getNumberOfCardsInHand() );
 		}
 		

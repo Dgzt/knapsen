@@ -226,8 +226,9 @@ void MainWindow::newGameSlot()
 	if( ret ){
 		kDebug() << "KDialog button: Ok";
 		
-		client = new Client;
-		client->setName( Settings::playerName() );
+		//client = new Client;
+		//client->setName( Settings::playerName() );
+		client = new Client( Settings::playerName() );
 		
 		setGameSignals();
 		
@@ -250,8 +251,9 @@ void MainWindow::newGameSlot()
 			
 				client->connectToHost( "127.0.0.1", server->serverPort() );
 
-				server->addBot( Settings::botName() );
-			
+				//server->addBot( Settings::botName() );
+				server->addBot( Settings::botName(), newGameDialog.getGameDifficulty() );
+				
 			}else{
 				kDebug() << "Server listen error!";
 				
@@ -263,7 +265,7 @@ void MainWindow::newGameSlot()
 			kDebug() << "Game mode: client";
 			
 			//
-			client->setName( "Client" );
+			//client->setName( "Client" );
 			//
 			
 			WaitForServerDialog waitForServerDialog;

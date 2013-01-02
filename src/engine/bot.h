@@ -1,11 +1,14 @@
 #ifndef BOT_H
 #define BOT_H
 
+#include "enums.h"
 #include "client.h"
 
 class Bot : public Client
 {
 	Q_OBJECT
+	
+	Knapsen::GameDifficulty mDifficulty;
 	
 	bool deckIsClosed;
 	
@@ -37,7 +40,7 @@ private slots:
 	void slotendGame( QString );
 	
 public:
-    Bot( QObject* parent = 0 );
+    Bot( QString, Knapsen::GameDifficulty );
 	
 };
 

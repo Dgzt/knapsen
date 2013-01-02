@@ -46,7 +46,8 @@ protected:
 public:
     enum GameErrorType{ NameIsBusy, ServerIsFull, OpponentDisconnected };
 	
-	Client( QObject* parent = 0 );
+	//Client( QObject* parent = 0 );
+    Client( QString );
     /*virtual */~Client();
 	
 	void startNextRound(){ sendCommand( START_NEXT_ROUND_COMMAND ); }

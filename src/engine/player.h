@@ -170,11 +170,12 @@ protected:
 	void sendCommand( QString command ){ write( command.toAscii() ); }
 	
 public:
-    Player( QObject* parent = 0 );
+    //Player( QObject* parent = 0 );
+    Player( QString );
 	~Player();
 	
 	//Set nickname
-	void setName( QString name ){ mName = name; }
+	//void setName( QString name ){ mName = name; }
 	
 	//Get nickname
 	QString getName() const { return mName; }

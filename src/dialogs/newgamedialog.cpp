@@ -1,6 +1,8 @@
+#include <KDE/KDebug>
 #include <KDE/KLocalizedString>
 #include "dialogs/newgamedialog.h"
 
+#include "ui_newgamewidget_local.h"
 #include "ui_newgamewidget_client.h"
 #include "ui_newgamewidget_server.h"
 
@@ -14,7 +16,12 @@ NewGameDialog::NewGameDialog( QWidget* parent, Qt::WFlags flags ): KPageDialog( 
 	resize( 400, 300 );
 	
 	//Local
-	KPageWidgetItem *localPageWidgetItem = new KPageWidgetItem( new QWidget, LOCAL_STRING );
+	mLocalWidgetUi = new Ui_NewGameWidgetUi_local;
+	
+	QWidget *localWidget = new QWidget;
+	mLocalWidgetUi->setupUi( localWidget );
+	
+	KPageWidgetItem *localPageWidgetItem = new KPageWidgetItem( localWidget, LOCAL_STRING );
 	localPageWidgetItem->setIcon( KIcon( "localmode.png" ) );
 	
 	addPage( localPageWidgetItem );
@@ -42,6 +49,7 @@ NewGameDialog::NewGameDialog( QWidget* parent, Qt::WFlags flags ): KPageDialog( 
 	addPage( serverPageWidgetItem );
 }
 
+
 NewGameDialog::GameMode NewGameDialog::getGameMode() const
 {
 	if( currentPage()->name() == LOCAL_STRING ){
@@ -50,6 +58,17 @@ NewGameDialog::GameMode NewGameDialog::getGameMode() const
 		return ClientMode;
 	}//else
 	return ServerMode;
+}
+
+Knapsen::GameDifficulty NewGameDialog::getGameDifficulty()
+{
+	if( mLocalWidgetUi->easyRadioButton->isChecked() ){
+		return Knapsen::Easy;
+	}else if( mLocalWidgetUi->mediumRadioButton->isChecked() ){
+		return Knapsen::Medium;
+	} //else mLocalWidgetUi->hardRadioButton->isChecked()
+	
+	return Knapsen::Hard;
 }
 
 QString NewGameDialog::getClient_ServerAddress() const

@@ -958,7 +958,7 @@ void Server::incomingConnection( int socketDescriptor )
 {
 	kDebug() << "socketDescriptor:" << socketDescriptor;
 	
-	Player* player = new Player( this );
+	Player* player = new Player( "" );
 	player->setSocketDescriptor( socketDescriptor );
 	
 	//If the player have name, then will be a player
@@ -972,10 +972,17 @@ void Server::setWhoStartGame( Knapsen::WhoStartGame whoStartGame )
 	mGameSequence->setWhoStartGame( whoStartGame );
 }
 
-void Server::addBot( QString botName )
+/*void Server::addBot( QString botName )
 {
 	mBot = new Bot( this );
 	mBot->setName( botName );
+	
+	mBot->connectToHost( "127.0.0.1", serverPort() );
+}*/
+
+void Server::addBot( QString botName,Knapsen::GameDifficulty difficulty )
+{
+	mBot = new Bot( botName, difficulty );
 	
 	mBot->connectToHost( "127.0.0.1", serverPort() );
 }
