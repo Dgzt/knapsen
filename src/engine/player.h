@@ -10,20 +10,14 @@ static const QString NAME_COMMAND = ":NAME=";
 //
 static const QString NAME_IS_BUSY_COMMAND =":NAME_IS_BUSY";
 //
-static const QString OPPONENT_NAME_COMMAND = ":OPPONENT_NAME=";
-
 //
 static const QString SERVER_IS_FULL_COMMAND = ":SERVER_IS_FULL";
 //
 
 //Configs
-static const QString TYPE_OF_CARDS_COMMAND = ":TYPE_OF_CARD=";
 static const QString TYPE_OF_CARDS_GERMAN_SUITS_VALUE = "GERMAN_SUIT";
 static const QString TYPE_OF_CARDS_FRENCH_SUITS_VALUE = "FRENCH_SUIT";
-
-static const QString SIZE_OF_DECK_COMMAND = ":SIZE_OF_DECK=";
-static const QString NUMBER_OF_CARDS_IN_HAND_COMMAND = ":NUMBER_OF_CARDS_IN_HAND=";
-static const QString INITIALIZE_TABLE_COMMAND = ":INITIALIZE_TABLE";
+static const QString INITIALIZE_TABLE_COMMAND = ":INITIALIZE_TABLE=";
 
 //
 static const QString NEW_PLAYER_CARD_COMMAND = ":NEW_PLAYER_CARD=";
@@ -215,22 +209,8 @@ public:
 	
 	void sendServerIsFull(){ sendCommand( SERVER_IS_FULL_COMMAND ); }
 	//
-	
-	//Send the opponent's name
-	//void sendOpponentName(){ sendCommand( OPPONENT_NAME_COMMAND+mOpponent->getName() ); }
-	void sendOpponentName( QString name ){ sendCommand( OPPONENT_NAME_COMMAND+name ); }
-	
-	//Send play with german suits cards or french suits cards
-	void sendTypeOfCard( Knapsen::TypeOfCards );
-	
-	//Send 20 or 24 cards in deck
-	void sendSizeOfDeck( int size ){ setLowestCard( size ); sendCommand( SIZE_OF_DECK_COMMAND+QString::number( size ) ); }
-	
-	//Send play with 5 or 6 cards in hand
-	void sendNumberOfCardsInHand( int size );
-	
-	//Build up the table
-	void sendInitializeTable(){ sendCommand( INITIALIZE_TABLE_COMMAND ); }
+
+	void sendInitializeTable( QString, Knapsen::TypeOfCards, int, int );
 	
 	//Set and send the new card
 	int sendNewCard( Card* );

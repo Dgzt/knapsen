@@ -12,18 +12,11 @@ class Client : public Player
 {
 	Q_OBJECT
 	
-	QString mOpponentName;
-	
-	Knapsen::TypeOfCards mTypeOfCards;
-	
 	int mSizeOfDeck;
 	int mSizeOfDeckNow;
 	
 	CentralCards *mCentralCards;
-	
-	//
 	TrumpCard *mTrumpCard;
-	//
 	
 	//
 	QList<QString> commandList;

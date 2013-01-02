@@ -50,6 +50,22 @@ QString Player::getValuePartOfCommand( QString text )
 	return text.mid( text.indexOf( '=' )+1 );
 }
 
+void Player::sendInitializeTable( QString opponentName, Knapsen::TypeOfCards typeOfCards, int sizeOfDeck, int numberOfCardsInHand )
+{
+	QString typeOfCardsValue;
+	if( typeOfCards == Knapsen::GermanSuits ){
+		typeOfCardsValue = TYPE_OF_CARDS_GERMAN_SUITS_VALUE;
+	}else{ // typeOfCards == Knapsen::FrenchSuits
+		typeOfCardsValue = TYPE_OF_CARDS_FRENCH_SUITS_VALUE;
+	}
+	
+	setLowestCard( sizeOfDeck );
+	
+	setNumberOfCardsInHand( numberOfCardsInHand );
+	
+	sendCommand( INITIALIZE_TABLE_COMMAND+opponentName+","+typeOfCardsValue+","+QString::number( sizeOfDeck )+","+QString::number( numberOfCardsInHand ) );
+}
+
 void Player::setNumberOfCardsInHand( int size )
 {
 	mNumberOfCardsInHand = size;
@@ -493,20 +509,20 @@ void Player::slotReadyRead()
 	}
 }
 
-void Player::sendTypeOfCard( Knapsen::TypeOfCards typeOfCards )
+/*void Player::sendTypeOfCard( Knapsen::TypeOfCards typeOfCards )
 {
 	if( typeOfCards == Knapsen::GermanSuits ){
 		sendCommand( TYPE_OF_CARDS_COMMAND+TYPE_OF_CARDS_GERMAN_SUITS_VALUE );
 	}else{ // typeOfCards == Knapsen::FrenchSuits
 		sendCommand( TYPE_OF_CARDS_COMMAND+TYPE_OF_CARDS_FRENCH_SUITS_VALUE );
 	}
-}
+}*/
 
-void Player::sendNumberOfCardsInHand( int size )
+/*void Player::sendNumberOfCardsInHand( int size )
 {
 	setNumberOfCardsInHand( size );
 	sendCommand( NUMBER_OF_CARDS_IN_HAND_COMMAND+QString::number( size ) );
-}
+}*/
 
 int Player::sendNewCard( Card *card )
 {

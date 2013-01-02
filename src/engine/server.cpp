@@ -111,7 +111,7 @@ void Server::newRound()
 	for( int i = 0; i < mPlayerList.size(); ++i ){
 		mPlayerList.at( i )->sendNewRound();
 	}
-	
+
 	//Send cards to players
 	for( int i = 0; i < mNumberOfCardsInHand; ++i ){
 		
@@ -995,26 +995,13 @@ void Server::startGame()
 	mDeck = new Deck( mSizeOfDeck );
 
 	mTrumpCard = new TrumpCard;
-
-	//To all players
+	
 	for( int i = 0; i < mPlayerList.size(); ++i ){
-		
-		//Send the opponent player's name
 		for( int j = 0; j < mPlayerList.size(); ++j ){
 			if( mPlayerList.at( j ) != mPlayerList.at( i ) ){
-				mPlayerList.at( j )->sendOpponentName( mPlayerList.at( i )->getName() );
+				mPlayerList.at( i )->sendInitializeTable( mPlayerList.at( j )->getName(), mTypeOfCards, mSizeOfDeck, mNumberOfCardsInHand );
 			}
 		}
-		
-		//Send the type of cards
-		mPlayerList.at( i )->sendTypeOfCard( mTypeOfCards );
-		//Send the size of deck
-		mPlayerList.at( i )->sendSizeOfDeck( mSizeOfDeck );
-		//Send number of cards in hand
-		mPlayerList.at( i )->sendNumberOfCardsInHand( mNumberOfCardsInHand );
-		
-		//Initialize table
-		mPlayerList.at( i )->sendInitializeTable();
 	}
 	
 	newGame();
@@ -1022,5 +1009,4 @@ void Server::startGame()
 	for( int i = 0; i < mPlayerList.size(); ++i ){
 		mPlayerList.at( i )->sendCommandsEnd();
 	}
-
 }

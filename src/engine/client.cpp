@@ -3,12 +3,8 @@
 #include "trumpcard.h"
 #include "client.h"
 
-//Client::Client( QObject* parent ) : 
-//	Player( parent ),
 Client::Client( QString name ): 
 	Player( name ),
-	mOpponentName( "" ),
-	mTypeOfCards( Knapsen::GermanSuits ),
 	mSizeOfDeck( 0 ),
 	mSizeOfDeckNow( 0 )
 {
@@ -69,55 +65,38 @@ void Client::newCommand( QString command )
 void Client::slotProcessCommands()
 {
 	do{
-		if( getCommandPartOfCommand( commandList.first() ) == OPPONENT_NAME_COMMAND ){
-			kDebug() << getName() << "opponent name:" << getValuePartOfCommand( commandList.first() );
-			
-			mOpponentName = getValuePartOfCommand( commandList.first() );
-		}
-	
-		if( getCommandPartOfCommand( commandList.first() ) == TYPE_OF_CARDS_COMMAND ){
-			kDebug() << getName() << "Type of cards:" << getValuePartOfCommand( commandList.first() );
-		
-			if( getValuePartOfCommand( commandList.first() ) == TYPE_OF_CARDS_GERMAN_SUITS_VALUE ){
-				mTypeOfCards = Knapsen::GermanSuits;
-			}else{ //getValuePartOfCommand( command ) == TYPE_OF_CARDS_FRENCH_SUITS_VALUE
-				mTypeOfCards = Knapsen::FrenchSuits;
-			}
-		}
-		
-		if( getCommandPartOfCommand( commandList.first() ) == SIZE_OF_DECK_COMMAND ){
-			kDebug() << getName() << "size of deck:" << getValuePartOfCommand( commandList.first() );
-		
-			bool ok;
-			int ret = getValuePartOfCommand( commandList.first() ).toInt( &ok );
-		
-			if( ok ){
-				mSizeOfDeck = ret;
-				mSizeOfDeckNow = mSizeOfDeck;
-				
-				setLowestCard( mSizeOfDeck );
-			}else{
-				kDebug() << "ERROR! Cannot convert size of deck value to int!";
-			}
-		}
-		
-		if( getCommandPartOfCommand( commandList.first() ) == NUMBER_OF_CARDS_IN_HAND_COMMAND ){
-			kDebug() << getName() << "Number of cards in hand:" << getValuePartOfCommand( commandList.first() );
-		
-			bool ok;
-			int ret = getValuePartOfCommand( commandList.first() ).toInt( &ok );
-		
-			if( ok ){
-				setNumberOfCardsInHand( ret );
-			}else{
-				kDebug() << "ERROR! Cannot convert number of cards in hand value to int!";
-			}
-		}
-		
 		if( getCommandPartOfCommand( commandList.first() ) == INITIALIZE_TABLE_COMMAND ){
-			kDebug() << getName() << "Initialize table.";
-
-			emit signalInitialize( getName(), mOpponentName, mTypeOfCards, getNumberOfCardsInHand() );
+			kDebug() << getName() << "Initialize table, value." << getValuePartOfCommand( commandList.first() );
+			
+			QString command = getValuePartOfCommand( commandList.first() );
+			
+			QList<QString> list;
+			int last = 0;
+			for( int i = 0; i < command.length(); ++i ){
+				if( command[i] == ',' ){
+					list.append( command.mid( last, i-last ) );
+					last = i+1;
+				}
+			}
+			list.append( command.mid( last, command.length()-last ) );
+			
+			Knapsen::TypeOfCards typeOfCards;
+			if( list.at( 1 ) == TYPE_OF_CARDS_GERMAN_SUITS_VALUE ){
+				typeOfCards = Knapsen::GermanSuits;
+			}else{ //list.at( 1 ) == TYPE_OF_CARDS_FRENCH_SUITS_VALUE
+				typeOfCards = Knapsen::FrenchSuits;
+			}
+			
+			bool ok;
+			mSizeOfDeck = list.at( 2 ).toInt( &ok );
+			mSizeOfDeckNow = mSizeOfDeck;
+			int numberOfCardsInHand = list.at( 3 ).toInt( &ok );
+			
+			setLowestCard( mSizeOfDeck );
+			
+			setNumberOfCardsInHand( numberOfCardsInHand );
+			
+			emit signalInitialize( getName(), list.at( 0 ), typeOfCards, getNumberOfCardsInHand() );
 		}
 		
 		if( getCommandPartOfCommand( commandList.first() ) == NEW_PLAYER_CARD_COMMAND ){
