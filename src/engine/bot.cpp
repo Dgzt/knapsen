@@ -66,16 +66,16 @@ void Bot::slotSelectCard()
 	kDebug() << "In Action.";
 	
 	// TMP
-	/*for( int i = 0; i < getNumberOfCardsInHand(); ++i ){
-		if( getCard( i ).isValid() && getCard( i ).isSelectable() ){
+	for( int i = 0; i < getNumberOfCardsInHand(); ++i ){
+		if( getCard( i ) != 0 && getCard( i )->isSelectable() ){
 			slotSelectedCardId( i );
 			return;
 		}
-	}*/
+	}
 	// /TMP
 	
 	//if( getCentralCardsSize() == 0 ){
-	if( getCentralCards()->isEmpty() ){
+	/*( getCentralCards()->isEmpty() ){
 		kDebug() << "Central cards size: 0";
 		
 		//If the bot can change card, then change card
@@ -456,7 +456,7 @@ void Bot::slotSelectCard()
 		
 		slotSelectedCardId( selectedCardId );
 		
-	}
+	}*/
 	
 }
 
