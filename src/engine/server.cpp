@@ -272,6 +272,19 @@ void Server::roundOver()
 	
 }
 
+void Server::addTricks( Player* player, int newTricks )
+{
+	player->addTricks( newTricks );
+	
+	//Send player's tricks to other players
+	for( int i = 0; i < mPlayerList.size(); ++i ){
+		if( mPlayerList.at( i ) != player ){
+			mPlayerList.at( i )->sendOpponentTricksChanged( player->getTricks() );
+		}
+	}
+}
+
+
 void Server::slotNewPlayer( Player* player )
 {
 	kDebug() << player->getName();
@@ -534,7 +547,8 @@ void Server::slotPlayerSelectedCard( Card* selectedCard, int cardPosition )
 			//
 			if( currentPlayer->getTricks() > 0 ){
 				
-				currentPlayer->addTricks( 20 );
+				//currentPlayer->addTricks( 20 );
+				addTricks( currentPlayer, 20 );
 				
 				if( mGameSequence->isRoundOver() ){
 					roundOver();
@@ -560,7 +574,8 @@ void Server::slotPlayerSelectedCard( Card* selectedCard, int cardPosition )
 			//
 			if( currentPlayer->getTricks() > 0 ){
 				
-				currentPlayer->addTricks( 40 );
+				//currentPlayer->addTricks( 40 );
+				addTricks( currentPlayer, 40 );
 				
 				if( mGameSequence->isRoundOver() ){
 					roundOver();
@@ -771,10 +786,12 @@ void Server::slotCheckCentralCards()
 	Player* currentPlayer = mGameSequence->getCurrentPlayer();
 		
 	kDebug() << currentPlayer->getName() << "get" << centralCard1Point+centralCard2Point << "points.";
-	currentPlayer->addTricks( centralCard1Point + centralCard2Point );
+	//currentPlayer->addTricks( centralCard1Point + centralCard2Point );
+	addTricks( currentPlayer, centralCard1Point + centralCard2Point );
 	
 	if( mWaitingMarriage && mWaitingMarriage->first == currentPlayer ){
-		currentPlayer->addTricks( mWaitingMarriage->second );
+		//currentPlayer->addTricks( mWaitingMarriage->second );
+		addTricks( currentPlayer, mWaitingMarriage->second );
 		delete mWaitingMarriage;
 		mWaitingMarriage = 0;
 	}

@@ -237,6 +237,10 @@ public:
 	//void sendOpponentAddNewCentralCard( Card );
 	void sendOpponentAddNewCentralCard( const Card* );
 	
+	//
+	void sendOpponentTricksChanged( int value ){ sendCommand( OPPONENT_TRICKS_CHANGED_COMMAND+QString::number( value ) ); }
+	//
+	
 	void sendOpponentDisconnected(){ sendCommand( OPPONENT_DISCONNECTED_COMMAND ); }
 	
 	void sendClearCentralCards(){ sendCommand( CLEAR_CENTRAL_CARDS_COMMAND ); }

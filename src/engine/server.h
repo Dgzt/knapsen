@@ -2,7 +2,6 @@
 #define SERVER_H
 
 #include <QtNetwork/QTcpServer>
-#include "card.h"
 #include "enums.h"
 
 class GameSequence;
@@ -67,9 +66,13 @@ class Server : public QTcpServer
 	QList<Player *> mPlayerListWhoWantNewGame;
 	//
 	
+	
 	void newGame();
 	void newRound();
 	void roundOver();
+	//
+	void addTricks( Player*, int );
+	//
 	
 private slots:
 	void slotNewPlayer( Player* );
