@@ -116,14 +116,7 @@ void Server::newRound()
 	for( int i = 0; i < mNumberOfCardsInHand; ++i ){
 		
 		for( int j = 0; j < mPlayerList.size(); ++j ){
-			//mPlayerList.at( j )->sendNewCard( mDeck->getCard() );
-			int cardId = mPlayerList.at( j )->sendNewCard( mDeck->getCard() );
-			
-			for( int k = 0; k < mPlayerList.size(); ++k ){
-				if( mPlayerList.at( k ) != mPlayerList.at( j ) ){
-					mPlayerList.at( k )->sendNewOpponentCard( cardId );
-				}
-			}
+			addNewCard( mPlayerList.at( j ), mDeck->getCard() );
 		}
 		
 		//Get trump card
@@ -270,6 +263,18 @@ void Server::roundOver()
 		mPlayerList.at( i )->sendCommandsEnd();
 	}
 	
+}
+
+void Server::addNewCard( Player* player, Card* card )
+{
+	int cardId = player->sendNewCard( card );
+	
+	//Send player's card id to other players
+	for( int i = 0; i < mPlayerList.size(); ++i ){
+		if( mPlayerList.at( i ) != player ){
+			mPlayerList.at( i )->sendNewOpponentCard( cardId );
+		}
+	}
 }
 
 void Server::addTricks( Player* player, int newTricks )
@@ -816,7 +821,6 @@ void Server::slotCheckCentralCards()
 		kDebug() << "Start next turn";
 		
 		//Clear central cards
-		//mCentralCards.clear();
 		mCentralCards->clear();
 		
 		for( int i = 0; i < mPlayerList.size(); ++i ){
@@ -827,34 +831,13 @@ void Server::slotCheckCentralCards()
 		if( !mPlayerWhoClickedToCloseButtonThisRound ){
 			//If the dech have card yet, then add new cards to players, first who won the last turn
 			if( mDeck->getDeckSize() > 0 ){
-				//currentPlayer->sendNewCard( mDeck->getCard() );
-				int cardId = currentPlayer->sendNewCard( mDeck->getCard() );
-				
-				for( int i = 0; i < mPlayerList.size(); ++i ){
-					if( mPlayerList.at( i ) != currentPlayer ){
-						mPlayerList.at( i )->sendNewOpponentCard( cardId );
-					}
-				}
+				addNewCard( currentPlayer, mDeck->getCard() );
 			
 				if( mDeck->getDeckSize() > 0 ){
-					//mGameSequence->getNextPlayer()->sendNewCard( mDeck->getCard() );
-					cardId = mGameSequence->getNextPlayer()->sendNewCard( mDeck->getCard() );
-					
-					for( int i = 0; i < mPlayerList.size(); ++i ){
-						if( mPlayerList.at( i ) != mGameSequence->getNextPlayer() ){
-							mPlayerList.at( i )->sendNewOpponentCard( cardId );
-						}
-					}
+					addNewCard( mGameSequence->getNextPlayer(), mDeck->getCard() );
 					
 				}else{
-					//mGameSequence->getNextPlayer()->sendNewCard( mTrumpCard->getCard() );
-					cardId = mGameSequence->getNextPlayer()->sendNewCard( mTrumpCard->getCard() );
-					
-					for( int i = 0; i < mPlayerList.size(); ++i ){
-						if( mPlayerList.at( i ) != mGameSequence->getNextPlayer() ){
-							mPlayerList.at( i )->sendNewOpponentCard( cardId );
-						}
-					}
+					addNewCard( mGameSequence->getNextPlayer(), mTrumpCard->getCard() );
 					
 					//mTrumpCard->clearTrumpCard();
 					mTrumpCard->clearTrumpCard( false );

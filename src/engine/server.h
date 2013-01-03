@@ -11,6 +11,7 @@ class Bot;
 class Deck;
 class CentralCards;
 class TrumpCard;
+class Card;
 
 class Server : public QTcpServer
 {
@@ -70,10 +71,11 @@ class Server : public QTcpServer
 	void newGame();
 	void newRound();
 	void roundOver();
-	//
+
+	void addNewCard( Player*, Card* );
 	void addTricks( Player*, int );
 	void addScores( Player*, int );
-	//
+	
 	
 private slots:
 	void slotNewPlayer( Player* );
