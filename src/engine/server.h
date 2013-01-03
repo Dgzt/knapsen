@@ -72,6 +72,7 @@ class Server : public QTcpServer
 	void roundOver();
 	//
 	void addTricks( Player*, int );
+	void addScores( Player*, int );
 	//
 	
 private slots:

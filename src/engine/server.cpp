@@ -250,7 +250,7 @@ void Server::roundOver()
 	}
 	
 	kDebug() << winnerPlayer->getName() << "win the round with" << scores << "scores.";
-	winnerPlayer->addScores( scores );
+	addScores( winnerPlayer, scores );
 	
 	if( mGameSequence->isGameOver() ){
 		
@@ -284,6 +284,17 @@ void Server::addTricks( Player* player, int newTricks )
 	}
 }
 
+void Server::addScores( Player* player, int newScores )
+{
+	player->addScores( newScores );
+	
+	//Send player's scores to other players
+	for( int i = 0; i < mPlayerList.size(); ++i ){
+		if( mPlayerList.at( i ) != player ){
+			mPlayerList.at( i )->sendOpponentScoresChanged( player->getScores() );
+		}
+	}
+}
 
 void Server::slotNewPlayer( Player* player )
 {
@@ -547,7 +558,6 @@ void Server::slotPlayerSelectedCard( Card* selectedCard, int cardPosition )
 			//
 			if( currentPlayer->getTricks() > 0 ){
 				
-				//currentPlayer->addTricks( 20 );
 				addTricks( currentPlayer, 20 );
 				
 				if( mGameSequence->isRoundOver() ){
@@ -574,7 +584,6 @@ void Server::slotPlayerSelectedCard( Card* selectedCard, int cardPosition )
 			//
 			if( currentPlayer->getTricks() > 0 ){
 				
-				//currentPlayer->addTricks( 40 );
 				addTricks( currentPlayer, 40 );
 				
 				if( mGameSequence->isRoundOver() ){

@@ -239,6 +239,7 @@ public:
 	
 	//
 	void sendOpponentTricksChanged( int value ){ sendCommand( OPPONENT_TRICKS_CHANGED_COMMAND+QString::number( value ) ); }
+	void sendOpponentScoresChanged( int value ){ sendCommand( OPPONENT_SCORES_CHANGED_COMMAND+QString::number( value ) ); }
 	//
 	
 	void sendOpponentDisconnected(){ sendCommand( OPPONENT_DISCONNECTED_COMMAND ); }
