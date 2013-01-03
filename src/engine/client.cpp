@@ -24,6 +24,22 @@ Client::~Client()
 	delete mTrumpCard;
 }
 
+QList< QString >* Client::getValues( QString valuesStr )
+{
+	QList< QString >* valuesArray = new QList< QString >;
+	
+	int last = 0;
+	for( int i = 0; i < valuesStr.length(); ++i ){
+		if( valuesStr[i] == ',' ){
+			valuesArray->append( valuesStr.mid( last, i-last ) );
+			last = i+1;
+		}
+	}
+	valuesArray->append( valuesStr.mid( last, valuesStr.length()-last ) );
+	
+	return valuesArray;
+}
+
 void Client::newCommand( QString command )
 {
 	kDebug() << command;
@@ -68,35 +84,27 @@ void Client::slotProcessCommands()
 		if( getCommandPartOfCommand( commandList.first() ) == INITIALIZE_TABLE_COMMAND ){
 			kDebug() << getName() << "Initialize table, value." << getValuePartOfCommand( commandList.first() );
 			
-			QString command = getValuePartOfCommand( commandList.first() );
-			
-			QList<QString> list;
-			int last = 0;
-			for( int i = 0; i < command.length(); ++i ){
-				if( command[i] == ',' ){
-					list.append( command.mid( last, i-last ) );
-					last = i+1;
-				}
-			}
-			list.append( command.mid( last, command.length()-last ) );
+			QList< QString >* valuesArray = getValues( getValuePartOfCommand( commandList.first() ) );
 			
 			Knapsen::TypeOfCards typeOfCards;
-			if( list.at( 1 ) == TYPE_OF_CARDS_GERMAN_SUITS_VALUE ){
+			if( valuesArray->at( 1 ) == TYPE_OF_CARDS_GERMAN_SUITS_VALUE ){
 				typeOfCards = Knapsen::GermanSuits;
-			}else{ //list.at( 1 ) == TYPE_OF_CARDS_FRENCH_SUITS_VALUE
+			}else{ //valuesArray->at( 1 ) == TYPE_OF_CARDS_FRENCH_SUITS_VALUE
 				typeOfCards = Knapsen::FrenchSuits;
 			}
 			
 			bool ok;
-			mSizeOfDeck = list.at( 2 ).toInt( &ok );
+			mSizeOfDeck = valuesArray->at( 2 ).toInt( &ok );
 			mSizeOfDeckNow = mSizeOfDeck;
-			int numberOfCardsInHand = list.at( 3 ).toInt( &ok );
+			int numberOfCardsInHand = valuesArray->at( 3 ).toInt( &ok );
 			
 			setLowestCard( mSizeOfDeck );
 			
 			setNumberOfCardsInHand( numberOfCardsInHand );
 			
-			emit signalInitialize( getName(), list.at( 0 ), typeOfCards, getNumberOfCardsInHand() );
+			emit signalInitialize( getName(), valuesArray->at( 0 ), typeOfCards, getNumberOfCardsInHand() );
+			
+			delete valuesArray;
 		}
 		
 		if( getCommandPartOfCommand( commandList.first() ) == NEW_PLAYER_CARD_COMMAND ){
@@ -252,32 +260,23 @@ void Client::slotProcessCommands()
 		if( getCommandPartOfCommand( commandList.first() ) == VISIBLE_OPPONENT_CARDS_COMMAND ){
 			kDebug() << getName() << "Visible opponent cards:" << getValuePartOfCommand( commandList.first() );
 			
-			QString value( getValuePartOfCommand( commandList.first() ) );
-			
 			bool ok;
-
-			int temp = value.indexOf( ',' );
-			int card1Pos = value.mid( 0, temp ).toInt( &ok );
-				
-			value = value.right( value.size()-temp-1 );
-			temp = value.indexOf( ',' );
-			int card1Value = value.mid( 0, temp ).toInt( &ok );
 			
-			value = value.right( value.size()-temp-1 );
-			temp = value.indexOf( ',' );
-			int card2Pos = value.mid( 0, temp ).toInt( &ok );
+			QList< QString >* valuesArray = getValues( getValuePartOfCommand( commandList.first() ) );
 			
-			value = value.right( value.size()-temp-1 );
-			int card2Value = value.toInt( &ok );
+			int card1Pos = valuesArray->at( 0 ).toInt( &ok );
+			int card1Value = valuesArray->at( 1 ).toInt( &ok );
+			int card2Pos = valuesArray->at( 2 ).toInt( &ok );
+			int card2Value = valuesArray->at( 3 ).toInt( &ok );
 			
-		
+			delete valuesArray;
+			
 			if( ok ){
 				kDebug() << card1Pos;
 				kDebug() << card1Value;
 				kDebug() << card2Pos;
 				kDebug() << card2Value;
 				
-				//emit signalShowOpponentCards( card1Pos, Card(card1Value).getCardText( mTypeOfCards ), card2Pos, Card(card2Value).getCardText( mTypeOfCards ) );
 				emit signalShowOpponentCards( card1Pos, Card(card1Value).getCardText(), card2Pos, Card(card2Value).getCardText() );
 			}else{
 				kDebug() << "ERROR! Wrong value in visible cards command!";

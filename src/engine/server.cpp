@@ -980,7 +980,7 @@ void Server::setWhoStartGame( Knapsen::WhoStartGame whoStartGame )
 	mBot->connectToHost( "127.0.0.1", serverPort() );
 }*/
 
-void Server::addBot( QString botName,Knapsen::GameDifficulty difficulty )
+void Server::addBot( QString botName, Knapsen::GameDifficulty difficulty )
 {
 	mBot = new Bot( botName, difficulty );
 	

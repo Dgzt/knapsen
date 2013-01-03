@@ -18,8 +18,10 @@ class Client : public Player
 	CentralCards *mCentralCards;
 	TrumpCard *mTrumpCard;
 	
-	//
 	QList<QString> commandList;
+	
+	//
+	QList<QString>* getValues( QString );
 	//
 	
 	virtual void newCommand( QString );
