@@ -34,15 +34,15 @@ Bot::Bot( QString name, Knapsen::GameDifficulty difficulty ):
 {
 	kDebug() << "Initialize.";
 	
-	connect( this, SIGNAL( signalOpponentDisconnected() ),			this, SLOT( slotOpponentDisconnected() ) );
-	connect( this, SIGNAL( signalPlayerInAction() ),				this, SLOT( slotPlayerInAction() ) );
-	connect( this, SIGNAL( signalNewRound() ),						this, SLOT( slotNewRound() ) );
-	//
-	connect( this, SIGNAL( signalCloseDeck() ),						this, SLOT( slotCloseDeck() ) );
-	//
-	connect( this, SIGNAL( signalCentralCardChanged( int, Card ) ),	this, SLOT( slotCentralCardChanged( int, Card ) ) );
-	connect( this, SIGNAL( signalEndRound( QString, int ) ),		this, SLOT( slotEndRound( QString, int ) ) );
-	connect( this, SIGNAL( signalEndGame( QString ) ),				this, SLOT( slotendGame( QString ) ) );
+	//connect( this, SIGNAL( signalOpponentDisconnected() ),			this, SLOT( slotOpponentDisconnected() ) );
+	connect( this, SIGNAL( signalGameError( Client::GameErrorType ) ),	this, SLOT( slotGameError( Client::GameErrorType ) ) );
+	connect( this, SIGNAL( signalPlayerInAction() ),					this, SLOT( slotPlayerInAction() ) );
+	connect( this, SIGNAL( signalNewRound() ),							this, SLOT( slotNewRound() ) );
+	connect( this, SIGNAL( signalCloseDeck() ),							this, SLOT( slotCloseDeck() ) );
+	//connect( this, SIGNAL( signalCentralCardChanged( int, Card ) ),		this, SLOT( slotCentralCardChanged( int, Card ) ) );
+	//connect( this, SIGNAL( 
+	connect( this, SIGNAL( signalEndRound( QString, int ) ),			this, SLOT( slotEndRound( QString, int ) ) );
+	connect( this, SIGNAL( signalEndGame( QString ) ),					this, SLOT( slotendGame( QString ) ) );
 	
 	//
 	pairOfQueenWasInCentralCards[0].first = pairOfKingWasInCentralCards[0].first = Card::Heart;
@@ -73,9 +73,9 @@ bool Bot::getPairOfQueenWasInCentralCards( Card::CardSuit cardSuit )
 	return false;
 }
 
-void Bot::slotOpponentDisconnected()
+void Bot::slotGameError( Client::GameErrorType )
 {
-	kDebug() << "Opponent disconnected. Disconnect me too.";
+	kDebug() << getName() << "Game error.";
 	
 	disconnectFromHost();
 }
@@ -499,7 +499,7 @@ void Bot::slotCloseDeck()
 	deckIsClosed = true;
 }
 
-void Bot::slotCentralCardChanged( int , Card card )
+/*void Bot::slotCentralCardChanged( int , Card card )
 {
 	if( card.getCardType() == Card::Queen ){
 		
@@ -522,7 +522,7 @@ void Bot::slotCentralCardChanged( int , Card card )
 		}
 		
 	}
-}
+}*/
 
 void Bot::slotEndRound( QString /*roundWinnerName*/ , int /*scores*/ )
 {

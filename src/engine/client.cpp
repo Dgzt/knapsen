@@ -260,28 +260,29 @@ void Client::slotProcessCommands()
 		if( getCommandPartOfCommand( commandList.first() ) == VISIBLE_OPPONENT_CARDS_COMMAND ){
 			kDebug() << getName() << "Visible opponent cards:" << getValuePartOfCommand( commandList.first() );
 			
-			bool ok;
-			
 			QList< QString >* valuesArray = getValues( getValuePartOfCommand( commandList.first() ) );
 			
-			int card1Pos = valuesArray->at( 0 ).toInt( &ok );
-			int card1Value = valuesArray->at( 1 ).toInt( &ok );
-			int card2Pos = valuesArray->at( 2 ).toInt( &ok );
-			int card2Value = valuesArray->at( 3 ).toInt( &ok );
-			
-			delete valuesArray;
-			
-			if( ok ){
-				kDebug() << card1Pos;
-				kDebug() << card1Value;
-				kDebug() << card2Pos;
-				kDebug() << card2Value;
+			try{
+				bool ok;
+				
+				int card1Pos = valuesArray->at( 0 ).toInt( &ok );
+				if( !ok ) throw 1;
+				
+				int card1Value = valuesArray->at( 1 ).toInt( &ok );
+				if( !ok ) throw 1;
+				
+				int card2Pos = valuesArray->at( 2 ).toInt( &ok );
+				if( !ok ) throw 1;
+				
+				int card2Value = valuesArray->at( 3 ).toInt( &ok );
+				if( !ok ) throw 1;
 				
 				emit signalShowOpponentCards( card1Pos, Card(card1Value).getCardText(), card2Pos, Card(card2Value).getCardText() );
-			}else{
+			}catch( int error ){
 				kDebug() << "ERROR! Wrong value in visible cards command!";
 			}
 			
+			delete valuesArray;
 		}
 			
 		if( getCommandPartOfCommand( commandList.first() ) == PLAYER_TRICKS_CHANGED_COMMAND ){

@@ -21,7 +21,8 @@ class Bot : public Client
 	//
 	
 private slots:
-	void slotOpponentDisconnected();
+	//void slotOpponentDisconnected();
+	void slotGameError( Client::GameErrorType );
 	
 	void slotPlayerInAction();
 	
@@ -29,11 +30,10 @@ private slots:
 	
 	void slotNewRound();
 	
-	//
 	void slotCloseDeck();
-	//
 	
-	void slotCentralCardChanged( int, Card );
+	//void slotCentralCardChanged( int, Card );
+	//void slotCentralCardChanged( int, Card* );
 	
 	void slotEndRound( QString, int );
 	
