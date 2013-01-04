@@ -363,7 +363,7 @@ void Client::slotProcessCommands()
 		if( getCommandPartOfCommand( commandList.first() ) == END_ROUND_COMMAND ){
 			kDebug() << getName() << "End round.";
 			
-			QString value = getValuePartOfCommand( commandList.first() );
+			/*QString value = getValuePartOfCommand( commandList.first() );
 			
 			QString winnerName = value.mid( 0, value.indexOf( ',' ) );
 			
@@ -373,8 +373,29 @@ void Client::slotProcessCommands()
 				emit signalEndRound( winnerName, winnerScore );
 			}else{
 				kDebug() << "ERROR! Cannot convert winner scores command value to int!";
+			}*/
+			
+			QList< QString >* values = getValues( getValuePartOfCommand( commandList.first() ) );
+			
+			try{
+				if( values->size() != 2 ){
+					throw "ERROR! Wrong size of values in end round command!";
+				}
+				
+				QString winnerName = values->at( 0 );
+				
+				bool ok;
+				int winnerScore = values->at( 1 ).toInt( &ok );
+				if( !ok ){ 
+					throw "ERROR! Cannot convert winner scores command value to int!";
+				}
+				
+				emit signalEndRound( winnerName, winnerScore );
+			}catch( QString error ){
+				kDebug() << error;
 			}
 			
+			delete values;
 		}
 		
 		if( getCommandPartOfCommand( commandList.first() ) == END_GAME_COMMAND ){
