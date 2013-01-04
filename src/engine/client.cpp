@@ -263,23 +263,32 @@ void Client::slotProcessCommands()
 			QList< QString >* valuesArray = getValues( getValuePartOfCommand( commandList.first() ) );
 			
 			try{
+				if( valuesArray->size() != 4 ){
+					throw 1;
+				}
+				
 				bool ok;
 				
 				int card1Pos = valuesArray->at( 0 ).toInt( &ok );
-				if( !ok ) throw 1;
+				if( !ok ) throw 2;
 				
 				int card1Value = valuesArray->at( 1 ).toInt( &ok );
-				if( !ok ) throw 1;
+				if( !ok ) throw 2;
 				
 				int card2Pos = valuesArray->at( 2 ).toInt( &ok );
-				if( !ok ) throw 1;
+				if( !ok ) throw 2;
 				
 				int card2Value = valuesArray->at( 3 ).toInt( &ok );
-				if( !ok ) throw 1;
+				if( !ok ) throw 2;
 				
 				emit signalShowOpponentCards( card1Pos, Card(card1Value).getCardText(), card2Pos, Card(card2Value).getCardText() );
 			}catch( int error ){
-				kDebug() << "ERROR! Wrong value in visible cards command!";
+				if( error == 1 ){
+					kDebug() << "ERROR! Wrong size of values in visible opponent cards command!";
+				}
+				if( error == 2 ){
+					kDebug() << "ERROR! Wrong value in visible cards command!";
+				}
 			}
 			
 			delete valuesArray;
@@ -362,19 +371,7 @@ void Client::slotProcessCommands()
 		
 		if( getCommandPartOfCommand( commandList.first() ) == END_ROUND_COMMAND ){
 			kDebug() << getName() << "End round.";
-			
-			/*QString value = getValuePartOfCommand( commandList.first() );
-			
-			QString winnerName = value.mid( 0, value.indexOf( ',' ) );
-			
-			bool ok;
-			int winnerScore = value.mid( value.indexOf( ',' )+1 ).toInt( &ok );
-			if( ok ){
-				emit signalEndRound( winnerName, winnerScore );
-			}else{
-				kDebug() << "ERROR! Cannot convert winner scores command value to int!";
-			}*/
-			
+
 			QList< QString >* values = getValues( getValuePartOfCommand( commandList.first() ) );
 			
 			try{
