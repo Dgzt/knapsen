@@ -32,12 +32,12 @@ endif( QT4_FOUND )
 
 find_package( KDE4 )
 if( KDE4_FOUND )
-	if( ${KDE_VERSION_MAJOR}.${KDE_VERSION_MINOR}.${KDE_VERSION_RELEASE} VERSION_LESS "4.6.0" )
+	if( ${KDE_VERSION_MAJOR}.${KDE_VERSION_MINOR}.${KDE_VERSION_RELEASE} VERSION_LESS "4.4.5" )
 		message( FATAL_ERROR 
 "----------------------------------------------------------
-	KDE4 is too old! Minimum version is 4.6.0!
+	KDE4 is too old! Minimum version is 4.4.5!
 ----------------------------------------------------------" )
-	endif( ${KDE_VERSION_MAJOR}.${KDE_VERSION_MINOR}.${KDE_VERSION_RELEASE} VERSION_LESS "4.6.0" )
+	endif( ${KDE_VERSION_MAJOR}.${KDE_VERSION_MINOR}.${KDE_VERSION_RELEASE} VERSION_LESS "4.4.5" )
 else( KDE4_FOUND )
 	message( FATAL_ERROR 
 "----------------------------------------------------------
@@ -53,12 +53,13 @@ endif( KDE4_FOUND )
 #++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 find_package( KDEGames )
 if( NOT KDEGames_FOUND )
-    message( FATAL_ERROR 
-"----------------------------------------------------------
-    KDEGames library development files not found!
-
-    Ubuntu: sudo apt-get install libkdegames-dev
-----------------------------------------------------------" )
+#    message( FATAL_ERROR 
+#"----------------------------------------------------------
+#    KDEGames library development files not found!
+#
+#    Ubuntu: sudo apt-get install libkdegames-dev
+#----------------------------------------------------------" )
+	find_package( LibKDEGames REQUIRED )
 endif( NOT KDEGames_FOUND )
 #++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
