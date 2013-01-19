@@ -49,8 +49,8 @@ public:
 	void startNextGame(){ sendCommand( START_NEXT_GAME_COMMAND ); }
 	
 public slots:
-	void slotSelectedCardId( int );
-	void slotSelectedTrumpCard();
+	void slotSelectCardId( int );
+	void slotSelectTrumpCard();
 	void slotTwentyButtonClicked();
 	void slotFortyButtonClicked();
 	void slotCloseButtonClicked();
@@ -73,6 +73,7 @@ signals:
 	void signalNewTrumpCard( QString );
 	
 	void signalNewCentralCard( int, QString );
+        void signalNewCentralCard( int, Card* );
 	
 	void signalClearCentralCards();
 	

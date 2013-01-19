@@ -10,34 +10,59 @@ class Bot : public Client
 	
 	Knapsen::GameDifficulty mDifficulty;
 	
-	bool deckIsClosed;
+	bool mDeckIsClosed;
 	
 	//
 	QPair< Card::CardSuit, bool > pairOfKingWasInCentralCards[4];
 	QPair< Card::CardSuit, bool > pairOfQueenWasInCentralCards[4];
 	
-	bool getPairOfKingWasInCentralCards( Card::CardSuit );
-	bool getPairOfQueenWasInCentralCards( Card::CardSuit );
-	//
+	//bool getPairOfKingWasInCentralCards( Card::CardSuit );
+	//bool getPairOfQueenWasInCentralCards( Card::CardSuit );
+	bool getPairOfCardWasInCentral( Card::CardType, Card::CardSuit );
+        //
 	
 private slots:
 	//void slotOpponentDisconnected();
-	void slotGameError( Client::GameErrorType );
+	//void slotGameError( Client::GameErrorType );
 	
 	void slotPlayerInAction();
 	
 	void slotSelectCard();
+        
+        void easy();
+        void medium();
+        void hard();
+        
+        int getRandomCardId();
+        
+        //
+        void tryChangeTrumpCard();
+        bool tryMeldMarriage();
+        
+        bool trySelectNotEqualTrump( Card::CardType );
+        bool trySelectPairWasNotInCentral( Card::CardType ); //Only King or Queen
+        bool trySelectEqualTrump( Card::CardType );
+        //
+        //bool trySelectPairHaveNotInHand( Card::CardType ); //Only King or Queen
+        //
+        bool trySelect( Card::CardType );
+        //
+        
+        //
+        bool trySelectEqualCentralNotEqualTrumpMinPoints();
+        //
 	
 	void slotNewRound();
 	
-	void slotCloseDeck();
+	void slotCloseDeck(){ mDeckIsClosed = true; }
 	
 	//void slotCentralCardChanged( int, Card );
 	//void slotCentralCardChanged( int, Card* );
+	void slotNewCentralCard( int, Card* );
 	
-	void slotEndRound( QString, int );
+	//void slotEndRound( QString, int );
 	
-	void slotendGame( QString );
+	//void slotendGame( QString );
 	
 public:
     Bot( QString, Knapsen::GameDifficulty );

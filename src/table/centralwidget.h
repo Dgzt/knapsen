@@ -80,7 +80,7 @@ private slots:
 	void slotTwentyButtonClicked(){ emit signalTwentyButtonClicked(); }
 	void slotFortyButtonClicked(){ emit signalFortyButtonClicked(); }
 	void slotCloseButtonClicked(){ emit signalCloseButtonClicked(); }
-	void slotSelectedTrumpCardSlot(){ emit signalSelectedTrumpCard(); }
+	void slotSelectTrumpCardSlot(){ emit signalSelectTrumpCard(); }
 	void slotCoverOpponentCards();
 	
 public slots:
@@ -130,8 +130,8 @@ public slots:
 	void slotStartGame();
 
 signals:
-	void signalSelectedCardId( int );
-	void signalSelectedTrumpCard();
+	void signalSelectCardId( int );
+	void signalSelectTrumpCard();
 	void signalTwentyButtonClicked();
 	void signalFortyButtonClicked();
 	void signalCloseButtonClicked();

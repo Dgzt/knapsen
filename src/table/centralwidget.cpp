@@ -354,7 +354,7 @@ void CentralWidget::slotInitialize( QString playerName, QString opponentName, Kn
 	mTrumpCard->setSelectable( false );
 	mTrumpCard->setZValue( 0 );
 	
-	connect( mTrumpCard, SIGNAL( click() ), this, SLOT( slotSelectedTrumpCardSlot() ) );
+	connect( mTrumpCard, SIGNAL( click() ), this, SLOT( slotSelectTrumpCardSlot() ) );
 
 	scene()->addItem( mTrumpCard );
 	
@@ -605,7 +605,7 @@ void CentralWidget::slotStartGame()
 
 void CentralWidget::slotClick( int id )
 {
-	emit signalSelectedCardId( id );
+	emit signalSelectCardId( id );
 	mPlayerCards[ id ].setVisible( false );
 	
 	//

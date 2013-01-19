@@ -192,8 +192,8 @@ void MainWindow::setGameSignals()
 	connect( client, SIGNAL( signalEndRound( QString, int ) ),									this,	 SLOT( slotEndRound( QString, int ) ) );
 	connect( client, SIGNAL( signalEndGame( QString ) ),										this,	 SLOT( slotEndGame( QString ) ) );
 	
-	connect( cWidget, SIGNAL( signalSelectedCardId( int ) ),									client, SLOT( slotSelectedCardId( int ) ) );
-	connect( cWidget, SIGNAL( signalSelectedTrumpCard() ),										client, SLOT( slotSelectedTrumpCard() ) );
+	connect( cWidget, SIGNAL( signalSelectCardId( int ) ),									client, SLOT( slotSelectCardId( int ) ) );
+	connect( cWidget, SIGNAL( signalSelectTrumpCard() ),										client, SLOT( slotSelectTrumpCard() ) );
 	connect( cWidget, SIGNAL( signalTwentyButtonClicked() ),									client, SLOT( slotTwentyButtonClicked() ) );
 	connect( cWidget, SIGNAL( signalFortyButtonClicked() ),										client, SLOT( slotFortyButtonClicked() ) );
 	connect( cWidget, SIGNAL( signalCloseButtonClicked() ),										client, SLOT( slotCloseButtonClicked() ) );

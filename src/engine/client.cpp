@@ -254,6 +254,7 @@ void Client::slotProcessCommands()
 				int pos = mCentralCards->add( new Card( ret ) );
 				//emit signalNewCentralCard( pos, mCentralCards->getCard( pos ).getCardText() );
 				emit signalNewCentralCard( pos, mCentralCards->getCard( pos )->getCardText() );
+                                emit signalNewCentralCard( pos, mCentralCards->getCard( pos ) );
 			}
 		}
 
@@ -421,9 +422,9 @@ void Client::slotConnected()
 	sendCommand( NAME_COMMAND+getName() );
 }
 
-void Client::slotSelectedCardId( int id )
+void Client::slotSelectCardId( int id )
 {
-	kDebug() << "Selected card:" << id;
+	kDebug() << "Select card:" << id;
 	setSelectableAllCards( false );
 	//int pos = mCentralCards->add( Card( getCard( id )->getValue() ) );
 	int pos = mCentralCards->add( getCard( id ) );
@@ -431,6 +432,7 @@ void Client::slotSelectedCardId( int id )
 	
 	//emit signalNewCentralCard( pos, mCentralCards->getCard( pos ).getCardText() );
 	emit signalNewCentralCard( pos, mCentralCards->getCard( pos )->getCardText() );
+        emit signalNewCentralCard( pos, mCentralCards->getCard( pos ) );
 
 	if( isTwentyButtonVisible() ){
 		setTwentyButtonVisible( false );
@@ -453,9 +455,9 @@ void Client::slotSelectedCardId( int id )
 	sendCommand( SELECTED_CARD_ID_COMMAND+QString::number( id ) );
 }
 
-void Client::slotSelectedTrumpCard()
+void Client::slotSelectTrumpCard()
 {
-	kDebug() << "Selected trump card.";
+	kDebug() << "Select trump card.";
 	
 	int ret = changeTrumpCard( getTrumpCard() );
 	
