@@ -49,16 +49,15 @@ private slots:
         //
         
         //
-        bool trySelectEqualCentralNotEqualTrumpMinPoints();
+        bool trySelectEqualCentralMinPoints();
+        bool trySelectEqualTrumpMinPoints();
         //
 	
 	void slotNewRound();
 	
 	void slotCloseDeck(){ mDeckIsClosed = true; }
 	
-	//void slotCentralCardChanged( int, Card );
-	//void slotCentralCardChanged( int, Card* );
-	void slotNewCentralCard( int, Card* );
+	void slotNewCentralCard( int, const Card* );
 	
 	//void slotEndRound( QString, int );
 	
