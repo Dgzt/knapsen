@@ -132,7 +132,8 @@ void Bot::medium()
                 case 4 : if( trySelectEqualTrump( Card::Ace ) ) break;
                 case 5 : if( trySelectEqualTrump( Card::Ten ) ) break;
                 case 6 : if( trySelect( Card::Jack ) ) break;
-                case 7 : trySelect( Card::Nine );
+                case 7 : trySelect( Card::Nine ); break;
+                case 8 : slotSelectCardId( getRandomCardId() );
             }
            
         }
