@@ -29,28 +29,6 @@ Bot::Bot( QString name, Knapsen::GameDifficulty difficulty ):
 	pairOfQueenWasInCentralCards[3].first = pairOfKingWasInCentralCards[3].first = Card::Club;
 }
 
-/*bool Bot::getPairOfKingWasInCentralCards( Card::CardSuit cardSuit )
-{
-	for( int i = 0; i < 4; ++i ){
-		if( pairOfKingWasInCentralCards[i].first == cardSuit ){
-			return pairOfKingWasInCentralCards[i].second;
-		}
-	}
-	
-	return false;
-}*/
-
-/*bool Bot::getPairOfQueenWasInCentralCards( Card::CardSuit cardSuit )
-{
-	for( int i = 0; i < 4; ++i ){
-		if( pairOfQueenWasInCentralCards[i].first == cardSuit ){
-			return pairOfQueenWasInCentralCards[i].second;
-		}
-	}
-	
-	return false;
-}*/
-
 bool Bot::getPairOfCardWasInCentral( Card::CardType cardType, Card::CardSuit cardSuit )
 {
     for( int i = 0; i < 4; ++i ){
@@ -121,7 +99,7 @@ void Bot::medium()
             trySelect( Card::King );
         }else{ //meld
             
-            int rand = qrand()%7;
+            int rand = qrand()%8;
             kDebug() << "rand:" << rand;
             
             switch( rand ){
@@ -140,6 +118,30 @@ void Bot::medium()
         
     }else{ //getCentralCards()->isEmpty()
         
+        int rand;
+        
+        if( qrand()%3 != 0 ){
+            kDebug() << "rand=0";
+            rand = 0;
+        }else{
+            rand = qrand()%10;
+            kDebug() << "rand:" << rand;
+        }
+        
+        switch( rand ){
+            case 0 : if( trySelectEqualCentralMinPoints() ) break;
+            case 1 : if( trySelectEqualTrumpMinPoints() ) break;
+            //Bot cannot win
+            case 2 : if( trySelect( Card::Nine ) ) break;
+            case 3 : if( trySelect( Card::Jack ) ) break;
+            case 4 : if( trySelectPairWasNotInCentral( Card::Queen ) ) break;
+            case 5 : if( trySelectPairWasNotInCentral( Card::King ) ) break;
+            case 6 : if( trySelect( Card::Ten ) ) break;
+            case 7 : if( trySelect( Card::Ace ) ) break;
+            case 8 : if( trySelect( Card::Queen ) ) break;
+            case 9 : if( trySelect( Card::King ) ) break;
+            case 10 : slotSelectCardId( getRandomCardId() );
+        }
     }
     
 }
@@ -175,6 +177,15 @@ void Bot::hard()
         switch( 0 ){
             case 0 : if( trySelectEqualCentralMinPoints() ) break;
             case 1 : if( trySelectEqualTrumpMinPoints() ) break;
+            //Bot cannot win
+            case 2 : if( trySelect( Card::Nine ) ) break;
+            case 3 : if( trySelect( Card::Jack ) ) break;
+            case 4 : if( trySelectPairWasNotInCentral( Card::Queen ) ) break;
+            case 5 : if( trySelectPairWasNotInCentral( Card::King ) ) break;
+            case 6 : if( trySelect( Card::Ten ) ) break;
+            case 7 : if( trySelect( Card::Ace ) ) break;
+            case 8 : if( trySelect( Card::Queen ) ) break;
+            case 9 : trySelect( Card::King );
         }
         
     }
