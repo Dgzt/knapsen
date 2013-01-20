@@ -14,6 +14,9 @@ class QGraphicsPixmapItem;
 //
 class QTimer;
 //
+//
+class Card;
+//
 
 class CentralWidget : public QGraphicsView
 {
@@ -87,17 +90,17 @@ public slots:
 	
 	void slotInitialize( QString, QString, Knapsen::TypeOfCards, int );
 	
-	void slotNewPlayerCard( int, QString );
+	void slotNewPlayerCard( int, const Card* );
 	void slotNewOpponentCardId( int );
 	
-	void slotNewTrumpCard( QString );
+	void slotNewTrumpCard( const Card* );
 	void slotTrumpCardHide();
 	void slotTrumpCardSelectableChanged( bool );
 	
 	void slotPlayerCardSelectableChanged( int, bool );
 
-	void slotNewCentralCard( int, QString );
-	void slotClearCentralCards();
+	void slotNewCentralCard( int, const Card* );
+        void slotClearCentralCards();
 	
 	void slotOpponentSelectedCardId( int );
 	
@@ -116,7 +119,7 @@ public slots:
 	void slotFortyButtonVisible( bool );
 	void slotCloseButtonVisible( bool );
 	
-	void slotShowOpponentCards( int, QString, int, QString );
+	void slotShowOpponentCards( int, Card, int, Card );
 	
 	//
 	void slotPlayerInAction();

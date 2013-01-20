@@ -68,12 +68,11 @@ signals:
 	
 	void signalNewOpponentCardId( int );
 	
-	void signalNewPlayerCard( int, QString );
+	void signalNewPlayerCard( int, const Card* );
+        
+	void signalNewTrumpCard( const Card* );
 	
-	void signalNewTrumpCard( QString );
-	
-	void signalNewCentralCard( int, QString );
-        void signalNewCentralCard( int, Card* );
+	void signalNewCentralCard( int, const Card* );
 	
 	void signalClearCentralCards();
 	
@@ -89,7 +88,6 @@ signals:
 	
 	void signalPlayerScoresChanged( int );
 	
-	//void signalDeckVisible( bool );
 	void signalHideDeck();
 	
 	void signalCloseDeck();
@@ -99,7 +97,7 @@ signals:
 	void signalTrumpCardSelectableChanged( bool );
 	//
 	
-	void signalShowOpponentCards( int, QString, int, QString );
+	void signalShowOpponentCards( int, Card, int, Card );
 	
 	//
 	void signalNewRound();

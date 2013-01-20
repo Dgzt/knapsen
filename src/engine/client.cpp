@@ -113,12 +113,9 @@ void Client::slotProcessCommands()
 			bool ok;
 			int ret = getValuePartOfCommand( commandList.first() ).toInt( &ok );
 			if( ok ){
-				//int cardId = addNewCard( Card( ret) );
-				int cardId = addNewCard( new Card( ret ) );
-				//emit signalNewPlayerCard( cardId, Card( ret ).getCardText() );
-				emit signalNewPlayerCard( cardId, getCard( cardId )->getCardText() );
-				
-				
+                                int cardId = addNewCard( new Card( ret ) );
+				emit signalNewPlayerCard( cardId, getCard( cardId ) );
+                                
 				mSizeOfDeckNow--;
 				if( mSizeOfDeckNow == 0 ){
 					//emit signalDeckVisible( false );
@@ -170,7 +167,7 @@ void Client::slotProcessCommands()
 				
 				mTrumpCard->addNewCard( new Card( ret ) );
 				
-				emit signalNewTrumpCard( getTrumpCard()->getCard()->getCardText() );
+				emit signalNewTrumpCard( getTrumpCard()->getCard() );
 			}else{
 				kDebug() << "ERROR! Cannot convert new trump card command value to int!";
 			}
@@ -249,11 +246,8 @@ void Client::slotProcessCommands()
 			bool ok;
 			int ret = getValuePartOfCommand( commandList.first() ).toInt( &ok );
 			if( ok ){
-				//addNewCentralCard( Card( ret ) );
-				//int pos = mCentralCards->add( Card( ret ) );
 				int pos = mCentralCards->add( new Card( ret ) );
-				//emit signalNewCentralCard( pos, mCentralCards->getCard( pos ).getCardText() );
-				emit signalNewCentralCard( pos, mCentralCards->getCard( pos )->getCardText() );
+				//emit signalNewCentralCard( pos, mCentralCards->getCard( pos )->getCardText() );
                                 emit signalNewCentralCard( pos, mCentralCards->getCard( pos ) );
 			}
 		}
@@ -282,7 +276,7 @@ void Client::slotProcessCommands()
 				int card2Value = valuesArray->at( 3 ).toInt( &ok );
 				if( !ok ) throw 2;
 				
-				emit signalShowOpponentCards( card1Pos, Card(card1Value).getCardText(), card2Pos, Card(card2Value).getCardText() );
+				emit signalShowOpponentCards( card1Pos, Card(card1Value), card2Pos, Card(card2Value) );
 			}catch( int error ){
 				if( error == 1 ){
 					kDebug() << "ERROR! Wrong size of values in visible opponent cards command!";
@@ -430,8 +424,7 @@ void Client::slotSelectCardId( int id )
 	int pos = mCentralCards->add( getCard( id ) );
 	removeCard( id );
 	
-	//emit signalNewCentralCard( pos, mCentralCards->getCard( pos ).getCardText() );
-	emit signalNewCentralCard( pos, mCentralCards->getCard( pos )->getCardText() );
+	//emit signalNewCentralCard( pos, mCentralCards->getCard( pos )->getCardText() );
         emit signalNewCentralCard( pos, mCentralCards->getCard( pos ) );
 
 	if( isTwentyButtonVisible() ){
@@ -461,8 +454,8 @@ void Client::slotSelectTrumpCard()
 	
 	int ret = changeTrumpCard( getTrumpCard() );
 	
-	emit signalNewPlayerCard( ret, getCard(ret)->getCardText() );
-	emit signalNewTrumpCard( getTrumpCard()->getCard()->getCardText() );
+	emit signalNewPlayerCard( ret, getCard(ret) );
+	emit signalNewTrumpCard( getTrumpCard()->getCard() );
 	
 	mTrumpCard->getCard()->setSelectable( false );
 	emit signalTrumpCardSelectableChanged( false );

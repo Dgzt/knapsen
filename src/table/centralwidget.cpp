@@ -15,6 +15,9 @@
 #include "table/mysvgitem.h"
 #include "table/mytextitem.h"
 #include "table/scoretable.h"
+//
+#include "engine/card.h"
+//
 
 #include "table/centralwidget.h"
 
@@ -410,9 +413,9 @@ void CentralWidget::slotInitialize( QString playerName, QString opponentName, Kn
 	connect( closeButton, SIGNAL( clicked() ), this, SLOT( slotCloseButtonClicked() ) );
 }
 
-void CentralWidget::slotNewPlayerCard( int id , QString card )
+void CentralWidget::slotNewPlayerCard( int id , const Card* card )
 {
-	mPlayerCards[ id ].setElementId( card );
+	mPlayerCards[ id ].setElementId( card->getCardText() );
 	
 	if( mGameIsRunning && !mPlayerCards[ id ].isVisible() ){
 		mPlayerCards[ id ].setVisible( true );
@@ -426,9 +429,9 @@ void CentralWidget::slotNewOpponentCardId( int id )
 	}
 }
 
-void CentralWidget::slotNewTrumpCard( QString card )
+void CentralWidget::slotNewTrumpCard( const Card* card )
 {
-	mTrumpCard->setElementId( card );
+	mTrumpCard->setElementId( card->getCardText() );
 	
 	if( !mTrumpCard->isVisible() ){
 		mTrumpCard->setVisible( true );
@@ -450,10 +453,10 @@ void CentralWidget::slotPlayerCardSelectableChanged( int id , bool selectable )
 	mPlayerCards[ id ].setSelectable( selectable );
 }
 
-void CentralWidget::slotNewCentralCard( int id, QString cardText )
+void CentralWidget::slotNewCentralCard( int id, const Card* card )
 {
-	mCentralCards[ id ].setElementId( cardText );
-	mCentralCards[ id ].setVisible( true );
+    mCentralCards[ id ].setElementId( card->getCardText() );
+    mCentralCards[ id ].setVisible( true );
 }
 
 void CentralWidget::slotClearCentralCards()
@@ -520,16 +523,15 @@ void CentralWidget::slotCloseButtonVisible( bool visible )
 	mCloseButton->setVisible( visible );
 }
 
-void CentralWidget::slotShowOpponentCards( int card1Pos, QString card1Text, int card2Pos, QString card2Text )
+void CentralWidget::slotShowOpponentCards( int card1Pos, Card card1, int card2Pos, Card card2 )
 {
-	mOpponentCards[ card1Pos ].setElementId( card1Text );
-	mOpponentCards[ card2Pos ].setElementId( card2Text );
+	mOpponentCards[ card1Pos ].setElementId( card1.getCardText() );
+	mOpponentCards[ card2Pos ].setElementId( card2.getCardText() );
 	
 	mShowOpponentCardsId = new QPair< int, int >;
 	mShowOpponentCardsId->first = card1Pos;
 	mShowOpponentCardsId->second = card2Pos;
 	
-	//QTimer::singleShot( 1000, this, SLOT( slotCoverOpponentCards() ) );
 	mOpponentCardsShowTimer = new QTimer( this );
 	mOpponentCardsShowTimer->setSingleShot( true );
 	mOpponentCardsShowTimer->setInterval( 1000 );
