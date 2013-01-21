@@ -1,6 +1,6 @@
 #include <KDE/KDebug>
 #include "centralcards.h"
-#include "trumpcard.h"
+#include "trump.h"
 #include "client.h"
 
 Client::Client( QString name ): 
@@ -9,7 +9,7 @@ Client::Client( QString name ):
 	mSizeOfDeckNow( 0 )
 {
 	mCentralCards = new CentralCards;
-	mTrumpCard = new TrumpCard;
+	mTrump = new Trump;
 	
 	connect( this, SIGNAL( connected() ), this, SLOT( slotConnected() ) );
 }
@@ -21,7 +21,7 @@ Client::~Client()
 		mCentralCards = 0;
 	}*/
 	delete mCentralCards;
-	delete mTrumpCard;
+	delete mTrump;
 }
 
 QList< QString >* Client::getValues( QString valuesStr )
@@ -161,13 +161,13 @@ void Client::slotProcessCommands()
 			bool ok;
 			int ret = getValuePartOfCommand( commandList.first() ).toInt( &ok );
 			if( ok ){
-				if( !mTrumpCard->isEmpty() ){
-					mTrumpCard->clearTrumpCard( true );
+				if( !mTrump->isEmpty() ){
+					mTrump->clearTrumpCard( true );
 				}
 				
-				mTrumpCard->addNewCard( new Card( ret ) );
+				mTrump->addNewCard( new Card( ret ) );
 				
-				emit signalNewTrumpCard( getTrumpCard()->getCard() );
+				emit signalNewTrumpCard( mTrump->getCard() );
 			}else{
 				kDebug() << "ERROR! Cannot convert new trump card command value to int!";
 			}
@@ -194,15 +194,15 @@ void Client::slotProcessCommands()
 		if( getCommandPartOfCommand( commandList.first() ) == CLEAR_TRUMP_CARD_COMMAND ){
 			kDebug() << getName() << "Clear trump card.";
 			
-			mTrumpCard->clearTrumpCard( true );
+			mTrump->clearTrumpCard( true );
 			emit signalTrumpCardHide();
 		}
 		
 		if( getCommandPartOfCommand( commandList.first() ) == TRUMP_CARD_SELECTABLE_COMMAND ){
 			kDebug() << getName() << "Selectable trump card.";
 			
-			getTrumpCard()->getCard()->setSelectable( true );
-			emit signalTrumpCardSelectableChanged( getTrumpCard()->getCard()->isSelectable() );
+			mTrump->getCard()->setSelectable( true );
+			emit signalTrumpCardSelectableChanged( mTrump->getCard()->isSelectable() );
 		}
 			
 		if( getCommandPartOfCommand( commandList.first() ) == SELECTABLE_ALL_CARDS_COMMAND ){
@@ -218,7 +218,7 @@ void Client::slotProcessCommands()
 			kDebug() << getName() << "Selectable certan cards.";
 			
 			//setSelectableCertainCards();
-			setSelectableCertainCards( mCentralCards , mTrumpCard );
+			setSelectableCertainCards( mCentralCards , mTrump );
 			emit signalPlayerInAction();
 		}
 		
@@ -440,8 +440,8 @@ void Client::slotSelectCardId( int id )
 	}
 	
 	//if( getTrumpCard().isSelectable() ){
-	if( !getTrumpCard()->isEmpty() && getTrumpCard()->getCard()->isSelectable() ){
-		getTrumpCard()->getCard()->setSelectable( false );
+	if( /*!mTrump->isEmpty() && */mTrump->getCard()->isSelectable() ){
+		mTrump->getCard()->setSelectable( false );
 		emit signalTrumpCardSelectableChanged( false );
 	}
 	
@@ -452,24 +452,24 @@ void Client::slotSelectTrumpCard()
 {
 	kDebug() << "Select trump card.";
 	
-	int ret = changeTrumpCard( getTrumpCard() );
+	int ret = changeTrumpCard( mTrump );
 	
 	emit signalNewPlayerCard( ret, getCard(ret) );
-	emit signalNewTrumpCard( getTrumpCard()->getCard() );
+	emit signalNewTrumpCard( mTrump->getCard() );
 	
-	mTrumpCard->getCard()->setSelectable( false );
+	mTrump->getCard()->setSelectable( false );
 	emit signalTrumpCardSelectableChanged( false );
 	
 	getCard( ret )->setSelectable( true );
 	emit signalPlayerCardSelectableChanged( ret, true );
 	
 	//if( haveRegularMarriages( mTrumpCard ) ){
-	if( haveRegularMarriages( mTrumpCard ) ){
+	if( haveRegularMarriages( mTrump ) ){
 		setTwentyButtonVisible( true );
 	}
 	
 	//if( haveTrumpMarriages() ){
-	if( haveTrumpMarriages( mTrumpCard ) ){
+	if( haveTrumpMarriages( mTrump ) ){
 		setFortyButtonVisible( true );
 	}
 	
@@ -479,7 +479,7 @@ void Client::slotSelectTrumpCard()
 void Client::slotTwentyButtonClicked()
 {
 	twentyButtonClicked();
-	setSelectableRegularMarriagesCards( mTrumpCard );
+	setSelectableRegularMarriagesCards( mTrump );
 	sendCommand( TWENTY_BUTTON_CLICKED_COMMAND );
 }
 
@@ -487,7 +487,7 @@ void Client::slotFortyButtonClicked()
 {
 	kDebug();
 	fortyButtonClicked();
-	setSelectableTrumpMarriagesCards( mTrumpCard );
+	setSelectableTrumpMarriagesCards( mTrump );
 	sendCommand( FORTY_BUTTON_CLICKED_COMMAND );
 }
 
@@ -496,10 +496,10 @@ void Client::slotCloseButtonClicked()
 	setCloseButtonVisible( false );
 	emit signalCloseDeck();
 	
-	kDebug() << getTrumpCard()->getCard()->isSelectable();
-	if( getTrumpCard()->getCard()->isSelectable() ){
-		getTrumpCard()->getCard()->setSelectable( false );
-		emit signalTrumpCardSelectableChanged( getTrumpCard()->getCard()->isSelectable() );
+	kDebug() << mTrump->getCard()->isSelectable();
+	if( mTrump->getCard()->isSelectable() ){
+		mTrump->getCard()->setSelectable( false );
+		emit signalTrumpCardSelectableChanged( mTrump->getCard()->isSelectable() );
 	}
 	
 	sendCommand( CLOSE_BUTTON_CLICKED_COMMAND );

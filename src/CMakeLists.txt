@@ -15,9 +15,7 @@ set(knapsen_HDRS
 	engine/gamesequence.h
 	engine/server.h
 	engine/centralcards.h
-	
-	engine/trumpcard.h
-	
+	engine/trump.h
 	dialogs/waitforserverdialog.h
 	dialogs/waitforclientdialog.h
 	dialogs/newgamedialog.h
@@ -40,9 +38,7 @@ set(knapsen_SRCS
 	engine/gamesequence.cpp
 	engine/server.cpp
 	engine/centralcards.cpp
-	
-	engine/trumpcard.cpp
-	
+	engine/trump.cpp
 	dialogs/waitforserverdialog.cpp
 	dialogs/waitforclientdialog.cpp
 	dialogs/newgamedialog.cpp

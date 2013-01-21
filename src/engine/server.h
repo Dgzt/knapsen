@@ -10,7 +10,7 @@ class Player;
 class Bot;
 class Deck;
 class CentralCards;
-class TrumpCard;
+class Trump;
 class Card;
 
 class Server : public QTcpServer
@@ -35,10 +35,9 @@ class Server : public QTcpServer
 	QList<Player*> mPlayerList;
 	
 	//Deck
-	Deck *mDeck;
+	Deck* mDeck;
 	
-	//Card mTrumpCard;
-	TrumpCard *mTrumpCard;
+	Trump* mTrump;
 
 	//Central cards
 	CentralCards *mCentralCards;

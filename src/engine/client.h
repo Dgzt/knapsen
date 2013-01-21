@@ -6,7 +6,7 @@
 
 class CentralCards;
 	
-class TrumpCard;
+class Trump;
 
 class Client : public Player
 {
@@ -16,7 +16,7 @@ class Client : public Player
 	int mSizeOfDeckNow;
 	
 	CentralCards *mCentralCards;
-	TrumpCard *mTrumpCard;
+	Trump *mTrump;
 	
 	QList<QString> commandList;
 	
@@ -36,7 +36,7 @@ protected:
 	
 	CentralCards* getCentralCards(){ return mCentralCards; }
 	
-	TrumpCard* getTrumpCard(){ return mTrumpCard; }
+	Trump* getTrump(){ return mTrump; }
 	
 public:
     enum GameErrorType{ NameIsBusy, ServerIsFull, OpponentDisconnected };

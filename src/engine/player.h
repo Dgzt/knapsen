@@ -84,7 +84,7 @@ static const QString START_NEXT_GAME_COMMAND = ":START_NEXT_GAME";
 
 class CentralCards;
 
-class TrumpCard;
+class Trump;
 
 class Player : public QTcpSocket
 {
@@ -141,7 +141,7 @@ protected:
 	//Set selectable OR not selectable all avalibe card
 	void setSelectableAllCards( bool );
 	//Set selectable cards, which suit of cards equal the suit of central card or suit of trump card
-	void setSelectableCertainCards( CentralCards *, TrumpCard * );
+	void setSelectableCertainCards( CentralCards* , Trump* );
 	
 	/*//void setSelectableRegularMarriagesCards();
 	void setSelectableRegularMarriagesCards( TrumpCard * );
@@ -188,19 +188,19 @@ public:
 	void addScores( int );
 	int getScores() const{ return mScores; }
 	
-	bool haveRegularMarriages( TrumpCard * ) const;
-	bool haveTrumpMarriages( TrumpCard * ) const;
+	bool haveRegularMarriages( Trump* ) const;
+	bool haveTrumpMarriages( Trump* ) const;
 	
-	bool canChangeTrumpCard( TrumpCard * ) const;
-	int changeTrumpCard( TrumpCard * );
+	bool canChangeTrumpCard( Trump* ) const;
+	int changeTrumpCard( Trump* );
 	
 	void setTwentyButtonVisible( bool );
 	bool isTwentyButtonVisible() const{ return mTwentyButtonVisible; }
 	void setFortyButtonVisible( bool );
 	bool isFortyButtonVisible() const{ return mFortyButtonVisible; }
 	
-	void setSelectableRegularMarriagesCards( TrumpCard * );
-	void setSelectableTrumpMarriagesCards( TrumpCard * );
+	void setSelectableRegularMarriagesCards( Trump* );
+	void setSelectableTrumpMarriagesCards( Trump* );
 	
 	//-- Commands --
 	
@@ -220,7 +220,7 @@ public:
 	
 	
 	//Set and send the new trump card
-	void sendNewTrumpCard( TrumpCard* );
+	void sendNewTrumpCard( Trump* );
 	
 	void sendClearTrumpCard(){ sendCommand( CLEAR_TRUMP_CARD_COMMAND ); }
 	
@@ -228,7 +228,7 @@ public:
 	void sendSelectableAllCards();
 
 	//void sendSelectableCertainCards();
-	void sendSelectableCertainCards( CentralCards *, TrumpCard * );
+	void sendSelectableCertainCards( CentralCards *, Trump* );
 	
 	void sendOpponentInAction(){ sendCommand( OPPONENT_IN_ACTION_COMMAND ); }
 	

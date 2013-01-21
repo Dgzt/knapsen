@@ -1,7 +1,7 @@
 #include <QtCore/QTimer>
 #include <KDE/KDebug>
 #include "centralcards.h"
-#include "trumpcard.h"
+#include "trump.h"
 #include "bot.h"
 
 const int INVALID_CARD_ID = -1;
@@ -210,7 +210,7 @@ void Bot::tryChangeTrumpCard()
 {
     kDebug() << "Try change trump card.";
     
-    if( !getTrumpCard()->isEmpty() && getTrumpCard()->getCard()->isSelectable() ){
+    if( !getTrump()->isEmpty() && getTrump()->getCard()->isSelectable() ){
         kDebug() << "Can change trump card. Change it.";
         
         slotSelectTrumpCard();
@@ -246,7 +246,7 @@ bool Bot::trySelectNotEqualTrump( Card::CardType cardType )
 {
     kDebug() << "If have" << cardType << "and the type of card is not equal with type of trump card then select card.";
     Card* card;
-    Card::CardSuit trumpCardSuit = getTrumpCard()->getCard()->getCardSuit();
+    Card::CardSuit trumpCardSuit = getTrump()->getCard()->getCardSuit();
     
     for( int i = 0; i < getNumberOfCardsInHand(); ++i ){
         card = getCard( i );
@@ -292,7 +292,7 @@ bool Bot::trySelectEqualTrump( Card::CardType cardType )
     kDebug() << "If have card, what the type of card is equal with the type of trump card, then select card.";
     
     Card* card;
-    Card::CardSuit trumpCardSuit = getTrumpCard()->getCard()->getCardSuit();
+    Card::CardSuit trumpCardSuit = getTrump()->getCard()->getCardSuit();
     
     for( int i = 0; i < getNumberOfCardsInHand(); ++i ){
         card = getCard( i );
@@ -367,7 +367,7 @@ bool Bot::trySelectEqualTrumpMinPoints()
 {
     kDebug() << "Try select the smallest points card, what's suit is equal whith trump card's suit and the card's point is more then central card's point.";
     
-    if( getCentralCards()->getCard(0)->getCardSuit() != getTrumpCard()->getCardSuit() ){ //If is equal, that was check the previous function
+    if( getCentralCards()->getCard(0)->getCardSuit() != getTrump()->getCardSuit() ){ //If is equal, that was check the previous function
         Card* card;
         int selectCardId = INVALID_CARD_ID;
         
@@ -377,7 +377,7 @@ bool Bot::trySelectEqualTrumpMinPoints()
             
             if( card != 0 &&
                 card->isSelectable() &&
-                card->getCardSuit() == getTrumpCard()->getCardSuit() )
+                card->getCardSuit() == getTrump()->getCardSuit() )
             {
                 if( ( getSizeOfDeckNow() == 0 || mDeckIsClosed ) ||
                     ( ( card->getCardType() == Card::King && getPairOfCardWasInCentral( Card::King, card->getCardSuit() ) ) ||
