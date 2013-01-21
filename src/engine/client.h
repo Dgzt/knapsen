@@ -2,10 +2,8 @@
 #define CLIENT_H
 
 #include "player.h"
-#include "enums.h"
 
 class CentralCards;
-	
 class Trump;
 
 class Client : public Player

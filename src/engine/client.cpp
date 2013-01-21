@@ -42,7 +42,7 @@ QList< QString >* Client::getValues( QString valuesStr )
 
 void Client::newCommand( QString command )
 {
-	kDebug() << command;
+	//kDebug() << command;
 	
 	if( getCommandPartOfCommand( command ) == OPPONENT_DISCONNECTED_COMMAND ){
 		kDebug() << getName() << "Opponent disconnected!";
@@ -276,7 +276,11 @@ void Client::slotProcessCommands()
 				int card2Value = valuesArray->at( 3 ).toInt( &ok );
 				if( !ok ) throw 2;
 				
-				emit signalShowOpponentCards( card1Pos, Card(card1Value), card2Pos, Card(card2Value) );
+                                commandList.removeFirst();
+                                
+                                emit signalShowOpponentCards( card1Pos, Card(card1Value), card2Pos, Card(card2Value) );
+                                
+                                break;
 			}catch( int error ){
 				if( error == 1 ){
 					kDebug() << "ERROR! Wrong size of values in visible opponent cards command!";
@@ -355,12 +359,9 @@ void Client::slotProcessCommands()
 			kDebug() << getName() << "Start game.";
 			
 			newGame();
-			//
-			//mCentralCards = new CentralCards;
-			//
+
 			emit signalPlayerScoresChanged( getScores() );
 			emit signalOpponentScoresChanged( 0 );
-			
 			emit signalStartGame();
 		}
 		
@@ -394,14 +395,6 @@ void Client::slotProcessCommands()
 			kDebug() << getName() << "End game.";
 			
 			emit signalEndGame( getValuePartOfCommand( commandList.first() ) );
-		}
-		
-		
-		
-		if( getName() != "Bot" && getCommandPartOfCommand( commandList.first() ) == VISIBLE_OPPONENT_CARDS_COMMAND ){
-			kDebug() << "Break loop.";
-			commandList.removeFirst();
-			break;
 		}
 		
 		commandList.removeFirst();
