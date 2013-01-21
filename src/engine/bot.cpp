@@ -29,7 +29,7 @@ Bot::Bot( QString name, Knapsen::GameDifficulty difficulty ):
 	pairOfQueenWasInCentralCards[3].first = pairOfKingWasInCentralCards[3].first = Card::Club;
 }
 
-bool Bot::getPairOfCardWasInCentral( Card::CardType cardType, Card::CardSuit cardSuit )
+bool Bot::getPairOfCardWasInCentral( Card::Type cardType, Card::Suit cardSuit )
 {
     for( int i = 0; i < 4; ++i ){
         if( cardType == Card::King && pairOfKingWasInCentralCards[i].first == cardSuit ){
@@ -242,16 +242,16 @@ bool Bot::tryMeldMarriage()
     return clicktedToFortyOrTwentyButton;
 }
 
-bool Bot::trySelectNotEqualTrump( Card::CardType cardType )
+bool Bot::trySelectNotEqualTrump( Card::Type cardType )
 {
     kDebug() << "If have" << cardType << "and the type of card is not equal with type of trump card then select card.";
     Card* card;
-    Card::CardSuit trumpCardSuit = getTrump()->getCard()->getCardSuit();
+    Card::Suit trumpCardSuit = getTrump()->getCard()->getSuit();
     
     for( int i = 0; i < getNumberOfCardsInHand(); ++i ){
         card = getCard( i );
         
-        if( card != 0 && card->isSelectable() && ( card->getCardSuit() != trumpCardSuit ) && ( card->getCardType() == cardType ) ){
+        if( card != 0 && card->isSelectable() && ( card->getSuit() != trumpCardSuit ) && ( card->getType() == cardType ) ){
             slotSelectCardId( i );
             return true;
         }
@@ -261,11 +261,11 @@ bool Bot::trySelectNotEqualTrump( Card::CardType cardType )
     return false;
 }
 
-bool Bot::trySelectPairWasNotInCentral( Card::CardType cardType )
+bool Bot::trySelectPairWasNotInCentral( Card::Type cardType )
 {
     kDebug() << "If have card, what the pair of card was in the central cards _OR_ the deck of cards count 0 then select card.";
     
-    Card::CardType pairCardType;
+    Card::Type pairCardType;
     if( cardType == Card::King ){
         pairCardType = Card::Queen;
     }else{ //cardType == Card::King
@@ -277,7 +277,7 @@ bool Bot::trySelectPairWasNotInCentral( Card::CardType cardType )
     for( int i = 0; i < getNumberOfCardsInHand(); ++i ){
         card = getCard( i );
         
-        if( card != 0 && card->isSelectable() && ( card->getCardType() == cardType ) && ( mDeckIsClosed || getSizeOfDeckNow() == 0 || ( getPairOfCardWasInCentral( pairCardType, card->getCardSuit() ) ) ) ){
+        if( card != 0 && card->isSelectable() && ( card->getType() == cardType ) && ( mDeckIsClosed || getSizeOfDeckNow() == 0 || ( getPairOfCardWasInCentral( pairCardType, card->getSuit() ) ) ) ){
             slotSelectCardId( i );
             return true;
         }
@@ -287,17 +287,17 @@ bool Bot::trySelectPairWasNotInCentral( Card::CardType cardType )
     return false;
 }
 
-bool Bot::trySelectEqualTrump( Card::CardType cardType )
+bool Bot::trySelectEqualTrump( Card::Type cardType )
 {
     kDebug() << "If have card, what the type of card is equal with the type of trump card, then select card.";
     
     Card* card;
-    Card::CardSuit trumpCardSuit = getTrump()->getCard()->getCardSuit();
+    Card::Suit trumpCardSuit = getTrump()->getCard()->getSuit();
     
     for( int i = 0; i < getNumberOfCardsInHand(); ++i ){
         card = getCard( i );
         
-        if( card != 0 && card->isSelectable() && ( card->getCardSuit() == trumpCardSuit ) && ( card->getCardType() == cardType ) ){
+        if( card != 0 && card->isSelectable() && ( card->getSuit() == trumpCardSuit ) && ( card->getType() == cardType ) ){
             slotSelectCardId( i );
             return true;
         }
@@ -307,12 +307,12 @@ bool Bot::trySelectEqualTrump( Card::CardType cardType )
     return false;
 }
 
-bool Bot::trySelect( Card::CardType cardType )
+bool Bot::trySelect( Card::Type cardType )
 {
     kDebug() << "If have " << cardType << " then I will select this.";
     
     for( int i = 0; i < getNumberOfCardsInHand(); ++i ){
-        if( getCard( i ) != 0 && getCard( i )->isSelectable() && getCard( i )->getCardType() == cardType ){
+        if( getCard( i ) != 0 && getCard( i )->isSelectable() && getCard( i )->getType() == cardType ){
             slotSelectCardId( i );
             return true;
         }
@@ -335,13 +335,13 @@ bool Bot::trySelectEqualCentralMinPoints()
         
         if( card != 0 &&
             card->isSelectable() &&
-            card->getCardSuit() == centralCard0->getCardSuit() &&
+            card->getSuit() == centralCard0->getSuit() &&
             card->getCardPoint() > centralCard0->getCardPoint() )
         {
             if( ( getSizeOfDeckNow() == 0 || mDeckIsClosed ) ||
-                ( ( card->getCardType() == Card::King && getPairOfCardWasInCentral( Card::King, card->getCardSuit() ) ) ||
-                  ( card->getCardType() == Card::Queen && getPairOfCardWasInCentral( Card::Queen, card->getCardSuit() ) ) ||
-                  ( card->getCardType() != Card::King && card->getCardType() != Card::Queen ) )   
+                ( ( card->getType() == Card::King && getPairOfCardWasInCentral( Card::King, card->getSuit() ) ) ||
+                  ( card->getType() == Card::Queen && getPairOfCardWasInCentral( Card::Queen, card->getSuit() ) ) ||
+                  ( card->getType() != Card::King && card->getType() != Card::Queen ) )   
             ){
                 if( ( selectCardId == INVALID_CARD_ID ) ||
                     ( card->getCardPoint() < getCard( selectCardId )->getCardPoint()  )
@@ -367,7 +367,7 @@ bool Bot::trySelectEqualTrumpMinPoints()
 {
     kDebug() << "Try select the smallest points card, what's suit is equal whith trump card's suit and the card's point is more then central card's point.";
     
-    if( getCentralCards()->getCard(0)->getCardSuit() != getTrump()->getCardSuit() ){ //If is equal, that was check the previous function
+    if( getCentralCards()->getCard(0)->getSuit() != getTrump()->getCardSuit() ){ //If is equal, that was check the previous function
         Card* card;
         int selectCardId = INVALID_CARD_ID;
         
@@ -377,12 +377,12 @@ bool Bot::trySelectEqualTrumpMinPoints()
             
             if( card != 0 &&
                 card->isSelectable() &&
-                card->getCardSuit() == getTrump()->getCardSuit() )
+                card->getSuit() == getTrump()->getCardSuit() )
             {
                 if( ( getSizeOfDeckNow() == 0 || mDeckIsClosed ) ||
-                    ( ( card->getCardType() == Card::King && getPairOfCardWasInCentral( Card::King, card->getCardSuit() ) ) ||
-                    ( card->getCardType() == Card::Queen && getPairOfCardWasInCentral( Card::Queen, card->getCardSuit() ) ) ||
-                    ( card->getCardType() != Card::King && card->getCardType() != Card::Queen ) )   
+                    ( ( card->getType() == Card::King && getPairOfCardWasInCentral( Card::King, card->getSuit() ) ) ||
+                    ( card->getType() == Card::Queen && getPairOfCardWasInCentral( Card::Queen, card->getSuit() ) ) ||
+                    ( card->getType() != Card::King && card->getType() != Card::Queen ) )   
                 ){
                     if( ( selectCardId == INVALID_CARD_ID ) ||
                         ( card->getCardPoint() < getCard( selectCardId )->getCardPoint()  )
@@ -413,21 +413,21 @@ void Bot::slotNewRound()
 
 void Bot::slotNewCentralCard( int , const Card* card )
 {
-    if( card->getCardType() == Card::Queen ){
+    if( card->getType() == Card::Queen ){
     
         for( int i = 0; i < 4; ++i ){
         
-            if( pairOfKingWasInCentralCards[i].first == card->getCardSuit() ){
+            if( pairOfKingWasInCentralCards[i].first == card->getSuit() ){
                 pairOfKingWasInCentralCards[i].second = true;
             }
                         
         }
                 
-    }else if( card->getCardType() == Card::King ){
+    }else if( card->getType() == Card::King ){
     
         for( int i = 0; i < 4; ++i ){
         
-            if( pairOfQueenWasInCentralCards[i].first == card->getCardSuit() ){
+            if( pairOfQueenWasInCentralCards[i].first == card->getSuit() ){
                 pairOfQueenWasInCentralCards[i].second = true;
             }
                         

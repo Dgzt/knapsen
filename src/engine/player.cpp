@@ -96,7 +96,7 @@ int Player::changeTrumpCard( Trump *trump )
 	//This value will be modify. Only for don't write warning the compiler.
 	
 	for( int i = 0; i < mNumberOfCardsInHand; ++i ){
-		if( mCards[i] != 0 && mCards[i]->getCardSuit() == trump->getCardSuit() && mCards[i]->getCardType() == mLowestCardType ){
+		if( mCards[i] != 0 && mCards[i]->getSuit() == trump->getCardSuit() && mCards[i]->getType() == mLowestCardType ){
 			kDebug() << i;
 			
 			Card *tmpCard = trump->getCard();
@@ -124,7 +124,7 @@ void Player::setSelectableCertainCards( CentralCards *centralCards, Trump *trump
 {
 	//Set true, which cards equal type whit central card
 	//if( setSelectableCardsWhatEqualSuit( centralCards->getCard( 0 ).getCardSuit() ) == false ){
-	if( setSelectableCardsWhatEqualSuit( centralCards->getCard( 0 )->getCardSuit() ) == false ){
+	if( setSelectableCardsWhatEqualSuit( centralCards->getCard( 0 )->getSuit() ) == false ){
 		//If have not cards which equal type whith central card, then set true, which equal type whith trump card 
 		//if( setSelectableCardsWhatEqualSuit( mTrumpCardSuit ) == false ){
 		if( setSelectableCardsWhatEqualSuit( trump->getCardSuit() ) == false ){
@@ -141,14 +141,14 @@ void Player::setSelectableRegularMarriagesCards( Trump* trump )
 	for( int i = 0; i < mNumberOfCardsInHand; ++i ){
 		
 		if( mCards[ i ] != 0 && 
-			mCards[ i ]->getCardSuit() != trump->getCardSuit() && 
-			mCards[ i ]->getCardType() == Card::King
+			mCards[ i ]->getSuit() != trump->getCardSuit() && 
+			mCards[ i ]->getType() == Card::King
 		){
 			for( int j = 0; j < mNumberOfCardsInHand; ++j ){
 				
 				if( mCards[ j ] != 0 &&
-					mCards[ j ]->getCardSuit() == mCards[ i ]->getCardSuit() &&
-					mCards[ j ]->getCardType() == Card::Queen
+					mCards[ j ]->getSuit() == mCards[ i ]->getSuit() &&
+					mCards[ j ]->getType() == Card::Queen
 					
 				){
 					mCards[ i ]->setSelectable( true );
@@ -168,14 +168,14 @@ void Player::setSelectableTrumpMarriagesCards( Trump* trump )
 	for( int i = 0; i < mNumberOfCardsInHand; ++i ){
 		
 		if( mCards[ i ] != 0 && 
-			mCards[ i ]->getCardSuit() == trump->getCardSuit() && 
-			mCards[ i ]->getCardType() == Card::King
+			mCards[ i ]->getSuit() == trump->getCardSuit() && 
+			mCards[ i ]->getType() == Card::King
 		){
 			for( int j = 0; j < mNumberOfCardsInHand; ++j ){
 				
 				if( mCards[ j ] != 0 &&
-					mCards[ j ]->getCardSuit() == mCards[ i ]->getCardSuit() &&
-					mCards[ j ]->getCardType() == Card::Queen
+					mCards[ j ]->getSuit() == mCards[ i ]->getSuit() &&
+					mCards[ j ]->getType() == Card::Queen
 					
 				){
 					mCards[ i ]->setSelectable( true );
@@ -258,9 +258,9 @@ void Player::setLowestCard( int sizeOfDeck )
 int Player::getPositionOfPairOfCard( const Card* card )
 {
 	for( int i = 0; i < mNumberOfCardsInHand; ++i ){
-		if( mCards[i] != 0 && card->getCardSuit() == mCards[i]->getCardSuit() &&
-			( ( card->getCardType() == Card::King && mCards[i]->getCardType() == Card::Queen ) ||
-			  ( card->getCardType() == Card::Queen && mCards[i]->getCardType() == Card::King ) )
+		if( mCards[i] != 0 && card->getSuit() == mCards[i]->getSuit() &&
+			( ( card->getType() == Card::King && mCards[i]->getType() == Card::Queen ) ||
+			  ( card->getType() == Card::Queen && mCards[i]->getType() == Card::King ) )
 		){
 			return i;
 		}
@@ -275,10 +275,10 @@ bool Player::haveRegularMarriages( Trump* trump ) const
 	bool ret = false;
 	
 	for( int i = 0; i < mNumberOfCardsInHand; ++i ){
-		if( mCards[ i ] != 0 && mCards[ i ]->getCardSuit() != trump->getCardSuit() && mCards[ i ]->getCardType() == Card::King ){
+		if( mCards[ i ] != 0 && mCards[ i ]->getSuit() != trump->getCardSuit() && mCards[ i ]->getType() == Card::King ){
 			
 			for( int j = 0; j < mNumberOfCardsInHand; ++j ){
-				if( mCards[j] != 0 && mCards[j]->getCardType() == Card::Queen && mCards[j]->getCardSuit() == mCards[i]->getCardSuit() ){
+				if( mCards[j] != 0 && mCards[j]->getType() == Card::Queen && mCards[j]->getSuit() == mCards[i]->getSuit() ){
 					ret = true;
 				}
 			}
@@ -294,10 +294,10 @@ bool Player::haveTrumpMarriages( Trump* trump ) const
 	bool ret = false;
 	
 	for( int i = 0; i < mNumberOfCardsInHand; ++i ){
-		if( mCards[ i ] != 0 && mCards[ i ]->getCardSuit() == trump->getCardSuit() && mCards[ i ]->getCardType() == Card::King ){
+		if( mCards[ i ] != 0 && mCards[ i ]->getSuit() == trump->getCardSuit() && mCards[ i ]->getType() == Card::King ){
 			
 			for( int j = 0; j < mNumberOfCardsInHand; ++j ){
-				if( mCards[j] != 0 && mCards[j]->getCardType() == Card::Queen && mCards[j]->getCardSuit() == mCards[i]->getCardSuit() ){
+				if( mCards[j] != 0 && mCards[j]->getType() == Card::Queen && mCards[j]->getSuit() == mCards[i]->getSuit() ){
 					ret = true;
 				}
 			}
@@ -314,7 +314,7 @@ bool Player::canChangeTrumpCard( Trump* trump ) const
 	
 	for( int i = 0; i < mNumberOfCardsInHand; ++i ){
 		
-		if( mCards[i] != 0 && mCards[i]->getCardSuit() == trump->getCardSuit() && mCards[i]->getCardType() == mLowestCardType ){
+		if( mCards[i] != 0 && mCards[i]->getSuit() == trump->getCardSuit() && mCards[i]->getType() == mLowestCardType ){
 			canChange = true;
 		}
 		
@@ -468,13 +468,13 @@ void Player::newCommand( QString command )
 	
 }
 
-bool Player::setSelectableCardsWhatEqualSuit( Card::CardSuit cardSuit )
+bool Player::setSelectableCardsWhatEqualSuit( Card::Suit cardSuit )
 {
 	bool haveSelectableCard = false;
 	
 	for( int i = 0; i < getNumberOfCardsInHand(); ++i ){
 		
-		if( mCards[ i ] != 0 && mCards[ i ]->getCardSuit() == cardSuit ){
+		if( mCards[ i ] != 0 && mCards[ i ]->getSuit() == cardSuit ){
 			mCards[ i ]->setSelectable( true );
 			emit signalPlayerCardSelectableChanged( i, true );
 			haveSelectableCard = true;

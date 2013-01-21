@@ -9,7 +9,7 @@ void Trump::addNewCard( Card *card )
 {
 	mCard = card;
 	
-	mCardSuit = mCard->getCardSuit();
+	mCardSuit = mCard->getSuit();
 }
 
 bool Trump::isEmpty()

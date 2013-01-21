@@ -7,8 +7,8 @@
 class Card
 {	
 public:
-	enum CardSuit{ Heart, Diamond, Spade, Club };
-	enum CardType{ Ace, Ten, King, Queen, Jack, Nine };
+	enum Suit{ Heart, Diamond, Spade, Club };
+	enum Type{ Ace, Ten, King, Queen, Jack, Nine };
 	
 private:
 	int mValue;
@@ -31,8 +31,8 @@ public:
 	
 	int getCardPoint() const;
 	
-	CardSuit getCardSuit() const;
-	CardType getCardType() const;
+	Suit getSuit() const;
+	Type getType() const;
 
 	//bool operator==( const Card * );
 };

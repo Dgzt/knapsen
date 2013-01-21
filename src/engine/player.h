@@ -93,7 +93,7 @@ class Player : public QTcpSocket
 	//Player's name
 	QString mName;
 	
-	Card::CardType mLowestCardType;
+	Card::Type mLowestCardType;
 	
 	int mNumberOfCardsInHand;
 	Card** mCards;
@@ -115,7 +115,7 @@ class Player : public QTcpSocket
 	
 	virtual void newCommand( QString );
 	
-	bool setSelectableCardsWhatEqualSuit( Card::CardSuit );
+	bool setSelectableCardsWhatEqualSuit( Card::Suit );
 	
 private slots:
 	void slotReadyRead();
@@ -132,7 +132,7 @@ protected:
 	void newRound();
 	
 	void setLowestCard( int );
-	Card::CardType getLowestCardType(){ return mLowestCardType; }
+	Card::Type getLowestCardType(){ return mLowestCardType; }
 	
 	int addNewCard( Card* );
 	void removeCard( int );

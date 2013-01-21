@@ -579,12 +579,8 @@ void Server::slotCheckCentralCards()
 	kDebug() << "centralCard1Point" << centralCard1Point;
 	kDebug() << "centralCard2Point" << centralCard2Point;
 	
-	//
-	//Card::CardSuit centralCard0Suit = mCentralCards->getCard( 0 ).getCardSuit();
-	const Card::CardSuit centralCard0Suit = mCentralCards->getCard( 0 )->getCardSuit();
-	//Card::CardSuit centralCard1Suit = mCentralCards->getCard( 1 ).getCardSuit();
-	const Card::CardSuit centralCard1Suit = mCentralCards->getCard( 1 )->getCardSuit();
-	//
+	const Card::Suit centralCard0Suit = mCentralCards->getCard( 0 )->getSuit();
+	const Card::Suit centralCard1Suit = mCentralCards->getCard( 1 )->getSuit();
 	
 	bool currentPlayerStartNextTurn;
 	
@@ -793,14 +789,6 @@ void Server::setWhoStartGame( Knapsen::WhoStartGame whoStartGame )
 {
 	mGameSequence->setWhoStartGame( whoStartGame );
 }
-
-/*void Server::addBot( QString botName )
-{
-	mBot = new Bot( this );
-	mBot->setName( botName );
-	
-	mBot->connectToHost( "127.0.0.1", serverPort() );
-}*/
 
 void Server::addBot( QString botName, Knapsen::GameDifficulty difficulty )
 {

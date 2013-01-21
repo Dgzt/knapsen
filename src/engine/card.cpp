@@ -23,7 +23,7 @@ int Card::getCardPoint() const
 {
 	int ret = 0;
 
-	switch( getCardType() ){
+	switch( getType() ){
 		case Card::Ace : ret = 11; break;
 		case Card::King : ret = 4; break;
 		case Card::Queen : ret = 3; break;
@@ -36,9 +36,9 @@ int Card::getCardPoint() const
 	return ret;
 }
 
-Card::CardSuit Card::getCardSuit() const
+Card::Suit Card::getSuit() const
 {
-	CardSuit ret;
+	Suit ret;
 	
 	if( mValue < 5 || mValue == 20 ){
 		ret = Card::Heart;
@@ -53,9 +53,9 @@ Card::CardSuit Card::getCardSuit() const
 	return ret;
 }
 
-Card::CardType Card::getCardType() const
+Card::Type Card::getType() const
 {
-	CardType ret;
+	Type ret;
 	
 	if( mValue == 0 || mValue == 5 || mValue == 10 || mValue == 15 ){ //Ace
 		ret = Card::Ace;
@@ -73,12 +73,3 @@ Card::CardType Card::getCardType() const
 	
 	return ret;
 }
-
-/*bool Card::operator==( const Card *card )
-{
-	if( mValue == card->mValue ){
-		return true;
-	}//else
-	return false;
-}*/
-

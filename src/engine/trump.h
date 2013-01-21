@@ -7,7 +7,7 @@ class Trump
 {
 	Card *mCard;
 	
-	Card::CardSuit mCardSuit;
+	Card::Suit mCardSuit;
 	
 public:
 	Trump();
@@ -15,7 +15,7 @@ public:
 	void addNewCard( Card* );
 	Card* getCard(){ return mCard; }
 	
-	Card::CardSuit getCardSuit(){ return mCardSuit; }
+	Card::Suit getCardSuit(){ return mCardSuit; }
 	
 	bool isEmpty();
 	

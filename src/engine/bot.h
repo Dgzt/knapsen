@@ -13,12 +13,12 @@ class Bot : public Client
 	bool mDeckIsClosed;
 	
 	//
-	QPair< Card::CardSuit, bool > pairOfKingWasInCentralCards[4];
-	QPair< Card::CardSuit, bool > pairOfQueenWasInCentralCards[4];
+	QPair< Card::Suit, bool > pairOfKingWasInCentralCards[4];
+	QPair< Card::Suit, bool > pairOfQueenWasInCentralCards[4];
 	
 	//bool getPairOfKingWasInCentralCards( Card::CardSuit );
 	//bool getPairOfQueenWasInCentralCards( Card::CardSuit );
-	bool getPairOfCardWasInCentral( Card::CardType, Card::CardSuit );
+	bool getPairOfCardWasInCentral( Card::Type, Card::Suit );
         //
 	
 private slots:
@@ -39,13 +39,13 @@ private slots:
         void tryChangeTrumpCard();
         bool tryMeldMarriage();
         
-        bool trySelectNotEqualTrump( Card::CardType );
-        bool trySelectPairWasNotInCentral( Card::CardType ); //Only King or Queen
-        bool trySelectEqualTrump( Card::CardType );
+        bool trySelectNotEqualTrump( Card::Type );
+        bool trySelectPairWasNotInCentral( Card::Type ); //Only King or Queen
+        bool trySelectEqualTrump( Card::Type );
         //
         //bool trySelectPairHaveNotInHand( Card::CardType ); //Only King or Queen
         //
-        bool trySelect( Card::CardType );
+        bool trySelect( Card::Type );
         //
         
         //
