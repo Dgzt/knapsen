@@ -3,10 +3,7 @@
 #include "trump.h"
 #include "player.h"
 
-//Player::Player( QObject* parent ): 
-//	QTcpSocket( parent ),
 Player::Player( QString name ): 
-	//mName( "" ),
 	mName( name ),
 	mLowestCardType( Card::Jack ),
 	mNumberOfCardsInHand( 0 ),

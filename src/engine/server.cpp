@@ -780,7 +780,7 @@ void Server::incomingConnection( int socketDescriptor )
 {
 	kDebug() << "socketDescriptor:" << socketDescriptor;
 	
-	Player* player = new Player( "" );
+	Player* player = new Player("");
 	player->setSocketDescriptor( socketDescriptor );
 	
 	//If the player have name, then will be a player

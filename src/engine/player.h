@@ -164,9 +164,8 @@ protected:
 	void sendCommand( QString command ){ write( command.toAscii() ); }
 	
 public:
-    //Player( QObject* parent = 0 );
     Player( QString );
-	~Player();
+    ~Player();
 	
 	//Set nickname
 	//void setName( QString name ){ mName = name; }
