@@ -596,22 +596,12 @@ void Server::slotCheckCentralCards()
 	
 	bool currentPlayerStartNextTurn;
 	
-	/*if( mTrumpCard.getCardSuit() == mCentralCards.at(0).getCardSuit() && mTrumpCard.getCardSuit() != mCentralCards.at(1).getCardSuit() ){
-		currentPlayerStartNextTurn = false;
-	}else if( mTrumpCard.getCardSuit() != mCentralCards.at(0).getCardSuit() && mTrumpCard.getCardSuit() == mCentralCards.at(1).getCardSuit() ){
-		currentPlayerStartNextTurn = true;
-	}else if( mCentralCards.at(0).getCardSuit() == mCentralCards.at(1).getCardSuit() ){
-	*/	
-	/*if( mTrumpCard.getCardSuit() == centralCard0Suit && mTrumpCard.getCardSuit() != centralCard1Suit ){
-		currentPlayerStartNextTurn = false;
-	}else if( mTrumpCard.getCardSuit() != centralCard0Suit && mTrumpCard.getCardSuit() == centralCard1Suit ){
-		currentPlayerStartNextTurn = true;
-	}else if( centralCard0Suit == centralCard1Suit ){
-	*/
-	if( mTrumpCard->getCard()->getCardSuit() == centralCard0Suit && mTrumpCard->getCard()->getCardSuit() != centralCard1Suit ){
-		currentPlayerStartNextTurn = false;
-	}else if( mTrumpCard->getCard()->getCardSuit() != centralCard0Suit && mTrumpCard->getCard()->getCardSuit() == centralCard1Suit ){
-		currentPlayerStartNextTurn = true;
+        //if( mTrumpCard->getCard()->getCardSuit() == centralCard0Suit && mTrumpCard->getCard()->getCardSuit() != centralCard1Suit ){
+	if( mTrumpCard->getCardSuit() == centralCard0Suit && mTrumpCard->getCardSuit() != centralCard1Suit ){
+        	currentPlayerStartNextTurn = false;
+	//}else if( mTrumpCard->getCard()->getCardSuit() != centralCard0Suit && mTrumpCard->getCard()->getCardSuit() == centralCard1Suit ){
+	}else if( mTrumpCard->getCardSuit() != centralCard0Suit && mTrumpCard->getCardSuit() == centralCard1Suit ){
+        	currentPlayerStartNextTurn = true;
 	}else if( centralCard0Suit == centralCard1Suit ){
 	
 		if( centralCard1Point < centralCard2Point ){
