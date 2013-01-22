@@ -7,26 +7,25 @@
 const int INVALID_CARD_ID = -1;
 
 Bot::Bot( QString name, Knapsen::GameDifficulty difficulty ):
-	Client( name ),
-	mDifficulty( difficulty ),
-	mDeckIsClosed( false ) 
+    Client( name ),
+    mDifficulty( difficulty ),
+    mDeckIsClosed( false ) 
 {
-	kDebug() << "Initialize.";
-	
-	//connect( this, SIGNAL( signalOpponentDisconnected() ),			this, SLOT( slotOpponentDisconnected() ) );
-	//connect( this, SIGNAL( signalGameError( Client::GameErrorType ) ),	this, SLOT( slotGameError( Client::GameErrorType ) ) );
-	connect( this, SIGNAL( signalPlayerInAction() ),					this, SLOT( slotPlayerInAction() ) );
-	connect( this, SIGNAL( signalNewRound() ),							this, SLOT( slotNewRound() ) );
-	connect( this, SIGNAL( signalCloseDeck() ),							this, SLOT( slotCloseDeck() ) );
-	connect( this, SIGNAL( signalNewCentralCard( int , const Card* ) ),                  this, SLOT( slotNewCentralCard( int, const Card* ) ) );
-	//connect( this, SIGNAL( signalEndRound( QString, int ) ),			this, SLOT( slotEndRound( QString, int ) ) );
-	//connect( this, SIGNAL( signalEndGame( QString ) ),					this, SLOT( slotendGame( QString ) ) );
-	
-	//
-	pairOfQueenWasInCentralCards[0].first = pairOfKingWasInCentralCards[0].first = Card::Heart;
-	pairOfQueenWasInCentralCards[1].first = pairOfKingWasInCentralCards[1].first = Card::Diamond;
-	pairOfQueenWasInCentralCards[2].first = pairOfKingWasInCentralCards[2].first = Card::Spade;
-	pairOfQueenWasInCentralCards[3].first = pairOfKingWasInCentralCards[3].first = Card::Club;
+    kDebug() << "Initialize.";
+    
+    //connect( this, SIGNAL( signalOpponentDisconnected() ),			this, SLOT( slotOpponentDisconnected() ) );
+    //connect( this, SIGNAL( signalGameError( Client::GameErrorType ) ),	this, SLOT( slotGameError( Client::GameErrorType ) ) );
+    connect( this, SIGNAL( signalPlayerInAction() ),					this, SLOT( slotPlayerInAction() ) );
+    connect( this, SIGNAL( signalNewRound() ),							this, SLOT( slotNewRound() ) );
+    connect( this, SIGNAL( signalCloseDeck() ),							this, SLOT( slotCloseDeck() ) );
+    connect( this, SIGNAL( signalNewCentralCard( int , const Card* ) ),                  this, SLOT( slotNewCentralCard( int, const Card* ) ) );
+    connect( this, SIGNAL( signalEndRound( QString, int ) ),			this, SLOT( slotEndRound( QString, int ) ) );
+    connect( this, SIGNAL( signalEndGame( QString ) ),					this, SLOT( slotendGame( QString ) ) );
+    
+    pairOfQueenWasInCentralCards[0].first = pairOfKingWasInCentralCards[0].first = Card::Heart;
+    pairOfQueenWasInCentralCards[1].first = pairOfKingWasInCentralCards[1].first = Card::Diamond;
+    pairOfQueenWasInCentralCards[2].first = pairOfKingWasInCentralCards[2].first = Card::Spade;
+    pairOfQueenWasInCentralCards[3].first = pairOfKingWasInCentralCards[3].first = Card::Club;
 }
 
 bool Bot::getPairOfCardWasInCentral( Card::Type cardType, Card::Suit cardSuit )
@@ -404,46 +403,36 @@ bool Bot::trySelectEqualTrumpMinPoints()
 
 void Bot::slotNewRound()
 {
-	mDeckIsClosed = false;
-        
-        for( int i = 0; i < 4; ++i ){
-            pairOfQueenWasInCentralCards[i].second = pairOfKingWasInCentralCards[i].second = false;
-        }
+    mDeckIsClosed = false;
+    
+    for( int i = 0; i < 4; ++i ){
+        pairOfQueenWasInCentralCards[i].second = pairOfKingWasInCentralCards[i].second = false;
+    }
 }
 
 void Bot::slotNewCentralCard( int , const Card* card )
 {
     if( card->getType() == Card::Queen ){
-    
         for( int i = 0; i < 4; ++i ){
-        
             if( pairOfKingWasInCentralCards[i].first == card->getSuit() ){
                 pairOfKingWasInCentralCards[i].second = true;
             }
-                        
-        }
-                
+        }   
     }else if( card->getType() == Card::King ){
-    
         for( int i = 0; i < 4; ++i ){
-        
             if( pairOfQueenWasInCentralCards[i].first == card->getSuit() ){
                 pairOfQueenWasInCentralCards[i].second = true;
             }
-                        
-        }
-                
+        }   
     }
 }
 
-/*void Bot::slotEndRound( QString /roundWinnerName/ , int /scores/ )
+void Bot::slotEndRound( QString /*roundWinnerName*/ , int /*scores*/ )
 {
-	startNextRound();
+    startNextRound();
 }
-*/
 
-/*void Bot::slotendGame( QString /gameWinnerName/ )
+void Bot::slotendGame( QString /*gameWinnerName*/ )
 {
-	startNextGame();
+    startNextGame();
 }
-*/
