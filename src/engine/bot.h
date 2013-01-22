@@ -18,9 +18,6 @@ class Bot : public Client
     bool getPairOfCardWasInCentral( Card::Type, Card::Suit );
 
 private slots:
-    //void slotOpponentDisconnected();
-    //void slotGameError( Client::GameErrorType );
-
     void slotPlayerInAction();
     
     void slotSelectCard();
@@ -53,7 +50,7 @@ private slots:
 
 public:
     Bot( QString, Knapsen::GameDifficulty );
-	
+
 };
 
 #endif //BOT_H
