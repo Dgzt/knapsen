@@ -554,10 +554,11 @@ void Server::slotPlayerChangeTrumpCard( Player *player )
 		return;
 	}
 	
-	player->changeTrumpCard( mTrump );
+	int id = player->changeTrumpCard( mTrump );
 	
 	mTrump->getCard()->setSelectable( false );
-	
+	player->getCard( id )->setSelectable( true );
+        
 	if( player->haveRegularMarriages( mTrump ) ){
 		player->setTwentyButtonVisible( true );
 	}
@@ -749,39 +750,6 @@ void Server::slotPlayerWantStartNextRound( Player *player )
 
 void Server::slotPlayerWantStartNextGame( Player *player )
 {
-	/*bool playerOk = true;
-	
-	for( int i = 0; i < mPlayerListWhoWantNewGame.size(); ++i ){
-		
-		if( player->getName() == mPlayerListWhoWantNewGame.at( i )->getName() ){
-			playerOk = false;
-		}
-		
-	}
-	
-	if( playerOk ){
-		mPlayerListWhoWantNewGame.append( player );
-	}else{
-		kDebug() << "ERROR!" << player->getName() << "more then once want start new game!";
-	}
-	
-	if( mPlayerListWhoWantNewGame.size() == mPlayerList.size() ){
-		
-		mPlayerListWhoWantNewGame.clear();
-		kDebug() << "Start new game.";
-		
-		//
-		mGameSequence->nextPlayerStartGame();
-		//
-		
-		newGame();
-		
-		for( int i = 0; i < mPlayerList.size(); ++i ){
-			mPlayerList.at( i )->sendCommandsEnd();
-		}
-		
-	}*/
-
     if( mPlayerListWhoWantNewGame != 0 ){
         
         for( int i = 0; i < mPlayerListWhoWantNewGame->size(); ++i ){
@@ -823,8 +791,7 @@ void Server::incomingConnection( int socketDescriptor )
 	player->setSocketDescriptor( socketDescriptor );
 	
 	//If the player have name, then will be a player
-	connect( player, SIGNAL( signalNewPlayer( Player* ) ), this, SLOT( slotNewPlayer( Player* ) ) );
-	//
+	connect( player, SIGNAL( signalNewPlayer( Player* ) ),          this, SLOT( slotNewPlayer( Player* ) ) );
 	connect( player, SIGNAL( signalPlayerDisconnected( Player* ) ), this, SLOT( slotPlayerDisconnected( Player* ) ) );
 }
 

@@ -16,10 +16,6 @@ Client::Client( QString name ):
 
 Client::~Client()
 {
-	/*if( mCentralCards ){
-		delete mCentralCards;
-		mCentralCards = 0;
-	}*/
 	delete mCentralCards;
 	delete mTrump;
 }
@@ -456,12 +452,10 @@ void Client::slotSelectTrumpCard()
 	getCard( ret )->setSelectable( true );
 	emit signalPlayerCardSelectableChanged( ret, true );
 	
-	//if( haveRegularMarriages( mTrumpCard ) ){
 	if( haveRegularMarriages( mTrump ) ){
 		setTwentyButtonVisible( true );
 	}
 	
-	//if( haveTrumpMarriages() ){
 	if( haveTrumpMarriages( mTrump ) ){
 		setFortyButtonVisible( true );
 	}
