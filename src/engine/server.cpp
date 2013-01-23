@@ -410,6 +410,11 @@ void Server::slotPlayerSelectedCard( Card* selectedCard, int cardPosition )
 				
 				if( mGameSequence->isRoundOver() ){
 					roundOver();
+                                        
+                                        for( int i = 0; i < mPlayerList.size(); ++i ){
+                                            mPlayerList.at( i )->sendCommandsEnd();
+                                        }
+                                        
 					return;
 				}
 				
@@ -435,6 +440,11 @@ void Server::slotPlayerSelectedCard( Card* selectedCard, int cardPosition )
 				
 				if( mGameSequence->isRoundOver() ){
 					roundOver();
+                                        
+                                        for( int i = 0; i < mPlayerList.size(); ++i ){
+                                            mPlayerList.at( i )->sendCommandsEnd();
+                                        }
+                                        
 					return;
 				}
 				
