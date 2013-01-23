@@ -15,12 +15,13 @@ class NewGameDialog : public KPageDialog
 	Ui_NewGameWidgetUi_server *mServerWidgetUi;
 	
 public:
-	enum GameMode { LocalMode, ClientMode, ServerMode };
+	//enum GameMode { LocalMode, ClientMode, ServerMode };
 	
     explicit NewGameDialog(QWidget* parent = 0, Qt::WFlags flags = 0);
 	
-	GameMode getGameMode() const;
-	
+	//GameMode getGameMode() const;
+	Knapsen::GameStatus getGameMode() const;
+    
 	//-Local mode-
 	Knapsen::GameDifficulty getGameDifficulty();
 	

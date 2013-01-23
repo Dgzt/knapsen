@@ -50,14 +50,14 @@ NewGameDialog::NewGameDialog( QWidget* parent, Qt::WFlags flags ): KPageDialog( 
 }
 
 
-NewGameDialog::GameMode NewGameDialog::getGameMode() const
+Knapsen::GameStatus NewGameDialog::getGameMode() const
 {
 	if( currentPage()->name() == LOCAL_STRING ){
-		return LocalMode;
+		return Knapsen::LocalMode;
 	}else if( currentPage()->name() == CLIENT_STRING ){
-		return ClientMode;
+		return Knapsen::ClientMode;
 	}//else
-	return ServerMode;
+	return Knapsen::ServerMode;
 }
 
 Knapsen::GameDifficulty NewGameDialog::getGameDifficulty()

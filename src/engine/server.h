@@ -62,9 +62,11 @@ class Server : public QTcpServer
 	Player *mPlayerWhoClickedToCloseButtonThisRound;
 	
 	//
-	QList<Player *> mPlayerListWhoWantResumeGame;
-	QList<Player *> mPlayerListWhoWantNewGame;
-	//
+	//QList<Player *> mPlayerListWhoWantResumeGame;
+	QList< Player* > *mPlayerListWhoWantNewRound;
+        //QList<Player *> mPlayerListWhoWantNewGame;
+	QList< Player* > *mPlayerListWhoWantNewGame;
+        //
 	
 	
 	void newGame();

@@ -39,6 +39,10 @@ Server::Server( QObject* parent ) :
 	mDeck = 0;
 	mPlayerWhoClickedToCloseButtonThisRound = 0;
 	mWaitingMarriage = 0;
+        
+        //
+        mPlayerListWhoWantNewRound = 0;
+        mPlayerListWhoWantNewGame = 0;
 }
 
 Server::~Server()
@@ -153,102 +157,101 @@ void Server::newRound()
 
 void Server::roundOver()
 {
-	kDebug() << "---- Round Over ----";
-	
-	Player *currentPlayer = mGameSequence->getCurrentPlayer();
-	Player *nextPlayer = mGameSequence->getNextPlayer();
-	
-	Player *winnerPlayer = 0; //Initialize with 0, becouse the compiler write warning.
-	Player *looserPlayer = 0; // --- || ---
-	
-	//Who win the round
-	if( mPlayerWhoClickedToCloseButtonThisRound ){
-		
-		if( mPlayerWhoClickedToCloseButtonThisRound == currentPlayer && currentPlayer->getTricks() >= 66 ){
-			winnerPlayer = currentPlayer;
-			looserPlayer = nextPlayer;
-		}else if( mPlayerWhoClickedToCloseButtonThisRound == nextPlayer && nextPlayer->getTricks() >= 66 ){
-			winnerPlayer = nextPlayer;
-			looserPlayer = currentPlayer;
-		}else if( mPlayerWhoClickedToCloseButtonThisRound == currentPlayer ){
-			winnerPlayer = nextPlayer;
-			looserPlayer = currentPlayer;
-		}else{
-			winnerPlayer = currentPlayer;
-			looserPlayer = nextPlayer;
-		}
-		
-	}else{
-		
-		if( currentPlayer->getTricks() >= 66 ){
-			winnerPlayer = currentPlayer;
-			looserPlayer = nextPlayer;
-		}else if( nextPlayer->getTricks() >= 66 ){
-			winnerPlayer = nextPlayer;
-			looserPlayer = currentPlayer;
-		}else if( currentPlayer->getNumberOfCardsInHandNow() == 0 ){
-			winnerPlayer = currentPlayer;
-			looserPlayer = nextPlayer;
-		}
-		
-	}
-	
-	//Winning scores
-	int scores = 0;
-	
-	if( mPlayerWhoClickedToCloseButtonThisRound == winnerPlayer ){
-		
-		if( looserPlayer->getTricks() == 0 ){
-			scores = 3;
-		}else if( looserPlayer->getTricks() < 33 ){
-			scores = 2;
-		}else{ //  33 <= looserPlayer->getTricks() && looserPlayer->getTricks() < 66
-			scores = 1;
-		}
-		
-	}else if( mPlayerWhoClickedToCloseButtonThisRound == looserPlayer ){
-		
-		//scores = 2;
-		if( mOpponentHaveNotTricksBeforePlayerClickedToCloseButton ){
-			scores = 3;
-		}else{
-			scores = 2;
-		}
-		
-		
-	}else{ // !mPlayerWhoClickedToCloseButtonThisRound
+    kDebug() << "---- Round Over ----";
+    
+    Player *currentPlayer = mGameSequence->getCurrentPlayer();
+    Player *nextPlayer = mGameSequence->getNextPlayer();
+    
+    Player *winnerPlayer = 0; //Initialize with 0, becouse the compiler write warning.
+    Player *looserPlayer = 0; // --- || ---
+    
+    //Who win the round
+    if( mPlayerWhoClickedToCloseButtonThisRound ){
+        
+        if( mPlayerWhoClickedToCloseButtonThisRound == currentPlayer && currentPlayer->getTricks() >= 66 ){
+            winnerPlayer = currentPlayer;
+            looserPlayer = nextPlayer;
+        }else if( mPlayerWhoClickedToCloseButtonThisRound == nextPlayer && nextPlayer->getTricks() >= 66 ){
+            winnerPlayer = nextPlayer;
+            looserPlayer = currentPlayer;
+        }else if( mPlayerWhoClickedToCloseButtonThisRound == currentPlayer ){
+            winnerPlayer = nextPlayer;
+            looserPlayer = currentPlayer;
+        }else{
+            winnerPlayer = currentPlayer;
+            looserPlayer = nextPlayer;
+        }
 
-		if( looserPlayer->getTricks() == 0 ){
-			scores = 3;
-		}else if( looserPlayer->getTricks() < 33 ){
-			scores = 2;
-		}else{ //  33 <= looserPlayer->getTricks() && looserPlayer->getTricks() < 66
-			scores = 1;
-		}
+    }else{
 
-	}
+        if( currentPlayer->getTricks() >= 66 ){
+            winnerPlayer = currentPlayer;
+            looserPlayer = nextPlayer;
+        }else if( nextPlayer->getTricks() >= 66 ){
+            winnerPlayer = nextPlayer;
+            looserPlayer = currentPlayer;
+        }else if( currentPlayer->getNumberOfCardsInHandNow() == 0 ){
+            winnerPlayer = currentPlayer;
+            looserPlayer = nextPlayer;
+        }
+
+    }
+
+    //Winning scores
+    int scores = 0;
+
+    if( mPlayerWhoClickedToCloseButtonThisRound == winnerPlayer ){
+        
+        if( looserPlayer->getTricks() == 0 ){
+            scores = 3;
+        }else if( looserPlayer->getTricks() < 33 ){
+            scores = 2;
+        }else{ //  33 <= looserPlayer->getTricks() && looserPlayer->getTricks() < 66
+            scores = 1;
+        }
+
+    }else if( mPlayerWhoClickedToCloseButtonThisRound == looserPlayer ){
+
+        //scores = 2;
+        if( mOpponentHaveNotTricksBeforePlayerClickedToCloseButton ){
+            scores = 3;
+        }else{
+            scores = 2;
+        }
+
+    }else{ // !mPlayerWhoClickedToCloseButtonThisRound
+
+        if( looserPlayer->getTricks() == 0 ){
+            scores = 3;
+        }else if( looserPlayer->getTricks() < 33 ){
+            scores = 2;
+        }else{ //  33 <= looserPlayer->getTricks() && looserPlayer->getTricks() < 66
+            scores = 1;
+        }
+
+    }
+
+    kDebug() << winnerPlayer->getName() << "win the round with" << scores << "scores.";
+    addScores( winnerPlayer, scores );
+    
+    if( mGameSequence->isGameOver() ){
+        mPlayerListWhoWantNewGame = new QList< Player* >;
+        
+        for( int i = 0; i < mPlayerList.size(); ++i ){
+            mPlayerList.at( i )->sendEndGame( winnerPlayer->getName() );
+        }
+
+    }else{
+        mPlayerListWhoWantNewRound = new QList< Player* >;
+            
+        for( int i = 0; i < mPlayerList.size(); ++i ){
+            mPlayerList.at( i )->sendEndRound( winnerPlayer->getName(), scores );
+        }
+    }
 	
-	kDebug() << winnerPlayer->getName() << "win the round with" << scores << "scores.";
-	addScores( winnerPlayer, scores );
-	
-	if( mGameSequence->isGameOver() ){
-		
-		for( int i = 0; i < mPlayerList.size(); ++i ){
-			mPlayerList.at( i )->sendEndGame( winnerPlayer->getName() );
-		}
-		
-	}else{
-		
-		for( int i = 0; i < mPlayerList.size(); ++i ){
-			mPlayerList.at( i )->sendEndRound( winnerPlayer->getName(), scores );
-		}
-		
-	}
-	
-	for( int i = 0; i < mPlayerList.size(); ++i ){
+	/*for( int i = 0; i < mPlayerList.size(); ++i ){
 		mPlayerList.at( i )->sendCommandsEnd();
-	}
-	
+	}*/
 }
 
 void Server::addNewCard( Player* player, Card* card )
@@ -625,7 +628,7 @@ void Server::slotCheckCentralCards()
 		
 	if( mGameSequence->isRoundOver() ){
 		roundOver();
-		return;
+		//return;
 	}else{
 		kDebug() << "Start next turn";
 		
@@ -702,41 +705,41 @@ void Server::slotCheckCentralCards()
 
 void Server::slotPlayerWantStartNextRound( Player *player )
 {
-	bool playerOk = true;
-	
-	for( int i = 0; i < mPlayerListWhoWantResumeGame.size(); ++i ){
-		
-		if( player->getName() == mPlayerListWhoWantResumeGame.at( i )->getName() ){
-			playerOk = false;
-		}
-		
-	}
-	
-	if( playerOk ){
-		mPlayerListWhoWantResumeGame.append( player );
-	}else{
-		kDebug() << "ERROR!" << player->getName() << "more then once want start next round!";
-	}
-	
-	if( mPlayerListWhoWantResumeGame.size() == mPlayerList.size() ){
-		mPlayerListWhoWantResumeGame.clear();
-		kDebug() << "Start next round.";
-		
-		//
-		mGameSequence->nextPlayerStartRound();
-		//
-		
-		newRound();
-		
-		for( int i = 0; i < mPlayerList.size(); ++i ){
-			mPlayerList.at( i )->sendCommandsEnd();
-		}
-	}
+    if( mPlayerListWhoWantNewRound != 0 ){
+        
+        for( int i = 0; i < mPlayerListWhoWantNewRound->size(); ++i ){
+            if( player == mPlayerListWhoWantNewRound->at( i ) ){
+                kDebug() << "ERROR!" << player->getName() << "want again start next round!";
+                return;
+            }
+        }
+        
+        mPlayerListWhoWantNewRound->append( player );
+        
+        if( mPlayerListWhoWantNewRound->size() == mPlayerList.size() ){
+            mPlayerListWhoWantNewRound->clear();
+            delete mPlayerListWhoWantNewRound;
+            mPlayerListWhoWantNewRound = 0;
+            
+            kDebug() << "Start next round.";
+            
+            mGameSequence->nextPlayerStartRound();
+            
+            newRound();
+            
+            for( int i = 0; i < mPlayerList.size(); ++i ){
+                mPlayerList.at( i )->sendCommandsEnd();
+            }
+        }
+        
+    }else{ //mPlayerListWhoWantNewRound != 0
+        kDebug() << "ERROR!" << player->getName() << "want start next round, but this isn't possible!";
+    }
 }
 
 void Server::slotPlayerWantStartNextGame( Player *player )
 {
-	bool playerOk = true;
+	/*bool playerOk = true;
 	
 	for( int i = 0; i < mPlayerListWhoWantNewGame.size(); ++i ){
 		
@@ -767,8 +770,38 @@ void Server::slotPlayerWantStartNextGame( Player *player )
 			mPlayerList.at( i )->sendCommandsEnd();
 		}
 		
-	}
-	
+	}*/
+
+    if( mPlayerListWhoWantNewGame != 0 ){
+        
+        for( int i = 0; i < mPlayerListWhoWantNewGame->size(); ++i ){
+            if( player == mPlayerListWhoWantNewGame->at( i ) ){
+                kDebug() << "ERROR!" << player->getName() << "want again start new game!";
+                return;
+            }
+        }
+        
+        mPlayerListWhoWantNewGame->append( player );
+        
+        if( mPlayerListWhoWantNewGame->size() == mPlayerList.size() ){
+            mPlayerListWhoWantNewGame->clear();
+            delete mPlayerListWhoWantNewGame;
+            mPlayerListWhoWantNewGame = 0;
+            
+            kDebug() << "Start new game.";
+            
+            mGameSequence->nextPlayerStartGame();
+            
+            newGame();
+            
+            for( int i = 0; i < mPlayerList.size(); ++i ){
+                mPlayerList.at( i )->sendCommandsEnd();
+            }
+        }
+        
+    }else{ //mPlayerListWhoWantNewGame != 0
+        kDebug() << "ERROR!" << player->getName() << "want start new game, but this isn't possible!";
+    }
 }
 
 

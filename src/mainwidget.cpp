@@ -30,31 +30,29 @@
 #include "ui_playersettingswidget.h"
 #include "ui_gamesettingswidget.h"
 
-MainWindow::MainWindow( QWidget* parent ) : KXmlGuiWindow( parent )
+MainWindow::MainWindow( QWidget* parent ) : 
+    KXmlGuiWindow( parent ),
+    mGameStatus( Knapsen::None )
 {
-	server = 0;
-	client = 0;
-
-	//
-	endRoundDialog = 0;
-	endGameDialog = 0;
-	//
-	
-	//Initialize the data path (example pictures, icons, etc)
-	initializePaths();
-	
-	//Setup the central widget
+    server = 0;
+    client = 0;
+    endRoundDialog = 0;
+    endGameDialog = 0;
+    
+    //Initialize the data path (example pictures, icons, etc)
+    initializePaths();
+    
+    //Setup the central widget
     cWidget = new CentralWidget( this );
-	setCentralWidget( cWidget );
-	
+    setCentralWidget( cWidget );
+
     setupActions();
-	
+
     setupGUI();
 }
 
 MainWindow::~MainWindow()
-{
-}
+{}
 
 void MainWindow::initializePaths()
 {
@@ -105,15 +103,15 @@ void MainWindow::initializePaths()
 
 void MainWindow::setupActions()
 {
-	//Game menu
-	KStandardGameAction::gameNew(					this, SLOT( newGameSlot()  ), actionCollection() );
-	mCloseGameAction = KStandardGameAction::end(	this, SLOT(closeGameSlot() ), actionCollection() );
-	KStandardGameAction::quit(						this, SLOT( close()        ), actionCollection() );
-	
-	mCloseGameAction->setEnabled( false );
-	
-	//Settings menu
-	KStandardAction::preferences(this, SLOT(optionsPreferences()), actionCollection());
+    //Game menu
+    KStandardGameAction::gameNew(                       this, SLOT( newGameSlot()  ), actionCollection() );
+    mCloseGameAction = KStandardGameAction::end(        this, SLOT(closeGameSlot() ), actionCollection() );
+    KStandardGameAction::quit(                          this, SLOT( close()        ), actionCollection() );
+    
+    mCloseGameAction->setEnabled( false );
+    
+    //Settings menu
+    KStandardAction::preferences(this, SLOT(optionsPreferences()), actionCollection());
 }
 
 void MainWindow::setServerConfig()
@@ -223,13 +221,11 @@ void MainWindow::newGameSlot()
 	if( ret ){
 		kDebug() << "KDialog button: Ok";
 		
-		//client = new Client;
-		//client->setName( Settings::playerName() );
 		client = new Client( Settings::playerName() );
 		
 		setGameSignals();
 		
-		if( newGameDialog.getGameMode() == NewGameDialog::LocalMode ){
+		if( newGameDialog.getGameMode() == Knapsen::LocalMode ){
 			kDebug() << "Game mode: local";
 			
 			server = new Server;
@@ -251,6 +247,7 @@ void MainWindow::newGameSlot()
 				//server->addBot( Settings::botName() );
 				server->addBot( Settings::botName(), newGameDialog.getGameDifficulty() );
 				
+                                mGameStatus = Knapsen::LocalMode;
 			}else{
 				kDebug() << "Server listen error!";
 				
@@ -258,7 +255,7 @@ void MainWindow::newGameSlot()
 				client = 0;
 			}
 				
-		}else if( newGameDialog.getGameMode() == NewGameDialog::ClientMode ){
+		}else if( newGameDialog.getGameMode() == Knapsen::ClientMode ){
 			kDebug() << "Game mode: client";
 			
 			//
@@ -275,6 +272,7 @@ void MainWindow::newGameSlot()
 			
 			if( waitForServerDialog.exec() ){
 				mCloseGameAction->setEnabled( true );
+                                mGameStatus = Knapsen::ClientMode;
 			}else{
 				kDebug() << "WaitForServerDialog - Cancel button.";
 				client->disconnectFromHost();
@@ -284,7 +282,7 @@ void MainWindow::newGameSlot()
 			}
 			
 			
-		}else{ //newGameDialog.getGameMode() == NewGameDialog::ServerMode
+		}else{ //newGameDialog.getGameMode() == Knapsen::ServerMode
 			kDebug() << "Game mode: server";
 			
 			server = new Server;
@@ -312,6 +310,7 @@ void MainWindow::newGameSlot()
 
 					slotStartGame();
 					
+                                        mGameStatus = Knapsen::ServerMode;
 				}else{
 					kDebug() << "WaitForClientDialog - Cancel button";
 					
@@ -348,6 +347,8 @@ void MainWindow::closeGameSlot()
 	client = 0;
 	
 	mCloseGameAction->setEnabled( false );
+        
+        mGameStatus = Knapsen::None;
 }
 
 
@@ -418,25 +419,25 @@ void MainWindow::slotSocketError( QAbstractSocket::SocketError socketError )
 
 void MainWindow::slotGameError( Client::GameErrorType gameErrorType )
 {
-	if( gameErrorType == Client::NameIsBusy ){
-		kDebug() << "Name is busy!";
-		KMessageBox::error( this, i18n( "The name is busy!" ) );
-	}
-	
-	if( gameErrorType == Client::OpponentDisconnected ){
-		kDebug() << "Opponent disconnected!";
-		
-		if( mCloseGameAction->isEnabled() ){
-			KMessageBox::information( this, i18n( "The opponent disconnected!" ) );
-			closeGameSlot();
-		}
-		
-	}
-	
-	if( gameErrorType == Client::ServerIsFull ){
-		kDebug() << "Name is busy!";
-		KMessageBox::error( this, i18n( "The server is full!" ) );
-	}
+    if( gameErrorType == Client::NameIsBusy ){
+        kDebug() << "Name is busy!";
+        KMessageBox::error( this, i18n( "The name is busy!" ) );
+    }
+    
+    if( gameErrorType == Client::OpponentDisconnected ){
+        kDebug() << "Opponent disconnected!";
+        
+        //if( mCloseGameAction->isEnabled() ){
+        if( mGameStatus != Knapsen::None ){
+            KMessageBox::information( this, i18n( "The opponent disconnected!" ) );
+            closeGameSlot();
+        }
+    }
+
+    if( gameErrorType == Client::ServerIsFull ){
+        kDebug() << "Name is busy!";
+        KMessageBox::error( this, i18n( "The server is full!" ) );
+    }
 }
 
 void MainWindow::slotEndRound( QString roundWinnerName, int scores )
