@@ -12,7 +12,6 @@ set(knapsen_HDRS
 	engine/bot.h
 	engine/client.h
 	engine/player.h
-	engine/gamesequence.h
 	engine/server.h
 	engine/centralcards.h
 	engine/trump.h
@@ -35,7 +34,6 @@ set(knapsen_SRCS
 	engine/bot.cpp
 	engine/client.cpp
 	engine/player.cpp
-	engine/gamesequence.cpp
 	engine/server.cpp
 	engine/centralcards.cpp
 	engine/trump.cpp

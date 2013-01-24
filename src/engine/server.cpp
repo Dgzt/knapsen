@@ -1,6 +1,6 @@
 #include <QtCore/QTimer>
 #include <KDE/KDebug>
-#include "gamesequence.h"
+//#include "gamesequence.h"
 #include "deck.h"
 #include "centralcards.h"
 #include "trump.h"
@@ -12,37 +12,28 @@
 const int MAX_PLAYERS = 2;
 
 Server::Server( QObject* parent ) :
-	QTcpServer( parent ),
-	//mAdminName( "" ),
-	mTwentyButtonClickedThisTurn( false ),
-	mFortyButtonClickedThisTurn( false ),
-	mClickedToCloseButtonThisTurn( false ),
-	mOpponentHaveNotTricksBeforePlayerClickedToCloseButton( false )
+    QTcpServer( parent ),
+    mSizeOfDeck( 20 ),
+    mNumberOfCardsInHand( 5 ),
+    mTypeOfCards( Knapsen::GermanSuits ),
+    mCurrentPlayerId(0),
+    mGameStarterPlayerId(0),
+    mRoundStarterPlayerId(0),
+    mTwentyButtonClickedThisTurn( false ),
+    mFortyButtonClickedThisTurn( false ),
+    mClickedToCloseButtonThisTurn( false ),
+    mOpponentHaveNotTricksBeforePlayerClickedToCloseButton( false )
 {
-	kDebug() << "Initialize.";
+    kDebug() << "Initialize.";
 
-	mGameSequence = new GameSequence;
-	mGameSequence->setPlayerList( &mPlayerList );
-	
-	//Defaults
-	mSizeOfDeck = 20;
-	mNumberOfCardsInHand = 5;
-	mTypeOfCards = Knapsen::GermanSuits;
-	
-	//
-	mBot = 0;
-	//
-	
-	mCentralCards = 0;
-	mTrump = 0;
-	
-	mDeck = 0;
-	mPlayerWhoClickedToCloseButtonThisRound = 0;
-	mWaitingMarriage = 0;
-        
-        //
-        mPlayerListWhoWantNewRound = 0;
-        mPlayerListWhoWantNewGame = 0;
+    mBot = 0;
+    mCentralCards = 0;
+    mTrump = 0;
+    mDeck = 0;
+    mPlayerWhoClickedToCloseButtonThisRound = 0;
+    mWaitingMarriage = 0;
+    mPlayerListWhoWantNewRound = 0;
+    mPlayerListWhoWantNewGame = 0;
 }
 
 Server::~Server()
@@ -51,9 +42,9 @@ Server::~Server()
 	if( mBot ){
 		delete mBot;
 	}
-	if( mGameSequence ){
+	/*if( mGameSequence ){
 		delete mGameSequence;
-	}
+	}*/
 	if( mDeck ){
 		delete mDeck;
 	}
@@ -122,7 +113,8 @@ void Server::newRound()
 		
 	}
 	
-	Player* currentPlayer = mGameSequence->getCurrentPlayer();
+	//Player* currentPlayer = mGameSequence->getCurrentPlayer();
+	Player* currentPlayer = getCurrentPlayer();
 	
 	//if( currentPlayer->haveRegularMarriages() ){
 	if( currentPlayer->haveRegularMarriages( mTrump ) ){
@@ -159,8 +151,10 @@ void Server::roundOver()
 {
     kDebug() << "---- Round Over ----";
     
-    Player *currentPlayer = mGameSequence->getCurrentPlayer();
-    Player *nextPlayer = mGameSequence->getNextPlayer();
+    //Player *currentPlayer = mGameSequence->getCurrentPlayer();
+    Player* currentPlayer = getCurrentPlayer();
+    //Player *nextPlayer = mGameSequence->getNextPlayer();
+    Player* nextPlayer = getNextPlayer();
     
     Player *winnerPlayer = 0; //Initialize with 0, becouse the compiler write warning.
     Player *looserPlayer = 0; // --- || ---
@@ -234,7 +228,8 @@ void Server::roundOver()
     kDebug() << winnerPlayer->getName() << "win the round with" << scores << "scores.";
     addScores( winnerPlayer, scores );
     
-    if( mGameSequence->isGameOver() ){
+    //if( mGameSequence->isGameOver() ){
+    if( isGameOver() ){
         mPlayerListWhoWantNewGame = new QList< Player* >;
         
         for( int i = 0; i < mPlayerList.size(); ++i ){
@@ -248,10 +243,79 @@ void Server::roundOver()
             mPlayerList.at( i )->sendEndRound( winnerPlayer->getName(), scores );
         }
     }
-	
-	/*for( int i = 0; i < mPlayerList.size(); ++i ){
-		mPlayerList.at( i )->sendCommandsEnd();
-	}*/
+
+    /*for( int i = 0; i < mPlayerList.size(); ++i ){
+        mPlayerList.at( i )->sendCommandsEnd();
+    }*/
+}
+
+void Server::nextPlayerStartRound()
+{
+    if( mRoundStarterPlayerId == 0 ){
+        mRoundStarterPlayerId = 1;
+    }else{
+        mRoundStarterPlayerId = 0;
+    }
+        
+    mCurrentPlayerId = mRoundStarterPlayerId;
+}
+
+void Server::nextPlayerStartGame()
+{
+    if( mGameStarterPlayerId == 0 ){
+        mGameStarterPlayerId = 1;
+    }else{
+        mGameStarterPlayerId = 0;
+    }
+    
+    mRoundStarterPlayerId = mGameStarterPlayerId;
+    mCurrentPlayerId = mRoundStarterPlayerId;
+}
+
+void Server::setCurrentPlayer( Player* player )
+{
+    for( int i = 0; i < mPlayerList.size(); ++i ){
+        if( player == mPlayerList.at( i ) ){
+            mCurrentPlayerId = i;
+        }
+    }
+}
+
+Player* Server::getNextPlayer()
+{
+    if( mCurrentPlayerId == 0 ){
+        return mPlayerList.at( 1 );
+    }//else
+    
+    return mPlayerList.at( 0 );
+}
+
+bool Server::isGameOver()
+{
+    for( int i = 0; i < mPlayerList.size(); ++i ){
+        if( mPlayerList.at( i )->getScores() >= 7 ){ // mPlayers->at( i )->getScores() >= 7
+            return true;
+        }
+    }
+        
+    return false;
+}
+
+bool Server::isRoundOver()
+{
+    //If a player have equal or more then 66 tricks, will have win the round
+    for( int i = 0; i < mPlayerList.size(); ++i ){
+        if( mPlayerList.at( i )->getTricks() >= 66 ){
+            return true;
+        }
+    }
+        
+    //If a player have not card in hand, then win the round who win the last turn
+    if( mPlayerList.at( mCurrentPlayerId )->getNumberOfCardsInHandNow()  == 0 ){
+        return true;
+    }
+        
+    return false;
 }
 
 void Server::addNewCard( Player* player, Card* card )
@@ -382,336 +446,339 @@ void Server::slotPlayerDisconnected( Player* player )
 
 void Server::slotPlayerSelectedCard( Card* selectedCard, int cardPosition )
 {
-	//kDebug() << "Selected card:" << selectedCard.getCardText( mTypeOfCards );
-	kDebug() << "Selected card:" << selectedCard->getCardText();
-	
-	mCentralCards->add( selectedCard );
-	
-	Player* nextPlayer = mGameSequence->getNextPlayer();
-	
-	//if( mCentralCards.size() != MAX_CENTRAL_CARDS_SIZE ){
-	if( !mCentralCards->isFull() ){
-		kDebug() << "Next player step.";
-		
-		Player* currentPlayer = mGameSequence->getCurrentPlayer();
-		//Player* nextPlayer = mGameSequence->getNextPlayer();
-		
-		//If the previous player clicked to twenty/forty button, then show that card to current player
-		if( mTwentyButtonClickedThisTurn ){
-			kDebug() << "Pair this card position:" << currentPlayer->getPositionOfPairOfCard( selectedCard );
-			int posOfPairOfCard = currentPlayer->getPositionOfPairOfCard( selectedCard );
-			nextPlayer->sendVisibleOpponentCards( cardPosition, selectedCard, posOfPairOfCard, currentPlayer->getCard( posOfPairOfCard ) );
-		
-			
-			//
-			if( currentPlayer->getTricks() > 0 ){
-				
-				addTricks( currentPlayer, 20 );
-				
-				if( mGameSequence->isRoundOver() ){
-					roundOver();
-                                        
-                                        for( int i = 0; i < mPlayerList.size(); ++i ){
-                                            mPlayerList.at( i )->sendCommandsEnd();
-                                        }
-                                        
-					return;
-				}
-				
-			}else{ //currentPlayer->getTricks() == 0
-				mWaitingMarriage = new QPair< Player*, int >;
-				mWaitingMarriage->first = currentPlayer;
-				mWaitingMarriage->second = 20;
-			}
-			
-			mTwentyButtonClickedThisTurn = false;
-		}
-		
-		if( mFortyButtonClickedThisTurn ){
-			kDebug() << "Pair this card position:" << currentPlayer->getPositionOfPairOfCard( selectedCard );
-			int posOfPairOfCard = currentPlayer->getPositionOfPairOfCard( selectedCard );
-			nextPlayer->sendVisibleOpponentCards( cardPosition, selectedCard, posOfPairOfCard, currentPlayer->getCard( posOfPairOfCard ) );
-			
-			
-			//
-			if( currentPlayer->getTricks() > 0 ){
-				
-				addTricks( currentPlayer, 40 );
-				
-				if( mGameSequence->isRoundOver() ){
-					roundOver();
-                                        
-                                        for( int i = 0; i < mPlayerList.size(); ++i ){
-                                            mPlayerList.at( i )->sendCommandsEnd();
-                                        }
-                                        
-					return;
-				}
-				
-			}else{ //currentPlayer->getTricks() == 0
-				mWaitingMarriage = new QPair< Player*, int >;
-				mWaitingMarriage->first = currentPlayer;
-				mWaitingMarriage->second = 40;
-			}
-			
-			mFortyButtonClickedThisTurn = false;
-		}
-		
-		if( mClickedToCloseButtonThisTurn ){
-			nextPlayer->sendOpponentClickedToCloseButton();
-		}
-		
-		nextPlayer->sendOpponentSelectedCardId( cardPosition );
-		nextPlayer->sendOpponentAddNewCentralCard( selectedCard );
-		
-		mGameSequence->setCurrentPlayer( nextPlayer );
-		//
-		currentPlayer = mGameSequence->getCurrentPlayer();
-		//
-		
-		//if( !mClickedToCloseButtonThisRound && mDeck->getDeckSize() > 0 ){
-		if( !mPlayerWhoClickedToCloseButtonThisRound && mDeck->getDeckSize() > 0 ){
-			currentPlayer->sendSelectableAllCards();
-			for( int i = 0; i < mPlayerList.size(); ++i ){
-				if( mPlayerList.at( i ) != currentPlayer ){
-					mPlayerList.at( i )->sendOpponentInAction();
-				}
-			}
-		}else{ // mDeck->getDeckSize() == 0
-			currentPlayer->sendSelectableCertainCards( mCentralCards, mTrump );
-			for( int i = 0; i < mPlayerList.size(); ++i ){
-				if( mPlayerList.at( i ) != currentPlayer ){
-					mPlayerList.at( i )->sendOpponentInAction();
-				}
-			}
-		}
-		
-		//Show opponent's arrow and send commands end
-		//currentPlayer->sendCommandsEnd();
-		for( int i = 0; i < mPlayerList.size(); ++i ){
-			mPlayerList.at( i )->sendCommandsEnd();
-		}
-		
-	}else{ // mCentralCards->isFull()
-		nextPlayer->sendOpponentSelectedCardId( cardPosition );
-		nextPlayer->sendOpponentAddNewCentralCard( selectedCard );
-		QTimer::singleShot( 1000, this, SLOT( slotCheckCentralCards() ) );
-	}
-	
-	nextPlayer->sendCommandsEnd();
+    kDebug() << "Selected card:" << selectedCard->getCardText();
+    
+    mCentralCards->add( selectedCard );
+
+    //Player* nextPlayer = getNextPlayer();
+        
+    if( !mCentralCards->isFull() ){
+        kDebug() << "Next player step.";
+        
+        //Player* currentPlayer = getCurrentPlayer();
+
+        //If the previous player clicked to twenty/forty button, then show that card to current player
+        if( mTwentyButtonClickedThisTurn ){
+            
+            //int posOfPairOfCard = currentPlayer->getPositionOfPairOfCard( selectedCard );
+            int posOfPairOfCard = getCurrentPlayer()->getPositionOfPairOfCard( selectedCard );
+            
+            //kDebug() << "Pair this card position:" << currentPlayer->getPositionOfPairOfCard( selectedCard );
+            kDebug() << "Pair this card position:" << posOfPairOfCard;
+            
+            //nextPlayer->sendVisibleOpponentCards( cardPosition, selectedCard, posOfPairOfCard, currentPlayer->getCard( posOfPairOfCard ) );
+            getNextPlayer()->sendVisibleOpponentCards( cardPosition, selectedCard, posOfPairOfCard, getCurrentPlayer()->getCard( posOfPairOfCard ) );
+
+            //
+            //if( currentPlayer->getTricks() > 0 ){
+            if( getCurrentPlayer()->getTricks() > 0 ){
+                //addTricks( currentPlayer, 20 );
+                addTricks( getCurrentPlayer(), 20 );
+                
+                //if( mGameSequence->isRoundOver() ){
+                if( isRoundOver() ){
+                    roundOver();
+                    
+                    for( int i = 0; i < mPlayerList.size(); ++i ){
+                        mPlayerList.at( i )->sendCommandsEnd();
+                    }
+                
+                    return;
+                }
+            
+            }else{ //getCurrentPlayer()->getTricks() > 0
+                mWaitingMarriage = new QPair< Player*, int >;
+                //mWaitingMarriage->first = currentPlayer;
+                mWaitingMarriage->first = getCurrentPlayer();
+                mWaitingMarriage->second = 20;
+            }
+            
+            mTwentyButtonClickedThisTurn = false;
+        }
+        
+        if( mFortyButtonClickedThisTurn ){
+            int posOfPairOfCard = getCurrentPlayer()->getPositionOfPairOfCard( selectedCard );
+            kDebug() << "Pair this card position:" << posOfPairOfCard;
+            getNextPlayer()->sendVisibleOpponentCards( cardPosition, selectedCard, posOfPairOfCard, getCurrentPlayer()->getCard( posOfPairOfCard ) );
+
+            //
+            if( getCurrentPlayer()->getTricks() > 0 ){
+                addTricks( getCurrentPlayer(), 40 );
+
+                //if( mGameSequence->isRoundOver() ){
+                if( isRoundOver() ){
+                    roundOver();
+                    
+                    for( int i = 0; i < mPlayerList.size(); ++i ){
+                        mPlayerList.at( i )->sendCommandsEnd();
+                    }
+                    
+                    return;
+                }
+                
+            }else{ //currentPlayer->getTricks() >= 0
+                mWaitingMarriage = new QPair< Player*, int >;
+                mWaitingMarriage->first = getCurrentPlayer();
+                mWaitingMarriage->second = 40;
+            }
+            
+            mFortyButtonClickedThisTurn = false;
+        }
+        
+        if( mClickedToCloseButtonThisTurn ){
+            getNextPlayer()->sendOpponentClickedToCloseButton();
+        }
+        
+        getNextPlayer()->sendOpponentSelectedCardId( cardPosition );
+        getNextPlayer()->sendOpponentAddNewCentralCard( selectedCard );
+        
+        //mGameSequence->setCurrentPlayer( nextPlayer );
+        setCurrentPlayer( getNextPlayer() );
+        //
+        //currentPlayer = mGameSequence->getCurrentPlayer();
+        //
+        
+        //if( !mClickedToCloseButtonThisRound && mDeck->getDeckSize() > 0 ){
+        if( !mPlayerWhoClickedToCloseButtonThisRound && mDeck->getDeckSize() > 0 ){
+            //currentPlayer->sendSelectableAllCards();
+            getCurrentPlayer()->sendSelectableAllCards();
+            /*for( int i = 0; i < mPlayerList.size(); ++i ){
+                if( mPlayerList.at( i ) != getCurrentPlayer() ){
+                    mPlayerList.at( i )->sendOpponentInAction();
+                }
+            }*/
+            getNextPlayer()->sendOpponentInAction();
+        }else{ // mDeck->getDeckSize() == 0
+            //currentPlayer->sendSelectableCertainCards( mCentralCards, mTrump );
+            getCurrentPlayer()->sendSelectableCertainCards( mCentralCards, mTrump );
+            /*for( int i = 0; i < mPlayerList.size(); ++i ){
+                if( mPlayerList.at( i ) != getCurrentPlayer() ){
+                    mPlayerList.at( i )->sendOpponentInAction();
+                }
+            }*/
+            getNextPlayer()->sendOpponentInAction();
+        }
+        
+        /*
+        //Show opponent's arrow and send commands end
+        for( int i = 0; i < mPlayerList.size(); ++i ){
+            mPlayerList.at( i )->sendCommandsEnd();
+        }
+        */
+        
+    }else{ // !mCentralCards->isFull()
+        //nextPlayer->sendOpponentSelectedCardId( cardPosition );
+        getNextPlayer()->sendOpponentSelectedCardId( cardPosition );
+        //nextPlayer->sendOpponentAddNewCentralCard( selectedCard );
+        getNextPlayer()->sendOpponentAddNewCentralCard( selectedCard );
+        QTimer::singleShot( 1000, this, SLOT( slotCheckCentralCards() ) );
+    }
+    
+    //nextPlayer->sendCommandsEnd();
+
+    //Show opponent's arrow and send commands end
+    for( int i = 0; i < mPlayerList.size(); ++i ){
+        mPlayerList.at( i )->sendCommandsEnd();
+    }
 }
 
 void Server::slotPlayerTwentyButtonClicked()
 {
-	kDebug() << mGameSequence->getCurrentPlayer()->getName() << "Clicked to twenty button.";
-	mGameSequence->getCurrentPlayer()->setSelectableRegularMarriagesCards( mTrump );
-	
-	mTwentyButtonClickedThisTurn = true;
+    kDebug() << getCurrentPlayer()->getName() << "Clicked to twenty button.";
+    getCurrentPlayer()->setSelectableRegularMarriagesCards( mTrump );
+    
+    mTwentyButtonClickedThisTurn = true;
 }
 
 void Server::slotPlayerFortyButtonClicked()
 {
-	kDebug() << mGameSequence->getCurrentPlayer()->getName() << "Clicked to forty button.";
-	mGameSequence->getCurrentPlayer()->setSelectableTrumpMarriagesCards( mTrump );
-	
-	mFortyButtonClickedThisTurn = true;
+    kDebug() << getCurrentPlayer()->getName() << "Clicked to forty button.";
+    getCurrentPlayer()->setSelectableTrumpMarriagesCards( mTrump );
+    
+    mFortyButtonClickedThisTurn = true;
 }
 
 void Server::slotPlayerClickedToCloseButton()
 {
-	kDebug() << mGameSequence->getCurrentPlayer()->getName() << "Clicked to close button.";
-	mClickedToCloseButtonThisTurn = true;
-	
-	//
-	for( int i = 0; i < mPlayerList.size(); ++i ){
-		if( mPlayerList.at( i ) != mGameSequence->getCurrentPlayer() ){
-			
-			if( mPlayerList.at( i )->getTricks() == 0 ){
-				mOpponentHaveNotTricksBeforePlayerClickedToCloseButton = true;
-			}else{
-				mOpponentHaveNotTricksBeforePlayerClickedToCloseButton = false;
-			}
-			
-		}
-	}
-	//
-	
-	mPlayerWhoClickedToCloseButtonThisRound = mGameSequence->getCurrentPlayer();
+    kDebug() << getCurrentPlayer()->getName() << "Clicked to close button.";
+    mClickedToCloseButtonThisTurn = true;
+    
+    //
+    for( int i = 0; i < mPlayerList.size(); ++i ){
+        if( mPlayerList.at( i ) != getCurrentPlayer() ){
+            
+            if( mPlayerList.at( i )->getTricks() == 0 ){
+                mOpponentHaveNotTricksBeforePlayerClickedToCloseButton = true;
+            }else{
+                mOpponentHaveNotTricksBeforePlayerClickedToCloseButton = false;
+            }
+            
+        }
+    }
+    //
+    
+    mPlayerWhoClickedToCloseButtonThisRound = getCurrentPlayer();
 }
 
 void Server::slotPlayerChangeTrumpCard( Player *player )
 {
-	kDebug() << "Begin.";
-	
-	//Check
-	if( mGameSequence->getCurrentPlayer() != player ){
-		kDebug() << "ERROR! Not the current player want change trump card!";
-		return;
-	}
-	
-	if( !player->canChangeTrumpCard( mTrump ) ){
-		kDebug() << "ERROR! The current player can't change trump card, but he/she want!";
-		return;
-	}
-	
-	int id = player->changeTrumpCard( mTrump );
-	
-	mTrump->getCard()->setSelectable( false );
-	player->getCard( id )->setSelectable( true );
+    kDebug() << "Begin.";
+    
+    //Check
+    if( getCurrentPlayer() != player ){
+        kDebug() << "ERROR! Not the current player want change trump card!";
+        return;
+    }
+    
+    if( !player->canChangeTrumpCard( mTrump ) ){
+        kDebug() << "ERROR! The current player can't change trump card, but he/she want!";
+        return;
+    }
+    
+    int id = player->changeTrumpCard( mTrump );
+    
+    mTrump->getCard()->setSelectable( false );
+    player->getCard( id )->setSelectable( true );
         
-	if( player->haveRegularMarriages( mTrump ) ){
-		player->setTwentyButtonVisible( true );
-	}
-	
-	if( player->haveTrumpMarriages( mTrump ) ){
-		player->setFortyButtonVisible( true );
-	}
-	
-	for( int i = 0; i < mPlayerList.size(); ++i ){
-		
-		if( mPlayerList.at(i) != player ){
-			mPlayerList.at(i)->sendNewTrumpCard( mTrump );
-		}
-		
-	}
-	
-	kDebug() << "End.";
+    if( player->haveRegularMarriages( mTrump ) ){
+        player->setTwentyButtonVisible( true );
+    }
+    
+    if( player->haveTrumpMarriages( mTrump ) ){
+        player->setFortyButtonVisible( true );
+    }
+    
+    for( int i = 0; i < mPlayerList.size(); ++i ){
+        
+        if( mPlayerList.at(i) != player ){
+            mPlayerList.at(i)->sendNewTrumpCard( mTrump );
+        }
+        
+    }
+    
+    kDebug() << "End.";
 }
 
 void Server::slotCheckCentralCards()
 {
-	
-	kDebug() << "Check the central cards.";
-		
-	//int centralCard1Point = mCentralCards.at(0).getCardPoint();
-	//int centralCard1Point = mCentralCards->getCard( 0 ).getCardPoint();
-	const int centralCard1Point = mCentralCards->getCard( 0 )->getCardPoint();
-	//int centralCard2Point = mCentralCards.at(1).getCardPoint();
-	//int centralCard2Point = mCentralCards->getCard(1).getCardPoint();
-	const int centralCard2Point = mCentralCards->getCard(1)->getCardPoint();
-	
-	kDebug() << "centralCard1Point" << centralCard1Point;
-	kDebug() << "centralCard2Point" << centralCard2Point;
-	
-	const Card::Suit centralCard0Suit = mCentralCards->getCard( 0 )->getSuit();
-	const Card::Suit centralCard1Suit = mCentralCards->getCard( 1 )->getSuit();
-	
-	bool currentPlayerStartNextTurn;
-	
-        //if( mTrumpCard->getCard()->getCardSuit() == centralCard0Suit && mTrumpCard->getCard()->getCardSuit() != centralCard1Suit ){
-	if( mTrump->getCardSuit() == centralCard0Suit && mTrump->getCardSuit() != centralCard1Suit ){
-        	currentPlayerStartNextTurn = false;
-	//}else if( mTrumpCard->getCard()->getCardSuit() != centralCard0Suit && mTrumpCard->getCard()->getCardSuit() == centralCard1Suit ){
-	}else if( mTrump->getCardSuit() != centralCard0Suit && mTrump->getCardSuit() == centralCard1Suit ){
-        	currentPlayerStartNextTurn = true;
-	}else if( centralCard0Suit == centralCard1Suit ){
-	
-		if( centralCard1Point < centralCard2Point ){
-			currentPlayerStartNextTurn = true;
-		}else{
-			currentPlayerStartNextTurn = false;
-		}
-		
-	}else{ // mCentralCards.at(0).getCardType != mCentralCards.at(1).getCardType
-		currentPlayerStartNextTurn = false;
-	}
-		
-	if( !currentPlayerStartNextTurn ){
-		mGameSequence->setCurrentPlayer( mGameSequence->getNextPlayer() );
-	}
-	
-	Player* currentPlayer = mGameSequence->getCurrentPlayer();
-		
-	kDebug() << currentPlayer->getName() << "get" << centralCard1Point+centralCard2Point << "points.";
-	//currentPlayer->addTricks( centralCard1Point + centralCard2Point );
-	addTricks( currentPlayer, centralCard1Point + centralCard2Point );
-	
-	if( mWaitingMarriage && mWaitingMarriage->first == currentPlayer ){
-		//currentPlayer->addTricks( mWaitingMarriage->second );
-		addTricks( currentPlayer, mWaitingMarriage->second );
-		delete mWaitingMarriage;
-		mWaitingMarriage = 0;
-	}
-		
-	if( mClickedToCloseButtonThisTurn ){
-		mClickedToCloseButtonThisTurn = false;
-	}
-		
-	if( mGameSequence->isRoundOver() ){
-		roundOver();
-		//return;
-	}else{
-		kDebug() << "Start next turn";
-		
-		//Clear central cards
-		mCentralCards->clear();
-		
-		for( int i = 0; i < mPlayerList.size(); ++i ){
-			mPlayerList.at( i )->sendClearCentralCards();
-		}
-		
-		//If player closed the deck
-		if( !mPlayerWhoClickedToCloseButtonThisRound ){
-			//If the dech have card yet, then add new cards to players, first who won the last turn
-			if( mDeck->getDeckSize() > 0 ){
-				addNewCard( currentPlayer, mDeck->getCard() );
-			
-				if( mDeck->getDeckSize() > 0 ){
-					addNewCard( mGameSequence->getNextPlayer(), mDeck->getCard() );
-					
-				}else{
-					addNewCard( mGameSequence->getNextPlayer(), mTrump->getCard() );
-					
-					//mTrumpCard->clearTrumpCard();
-					mTrump->clearTrumpCard( false );
-					
-					for( int i = 0; i < mPlayerList.size(); ++i ){
-						mPlayerList.at( i )->sendClearTrumpCard();
-					}
-				
-				}
-			
-			}
-		}
-		
-		currentPlayer->sendSelectableAllCards();
-		for( int i = 0; i < mPlayerList.size(); ++i ){
-			if( mPlayerList.at( i ) != currentPlayer ){
-				mPlayerList.at( i )->sendOpponentInAction();
-			}
-		}
-		
-		//if( currentPlayer->haveRegularMarriages() ){
-		if( currentPlayer->haveRegularMarriages( mTrump ) ){
-			kDebug() << currentPlayer->getName() << "have regular marriages.";
-			currentPlayer->setTwentyButtonVisible( true );
-			currentPlayer->sendTwentyButtonVisible();
-		}
-	
-		//if( currentPlayer->haveTrumpMarriages() ){
-		if( currentPlayer->haveTrumpMarriages( mTrump ) ){
-			kDebug() << currentPlayer->getName() << "have trump marriages.";
-			currentPlayer->setFortyButtonVisible( true );
-			currentPlayer->sendFortyButtonVisible();
-		}
-		
-		//if( currentPlayer->canChangeTrumpCard() ){
-		if( currentPlayer->canChangeTrumpCard( mTrump ) ){
-			kDebug() << currentPlayer->getName() << "can change trump card.";
-			currentPlayer->sendSelectableTrumpCard();
-		}
-		
-		//if( !mClickedToCloseButtonThisRound && mDeck->getDeckSize() > 3 ){
-		if( !mPlayerWhoClickedToCloseButtonThisRound && mDeck->getDeckSize() > 3 ){
-			currentPlayer->sendCloseButtonVisible();
-		}
-		
-	}
-	
-	for( int i = 0; i < mPlayerList.size(); ++i ){
-		mPlayerList.at( i )->sendCommandsEnd();
-	}
-	
+    kDebug() << "Check the central cards.";
+    
+    const int centralCard1Point = mCentralCards->getCard( 0 )->getCardPoint();
+    const int centralCard2Point = mCentralCards->getCard( 1 )->getCardPoint();
+    
+    kDebug() << "centralCard1Point" << centralCard1Point;
+    kDebug() << "centralCard2Point" << centralCard2Point;
+    
+    const Card::Suit centralCard0Suit = mCentralCards->getCard( 0 )->getSuit();
+    const Card::Suit centralCard1Suit = mCentralCards->getCard( 1 )->getSuit();
+    
+    bool currentPlayerStartNextTurn;
+    
+    if( mTrump->getCardSuit() == centralCard0Suit && mTrump->getCardSuit() != centralCard1Suit ){
+        currentPlayerStartNextTurn = false;
+    }else if( mTrump->getCardSuit() != centralCard0Suit && mTrump->getCardSuit() == centralCard1Suit ){
+        currentPlayerStartNextTurn = true;
+    }else if( centralCard0Suit == centralCard1Suit ){
+    
+        if( centralCard1Point < centralCard2Point ){
+            currentPlayerStartNextTurn = true;
+        }else{
+            currentPlayerStartNextTurn = false;
+        }
+        
+    }else{ // centralCard0Suit == centralCard1Suit
+        currentPlayerStartNextTurn = false;
+    }
+    
+    if( !currentPlayerStartNextTurn ){
+        setCurrentPlayer( getNextPlayer() );
+    }
+    
+    //Player* currentPlayer = mGameSequence->getCurrentPlayer();
+    
+    kDebug() << getCurrentPlayer()->getName() << "get" << centralCard1Point+centralCard2Point << "points.";
+    addTricks( getCurrentPlayer(), centralCard1Point + centralCard2Point );
+    
+    if( mWaitingMarriage && mWaitingMarriage->first == getCurrentPlayer() ){
+        addTricks( getCurrentPlayer(), mWaitingMarriage->second );
+        delete mWaitingMarriage;
+        mWaitingMarriage = 0;
+    }
+    
+    if( mClickedToCloseButtonThisTurn ){
+        mClickedToCloseButtonThisTurn = false;
+    }
+    
+    if( isRoundOver() ){
+        roundOver();
+        //return;
+    }else{
+        kDebug() << "Start next turn";
+        
+        //Clear central cards
+        mCentralCards->clear();
+        
+        for( int i = 0; i < mPlayerList.size(); ++i ){
+            mPlayerList.at( i )->sendClearCentralCards();
+        }
+        
+        //If player closed the deck
+        if( !mPlayerWhoClickedToCloseButtonThisRound ){
+            //If the dech have card yet, then add new cards to players, first who won the last turn
+            if( mDeck->getDeckSize() > 0 ){
+                addNewCard( getCurrentPlayer(), mDeck->getCard() );
+                
+                if( mDeck->getDeckSize() > 0 ){
+                    addNewCard( getNextPlayer(), mDeck->getCard() );
+                    
+                }else{
+                    addNewCard( getNextPlayer(), mTrump->getCard() );
+                    
+                    mTrump->clearTrumpCard( false );
+                    
+                    for( int i = 0; i < mPlayerList.size(); ++i ){
+                        mPlayerList.at( i )->sendClearTrumpCard();
+                    }
+                    
+                }
+                
+            }
+        }
+        
+        getCurrentPlayer()->sendSelectableAllCards();
+        for( int i = 0; i < mPlayerList.size(); ++i ){
+            if( mPlayerList.at( i ) != getCurrentPlayer() ){
+                mPlayerList.at( i )->sendOpponentInAction();
+            }
+        }
+        
+        if( getCurrentPlayer()->haveRegularMarriages( mTrump ) ){
+            kDebug() << getCurrentPlayer()->getName() << "have regular marriages.";
+            getCurrentPlayer()->setTwentyButtonVisible( true );
+            getCurrentPlayer()->sendTwentyButtonVisible();
+        }
+        
+        if( getCurrentPlayer()->haveTrumpMarriages( mTrump ) ){
+            kDebug() << getCurrentPlayer()->getName() << "have trump marriages.";
+            getCurrentPlayer()->setFortyButtonVisible( true );
+            getCurrentPlayer()->sendFortyButtonVisible();
+        }
+        
+        if( getCurrentPlayer()->canChangeTrumpCard( mTrump ) ){
+            kDebug() << getCurrentPlayer()->getName() << "can change trump card.";
+            getCurrentPlayer()->sendSelectableTrumpCard();
+        }
+        
+        if( !mPlayerWhoClickedToCloseButtonThisRound && mDeck->getDeckSize() > 3 ){
+            getCurrentPlayer()->sendCloseButtonVisible();
+        }
+        
+    }
+    
+    for( int i = 0; i < mPlayerList.size(); ++i ){
+        mPlayerList.at( i )->sendCommandsEnd();
+    }
+    
 }
 
 void Server::slotPlayerWantStartNextRound( Player *player )
@@ -734,7 +801,7 @@ void Server::slotPlayerWantStartNextRound( Player *player )
             
             kDebug() << "Start next round.";
             
-            mGameSequence->nextPlayerStartRound();
+            nextPlayerStartRound();
             
             newRound();
             
@@ -768,7 +835,7 @@ void Server::slotPlayerWantStartNextGame( Player *player )
             
             kDebug() << "Start new game.";
             
-            mGameSequence->nextPlayerStartGame();
+            nextPlayerStartGame();
             
             newGame();
             
@@ -797,7 +864,27 @@ void Server::incomingConnection( int socketDescriptor )
 
 void Server::setWhoStartGame( Knapsen::WhoStartGame whoStartGame )
 {
-	mGameSequence->setWhoStartGame( whoStartGame );
+    //mGameSequence->setWhoStartGame( whoStartGame );
+    if( whoStartGame == Knapsen::RandomPlayer ){
+        
+        if( qrand()%2 == 0 ){
+            whoStartGame = Knapsen::AdminPlayer;
+        }else{
+            whoStartGame = Knapsen::OpponentPlayer;
+        }
+        
+    }
+    
+    if( whoStartGame == Knapsen::AdminPlayer ){
+        //The first player always the admin
+        mGameStarterPlayerId = 0;
+    }else{ //whoStartGame == Knapsen::AdminPlayer
+        //The second player always the opponent
+        mGameStarterPlayerId = 1;
+    }
+    
+    mRoundStarterPlayerId = mGameStarterPlayerId;
+    mCurrentPlayerId = mRoundStarterPlayerId;
 }
 
 void Server::addBot( QString botName, Knapsen::GameDifficulty difficulty )
