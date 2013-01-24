@@ -7,20 +7,20 @@ class Ui_WaitingWidgetUi;
 
 class WaitForServerDialog : public KDialog
 {
-	Q_OBJECT
-	
-	Ui_WaitingWidgetUi* waitingWidgetUi;
-	
-	bool connectionError;
-	
+    Q_OBJECT
+    
+    Ui_WaitingWidgetUi* waitingWidgetUi;
+    
+    bool connectionError;
+
 private slots:
-	void waitingProgressBarTimeoutSlot();
-	
+    void waitingProgressBarTimeoutSlot();
+
 public:
     WaitForServerDialog();
-	
-	bool haveConnectionError() const;
-	
+    
+    bool haveConnectionError() const;
+    
 };
 
 #endif //WAITFORSERVERDIALOG_H

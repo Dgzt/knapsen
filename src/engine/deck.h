@@ -8,19 +8,19 @@
 
 class Deck
 {
-	int mDeckSize;
-	
-	QList<Card*> mCards;
-		
+    int mDeckSize;
+    
+    QList<Card*> mCards;
+    
 public:
-	Deck( int );
-	
-	void buildDeck();
-	
-	int getDeckSize() const{ return mCards.size(); }
-	
-	Card* getCard(){ return mCards.takeLast(); }
-	
+    Deck( int );
+    
+    void buildDeck();
+    
+    int getDeckSize() const{ return mCards.size(); }
+    
+    Card* getCard(){ return mCards.takeLast(); }
+    
 };
 
 #endif //DECK_H

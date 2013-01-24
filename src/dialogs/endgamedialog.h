@@ -8,7 +8,7 @@ class EndGameDialog : public KDialog
 
 public:
     EndGameDialog(QWidget* parent = 0, QString winnerName = "" );
-	
+
 };
 
 #endif //ENDGAMEDIALOG_H

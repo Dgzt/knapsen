@@ -88,211 +88,192 @@ class Trump;
 
 class Player : public QTcpSocket
 {
-	Q_OBJECT
-
-	//Player's name
-	QString mName;
-	
-	Card::Type mLowestCardType;
-	
-	int mNumberOfCardsInHand;
-	Card** mCards;
-	
-	//Player's tricks
-	int mTricks;
-	
-	//Player's scores
-	int mScores;
-	
-	//If this variable is visible, then visible the twenty button
-	bool mTwentyButtonVisible;
-	//If this variable is visible, then visible the forty button
-	bool mFortyButtonVisible;
-	//If this variable is visible, then visible the close button
-	bool mCloseButtonVisible;
-	
-	
-	
-	virtual void newCommand( QString );
-	
-	bool setSelectableCardsWhatEqualSuit( Card::Suit );
-	
+    Q_OBJECT
+    
+    //Player's name
+    QString mName;
+    
+    Card::Type mLowestCardType;
+    
+    int mNumberOfCardsInHand;
+    Card** mCards;
+    
+    //Player's tricks
+    int mTricks;
+    
+    //Player's scores
+    int mScores;
+    
+    //If this variable is visible, then visible the twenty button
+    bool mTwentyButtonVisible;
+    //If this variable is visible, then visible the forty button
+    bool mFortyButtonVisible;
+    //If this variable is visible, then visible the close button
+    bool mCloseButtonVisible;
+    
+    
+    virtual void newCommand( QString );
+    
+    bool setSelectableCardsWhatEqualSuit( Card::Suit );
+    
 private slots:
-	void slotReadyRead();
-	void slotDisconnected(){ emit signalPlayerDisconnected( this ); }
-	
+    void slotReadyRead();
+    void slotDisconnected(){ emit signalPlayerDisconnected( this ); }
+    
 protected:
-	QString getCommandPartOfCommand( QString );
-	QString getValuePartOfCommand( QString );
-	
-	void setNumberOfCardsInHand( int );
-	int getNumberOfCardsInHand() const{ return mNumberOfCardsInHand; }
-	
-	void newGame();
-	void newRound();
-	
-	void setLowestCard( int );
-	Card::Type getLowestCardType(){ return mLowestCardType; }
-	
-	int addNewCard( Card* );
-	void removeCard( int );
-
-	
-	//Set selectable OR not selectable all avalibe card
-	void setSelectableAllCards( bool );
-	//Set selectable cards, which suit of cards equal the suit of central card or suit of trump card
-	void setSelectableCertainCards( CentralCards* , Trump* );
-	
-	/*//void setSelectableRegularMarriagesCards();
-	void setSelectableRegularMarriagesCards( TrumpCard * );
-	//void setSelectableTrumpMarriagesCards();
-	void setSelectableTrumpMarriagesCards( TrumpCard * );*/
-	
-	/*void setTwentyButtonVisible( bool );
-	bool isTwentyButtonVisible() const{ return mTwentyButtonVisible; }
-	void setFortyButtonVisible( bool );
-	bool isFortyButtonVisible() const{ return mFortyButtonVisible; }*/
-	void twentyButtonClicked();
-	void fortyButtonClicked();
-	void setCloseButtonVisible( bool visible ){ mCloseButtonVisible = visible; emit signalCloseButtonVisible( visible ); }
-	bool isCloseButtonVisible() const{ return mCloseButtonVisible; }
-	
-	void setTricks( int tricks ){ mTricks = tricks; }
-	void setScores( int scores ){ mScores = scores; }
-	
-	//Send command to socket
-	void sendCommand( QString command ){ write( command.toAscii() ); }
-	
+    QString getCommandPartOfCommand( QString );
+    QString getValuePartOfCommand( QString );
+    
+    void setNumberOfCardsInHand( int );
+    int getNumberOfCardsInHand() const{ return mNumberOfCardsInHand; }
+    
+    void newGame();
+    void newRound();
+    
+    void setLowestCard( int );
+    Card::Type getLowestCardType(){ return mLowestCardType; }
+    
+    int addNewCard( Card* );
+    void removeCard( int );
+    
+    
+    //Set selectable OR not selectable all avalibe card
+    void setSelectableAllCards( bool );
+    //Set selectable cards, which suit of cards equal the suit of central card or suit of trump card
+    void setSelectableCertainCards( CentralCards* , Trump* );
+    
+    void twentyButtonClicked();
+    void fortyButtonClicked();
+    void setCloseButtonVisible( bool visible ){ mCloseButtonVisible = visible; emit signalCloseButtonVisible( visible ); }
+    bool isCloseButtonVisible() const{ return mCloseButtonVisible; }
+    
+    void setTricks( int tricks ){ mTricks = tricks; }
+    void setScores( int scores ){ mScores = scores; }
+    
+    //Send command to socket
+    void sendCommand( QString command ){ write( command.toAscii() ); }
+    
 public:
     Player( QString );
     ~Player();
-	
-	//Set nickname
-	//void setName( QString name ){ mName = name; }
-	
-	//Get nickname
-	QString getName() const { return mName; }
-	
-	int getNumberOfCardsInHandNow();
-	
-	Card* getCard( int );
-	
-	//If this card is king, then return equal suit of queen, 
-	//else this card is queen, then return equal suit of king
-	//int getPositionOfPairOfCard( Card );
-	int getPositionOfPairOfCard( const Card* );
-	
-	void addTricks( int );
-	int getTricks() const{ return mTricks; }
-	void addScores( int );
-	int getScores() const{ return mScores; }
-	
-	bool haveRegularMarriages( Trump* ) const;
-	bool haveTrumpMarriages( Trump* ) const;
-	
-	bool canChangeTrumpCard( Trump* ) const;
-	int changeTrumpCard( Trump* );
-	
-	void setTwentyButtonVisible( bool );
-	bool isTwentyButtonVisible() const{ return mTwentyButtonVisible; }
-	void setFortyButtonVisible( bool );
-	bool isFortyButtonVisible() const{ return mFortyButtonVisible; }
-	
-	void setSelectableRegularMarriagesCards( Trump* );
-	void setSelectableTrumpMarriagesCards( Trump* );
-	
-	//-- Commands --
-	
-	//
-	void sendNameIsBusy(){ sendCommand( NAME_IS_BUSY_COMMAND ); }
-	
-	void sendServerIsFull(){ sendCommand( SERVER_IS_FULL_COMMAND ); }
-	//
+    
+    //Get nickname
+    QString getName() const { return mName; }
+    
+    int getNumberOfCardsInHandNow();
+    
+    Card* getCard( int );
+    
+    //If this card is king, then return equal suit of queen, 
+    //else this card is queen, then return equal suit of king
+    //int getPositionOfPairOfCard( Card );
+    int getPositionOfPairOfCard( const Card* );
+    
+    void addTricks( int );
+    int getTricks() const{ return mTricks; }
+    void addScores( int );
+    int getScores() const{ return mScores; }
+    
+    bool haveRegularMarriages( Trump* ) const;
+    bool haveTrumpMarriages( Trump* ) const;
+    
+    bool canChangeTrumpCard( Trump* ) const;
+    int changeTrumpCard( Trump* );
+    
+    void setTwentyButtonVisible( bool );
+    bool isTwentyButtonVisible() const{ return mTwentyButtonVisible; }
+    void setFortyButtonVisible( bool );
+    bool isFortyButtonVisible() const{ return mFortyButtonVisible; }
+    
+    void setSelectableRegularMarriagesCards( Trump* );
+    void setSelectableTrumpMarriagesCards( Trump* );
+    
+    //-- Commands --
+    
+    //
+    void sendNameIsBusy(){ sendCommand( NAME_IS_BUSY_COMMAND ); }
+    
+    void sendServerIsFull(){ sendCommand( SERVER_IS_FULL_COMMAND ); }
+    //
 
-	void sendInitializeTable( QString, Knapsen::TypeOfCards, int, int );
-	
-	//Set and send the new card
-	int sendNewCard( Card* );
-	
-	//Send to player the new opponent card id
-	void sendNewOpponentCard( int id ){ sendCommand( NEW_OPPONENT_CARD_COMMAND_ID+QString::number( id ) ); }
-	
-	
-	//Set and send the new trump card
-	void sendNewTrumpCard( Trump* );
-	
-	void sendClearTrumpCard(){ sendCommand( CLEAR_TRUMP_CARD_COMMAND ); }
-	
-	//Set and send enabled all card
-	void sendSelectableAllCards();
-
-	//void sendSelectableCertainCards();
-	void sendSelectableCertainCards( CentralCards *, Trump* );
-	
-	void sendOpponentInAction(){ sendCommand( OPPONENT_IN_ACTION_COMMAND ); }
-	
-	void sendOpponentSelectedCardId( int id ){ sendCommand( OPPONENT_SELECTED_CARD_ID_COMMAND+QString::number( id ) ); }
-	
-	//void sendOpponentAddNewCentralCard( Card );
-	void sendOpponentAddNewCentralCard( const Card* );
-	
-	//
-	void sendOpponentTricksChanged( int value ){ sendCommand( OPPONENT_TRICKS_CHANGED_COMMAND+QString::number( value ) ); }
-	void sendOpponentScoresChanged( int value ){ sendCommand( OPPONENT_SCORES_CHANGED_COMMAND+QString::number( value ) ); }
-	//
-	
-	void sendOpponentDisconnected(){ sendCommand( OPPONENT_DISCONNECTED_COMMAND ); }
-	
-	void sendClearCentralCards(){ sendCommand( CLEAR_CENTRAL_CARDS_COMMAND ); }
-	
-	void sendTwentyButtonVisible(){ sendCommand( TWENTY_BUTTON_VISIBLE_COMMAND ); }
-	void sendFortyButtonVisible(){ sendCommand( FORTY_BUTTON_VISIBLE_COMMAND ); }
-
-	void sendCloseButtonVisible();
-	
-	void sendOpponentClickedToCloseButton(){ sendCommand( OPPONENT_CLICKED_TO_CLOSE_BUTTON_COMMAND ); }
-	
-	void sendSelectableTrumpCard(){ sendCommand( TRUMP_CARD_SELECTABLE_COMMAND ); }
-	void sendChangeTrumpCard(){ sendCommand( CHANGE_TRUMP_CARD_COMMAND ); }
-
-	
-	//If the opponent clicked to twenty or forty button, then show that cards
-	//void sendVisibleOpponentCards( int, Card, int, Card* );
-	void sendVisibleOpponentCards( int, Card*, int, Card* );
-	
-	void sendNewRound(){ newRound(); sendCommand( NEW_ROUND_COMMAND ); }
-	
-	void sendNewGame(){ newGame(); sendCommand( NEW_GAME_COMMAND ); }
-	
-	void sendEndRound( QString winnerName, int winnnerScores ){ sendCommand( END_ROUND_COMMAND+winnerName+","+QString::number( winnnerScores ) ); }
-	
-	void sendEndGame( QString winnerName ){ sendCommand( END_GAME_COMMAND+winnerName ); }
-	
-	void sendCommandsEnd(){ sendCommand( COMMANDS_END_COMMAND ); }
-	
+    void sendInitializeTable( QString, Knapsen::TypeOfCards, int, int );
+    
+    //Set and send the new card
+    int sendNewCard( Card* );
+    
+    //Send to player the new opponent card id
+    void sendNewOpponentCard( int id ){ sendCommand( NEW_OPPONENT_CARD_COMMAND_ID+QString::number( id ) ); }
+    
+    //Set and send the new trump card
+    void sendNewTrumpCard( Trump* );
+    
+    void sendClearTrumpCard(){ sendCommand( CLEAR_TRUMP_CARD_COMMAND ); }
+    
+    //Set and send enabled all card
+    void sendSelectableAllCards();
+    
+    //void sendSelectableCertainCards();
+    void sendSelectableCertainCards( CentralCards *, Trump* );
+    
+    void sendOpponentInAction(){ sendCommand( OPPONENT_IN_ACTION_COMMAND ); }
+    
+    void sendOpponentSelectedCardId( int id ){ sendCommand( OPPONENT_SELECTED_CARD_ID_COMMAND+QString::number( id ) ); }
+    
+    //void sendOpponentAddNewCentralCard( Card );
+    void sendOpponentAddNewCentralCard( const Card* );
+    
+    //
+    void sendOpponentTricksChanged( int value ){ sendCommand( OPPONENT_TRICKS_CHANGED_COMMAND+QString::number( value ) ); }
+    void sendOpponentScoresChanged( int value ){ sendCommand( OPPONENT_SCORES_CHANGED_COMMAND+QString::number( value ) ); }
+    //
+    
+    void sendOpponentDisconnected(){ sendCommand( OPPONENT_DISCONNECTED_COMMAND ); }
+    
+    void sendClearCentralCards(){ sendCommand( CLEAR_CENTRAL_CARDS_COMMAND ); }
+    
+    void sendTwentyButtonVisible(){ sendCommand( TWENTY_BUTTON_VISIBLE_COMMAND ); }
+    void sendFortyButtonVisible(){ sendCommand( FORTY_BUTTON_VISIBLE_COMMAND ); }
+    
+    void sendCloseButtonVisible();
+    
+    void sendOpponentClickedToCloseButton(){ sendCommand( OPPONENT_CLICKED_TO_CLOSE_BUTTON_COMMAND ); }
+    
+    void sendSelectableTrumpCard(){ sendCommand( TRUMP_CARD_SELECTABLE_COMMAND ); }
+    void sendChangeTrumpCard(){ sendCommand( CHANGE_TRUMP_CARD_COMMAND ); }     
+    
+    //If the opponent clicked to twenty or forty button, then show that cards
+    void sendVisibleOpponentCards( int, Card*, int, Card* );
+    
+    void sendNewRound(){ newRound(); sendCommand( NEW_ROUND_COMMAND ); }
+    
+    void sendNewGame(){ newGame(); sendCommand( NEW_GAME_COMMAND ); }
+    
+    void sendEndRound( QString winnerName, int winnnerScores ){ sendCommand( END_ROUND_COMMAND+winnerName+","+QString::number( winnnerScores ) ); }
+    
+    void sendEndGame( QString winnerName ){ sendCommand( END_GAME_COMMAND+winnerName ); }
+    
+    void sendCommandsEnd(){ sendCommand( COMMANDS_END_COMMAND ); }
+    
 signals:
-	//Signals to server
-	void signalNewPlayer( Player* );
-	void signalPlayerDisconnected( Player* );
-	//void signalSelectedCard( Card, int );
-	//
-	void signalSelectedCard( Card*, int );
-	//
-	void signalTwentyButtonClicked();
-	void signalFortyButtonClicked();
-	void signalCloseButtonClicked();
-	void signalChangeTrumpCard( Player* );
-
-	void signalStartNextRound( Player* );
-	void signalStartNextGame( Player* );
-
-	
-	//Signals to player
-	void signalPlayerCardSelectableChanged( int, bool );
-	void signalTwentyButtonVisible( bool );
-	void signalFortyButtonVisible( bool );
-	void signalCloseButtonVisible( bool );
-	
+    //Signals to server
+    void signalNewPlayer( Player* );
+    void signalPlayerDisconnected( Player* );
+    void signalSelectedCard( Card*, int );
+    void signalTwentyButtonClicked();
+    void signalFortyButtonClicked();
+    void signalCloseButtonClicked();
+    void signalChangeTrumpCard( Player* );
+    
+    void signalStartNextRound( Player* );
+    void signalStartNextGame( Player* );
+    
+    
+    //Signals to player
+    void signalPlayerCardSelectableChanged( int, bool );
+    void signalTwentyButtonVisible( bool );
+    void signalFortyButtonVisible( bool );
+    void signalCloseButtonVisible( bool );
+    
 };
 
 #endif //PLAYER_H

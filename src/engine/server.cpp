@@ -38,113 +38,105 @@ Server::Server( QObject* parent ) :
 
 Server::~Server()
 {
-	kDebug() << "Server is deleting.";
-	if( mBot ){
-		delete mBot;
-	}
-	/*if( mGameSequence ){
-		delete mGameSequence;
-	}*/
-	if( mDeck ){
-		delete mDeck;
-	}
-	if( mCentralCards ){
-		delete mCentralCards;
-	}
-	if( mTrump ){
-		delete mTrump;
-	}
+    kDebug() << "Server is deleting.";
+    if( mBot ){
+        delete mBot;
+    }
+    if( mDeck ){
+        delete mDeck;
+    }
+    if( mCentralCards ){
+        delete mCentralCards;
+    }
+    if( mTrump ){
+        delete mTrump;
+    }
 }
 
 void Server::newGame()
 {
-	kDebug() << "Start new game.";
-	
-	for( int i = 0; i < mPlayerList.size(); ++i ){
-		mPlayerList.at( i )->sendNewGame();
-	}
-	
-	newRound();
-	
+    kDebug() << "Start new game.";
+    
+    for( int i = 0; i < mPlayerList.size(); ++i ){
+        mPlayerList.at( i )->sendNewGame();
+    }
+    
+    newRound();
 }
 
 void Server::newRound()
 {
-	kDebug() << "Start new round.";
-	
-	//Build deck
-	mDeck->buildDeck();
-	
-	//Clear central cards
-	mCentralCards->clear();
-	
-	//Clear trump card
-	mTrump->clearTrumpCard( true );
-	
-	//Clear variables
-	mOpponentHaveNotTricksBeforePlayerClickedToCloseButton = false;
-	mPlayerWhoClickedToCloseButtonThisRound = 0;
-	mTwentyButtonClickedThisTurn = false;
-	mFortyButtonClickedThisTurn = false;
-	mClickedToCloseButtonThisTurn = false;
-	
-	//Clear cards, tricks
-	for( int i = 0; i < mPlayerList.size(); ++i ){
-		mPlayerList.at( i )->sendNewRound();
-	}
-
-	//Send cards to players
-	for( int i = 0; i < mNumberOfCardsInHand; ++i ){
-		
-		for( int j = 0; j < mPlayerList.size(); ++j ){
-			addNewCard( mPlayerList.at( j ), mDeck->getCard() );
-		}
-		
-		//Get trump card
-		if( i == 2 ){
-			//mTrumpCard = mDeck->getCard();
-			mTrump->addNewCard( mDeck->getCard() );
-			
-			for( int j = 0; j < mPlayerList.size(); ++j ){
-				mPlayerList.at( j )->sendNewTrumpCard( mTrump );
-			}
-			
-		}
-		
-	}
-	
-	//Player* currentPlayer = mGameSequence->getCurrentPlayer();
-	Player* currentPlayer = getCurrentPlayer();
-	
-	//if( currentPlayer->haveRegularMarriages() ){
-	if( currentPlayer->haveRegularMarriages( mTrump ) ){
-		kDebug() << currentPlayer->getName() << "have regular marriages.";
-		currentPlayer->setTwentyButtonVisible( true );
-		currentPlayer->sendTwentyButtonVisible();
-	}
-	
-	//if( currentPlayer->haveTrumpMarriages() ){
-	if( currentPlayer->haveTrumpMarriages( mTrump ) ){
-		kDebug() << currentPlayer->getName() << "have trump marriages.";
-		currentPlayer->setFortyButtonVisible( true );
-		currentPlayer->sendFortyButtonVisible();
-	}
-	
-	//if( currentPlayer->canChangeTrumpCard() ){
-	if( currentPlayer->canChangeTrumpCard( mTrump ) ){
-		kDebug() << currentPlayer->getName() << "can change trump card.";
-		currentPlayer->sendSelectableTrumpCard();
-	}
-	
-	currentPlayer->sendCloseButtonVisible();
-	
-	currentPlayer->sendSelectableAllCards();
-	for( int i = 0; i < mPlayerList.size(); ++i ){
-		if( mPlayerList.at( i ) != currentPlayer ){
-			mPlayerList.at( i )->sendOpponentInAction();
-		}
-	}
-	
+    kDebug() << "Start new round.";
+    
+    //Build deck
+    mDeck->buildDeck();
+    
+    //Clear central cards
+    mCentralCards->clear();
+    
+    //Clear trump card
+    mTrump->clearTrumpCard( true );
+    
+    //Clear variables
+    mOpponentHaveNotTricksBeforePlayerClickedToCloseButton = false;
+    mPlayerWhoClickedToCloseButtonThisRound = 0;
+    mTwentyButtonClickedThisTurn = false;
+    mFortyButtonClickedThisTurn = false;
+    mClickedToCloseButtonThisTurn = false;
+    
+    //Clear cards, tricks
+    for( int i = 0; i < mPlayerList.size(); ++i ){
+        mPlayerList.at( i )->sendNewRound();
+    }
+    
+    //Send cards to players
+    for( int i = 0; i < mNumberOfCardsInHand; ++i ){
+        
+        for( int j = 0; j < mPlayerList.size(); ++j ){
+            addNewCard( mPlayerList.at( j ), mDeck->getCard() );
+        }
+        
+        //Get trump card
+        if( i == 2 ){
+            //mTrumpCard = mDeck->getCard();
+            mTrump->addNewCard( mDeck->getCard() );
+            
+            for( int j = 0; j < mPlayerList.size(); ++j ){
+                mPlayerList.at( j )->sendNewTrumpCard( mTrump );
+            }
+            
+        }
+        
+    }
+    
+    Player* currentPlayer = getCurrentPlayer();
+    
+    if( currentPlayer->haveRegularMarriages( mTrump ) ){
+        kDebug() << currentPlayer->getName() << "have regular marriages.";
+        currentPlayer->setTwentyButtonVisible( true );
+        currentPlayer->sendTwentyButtonVisible();
+    }
+    
+    if( currentPlayer->haveTrumpMarriages( mTrump ) ){
+        kDebug() << currentPlayer->getName() << "have trump marriages.";
+        currentPlayer->setFortyButtonVisible( true );
+        currentPlayer->sendFortyButtonVisible();
+    }
+    
+    if( currentPlayer->canChangeTrumpCard( mTrump ) ){
+        kDebug() << currentPlayer->getName() << "can change trump card.";
+        currentPlayer->sendSelectableTrumpCard();
+    }
+    
+    currentPlayer->sendCloseButtonVisible();
+    
+    currentPlayer->sendSelectableAllCards();
+    for( int i = 0; i < mPlayerList.size(); ++i ){
+        if( mPlayerList.at( i ) != currentPlayer ){
+            mPlayerList.at( i )->sendOpponentInAction();
+        }
+    }
+    
 }
 
 void Server::roundOver()
@@ -320,128 +312,127 @@ bool Server::isRoundOver()
 
 void Server::addNewCard( Player* player, Card* card )
 {
-	int cardId = player->sendNewCard( card );
-	
-	//Send player's card id to other players
-	for( int i = 0; i < mPlayerList.size(); ++i ){
-		if( mPlayerList.at( i ) != player ){
-			mPlayerList.at( i )->sendNewOpponentCard( cardId );
-		}
-	}
+    int cardId = player->sendNewCard( card );
+    
+    //Send player's card id to other players
+    for( int i = 0; i < mPlayerList.size(); ++i ){
+        if( mPlayerList.at( i ) != player ){
+            mPlayerList.at( i )->sendNewOpponentCard( cardId );
+        }
+    }
 }
 
 void Server::addTricks( Player* player, int newTricks )
 {
-	player->addTricks( newTricks );
-	
-	//Send player's tricks to other players
-	for( int i = 0; i < mPlayerList.size(); ++i ){
-		if( mPlayerList.at( i ) != player ){
-			mPlayerList.at( i )->sendOpponentTricksChanged( player->getTricks() );
-		}
-	}
+    player->addTricks( newTricks );
+    
+    //Send player's tricks to other players
+    for( int i = 0; i < mPlayerList.size(); ++i ){
+        if( mPlayerList.at( i ) != player ){
+            mPlayerList.at( i )->sendOpponentTricksChanged( player->getTricks() );
+        }
+    }
 }
 
 void Server::addScores( Player* player, int newScores )
 {
-	player->addScores( newScores );
-	
-	//Send player's scores to other players
-	for( int i = 0; i < mPlayerList.size(); ++i ){
-		if( mPlayerList.at( i ) != player ){
-			mPlayerList.at( i )->sendOpponentScoresChanged( player->getScores() );
-		}
-	}
+    player->addScores( newScores );
+    
+    //Send player's scores to other players
+    for( int i = 0; i < mPlayerList.size(); ++i ){
+        if( mPlayerList.at( i ) != player ){
+            mPlayerList.at( i )->sendOpponentScoresChanged( player->getScores() );
+        }
+    }
 }
 
 void Server::slotNewPlayer( Player* player )
 {
-	kDebug() << player->getName();
-	
-	if( mPlayerList.size() < MAX_PLAYERS ){
-		
-		for( int i = 0; i < mPlayerList.size(); ++i ){
-			if( mPlayerList.at(i)->getName() == player->getName() ){
-				kDebug() << "The \"" << player->getName() << "\" name is busy.";
-				player->sendNameIsBusy();
-				return;
-			}
-		}
-		
-		mPlayerList.append( player );
-		//connect( player, SIGNAL( signalPlayerDisconnected( Player* ) ),	this, SLOT( slotPlayerDisconnected( Player* ) ) );
-		connect( player, SIGNAL( signalSelectedCard( Card*, int ) ),		this, SLOT( slotPlayerSelectedCard( Card*, int ) ) ); 
-		connect( player, SIGNAL( signalTwentyButtonClicked() ),				this, SLOT( slotPlayerTwentyButtonClicked() ) );
-		connect( player, SIGNAL( signalFortyButtonClicked() ),				this, SLOT( slotPlayerFortyButtonClicked() ) );
-		connect( player, SIGNAL( signalCloseButtonClicked() ),				this, SLOT( slotPlayerClickedToCloseButton() ) );
-		//connect( player, SIGNAL( signalChangedTrumpCard( Card ) ),		this, SLOT( slotPlayerChangedTrumpCard( Card ) ) );
-		connect( player, SIGNAL( signalChangeTrumpCard( Player* ) ),		this, SLOT( slotPlayerChangeTrumpCard( Player* ) ) );
-		connect( player, SIGNAL( signalStartNextRound( Player* ) ),			this, SLOT( slotPlayerWantStartNextRound( Player* ) ) );
-		connect( player, SIGNAL( signalStartNextGame( Player* ) ),			this, SLOT( slotPlayerWantStartNextGame( Player* ) ) );
-		
-		emit signalPlayerConnected( player->getName() );
-		
-		if( mPlayerList.size() == MAX_PLAYERS ){
-			kDebug() << "The server is full.";
-			
-			emit signalServerFull();
-		}
-		
-	}else{
-		kDebug() << "The server is full, no free slot.";
-		player->sendServerIsFull();
-		//player->deleteLater();
-	}
-	
+    kDebug() << player->getName();
+    
+    if( mPlayerList.size() < MAX_PLAYERS ){
+        
+        for( int i = 0; i < mPlayerList.size(); ++i ){
+            if( mPlayerList.at(i)->getName() == player->getName() ){
+                kDebug() << "The \"" << player->getName() << "\" name is busy.";
+                player->sendNameIsBusy();
+                return;
+            }
+        }
+        
+        mPlayerList.append( player );
+        
+        connect( player, SIGNAL( signalSelectedCard( Card*, int ) ),		this, SLOT( slotPlayerSelectedCard( Card*, int ) ) ); 
+        connect( player, SIGNAL( signalTwentyButtonClicked() ),				this, SLOT( slotPlayerTwentyButtonClicked() ) );
+        connect( player, SIGNAL( signalFortyButtonClicked() ),				this, SLOT( slotPlayerFortyButtonClicked() ) );
+        connect( player, SIGNAL( signalCloseButtonClicked() ),				this, SLOT( slotPlayerClickedToCloseButton() ) );
+        connect( player, SIGNAL( signalChangeTrumpCard( Player* ) ),		this, SLOT( slotPlayerChangeTrumpCard( Player* ) ) );
+        connect( player, SIGNAL( signalStartNextRound( Player* ) ),			this, SLOT( slotPlayerWantStartNextRound( Player* ) ) );
+        connect( player, SIGNAL( signalStartNextGame( Player* ) ),			this, SLOT( slotPlayerWantStartNextGame( Player* ) ) );
+        
+        emit signalPlayerConnected( player->getName() );
+        
+        if( mPlayerList.size() == MAX_PLAYERS ){
+            kDebug() << "The server is full.";
+            
+            emit signalServerFull();
+        }
+        
+    }else{
+        kDebug() << "The server is full, no free slot.";
+        player->sendServerIsFull();
+        //player->deleteLater();
+    }
+    
 }
 
 void Server::slotPlayerDisconnected( Player* player )
 {
-	kDebug() << player->getName() << "disconnected.";
-	
-	const int INVALID_ID = -1;
-	
-	int id = INVALID_ID;
-	
-	for( int i = 0; i < mPlayerList.size(); ++i ){
-		if( player == mPlayerList.at( i ) ){
-			id = i;
-		}
-	}
-	
-	if( id != INVALID_ID ){
-		
-		mPlayerList.removeAt( id );
-	
-		//Delete player
-		player->disconnectFromHost();
-		player->deleteLater();
-		
-		emit signalPlayerDisconnected( player->getName() );
-		
-		//If the opponent is bot, then delete bot
-		if( mBot ){
-			mBot->disconnectFromHost();
-			mBot->deleteLater();
-			mBot = 0;
-		}
-		
-		if( mPlayerList.isEmpty() ){
-			kDebug() << "Server is empty!";
-			emit signalServerEmpty();
-		}else{
-			
-			for( int i = 0; i < mPlayerList.size(); ++i ){
-				mPlayerList.at( i )->sendOpponentDisconnected();
-			}
-			
-		}
-		
-	}else{ // id == INVALID_ID
-		player->disconnectFromHost();
-		player->deleteLater();
-	}
-	
+    kDebug() << player->getName() << "disconnected.";
+    
+    const int INVALID_ID = -1;
+    
+    int id = INVALID_ID;
+    
+    for( int i = 0; i < mPlayerList.size(); ++i ){
+        if( player == mPlayerList.at( i ) ){
+            id = i;
+        }
+    }
+    
+    if( id != INVALID_ID ){
+        
+        mPlayerList.removeAt( id );
+        
+        //Delete player
+        player->disconnectFromHost();
+        player->deleteLater();
+        
+        emit signalPlayerDisconnected( player->getName() );
+        
+        //If the opponent is bot, then delete bot
+        if( mBot ){
+            mBot->disconnectFromHost();
+            mBot->deleteLater();
+            mBot = 0;
+        }
+        
+        if( mPlayerList.isEmpty() ){
+            kDebug() << "Server is empty!";
+            emit signalServerEmpty();
+        }else{
+            
+            for( int i = 0; i < mPlayerList.size(); ++i ){
+                mPlayerList.at( i )->sendOpponentDisconnected();
+            }
+        
+        }
+        
+    }else{ // id == INVALID_ID
+        player->disconnectFromHost();
+        player->deleteLater();
+    }
+    
 }
 
 void Server::slotPlayerSelectedCard( Card* selectedCard, int cardPosition )
@@ -852,14 +843,14 @@ void Server::slotPlayerWantStartNextGame( Player *player )
 
 void Server::incomingConnection( int socketDescriptor )
 {
-	kDebug() << "socketDescriptor:" << socketDescriptor;
-	
-	Player* player = new Player("");
-	player->setSocketDescriptor( socketDescriptor );
-	
-	//If the player have name, then will be a player
-	connect( player, SIGNAL( signalNewPlayer( Player* ) ),          this, SLOT( slotNewPlayer( Player* ) ) );
-	connect( player, SIGNAL( signalPlayerDisconnected( Player* ) ), this, SLOT( slotPlayerDisconnected( Player* ) ) );
+    kDebug() << "socketDescriptor:" << socketDescriptor;
+    
+    Player* player = new Player("");
+    player->setSocketDescriptor( socketDescriptor );
+    
+    //If the player have name, then will be a player
+    connect( player, SIGNAL( signalNewPlayer( Player* ) ),          this, SLOT( slotNewPlayer( Player* ) ) );
+    connect( player, SIGNAL( signalPlayerDisconnected( Player* ) ), this, SLOT( slotPlayerDisconnected( Player* ) ) );
 }
 
 void Server::setWhoStartGame( Knapsen::WhoStartGame whoStartGame )
@@ -889,35 +880,35 @@ void Server::setWhoStartGame( Knapsen::WhoStartGame whoStartGame )
 
 void Server::addBot( QString botName, Knapsen::GameDifficulty difficulty )
 {
-	mBot = new Bot( botName, difficulty );
-	
-	mBot->connectToHost( "127.0.0.1", serverPort() );
+    mBot = new Bot( botName, difficulty );
+    
+    mBot->connectToHost( "127.0.0.1", serverPort() );
 }
 
 void Server::startGame()
 {
-	kDebug() << "Start game.";
-	
-	//Initialize deck
-	mDeck = new Deck( mSizeOfDeck );
-	
-	//Initialize central card
-	mCentralCards = new CentralCards;
-	
-	//Initialize trump
-	mTrump = new Trump;
-	
-	for( int i = 0; i < mPlayerList.size(); ++i ){
-		for( int j = 0; j < mPlayerList.size(); ++j ){
-			if( mPlayerList.at( j ) != mPlayerList.at( i ) ){
-				mPlayerList.at( i )->sendInitializeTable( mPlayerList.at( j )->getName(), mTypeOfCards, mSizeOfDeck, mNumberOfCardsInHand );
-			}
-		}
-	}
-	
-	newGame();
-	
-	for( int i = 0; i < mPlayerList.size(); ++i ){
-		mPlayerList.at( i )->sendCommandsEnd();
-	}
+    kDebug() << "Start game.";
+    
+    //Initialize deck
+    mDeck = new Deck( mSizeOfDeck );
+    
+    //Initialize central card
+    mCentralCards = new CentralCards;
+    
+    //Initialize trump
+    mTrump = new Trump;
+    
+    for( int i = 0; i < mPlayerList.size(); ++i ){
+        for( int j = 0; j < mPlayerList.size(); ++j ){
+            if( mPlayerList.at( j ) != mPlayerList.at( i ) ){
+                mPlayerList.at( i )->sendInitializeTable( mPlayerList.at( j )->getName(), mTypeOfCards, mSizeOfDeck, mNumberOfCardsInHand );
+            }
+        }
+    }
+    
+    newGame();
+    
+    for( int i = 0; i < mPlayerList.size(); ++i ){
+        mPlayerList.at( i )->sendCommandsEnd();
+    }
 }

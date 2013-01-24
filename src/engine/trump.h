@@ -5,22 +5,22 @@
 
 class Trump
 {
-	Card *mCard;
-	
-	Card::Suit mCardSuit;
-	
+    Card *mCard;
+    
+    Card::Suit mCardSuit;
+    
 public:
-	Trump();
-	
-	void addNewCard( Card* );
-	Card* getCard(){ return mCard; }
-	
-	Card::Suit getCardSuit(){ return mCardSuit; }
-	
-	bool isEmpty();
-	
-	void clearTrumpCard( bool );
-	
+    Trump();
+    
+    void addNewCard( Card* );
+    Card* getCard(){ return mCard; }
+    
+    Card::Suit getCardSuit(){ return mCardSuit; }
+    
+    bool isEmpty();
+    
+    void clearTrumpCard( bool );
+    
 };
 
 #endif //TRUMP_CARD_H

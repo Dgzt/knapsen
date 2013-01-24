@@ -6,20 +6,20 @@
 
 class CentralCards
 {
-	Card** mCards;
-	
+    Card** mCards;
+    
 public:
-	CentralCards();
-	~CentralCards();
-	
-	int add( Card* );
-	void clear();
-	
-	bool isEmpty();
-	bool isFull();
-	
-	Card* getCard( int );
-	
+    CentralCards();
+    ~CentralCards();
+    
+    int add( Card* );
+    void clear();
+    
+    bool isEmpty();
+    bool isFull();
+    
+    Card* getCard( int );
+
 };
 
 #endif //CENTRALCARDS_H

@@ -1,13 +1,13 @@
 set(knapsen_PICS
-	background.png
-	arrow.png
-	tigullio-bridge.svg
-	william-tell.svgz
-	localmode.png
-	clientmode.png
-	servermode.png
-	playersettings.png
-	gamesettings.png
+    background.png
+    arrow.png
+    tigullio-bridge.svg
+    william-tell.svgz
+    localmode.png
+    clientmode.png
+    servermode.png
+    playersettings.png
+    gamesettings.png
 )
 
 kde4_install_icons( ${ICON_INSTALL_DIR}   )

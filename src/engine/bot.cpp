@@ -44,7 +44,7 @@ bool Bot::getPairOfCardWasInCentral( Card::Type cardType, Card::Suit cardSuit )
 
 void Bot::slotPlayerInAction()
 {
-	QTimer::singleShot( 1000, this, SLOT( slotSelectCard() ) );
+    QTimer::singleShot( 1000, this, SLOT( slotSelectCard() ) );
 }
 
 void Bot::slotSelectCard()

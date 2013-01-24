@@ -7,22 +7,22 @@ class Ui_WaitForClientWidgetUi;
 
 class WaitForClientDialog : public KDialog
 {
-	Q_OBJECT
-	
-	Ui_WaitForClientWidgetUi *waitForClientWidgetUi;
-	
-	QString mAdminName;
-	
+    Q_OBJECT
+    
+    Ui_WaitForClientWidgetUi *waitForClientWidgetUi;
+    
+    QString mAdminName;
+
 public:
     WaitForClientDialog();
-	
-	//Set admin name, becouse not show when player connected to server
-	void setAdminName( QString adminName ){ mAdminName = adminName; }
-	
+    
+    //Set admin name, becouse not show when player connected to server
+    void setAdminName( QString adminName ){ mAdminName = adminName; }
+
 public slots:
-	void slotPlayerConnected( QString );
-	void slotPlayerDisconnectedSlot( QString );
-	void slotServerFull();
+    void slotPlayerConnected( QString );
+    void slotPlayerDisconnectedSlot( QString );
+    void slotServerFull();
 
 };
 

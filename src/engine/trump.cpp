@@ -2,29 +2,29 @@
 
 Trump::Trump()
 {
-	mCard = 0;
+    mCard = 0;
 }
 
 void Trump::addNewCard( Card *card )
 {
-	mCard = card;
-	
-	mCardSuit = mCard->getSuit();
+    mCard = card;
+    
+    mCardSuit = mCard->getSuit();
 }
 
 bool Trump::isEmpty()
 {
-	if( mCard == 0 ){
-		return true;
-	}//else
-	return false;
+    if( mCard == 0 ){
+        return true;
+    }//else
+    return false;
 }
 
 void Trump::clearTrumpCard( bool removeData )
 {
-	if( removeData ){
-		delete mCard;
-	}
-	
-	mCard = 0;
+    if( removeData ){
+        delete mCard;
+    }
+    
+    mCard = 0;
 }
