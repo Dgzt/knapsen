@@ -16,11 +16,6 @@ class Bot : public Client
     QPair< Card::Suit, bool > pairOfQueenWasInCentralCards[4];
     
     bool getPairOfCardWasInCentral( Card::Type, Card::Suit );
-
-private slots:
-    void slotPlayerInAction();
-    
-    void slotSelectCard();
     
     void easy();
     void medium();
@@ -38,12 +33,19 @@ private slots:
     
     bool trySelectEqualCentralMinPoints();
     bool trySelectEqualTrumpMinPoints();
+
+private slots:
+    void slotPlayerInAction();
+    
+    void slotSelectCard();
     
     void slotNewRound();
     
     void slotCloseDeck(){ mDeckIsClosed = true; }
     
     void slotNewCentralCard( int, const Card* );
+    
+    void slotShowOpponentCards( int, Card, int, Card );
     
     void slotEndRound( QString, int );
     void slotendGame( QString );

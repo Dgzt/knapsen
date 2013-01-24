@@ -13,12 +13,13 @@ Bot::Bot( QString name, Knapsen::GameDifficulty difficulty ):
 {
     kDebug() << "Initialize.";
     
-    connect( this, SIGNAL( signalPlayerInAction() ),                    this, SLOT( slotPlayerInAction() ) );
-    connect( this, SIGNAL( signalNewRound() ),                          this, SLOT( slotNewRound() ) );
-    connect( this, SIGNAL( signalCloseDeck() ),                         this, SLOT( slotCloseDeck() ) );
-    connect( this, SIGNAL( signalNewCentralCard( int , const Card* ) ), this, SLOT( slotNewCentralCard( int, const Card* ) ) );
-    connect( this, SIGNAL( signalEndRound( QString, int ) ),            this, SLOT( slotEndRound( QString, int ) ) );
-    connect( this, SIGNAL( signalEndGame( QString ) ),                  this, SLOT( slotendGame( QString ) ) );
+    connect( this, SIGNAL( signalPlayerInAction() ),                            this, SLOT( slotPlayerInAction() ) );
+    connect( this, SIGNAL( signalNewRound() ),                                  this, SLOT( slotNewRound() ) );
+    connect( this, SIGNAL( signalCloseDeck() ),                                 this, SLOT( slotCloseDeck() ) );
+    connect( this, SIGNAL( signalNewCentralCard( int , const Card* ) ),         this, SLOT( slotNewCentralCard( int, const Card* ) ) );
+    connect( this, SIGNAL( signalShowOpponentCards( int, Card, int, Card ) ),   this, SLOT( slotShowOpponentCards( int, Card, int, Card ) ) );
+    connect( this, SIGNAL( signalEndRound( QString, int ) ),                    this, SLOT( slotEndRound( QString, int ) ) );
+    connect( this, SIGNAL( signalEndGame( QString ) ),                          this, SLOT( slotendGame( QString ) ) );
     
     pairOfQueenWasInCentralCards[0].first = pairOfKingWasInCentralCards[0].first = Card::Heart;
     pairOfQueenWasInCentralCards[1].first = pairOfKingWasInCentralCards[1].first = Card::Diamond;
@@ -390,6 +391,11 @@ bool Bot::trySelectEqualTrumpMinPoints()
     }
     
     return false;
+}
+
+void Bot::slotShowOpponentCards(int , Card , int , Card )
+{
+    slotProcessCommands();
 }
 
 void Bot::slotNewRound()

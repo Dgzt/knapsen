@@ -663,11 +663,11 @@ void Server::slotCheckCentralCards()
 {
     kDebug() << "Check the central cards.";
     
-    const int centralCard1Point = mCentralCards->getCard( 0 )->getCardPoint();
-    const int centralCard2Point = mCentralCards->getCard( 1 )->getCardPoint();
+    const int centralCard0Point = mCentralCards->getCard( 0 )->getCardPoint();
+    const int centralCard1Point = mCentralCards->getCard( 1 )->getCardPoint();
     
+    kDebug() << "centralCard0Point" << centralCard0Point;
     kDebug() << "centralCard1Point" << centralCard1Point;
-    kDebug() << "centralCard2Point" << centralCard2Point;
     
     const Card::Suit centralCard0Suit = mCentralCards->getCard( 0 )->getSuit();
     const Card::Suit centralCard1Suit = mCentralCards->getCard( 1 )->getSuit();
@@ -680,7 +680,7 @@ void Server::slotCheckCentralCards()
         currentPlayerStartNextTurn = true;
     }else if( centralCard0Suit == centralCard1Suit ){
     
-        if( centralCard1Point < centralCard2Point ){
+        if( centralCard0Point < centralCard1Point ){
             currentPlayerStartNextTurn = true;
         }else{
             currentPlayerStartNextTurn = false;
@@ -696,8 +696,8 @@ void Server::slotCheckCentralCards()
     
     //Player* currentPlayer = mGameSequence->getCurrentPlayer();
     
-    kDebug() << getCurrentPlayer()->getName() << "get" << centralCard1Point+centralCard2Point << "points.";
-    addTricks( getCurrentPlayer(), centralCard1Point + centralCard2Point );
+    kDebug() << getCurrentPlayer()->getName() << "get" << centralCard0Point+centralCard1Point << "points.";
+    addTricks( getCurrentPlayer(), centralCard0Point + centralCard1Point );
     
     if( mWaitingMarriage && mWaitingMarriage->first == getCurrentPlayer() ){
         addTricks( getCurrentPlayer(), mWaitingMarriage->second );
