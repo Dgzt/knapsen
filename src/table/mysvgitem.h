@@ -5,25 +5,25 @@
 
 class MySvgItem : public QGraphicsSvgItem
 {
-	Q_OBJECT
-	
-	int mId;
-	
-	bool mSelectable;
-	
+    Q_OBJECT
+    
+    int mId;
+    
+    bool mSelectable;
+    
 protected:
-	void mousePressEvent( QGraphicsSceneMouseEvent * );
-	
+    void mousePressEvent( QGraphicsSceneMouseEvent * );
+    
 public:
     MySvgItem();
-	
-	void setId( int );
-	void setSelectable( bool );
+    
+    void setId( int );
+    void setSelectable( bool );
 
 signals:
-	void click( int );
-	void click();
-	
+    void click( int );
+    void click();
+    
 };
 
 #endif //mysvgitem_h

@@ -6,7 +6,7 @@ MyTextItem::MyTextItem(const QString& text, QGraphicsItem* parent): QGraphicsTex
 
 void MyTextItem::paint(QPainter * painter, const QStyleOptionGraphicsItem * option, QWidget * widget  )
 {
-	painter->fillRect( boundingRect(), Qt::white );
-	
+    painter->fillRect( boundingRect(), Qt::white );
+    
     QGraphicsTextItem::paint( painter, option, widget);
 }

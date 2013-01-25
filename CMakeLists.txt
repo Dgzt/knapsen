@@ -3,7 +3,7 @@ project( knapsen )
 cmake_minimum_required( VERSION 2.6 )
 
 if( NOT CMAKE_CXX_COMPILER )
-	message( FATAL_ERROR
+    message( FATAL_ERROR
 "----------------------------------------------------------
     g++ is not found!
 
@@ -14,14 +14,14 @@ endif( NOT CMAKE_CXX_COMPILER )
 
 find_package( Qt4 )
 if( QT4_FOUND )
-	if( ${QT_VERSION_MAJOR}.${QT_VERSION_MINOR}.${QT_VERSION_PATCH} VERSION_LESS "4.6.0" )
-		message( FATAL_ERROR 
+    if( ${QT_VERSION_MAJOR}.${QT_VERSION_MINOR}.${QT_VERSION_PATCH} VERSION_LESS "4.6.0" )
+        message( FATAL_ERROR 
 "----------------------------------------------------------
-	Qt is too old! Minimum version is 4.6.0!
+    Qt is too old! Minimum version is 4.6.0!
 ----------------------------------------------------------" )
-	endif( ${QT_VERSION_MAJOR}.${QT_VERSION_MINOR}.${QT_VERSION_PATCH} VERSION_LESS "4.6.0" )
+    endif( ${QT_VERSION_MAJOR}.${QT_VERSION_MINOR}.${QT_VERSION_PATCH} VERSION_LESS "4.6.0" )
 else( QT4_FOUND )
-	message( FATAL_ERROR 
+    message( FATAL_ERROR 
 "----------------------------------------------------------
     Qt4 development files not found!
 
@@ -32,14 +32,14 @@ endif( QT4_FOUND )
 
 find_package( KDE4 )
 if( KDE4_FOUND )
-	if( ${KDE_VERSION_MAJOR}.${KDE_VERSION_MINOR}.${KDE_VERSION_RELEASE} VERSION_LESS "4.4.5" )
-		message( FATAL_ERROR 
+    if( ${KDE_VERSION_MAJOR}.${KDE_VERSION_MINOR}.${KDE_VERSION_RELEASE} VERSION_LESS "4.4.5" )
+        message( FATAL_ERROR 
 "----------------------------------------------------------
-	KDE4 is too old! Minimum version is 4.4.5!
+    KDE4 is too old! Minimum version is 4.4.5!
 ----------------------------------------------------------" )
-	endif( ${KDE_VERSION_MAJOR}.${KDE_VERSION_MINOR}.${KDE_VERSION_RELEASE} VERSION_LESS "4.4.5" )
+    endif( ${KDE_VERSION_MAJOR}.${KDE_VERSION_MINOR}.${KDE_VERSION_RELEASE} VERSION_LESS "4.4.5" )
 else( KDE4_FOUND )
-	message( FATAL_ERROR 
+    message( FATAL_ERROR 
 "----------------------------------------------------------
     KDE4 library development files not found!
 

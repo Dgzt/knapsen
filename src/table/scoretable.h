@@ -5,21 +5,20 @@
 
 class ScoreTable : public QGraphicsItem
 {
-
-	QGraphicsTextItem* tricksItem;
-	QGraphicsTextItem* scoreItem;
-
+    QGraphicsTextItem* tricksItem;
+    QGraphicsTextItem* scoreItem;
+    
 public:
     ScoreTable();
-	
-	virtual QRectF boundingRect() const;
-	
-	void setTricks( int );
-	void setScores( int );
-	
+    
+    virtual QRectF boundingRect() const;
+    
+    void setTricks( int );
+    void setScores( int );
+    
 protected:
-	virtual void paint( QPainter * , const QStyleOptionGraphicsItem * , QWidget * );
-	
+    virtual void paint( QPainter * , const QStyleOptionGraphicsItem * , QWidget * );
+    
 };
 
 #endif //scoretable_h

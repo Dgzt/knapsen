@@ -1,61 +1,61 @@
 
 set(knapsen_HDRS
-	enums.h
-	table/scoretable.h
-	table/mytextitem.h
-	table/mysvgitem.h
-	engine/card.h
-	engine/deck.h
-	dialogs/waitingforopponent.h
-	dialogs/endgamedialog.h
-	dialogs/endrounddialog.h
-	engine/bot.h
-	engine/client.h
-	engine/player.h
-	engine/server.h
-	engine/centralcards.h
-	engine/trump.h
-	dialogs/waitforserverdialog.h
-	dialogs/waitforclientdialog.h
-	dialogs/newgamedialog.h
-	table/centralwidget.h
-	mainwidget.h
+    enums.h
+    table/scoretable.h
+    table/mytextitem.h
+    table/mysvgitem.h
+    engine/card.h
+    engine/deck.h
+    dialogs/waitingforopponent.h
+    dialogs/endgamedialog.h
+    dialogs/endrounddialog.h
+    engine/bot.h
+    engine/client.h
+    engine/player.h
+    engine/server.h
+    engine/centralcards.h
+    engine/trump.h
+    dialogs/waitforserverdialog.h
+    dialogs/waitforclientdialog.h
+    dialogs/newgamedialog.h
+    table/centralwidget.h
+    mainwidget.h
 )
 
 set(knapsen_SRCS
-	table/scoretable.cpp
-	table/mytextitem.cpp
-	table/mysvgitem.cpp
-	engine/card.cpp
-	engine/deck.cpp
-	dialogs/waitingforopponent.cpp
-	dialogs/endgamedialog.cpp
-	dialogs/endrounddialog.cpp
-	engine/bot.cpp
-	engine/client.cpp
-	engine/player.cpp
-	engine/server.cpp
-	engine/centralcards.cpp
-	engine/trump.cpp
-	dialogs/waitforserverdialog.cpp
-	dialogs/waitforclientdialog.cpp
-	dialogs/newgamedialog.cpp
-	table/centralwidget.cpp
-	mainwidget.cpp
-	main.cpp
+    table/scoretable.cpp
+    table/mytextitem.cpp
+    table/mysvgitem.cpp
+    engine/card.cpp
+    engine/deck.cpp
+    dialogs/waitingforopponent.cpp
+    dialogs/endgamedialog.cpp
+    dialogs/endrounddialog.cpp
+    engine/bot.cpp
+    engine/client.cpp
+    engine/player.cpp
+    engine/server.cpp
+    engine/centralcards.cpp
+    engine/trump.cpp
+    dialogs/waitforserverdialog.cpp
+    dialogs/waitforclientdialog.cpp
+    dialogs/newgamedialog.cpp
+    table/centralwidget.cpp
+    mainwidget.cpp
+    main.cpp
 )
 
 set(knapsen_UIS
-	#dialogs/newgamewidget.ui
-	dialogs/newgamewidget_local.ui
-	dialogs/newgamewidget_client.ui
-	dialogs/newgamewidget_server.ui
-	dialogs/endroundwidget.ui
-	dialogs/endgamewidget.ui
-	playersettingswidget.ui
-	gamesettingswidget.ui
-	dialogs/waitingwidget.ui
-	dialogs/waitforclientwidget.ui
+    #dialogs/newgamewidget.ui
+    dialogs/newgamewidget_local.ui
+    dialogs/newgamewidget_client.ui
+    dialogs/newgamewidget_server.ui
+    dialogs/endroundwidget.ui
+    dialogs/endgamewidget.ui
+    playersettingswidget.ui
+    gamesettingswidget.ui
+    dialogs/waitingwidget.ui
+    dialogs/waitforclientwidget.ui
 )
 
 SET (CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fexceptions")

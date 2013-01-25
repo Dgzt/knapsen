@@ -4,37 +4,37 @@
 #include "mysvgitem.h"
 
 MySvgItem::MySvgItem() : 
-	mId( 0 ),
-	mSelectable( false )
-{	
-	//setAcceptHoverEvents( true );
+    mId( 0 ),
+    mSelectable( false )
+{
+    //setAcceptHoverEvents( true );
 }
 
 void MySvgItem::mousePressEvent( QGraphicsSceneMouseEvent* )
 {
     //Q_UNUSED( gsme );
-	
-	if( mSelectable ){
-		//selectable = false;
-		
-		emit click();
-		emit click( mId );
-	}
+    
+    if( mSelectable ){
+        //selectable = false;
+        
+        emit click();
+        emit click( mId );
+    }
 }
 
 void MySvgItem::setId( int id )
 {
-	mId = id;
+    mId = id;
 }
 
 void MySvgItem::setSelectable( bool selectable )
 {
-	mSelectable = selectable;
-	kDebug() << mId << mSelectable;
-	
-	if( mSelectable ){
-		setCursor( QCursor( Qt::PointingHandCursor ) );
-	}else{
-		setCursor( QCursor( Qt::ArrowCursor ) );
-	}
+    mSelectable = selectable;
+    kDebug() << mId << mSelectable;
+    
+    if( mSelectable ){
+        setCursor( QCursor( Qt::PointingHandCursor ) );
+    }else{
+        setCursor( QCursor( Qt::ArrowCursor ) );
+    }
 }
