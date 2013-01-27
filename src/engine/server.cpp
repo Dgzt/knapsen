@@ -312,12 +312,21 @@ bool Server::isRoundOver()
 
 void Server::addNewCard( Player* player, Card* card )
 {
-    int cardId = player->sendNewCard( card );
+    /*int cardId = player->sendNewCard( card );
     
     //Send player's card id to other players
     for( int i = 0; i < mPlayerList.size(); ++i ){
         if( mPlayerList.at( i ) != player ){
             mPlayerList.at( i )->sendNewOpponentCard( cardId );
+        }
+    }*/
+    
+    player->sendNewCard( card );
+    
+    //Send other players
+    for( int i = 0; i < mPlayerList.size(); ++i ){
+        if( mPlayerList.at( i ) != player ){
+            mPlayerList.at( i )->sendNewOpponentCard();
         }
     }
 }
@@ -901,7 +910,8 @@ void Server::startGame()
     for( int i = 0; i < mPlayerList.size(); ++i ){
         for( int j = 0; j < mPlayerList.size(); ++j ){
             if( mPlayerList.at( j ) != mPlayerList.at( i ) ){
-                mPlayerList.at( i )->sendInitializeTable( mPlayerList.at( j )->getName(), mTypeOfCards, mSizeOfDeck, mNumberOfCardsInHand );
+                //mPlayerList.at( i )->sendInitializeTable( mPlayerList.at( j )->getName(), mTypeOfCards, mSizeOfDeck, mNumberOfCardsInHand );
+                mPlayerList.at( i )->sendInitializeTable( mPlayerList.at( j )->getName(), mTypeOfCards, mSizeOfDeck);
             }
         }
     }

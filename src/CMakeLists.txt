@@ -1,9 +1,12 @@
 
 set(knapsen_HDRS
     enums.h
+    
+    table/hand.h
+    
     table/scoretable.h
     table/mytextitem.h
-    table/mysvgitem.h
+    table/svgcard.h
     engine/card.h
     engine/deck.h
     dialogs/waitingforopponent.h
@@ -23,9 +26,11 @@ set(knapsen_HDRS
 )
 
 set(knapsen_SRCS
+    table/hand.cpp
+    
     table/scoretable.cpp
     table/mytextitem.cpp
-    table/mysvgitem.cpp
+    table/svgcard.cpp
     engine/card.cpp
     engine/deck.cpp
     dialogs/waitingforopponent.cpp

@@ -71,7 +71,7 @@ void Client::newCommand( QString command )
 void Client::slotProcessCommands()
 {
     do{
-        if( getCommandPartOfCommand( commandList.first() ) == INITIALIZE_TABLE_COMMAND ){
+        /*if( getCommandPartOfCommand( commandList.first() ) == INITIALIZE_TABLE_COMMAND ){
             kDebug() << getName() << "Initialize table, value." << getValuePartOfCommand( commandList.first() );
             
             QList< QString >* valuesArray = getValues( getValuePartOfCommand( commandList.first() ) );
@@ -90,9 +90,35 @@ void Client::slotProcessCommands()
             
             setLowestCard( mSizeOfDeck );
             
-            setNumberOfCardsInHand( numberOfCardsInHand );
+            //setNumberOfCardsInHand( numberOfCardsInHand );
             
             emit signalInitialize( getName(), valuesArray->at( 0 ), typeOfCards, getNumberOfCardsInHand() );
+            
+            delete valuesArray;
+        }*/
+        
+        if( getCommandPartOfCommand( commandList.first() ) == INITIALIZE_TABLE_COMMAND ){
+            kDebug() << getName() << "Initialize table, value." << getValuePartOfCommand( commandList.first() );
+            
+            QList< QString >* valuesArray = getValues( getValuePartOfCommand( commandList.first() ) );
+            
+            Knapsen::TypeOfCards typeOfCards;
+            if( valuesArray->at( 1 ) == TYPE_OF_CARDS_GERMAN_SUITS_VALUE ){
+                typeOfCards = Knapsen::GermanSuits;
+            }else{ //valuesArray->at( 1 ) == TYPE_OF_CARDS_GERMAN_SUITS_VALUE
+                typeOfCards = Knapsen::FrenchSuits;
+            }
+            
+            bool ok;
+            mSizeOfDeck = valuesArray->at( 2 ).toInt( &ok );
+            mSizeOfDeckNow = mSizeOfDeck;
+            //int numberOfCardsInHand = valuesArray->at( 3 ).toInt( &ok );
+            
+            setLowestCard( mSizeOfDeck );
+            
+            //setNumberOfCardsInHand( numberOfCardsInHand );
+            
+            emit signalInitialize( getName(), valuesArray->at( 0 ), typeOfCards );
             
             delete valuesArray;
         }
@@ -103,8 +129,11 @@ void Client::slotProcessCommands()
             bool ok;
             int ret = getValuePartOfCommand( commandList.first() ).toInt( &ok );
             if( ok ){
-                int cardId = addNewCard( new Card( ret ) );
-                emit signalNewPlayerCard( cardId, getCard( cardId ) );
+                //int cardId = addNewCard( new Card( ret ) );
+                Card* card = new Card( ret );
+                addNewCard( card );
+                //emit signalNewPlayerCard( cardId, getCard( cardId ) );
+                emit signalNewPlayerCard( card );
                 
                 mSizeOfDeckNow--;
                 if( mSizeOfDeckNow == 0 ){
@@ -126,7 +155,7 @@ void Client::slotProcessCommands()
             emit signalNewRound();
         }
         
-        if( getCommandPartOfCommand( commandList.first() ) == NEW_OPPONENT_CARD_COMMAND_ID ){
+        /*if( getCommandPartOfCommand( commandList.first() ) == NEW_OPPONENT_CARD_COMMAND_ID ){
             kDebug() << getName() << "new opponent card id:" << getValuePartOfCommand( commandList.first() );
             
             bool ok;
@@ -141,6 +170,12 @@ void Client::slotProcessCommands()
             }else{
                 kDebug() << "ERROR! Cannot covert new opponent card command id value to int!";
             }
+        }*/
+        
+        if( getCommandPartOfCommand( commandList.first() ) == NEW_OPPONENT_CARD_COMMAND ){
+            kDebug() << getName() << "new opponent card.";
+            
+            emit signalNewOpponentCard();
         }
         
         if( getCommandPartOfCommand( commandList.first() ) == NEW_TRUMP_CARD_COMMAND ){
@@ -401,8 +436,9 @@ void Client::slotSelectCardId( int id )
     kDebug() << "Select card:" << id;
     setSelectableAllCards( false );
     
-    int pos = mCentralCards->add( getCard( id ) );
-    removeCard( id );
+    /*int pos = mCentralCards->add( getCard( id ) );
+    removeCard( id );*/
+    int pos = mCentralCards->add( takeCard( id ) );
     
     emit signalNewCentralCard( pos, mCentralCards->getCard( pos ) );
     
@@ -428,7 +464,7 @@ void Client::slotSelectCardId( int id )
 
 void Client::slotSelectTrumpCard()
 {
-    kDebug() << "Select trump card.";
+    /*kDebug() << "Select trump card.";
     
     int ret = changeTrumpCard( mTrump );
     
@@ -449,7 +485,7 @@ void Client::slotSelectTrumpCard()
         setFortyButtonVisible( true );
     }
     
-    sendChangeTrumpCard();
+    sendChangeTrumpCard();*/
 }
 
 void Client::slotTwentyButtonClicked()

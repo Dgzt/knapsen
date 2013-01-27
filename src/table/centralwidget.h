@@ -6,7 +6,7 @@
 
 
 class QGraphicsSvgItem;
-class MySvgItem;
+class SvgCard;
 class QSvgRenderer;
 class MyTextItem;
 class ScoreTable;
@@ -14,9 +14,16 @@ class QGraphicsPixmapItem;
 class QTimer;
 class Card;
 
+class Hand;
+class Client;
+
 class CentralWidget : public QGraphicsView
 {
     Q_OBJECT
+    
+    //
+    Client* mClient;
+    //
     
     bool mGameIsRunning;
     
@@ -34,14 +41,17 @@ class CentralWidget : public QGraphicsView
     MyTextItem* mPlayerName;
     
     QSvgRenderer* mRenderer;
-    QGraphicsSvgItem* mDeck;
+    //QGraphicsSvgItem* mDeck;
+    SvgCard* mDeck;
     
     //
-    int mNumberOfCardsInHand;
+    //int mNumberOfCardsInHand;
     //
     
-    QGraphicsSvgItem* mOpponentCards;
-    MySvgItem* mPlayerCards;
+    //QGraphicsSvgItem* mOpponentCards;
+    //MySvgItem* mPlayerCards;
+    Hand* mOpponentCards;
+    Hand* mPlayerCards;
     
     //
     QTimer *mOpponentCardsShowTimer;
@@ -55,7 +65,7 @@ class CentralWidget : public QGraphicsView
     ScoreTable* mOpponentScoreTable;
     ScoreTable* mPlayerScoreTable;
     
-    MySvgItem* mTrumpCard;
+    SvgCard* mTrumpCard;
     
     QGraphicsSvgItem* mCentralCards;
     
@@ -65,9 +75,18 @@ class CentralWidget : public QGraphicsView
     
     void setInGamePositions();
     
+    //
+    //void setOpponentScoreTablePos();
+    //void setPlayerScoreTablePos();
+    //
+    
 public:
     CentralWidget( QWidget* parent = 0 );
     ~CentralWidget();
+    
+    //
+    void setClient( Client* client ){ mClient = client; }
+    //
     
     void clearWidget();
     
@@ -75,6 +94,10 @@ protected:
     void resizeEvent( QResizeEvent* );
     
 private slots:
+    //
+    void slotOpponentCardsSizeChanged();
+    void slotPlayerCardsSizeChanged();
+    //
     void slotClick( int );
     void slotTwentyButtonClicked(){ emit signalTwentyButtonClicked(); }
     void slotFortyButtonClicked(){ emit signalFortyButtonClicked(); }
@@ -83,16 +106,17 @@ private slots:
     void slotCoverOpponentCards();
     
 public slots:
-    void slotInitialize( QString, QString, Knapsen::TypeOfCards, int );
+    //void slotInitialize( QString, QString, Knapsen::TypeOfCards, int );
+    void slotInitialize( QString, QString, Knapsen::TypeOfCards );
     
-    void slotNewPlayerCard( int, const Card* );
-    void slotNewOpponentCardId( int );
+    //void slotNewPlayerCard( int, const Card* );
+    //void slotNewOpponentCardId( int );
     
     void slotNewTrumpCard( const Card* );
     void slotTrumpCardHide();
     void slotTrumpCardSelectableChanged( bool );
     
-    void slotPlayerCardSelectableChanged( int, bool );
+    //void slotPlayerCardSelectableChanged( int, bool );
     
     void slotNewCentralCard( int, const Card* );
     void slotClearCentralCards();

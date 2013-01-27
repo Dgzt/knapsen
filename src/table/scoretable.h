@@ -12,12 +12,11 @@ public:
     ScoreTable();
     
     virtual QRectF boundingRect() const;
+    virtual void paint( QPainter * , const QStyleOptionGraphicsItem * , QWidget * );
     
     void setTricks( int );
     void setScores( int );
     
-protected:
-    virtual void paint( QPainter * , const QStyleOptionGraphicsItem * , QWidget * );
     
 };
 

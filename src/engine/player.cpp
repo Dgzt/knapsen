@@ -6,14 +6,14 @@
 Player::Player( QString name ): 
     mName( name ),
     mLowestCardType( Card::Jack ),
-    mNumberOfCardsInHand( 0 ),
+    //mNumberOfCardsInHand( 0 ),
     mTricks( 0 ),
     mScores( 0 ),
     mTwentyButtonVisible( false ),
     mFortyButtonVisible( false ),
     mCloseButtonVisible( false )
 {       
-    mCards = 0;
+    //mCards = 0;
     
     connect( this, SIGNAL( readyRead() ), this, SLOT( slotReadyRead() ) );
     connect( this, SIGNAL( disconnected() ), this, SLOT( slotDisconnected() ) );
@@ -23,14 +23,14 @@ Player::~Player()
 {
     kDebug() << getName() << "deleting.";
     
-    if( mCards != 0 ){
+    /*if( mCards != 0 ){
         for( int i = 0; i < mNumberOfCardsInHand; ++i ){
             if( mCards[i] != 0 ){
                 delete mCards[i];
             }
         }
         delete[] mCards;
-    }
+    }*/
 }
 
 QString Player::getCommandPartOfCommand( QString text )
@@ -47,7 +47,7 @@ QString Player::getValuePartOfCommand( QString text )
     return text.mid( text.indexOf( '=' )+1 );
 }
 
-void Player::sendInitializeTable( QString opponentName, Knapsen::TypeOfCards typeOfCards, int sizeOfDeck, int numberOfCardsInHand )
+/*void Player::sendInitializeTable( QString opponentName, Knapsen::TypeOfCards typeOfCards, int sizeOfDeck, int numberOfCardsInHand )
 {
     QString typeOfCardsValue;
     if( typeOfCards == Knapsen::GermanSuits ){
@@ -58,12 +58,28 @@ void Player::sendInitializeTable( QString opponentName, Knapsen::TypeOfCards typ
     
     setLowestCard( sizeOfDeck );
     
-    setNumberOfCardsInHand( numberOfCardsInHand );
+    //setNumberOfCardsInHand( numberOfCardsInHand );
     
     sendCommand( INITIALIZE_TABLE_COMMAND+opponentName+","+typeOfCardsValue+","+QString::number( sizeOfDeck )+","+QString::number( numberOfCardsInHand ) );
+}*/
+
+void Player::sendInitializeTable( QString opponentName, Knapsen::TypeOfCards typeOfCards, int sizeOfDeck )
+{
+    QString typeOfCardsValue;
+    if( typeOfCards == Knapsen::GermanSuits ){
+        typeOfCardsValue = TYPE_OF_CARDS_GERMAN_SUITS_VALUE;
+    }else{ // typeOfCards == Knapsen::FrenchSuits
+        typeOfCardsValue = TYPE_OF_CARDS_FRENCH_SUITS_VALUE;
+    }
+    
+    setLowestCard( sizeOfDeck );
+    
+    //setNumberOfCardsInHand( numberOfCardsInHand );
+    
+    sendCommand( INITIALIZE_TABLE_COMMAND+opponentName+","+typeOfCardsValue+","+QString::number( sizeOfDeck ) );
 }
 
-void Player::setNumberOfCardsInHand( int size )
+/*void Player::setNumberOfCardsInHand( int size )
 {
     mNumberOfCardsInHand = size;
     
@@ -72,9 +88,9 @@ void Player::setNumberOfCardsInHand( int size )
     for( int i = 0; i < size; ++i ){
         mCards[ i ] = 0;
     }
-}
+}*/
 
-int Player::addNewCard( Card *card )
+/*int Player::addNewCard( Card *card )
 {
     int cardId = -1;
     
@@ -86,17 +102,19 @@ int Player::addNewCard( Card *card )
         }
     }
     return cardId;
-}
+}*/
 
-void Player::removeCard( int id )
+/*void Player::removeCard( int id )
 {
     //Why not delete? Becouse when call the removeCard(int) function when move the card to central cards 
-    mCards[ id ] = 0;  
-}
+    //mCards[ id ] = 0;
+    
+    
+}*/
 
 int Player::changeTrumpCard( Trump *trump )
 {
-    //This value will be modify. Only for don't write warning the compiler.
+    /*//This value will be modify. Only for don't write warning the compiler.
     
     for( int i = 0; i < mNumberOfCardsInHand; ++i ){
         if( mCards[i] != 0 && mCards[i]->getSuit() == trump->getCardSuit() && mCards[i]->getType() == mLowestCardType ){
@@ -108,18 +126,23 @@ int Player::changeTrumpCard( Trump *trump )
             
             return i;
         }
-    }
+    }*/
     
     return -1; //If this function return this value, then this is a bug.
 }
 
 void Player::setSelectableAllCards( bool enabled )
 {
-    for( int i = 0; i < mNumberOfCardsInHand; ++i ){
+    /*for( int i = 0; i < mNumberOfCardsInHand; ++i ){
         if( mCards[ i ] != 0 ){
             mCards[ i ]->setSelectable( enabled );
             emit signalPlayerCardSelectableChanged( i, enabled );
         }
+    }*/
+    
+    for( int i = 0; i < mCards.size(); ++i ){
+        mCards.at(i)->setSelectable( enabled );
+        emit signalPlayerCardSelectableChanged( i, enabled );
     }
 }
 
@@ -137,7 +160,7 @@ void Player::setSelectableCertainCards( CentralCards *centralCards, Trump *trump
 
 void Player::setSelectableRegularMarriagesCards( Trump* trump )
 {
-    for( int i = 0; i < mNumberOfCardsInHand; ++i ){
+    /*for( int i = 0; i < mNumberOfCardsInHand; ++i ){
         
         if( mCards[ i ] != 0 && 
             mCards[ i ]->getSuit() != trump->getCardSuit() && 
@@ -156,12 +179,31 @@ void Player::setSelectableRegularMarriagesCards( Trump* trump )
                 }
             }
         }
+    }*/
+    
+    for( int i = 0; i < mCards.size(); ++i ){
+        
+        if( mCards.at( i )->getSuit() != trump->getCardSuit() && 
+            mCards.at( i )->getType() == Card::King
+        ){
+            for( int j = 0; j < mCards.size(); ++j ){
+            
+                if( mCards.at( j )->getSuit() == mCards.at( i )->getSuit() &&
+                    mCards.at( j )->getType() == Card::Queen
+                ){
+                    mCards.at( i )->setSelectable( true );
+                    mCards.at( j )->setSelectable( true );
+                    emit signalPlayerCardSelectableChanged( i, true );
+                    emit signalPlayerCardSelectableChanged( j, true );
+                }
+            }
+        }
     }
 }
 
 void Player::setSelectableTrumpMarriagesCards( Trump* trump )
 {
-    for( int i = 0; i < mNumberOfCardsInHand; ++i ){
+    /*for( int i = 0; i < mNumberOfCardsInHand; ++i ){
         
         if( mCards[ i ] != 0 && 
             mCards[ i ]->getSuit() == trump->getCardSuit() && 
@@ -177,6 +219,27 @@ void Player::setSelectableTrumpMarriagesCards( Trump* trump )
                     mCards[ j ]->setSelectable( true );
                     emit signalPlayerCardSelectableChanged( i, mCards[ i ]->isSelectable() );
                     emit signalPlayerCardSelectableChanged( j, mCards[ j ]->isSelectable() );
+                }
+                
+            }
+        }
+
+    }*/
+    
+    for( int i = 0; i < mCards.size(); ++i ){
+        
+        if( mCards.at( i )->getSuit() == trump->getCardSuit() && 
+            mCards.at( i )->getType() == Card::King
+        ){
+            for( int j = 0; j < mCards.size(); ++j ){
+                
+                if( mCards.at( j )->getSuit() == mCards.at( i )->getSuit() &&
+                    mCards.at( j )->getType() == Card::Queen
+                ){
+                    mCards.at( i )->setSelectable( true );
+                    mCards.at( j )->setSelectable( true );
+                    emit signalPlayerCardSelectableChanged( i, true );
+                    emit signalPlayerCardSelectableChanged( j, true );
                 }
                 
             }
@@ -214,11 +277,15 @@ void Player::newGame()
 void Player::newRound()
 {
     //Clear cards
-    for( int i = 0; i < mNumberOfCardsInHand; ++i ){
+    /*for( int i = 0; i < mNumberOfCardsInHand; ++i ){
         if( mCards[ i ] != 0 ){
             delete mCards[ i ];
             mCards[ i ] = 0;
         }
+    }*/
+    while( mCards.size() != 0 ){
+        Card* card = mCards.takeAt(0);
+        delete card;
     }
     
     //Clear tricks
@@ -236,10 +303,22 @@ void Player::setLowestCard( int sizeOfDeck )
 
 int Player::getPositionOfPairOfCard( const Card* card )
 {
-    for( int i = 0; i < mNumberOfCardsInHand; ++i ){
+    /*for( int i = 0; i < mNumberOfCardsInHand; ++i ){
         if( mCards[i] != 0 && card->getSuit() == mCards[i]->getSuit() &&
             ( ( card->getType() == Card::King && mCards[i]->getType() == Card::Queen ) ||
               ( card->getType() == Card::Queen && mCards[i]->getType() == Card::King ) )
+        ){
+            return i;
+        }
+    }
+    
+    //Error
+    return -1;*/
+    
+    for( int i = 0; i < mCards.size(); ++i ){
+        if( card->getSuit() == mCards.at( i )->getSuit() &&
+            ( ( card->getType() == Card::King && mCards.at( i )->getType() == Card::Queen ) ||
+              ( card->getType() == Card::Queen && mCards.at( i )->getType() == Card::King ) )
         ){
             return i;
         }
@@ -251,7 +330,7 @@ int Player::getPositionOfPairOfCard( const Card* card )
 
 bool Player::haveRegularMarriages( Trump* trump ) const
 {
-    bool ret = false;
+    /*bool ret = false;
     
     for( int i = 0; i < mNumberOfCardsInHand; ++i ){
         if( mCards[ i ] != 0 && mCards[ i ]->getSuit() != trump->getCardSuit() && mCards[ i ]->getType() == Card::King ){
@@ -265,12 +344,28 @@ bool Player::haveRegularMarriages( Trump* trump ) const
         }
     }
     
+    return ret;*/
+    
+    bool ret = false;
+    
+    for( int i = 0; i < mCards.size(); ++i ){
+        if( mCards.at( i )->getSuit() != trump->getCardSuit() && mCards.at( i )->getType() == Card::King ){
+            
+            for( int j = 0; j < mCards.size(); ++j ){
+                if( mCards.at( j )->getType() == Card::Queen && mCards.at( j )->getSuit() == mCards.at( i )->getSuit() ){
+                    ret = true;
+                }
+            }
+            
+        }
+    }
+    
     return ret;
 }
 
 bool Player::haveTrumpMarriages( Trump* trump ) const
 {
-    bool ret = false;
+    /*bool ret = false;
     
     for( int i = 0; i < mNumberOfCardsInHand; ++i ){
         if( mCards[ i ] != 0 && mCards[ i ]->getSuit() == trump->getCardSuit() && mCards[ i ]->getType() == Card::King ){
@@ -284,16 +379,44 @@ bool Player::haveTrumpMarriages( Trump* trump ) const
         }
     }
     
+    return ret;*/
+    
+    bool ret = false;
+    
+    for( int i = 0; i < mCards.size(); ++i ){
+        if( mCards.at( i )->getSuit() == trump->getCardSuit() && mCards.at( i )->getType() == Card::King ){
+            
+            for( int j = 0; j < mCards.size(); ++j ){
+                if( mCards.at( j )->getType() == Card::Queen && mCards.at( j )->getSuit() == mCards.at( i )->getSuit() ){
+                    ret = true;
+                }
+            }
+            
+        }
+    }
+    
     return ret;
 }
 
 bool Player::canChangeTrumpCard( Trump* trump ) const
 {
-    bool canChange = false;
+    /*bool canChange = false;
     
     for( int i = 0; i < mNumberOfCardsInHand; ++i ){
         
         if( mCards[i] != 0 && mCards[i]->getSuit() == trump->getCardSuit() && mCards[i]->getType() == mLowestCardType ){
+            canChange = true;
+        }
+        
+    }
+    
+    return canChange;*/
+    
+    bool canChange = false;
+    
+    for( int i = 0; i < mCards.size(); ++i ){
+        
+        if( mCards.at( i )->getSuit() == trump->getCardSuit() && mCards.at( i )->getType() == mLowestCardType ){
             canChange = true;
         }
         
@@ -371,8 +494,10 @@ void Player::newCommand( QString command )
                     setCloseButtonVisible( false );
                 }
                 
-                emit signalSelectedCard( getCard( ret ), ret );
-                removeCard( ret );
+                //emit signalSelectedCard( getCard( ret ), ret );
+                //removeCard( ret );
+                
+                emit signalSelectedCard( takeCard( ret ), ret );
             }else{
                 kDebug() << "ERROR!" << getName() << "selected" << ret << "card id, but this is not selectable!";
             }
@@ -472,14 +597,22 @@ void Player::slotReadyRead()
     }
 }
 
-int Player::sendNewCard( Card *card )
+/*int Player::sendNewCard( Card *card )
 {
     int id = addNewCard( card );
     
     sendCommand( NEW_PLAYER_CARD_COMMAND+QString::number( getCard( id )->getValue() ) );
     
     return id;
+}*/
+
+void Player::sendNewCard( Card* card )
+{
+    addNewCard( card );
+    
+    sendCommand( NEW_PLAYER_CARD_COMMAND+QString::number( card->getValue() ) );
 }
+
 
 void Player::sendNewTrumpCard( Trump* trump )
 {

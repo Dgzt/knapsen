@@ -21,7 +21,8 @@ static const QString INITIALIZE_TABLE_COMMAND = ":INITIALIZE_TABLE=";
 
 //
 static const QString NEW_PLAYER_CARD_COMMAND = ":NEW_PLAYER_CARD=";
-static const QString NEW_OPPONENT_CARD_COMMAND_ID = ":NEW_OPPONENT_CARD_ID=";
+//static const QString NEW_OPPONENT_CARD_COMMAND_ID = ":NEW_OPPONENT_CARD_ID=";
+static const QString NEW_OPPONENT_CARD_COMMAND = ":NEW_OPPONENT_CARD";
 
 //
 static const QString NEW_TRUMP_CARD_COMMAND = ":NEW_TRUMP_CARD=";
@@ -95,8 +96,9 @@ class Player : public QTcpSocket
     
     Card::Type mLowestCardType;
     
-    int mNumberOfCardsInHand;
-    Card** mCards;
+    //int mNumberOfCardsInHand;
+    //Card** mCards;
+    QList< Card* > mCards;
     
     //Player's tricks
     int mTricks;
@@ -124,8 +126,9 @@ protected:
     QString getCommandPartOfCommand( QString );
     QString getValuePartOfCommand( QString );
     
-    void setNumberOfCardsInHand( int );
-    int getNumberOfCardsInHand() const{ return mNumberOfCardsInHand; }
+    //void setNumberOfCardsInHand( int );
+    //int getNumberOfCardsInHand() const{ return mNumberOfCardsInHand; }
+    int getNumberOfCardsInHand(){ return mCards.size(); }
     
     void newGame();
     void newRound();
@@ -133,8 +136,12 @@ protected:
     void setLowestCard( int );
     Card::Type getLowestCardType(){ return mLowestCardType; }
     
-    int addNewCard( Card* );
-    void removeCard( int );
+    //int addNewCard( Card* );
+    void addNewCard( Card* card ){ mCards.append( card ); }
+    //void removeCard( int );
+    //
+    Card* takeCard( int id ){ return mCards.takeAt( id ); }
+    //
     
     
     //Set selectable OR not selectable all avalibe card
@@ -196,13 +203,16 @@ public:
     void sendServerIsFull(){ sendCommand( SERVER_IS_FULL_COMMAND ); }
     //
 
-    void sendInitializeTable( QString, Knapsen::TypeOfCards, int, int );
+    //void sendInitializeTable( QString, Knapsen::TypeOfCards, int, int );
+    void sendInitializeTable( QString, Knapsen::TypeOfCards, int );
     
     //Set and send the new card
-    int sendNewCard( Card* );
+    //int sendNewCard( Card* );
+    void sendNewCard( Card* );
     
     //Send to player the new opponent card id
-    void sendNewOpponentCard( int id ){ sendCommand( NEW_OPPONENT_CARD_COMMAND_ID+QString::number( id ) ); }
+    //void sendNewOpponentCard( int id ){ sendCommand( NEW_OPPONENT_CARD_COMMAND_ID+QString::number( id ) ); }
+    void sendNewOpponentCard(){ sendCommand( NEW_OPPONENT_CARD_COMMAND ); }
     
     //Set and send the new trump card
     void sendNewTrumpCard( Trump* );

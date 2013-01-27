@@ -62,12 +62,15 @@ signals:
     void signalGameError( Client::GameErrorType );
     //
     
-    void signalInitialize( QString, QString, Knapsen::TypeOfCards, int );
+    //void signalInitialize( QString, QString, Knapsen::TypeOfCards, int );
+    void signalInitialize( QString, QString, Knapsen::TypeOfCards );
     
-    void signalNewOpponentCardId( int );
+    //void signalNewOpponentCardId( int );
+    void signalNewOpponentCard();
     
-    void signalNewPlayerCard( int, const Card* );
-        
+    //void signalNewPlayerCard( int, const Card* );
+    void signalNewPlayerCard( const Card* );
+    
     void signalNewTrumpCard( const Card* );
     
     void signalNewCentralCard( int, const Card* );
