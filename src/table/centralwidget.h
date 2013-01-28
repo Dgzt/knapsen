@@ -85,7 +85,8 @@ public:
     ~CentralWidget();
     
     //
-    void setClient( Client* client ){ mClient = client; }
+    //void setClient( Client* client ){ mClient = client; }
+    void setClient( Client* );
     //
     
     void clearWidget();
@@ -98,7 +99,13 @@ private slots:
     void slotOpponentCardsSizeChanged();
     void slotPlayerCardsSizeChanged();
     //
-    void slotClick( int );
+    //void slotClick( int );
+    //
+    void slotShowOpponentArrow();
+    void slotShowPlayerArrow();
+    void slotHideOpponentArrow();
+    void slotHidePlayerArrow();
+    //
     void slotTwentyButtonClicked(){ emit signalTwentyButtonClicked(); }
     void slotFortyButtonClicked(){ emit signalFortyButtonClicked(); }
     void slotCloseButtonClicked(){ emit signalCloseButtonClicked(); }
@@ -113,7 +120,7 @@ public slots:
     //void slotNewOpponentCardId( int );
     
     void slotNewTrumpCard( const Card* );
-    void slotTrumpCardHide();
+    void slotHideTrumpCard();
     void slotTrumpCardSelectableChanged( bool );
     
     //void slotPlayerCardSelectableChanged( int, bool );
@@ -121,7 +128,7 @@ public slots:
     void slotNewCentralCard( int, const Card* );
     void slotClearCentralCards();
     
-    void slotOpponentSelectedCardId( int );
+    //void slotOpponentSelectedCardId( int );
     
     void slotOpponentTricksChanged( int );
     
@@ -141,8 +148,8 @@ public slots:
     void slotShowOpponentCards( int, Card, int, Card );
     
     //
-    void slotPlayerInAction();
-    void slotOpponentinAction();
+    //void slotPlayerInAction();
+    //void slotOpponentinAction();
     //
     
     //

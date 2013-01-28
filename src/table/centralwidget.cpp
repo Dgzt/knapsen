@@ -85,6 +85,14 @@ CentralWidget::CentralWidget( QWidget* parent ):
 CentralWidget::~CentralWidget()
 {}
 
+void CentralWidget::setClient( Client* client )
+{
+    mClient = client;
+    
+    connect( mClient, SIGNAL( signalInitialize( QString, QString, Knapsen::TypeOfCards ) ), 
+             this,    SLOT( slotInitialize( QString, QString, Knapsen::TypeOfCards ) ) );
+}
+
 void CentralWidget::clearWidget()
 {
     kDebug() << "Clear widget.";
@@ -163,7 +171,7 @@ void CentralWidget::setInGamePositions()
     const int nameDistance = 5;
     //const int cardDistance = 10;
     //const int scoreTableDistance = 5;
-    const int buttonDistance = 5;
+    //const int buttonDistance = 5;
     
     //Set position of player's name
     QPoint playerNamePos;
@@ -181,7 +189,7 @@ void CentralWidget::setInGamePositions()
     mDeck->setPos( 20, height()/2-mCardSize.height()/2 );
     
     //Set position of opponent's cards and player's cards
-    float removeCardsDistance = 0.0;
+    //float removeCardsDistance = 0.0;
     /*if( mNumberOfCardsInHand == 5 ){
         removeCardsDistance = 2 * cardDistance;
     }else{ //mNumberOfCardsInHand == 6
@@ -521,6 +529,9 @@ void CentralWidget::slotInitialize( QString playerName, QString opponentName, Kn
     mTrumpCard->setSelectable( false );
     mTrumpCard->setZValue( 0 );
     
+    connect( mClient, SIGNAL( signalNewTrumpCard( const Card* ) ),        this, SLOT( slotNewTrumpCard( const Card* ) ) );
+    connect( mClient, SIGNAL( signalTrumpCardSelectableChanged( bool ) ), this, SLOT( slotTrumpCardSelectableChanged( bool ) ) );
+    connect( mClient, SIGNAL( signalHideTrumpCard() ),                    this, SLOT( slotHideTrumpCard() ) );
     //connect( mTrumpCard, SIGNAL( click() ), this, SLOT( slotSelectTrumpCardSlot() ) );
     
     scene()->addItem( mTrumpCard );
@@ -568,7 +579,7 @@ void CentralWidget::slotInitialize( QString playerName, QString opponentName, Kn
     
     connect( mPlayerCards, SIGNAL( signalSizeChanged() ),                       this, SLOT( slotPlayerCardsSizeChanged() ) );
     
-    connect( mPlayerCards, SIGNAL( signalSelectedCardId( int ) ),                 mClient, SLOT( slotSelectCardId( int ) ) );
+    connect( mPlayerCards, SIGNAL( signalSelectedCardId( int ) ),               mClient, SLOT( slotSelectCardId( int ) ) );
     
     scene()->addItem( mPlayerCards );
     //
@@ -585,6 +596,9 @@ void CentralWidget::slotInitialize( QString playerName, QString opponentName, Kn
         scene()->addItem( &mCentralCards[i] );
     }
     
+    connect( mClient, SIGNAL( signalNewCentralCard( int, const Card* ) ), this, SLOT( slotNewCentralCard( int, const Card* ) ) );
+    connect( mClient, SIGNAL( signalClearCentralCards() ),                this, SLOT( slotClearCentralCards() ) );
+    
     //Arrows
     QPixmap arrowImage( KGlobal::dirs()->findResource( "appdata", "pics/arrow.png" ) );
     mPlayerArrow = scene()->addPixmap( arrowImage );
@@ -593,8 +607,11 @@ void CentralWidget::slotInitialize( QString playerName, QString opponentName, Kn
     mPlayerArrow->setVisible( false );
     mOpponentArrow->setVisible( false );
     
-    connect( mClient, SIGNAL( signalOpponentInAction() ),       this, SLOT( slotOpponentinAction() ) );
-    connect( mClient, SIGNAL( signalPlayerInAction() ),         this, SLOT( slotPlayerInAction() ) );
+    connect( mClient, SIGNAL( signalOpponentInAction() ),                 this, SLOT( slotShowOpponentArrow() ) );
+    connect( mClient, SIGNAL( signalPlayerInAction() ),                   this, SLOT( slotShowPlayerArrow() ) );
+    connect( mClient,      SIGNAL( signalOpponentSelectedCardId( int ) ), this, SLOT( slotHideOpponentArrow() ) );
+    connect( mPlayerCards, SIGNAL( signalSelectedCardId( int ) ),         this, SLOT( slotHidePlayerArrow() ) );
+    
     
     //Setup score tables
     mOpponentScoreTable = new ScoreTable;
@@ -653,7 +670,7 @@ void CentralWidget::slotNewTrumpCard( const Card* card )
     }
 }
 
-void CentralWidget::slotTrumpCardHide()
+void CentralWidget::slotHideTrumpCard()
 {
     mTrumpCard->setVisible( false );
 }
@@ -682,13 +699,13 @@ void CentralWidget::slotClearCentralCards()
     }
 }
 
-void CentralWidget::slotOpponentSelectedCardId( int id )
+/*void CentralWidget::slotOpponentSelectedCardId( int id )
 {
     //mOpponentCards[ id ].setVisible( false );
     
     //
     mOpponentArrow->setVisible( false );
-}
+}*/
 
 void CentralWidget::slotOpponentTricksChanged( int tricks )
 {
@@ -756,19 +773,19 @@ void CentralWidget::slotShowOpponentCards( int card1Pos, Card card1, int card2Po
     mOpponentCardsShowTimer->start();*/
 }
 
-void CentralWidget::slotPlayerInAction()
+/*void CentralWidget::slotPlayerInAction()
 {
     kDebug() << "Player in action.";
     
     mPlayerArrow->setVisible( true );
-}
+}*/
 
-void CentralWidget::slotOpponentinAction()
+/*void CentralWidget::slotOpponentinAction()
 {
     kDebug() << "Opponent in action.";
     
     mOpponentArrow->setVisible( true );
-}
+}*/
 
 void CentralWidget::slotNewRound()
 {
@@ -838,7 +855,7 @@ void CentralWidget::slotOpponentCardsSizeChanged()
     //mOpponentArrow->setPos( mOpponentCards->pos().x() - SCORE_TABLE_CARDS_DISTANCE - mOpponentArrow->pos().x(),
     //                        mOpponentCards->pos().y() );
     mOpponentArrow->setPos( mOpponentCards->pos().x() + mOpponentCards->boundingRect().width() + SCORE_TABLE_CARDS_DISTANCE + mCardSize.width()/2,
-                            mOpponentCards->pos().y() );
+                            mOpponentCards->pos().y() + mCardSize.height() - mOpponentArrow->boundingRect().height() );
 
 }
 
@@ -864,12 +881,32 @@ void CentralWidget::slotPlayerCardsSizeChanged()
     
 }
 
-void CentralWidget::slotClick( int id )
+/*void CentralWidget::slotClick( int id )
 {
     emit signalSelectCardId( id );
     mPlayerCards[ id ].setVisible( false );
     
     //
+    mPlayerArrow->setVisible( false );
+}*/
+
+void CentralWidget::slotShowOpponentArrow()
+{
+    mOpponentArrow->setVisible( true );
+}
+
+void CentralWidget::slotShowPlayerArrow()
+{
+    mPlayerArrow->setVisible( true );
+}
+
+void CentralWidget::slotHideOpponentArrow()
+{
+    mOpponentArrow->setVisible( false );
+}
+
+void CentralWidget::slotHidePlayerArrow()
+{
     mPlayerArrow->setVisible( false );
 }
 

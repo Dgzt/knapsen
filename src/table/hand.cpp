@@ -56,7 +56,7 @@ void Hand::slotMouseEnter( SvgCard* svgCard )
     //int id = getCardId( svgCard );
     int id = mCards.indexOf( svgCard );
     
-    qDebug() << "slotMouseEnter(): " << id;
+    kDebug() /*<< "slotMouseEnter(): "*/ << id;
 
     /*//Highlight card
     mCards.at( id )->setPos( mCards.at( id )->pos().x(),
@@ -89,7 +89,7 @@ void Hand::slotMouseLeave( SvgCard* svgCard )
     //int id = getCardId( svgCard );
     int id = mCards.indexOf( svgCard );
     
-    qDebug() << "slotMouseLeave(): " << id;
+    kDebug() /*<< "slotMouseLeave(): "*/ << id;
     
     /*//Highlight back
     mCards.at( id )->setPos( mCards.at( id )->pos().x(),
@@ -184,11 +184,6 @@ void Hand::newCard( QString cardText )
                                 mCards.at( i )->pos().y() );
     }
 }*/
-
-void Hand::slotNewCard()
-{
-    newCard( "back" );
-}
 
 void Hand::slotNewCard( const Card* card )
 {

@@ -93,7 +93,7 @@ signals:
     
     void signalCloseDeck();
     
-    void signalTrumpCardHide();
+    void signalHideTrumpCard();
     //
     void signalTrumpCardSelectableChanged( bool );
     //

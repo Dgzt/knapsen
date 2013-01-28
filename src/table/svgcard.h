@@ -11,11 +11,6 @@ class SvgCard : public QGraphicsSvgItem
     
     double mScale;
     
-    //int mId;
-    //
-    
-    //
-    
     bool mSelectable;
     
 protected:

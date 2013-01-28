@@ -218,7 +218,7 @@ void Client::slotProcessCommands()
             kDebug() << getName() << "Clear trump card.";
             
             mTrump->clearTrumpCard( true );
-            emit signalTrumpCardHide();
+            emit signalHideTrumpCard();
         }
         
         if( getCommandPartOfCommand( commandList.first() ) == TRUMP_CARD_SELECTABLE_COMMAND ){

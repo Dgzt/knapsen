@@ -40,7 +40,7 @@ private slots:
     void slotCardClicked( SvgCard* );
     
 public slots:
-    void slotNewCard();
+    void slotNewCard(){ newCard( "back" ); }
     void slotNewCard( const Card* );
     
     void slotSelectableChanged( int, bool );

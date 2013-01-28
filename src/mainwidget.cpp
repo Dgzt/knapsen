@@ -153,16 +153,16 @@ void MainWindow::setServerConfig()
 
 void MainWindow::setGameSignals()
 {
-    connect( client, SIGNAL( signalInitialize( QString, QString, Knapsen::TypeOfCards ) ),      cWidget, SLOT( slotInitialize( QString, QString, Knapsen::TypeOfCards ) ) );
+    //connect( client, SIGNAL( signalInitialize( QString, QString, Knapsen::TypeOfCards ) ),      cWidget, SLOT( slotInitialize( QString, QString, Knapsen::TypeOfCards ) ) );
     //connect( client, SIGNAL( signalNewPlayerCard( int, const Card* ) ),                         cWidget, SLOT( slotNewPlayerCard( int, const Card* ) ) );
     //connect( client, SIGNAL( signalNewOpponentCardId( int ) ),                                  cWidget, SLOT( slotNewOpponentCardId( int ) ) );
-    connect( client, SIGNAL( signalNewTrumpCard( const Card* ) ),                               cWidget, SLOT( slotNewTrumpCard( const Card* ) ) );
-    connect( client, SIGNAL( signalTrumpCardHide() ),                                           cWidget, SLOT( slotTrumpCardHide() ) );
-    connect( client, SIGNAL( signalTrumpCardSelectableChanged( bool ) ),                        cWidget, SLOT( slotTrumpCardSelectableChanged( bool ) ) );
+    //connect( client, SIGNAL( signalNewTrumpCard( const Card* ) ),                               cWidget, SLOT( slotNewTrumpCard( const Card* ) ) );
+    //connect( client, SIGNAL( signalTrumpCardHide() ),                                           cWidget, SLOT( slotTrumpCardHide() ) );
+    //connect( client, SIGNAL( signalTrumpCardSelectableChanged( bool ) ),                        cWidget, SLOT( slotTrumpCardSelectableChanged( bool ) ) );
     //connect( client, SIGNAL( signalPlayerCardSelectableChanged( int, bool ) ),                  cWidget, SLOT( slotPlayerCardSelectableChanged( int, bool ) ) );
-    connect( client, SIGNAL( signalNewCentralCard( int, const Card* ) ),                        cWidget, SLOT( slotNewCentralCard( int, const Card* ) ) );
-    connect( client, SIGNAL( signalClearCentralCards() ),                                       cWidget, SLOT( slotClearCentralCards() ) );
-    connect( client, SIGNAL( signalOpponentSelectedCardId( int ) ),                             cWidget, SLOT( slotOpponentSelectedCardId( int ) ) );
+    //connect( client, SIGNAL( signalNewCentralCard( int, const Card* ) ),                        cWidget, SLOT( slotNewCentralCard( int, const Card* ) ) );
+    //connect( client, SIGNAL( signalClearCentralCards() ),                                       cWidget, SLOT( slotClearCentralCards() ) );
+    //connect( client, SIGNAL( signalOpponentSelectedCardId( int ) ),                             cWidget, SLOT( slotOpponentSelectedCardId( int ) ) );
     //connect( client, SIGNAL( signalOpponentTricksChanged( int ) ),                              cWidget, SLOT( slotOpponentTricksChanged( int ) ) );
     //connect( client, SIGNAL( signalOpponentScoresChanged( int ) ),                              cWidget, SLOT( slotOpponentScoresChanged( int ) ) );
     //connect( client, SIGNAL( signalPlayerTricksChanged( int ) ),                                cWidget, SLOT( slotPlayerTricksChanged( int ) ) );
