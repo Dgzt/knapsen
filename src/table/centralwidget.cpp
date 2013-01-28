@@ -512,6 +512,8 @@ void CentralWidget::slotInitialize( QString playerName, QString opponentName, Kn
     
     scene()->addItem( mDeck );
     
+    connect( mClient, SIGNAL( signalHideDeck() ), this, SLOT( slotHideDeck() ) );
+    
     //Set size of card
     mCardSize = mDeck->getSizeF();
     
@@ -532,6 +534,7 @@ void CentralWidget::slotInitialize( QString playerName, QString opponentName, Kn
     connect( mClient, SIGNAL( signalNewTrumpCard( const Card* ) ),        this, SLOT( slotNewTrumpCard( const Card* ) ) );
     connect( mClient, SIGNAL( signalTrumpCardSelectableChanged( bool ) ), this, SLOT( slotTrumpCardSelectableChanged( bool ) ) );
     connect( mClient, SIGNAL( signalHideTrumpCard() ),                    this, SLOT( slotHideTrumpCard() ) );
+    connect( mClient, SIGNAL( signalCloseDeck() ),                        this, SLOT( slotCloseDeck() ) ); 
     //connect( mTrumpCard, SIGNAL( click() ), this, SLOT( slotSelectTrumpCardSlot() ) );
     
     scene()->addItem( mTrumpCard );
@@ -643,6 +646,9 @@ void CentralWidget::slotInitialize( QString playerName, QString opponentName, Kn
     mCloseButton = scene()->addWidget( closeButton );
     mCloseButton->setVisible( false );
     connect( closeButton, SIGNAL( clicked() ), this, SLOT( slotCloseButtonClicked() ) );
+    
+    connect( mClient, SIGNAL( signalNewRound() ), this, SLOT( slotNewRound() ) );
+    connect( mClient, SIGNAL( signalStartGame() ), this, SLOT( slotStartGame() ) );
 }
 
 /*void CentralWidget::slotNewPlayerCard( int id , const Card* card )

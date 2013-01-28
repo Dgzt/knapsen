@@ -153,33 +153,6 @@ void MainWindow::setServerConfig()
 
 void MainWindow::setGameSignals()
 {
-    //connect( client, SIGNAL( signalInitialize( QString, QString, Knapsen::TypeOfCards ) ),      cWidget, SLOT( slotInitialize( QString, QString, Knapsen::TypeOfCards ) ) );
-    //connect( client, SIGNAL( signalNewPlayerCard( int, const Card* ) ),                         cWidget, SLOT( slotNewPlayerCard( int, const Card* ) ) );
-    //connect( client, SIGNAL( signalNewOpponentCardId( int ) ),                                  cWidget, SLOT( slotNewOpponentCardId( int ) ) );
-    //connect( client, SIGNAL( signalNewTrumpCard( const Card* ) ),                               cWidget, SLOT( slotNewTrumpCard( const Card* ) ) );
-    //connect( client, SIGNAL( signalTrumpCardHide() ),                                           cWidget, SLOT( slotTrumpCardHide() ) );
-    //connect( client, SIGNAL( signalTrumpCardSelectableChanged( bool ) ),                        cWidget, SLOT( slotTrumpCardSelectableChanged( bool ) ) );
-    //connect( client, SIGNAL( signalPlayerCardSelectableChanged( int, bool ) ),                  cWidget, SLOT( slotPlayerCardSelectableChanged( int, bool ) ) );
-    //connect( client, SIGNAL( signalNewCentralCard( int, const Card* ) ),                        cWidget, SLOT( slotNewCentralCard( int, const Card* ) ) );
-    //connect( client, SIGNAL( signalClearCentralCards() ),                                       cWidget, SLOT( slotClearCentralCards() ) );
-    //connect( client, SIGNAL( signalOpponentSelectedCardId( int ) ),                             cWidget, SLOT( slotOpponentSelectedCardId( int ) ) );
-    //connect( client, SIGNAL( signalOpponentTricksChanged( int ) ),                              cWidget, SLOT( slotOpponentTricksChanged( int ) ) );
-    //connect( client, SIGNAL( signalOpponentScoresChanged( int ) ),                              cWidget, SLOT( slotOpponentScoresChanged( int ) ) );
-    //connect( client, SIGNAL( signalPlayerTricksChanged( int ) ),                                cWidget, SLOT( slotPlayerTricksChanged( int ) ) );
-    //connect( client, SIGNAL( signalPlayerScoresChanged( int ) ),                                cWidget, SLOT( slotPlayerScoresChanged( int ) ) );
-    connect( client, SIGNAL( signalHideDeck() ),                                                cWidget, SLOT( slotHideDeck() ) );
-    connect( client, SIGNAL( signalCloseDeck() ),                                               cWidget, SLOT( slotCloseDeck() ) );
-    //connect( client, SIGNAL( signalTwentyButtonVisible( bool ) ),                               cWidget, SLOT( slotTwentyButtonVisible( bool ) ) );
-    //connect( client, SIGNAL( signalFortyButtonVisible( bool ) ),                                cWidget, SLOT( slotFortyButtonVisible( bool ) ) );
-    //connect( client, SIGNAL( signalCloseButtonVisible( bool ) ),                                cWidget, SLOT( slotCloseButtonVisible( bool ) ) );
-    connect( client, SIGNAL( signalShowOpponentCards( int, Card, int, Card ) ),                 cWidget, SLOT( slotShowOpponentCards( int, Card, int, Card ) ) );
-    //
-    //connect( client, SIGNAL( signalPlayerInAction() ),                                          cWidget, SLOT( slotPlayerInAction() ) );
-    //connect( client, SIGNAL( signalOpponentInAction() ),                                        cWidget, SLOT( slotOpponentinAction() ) );
-    //
-    connect( client, SIGNAL( signalNewRound() ),                                                cWidget, SLOT( slotNewRound() ) );
-    connect( client, SIGNAL( signalStartGame() ),                                               cWidget, SLOT( slotStartGame() ) );
-    
     //
     connect( client, SIGNAL( error( QAbstractSocket::SocketError ) ),                           this,   SLOT( slotSocketError( QAbstractSocket::SocketError ) ) );
     connect( client, SIGNAL( signalGameError( Client::GameErrorType ) ),                        this,   SLOT( slotGameError( Client::GameErrorType ) ) );
@@ -187,12 +160,12 @@ void MainWindow::setGameSignals()
     connect( client, SIGNAL( signalEndRound( QString, int ) ),                                  this,	 SLOT( slotEndRound( QString, int ) ) );
     connect( client, SIGNAL( signalEndGame( QString ) ),                                        this,	 SLOT( slotEndGame( QString ) ) );
     
-    connect( cWidget, SIGNAL( signalSelectCardId( int ) ),                                      client, SLOT( slotSelectCardId( int ) ) );
-    connect( cWidget, SIGNAL( signalSelectTrumpCard() ),                                        client, SLOT( slotSelectTrumpCard() ) );
-    connect( cWidget, SIGNAL( signalTwentyButtonClicked() ),                                    client, SLOT( slotTwentyButtonClicked() ) );
-    connect( cWidget, SIGNAL( signalFortyButtonClicked() ),                                     client, SLOT( slotFortyButtonClicked() ) );
-    connect( cWidget, SIGNAL( signalCloseButtonClicked() ),                                     client, SLOT( slotCloseButtonClicked() ) );
-    connect( cWidget, SIGNAL( signalHideShowedOpponentCards() ),                                client, SLOT( slotProcessCommands() ) );
+    //connect( cWidget, SIGNAL( signalSelectCardId( int ) ),                                      client, SLOT( slotSelectCardId( int ) ) );
+    //connect( cWidget, SIGNAL( signalSelectTrumpCard() ),                                        client, SLOT( slotSelectTrumpCard() ) );
+    //connect( cWidget, SIGNAL( signalTwentyButtonClicked() ),                                    client, SLOT( slotTwentyButtonClicked() ) );
+    //connect( cWidget, SIGNAL( signalFortyButtonClicked() ),                                     client, SLOT( slotFortyButtonClicked() ) );
+    //connect( cWidget, SIGNAL( signalCloseButtonClicked() ),                                     client, SLOT( slotCloseButtonClicked() ) );
+    //connect( cWidget, SIGNAL( signalHideShowedOpponentCards() ),                                client, SLOT( slotProcessCommands() ) );
 }
 
 void MainWindow::newGameSlot()
