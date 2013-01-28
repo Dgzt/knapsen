@@ -12,6 +12,9 @@ class SvgCard : public QGraphicsSvgItem
     double mScale;
     
     //int mId;
+    //
+    
+    //
     
     bool mSelectable;
     
@@ -31,7 +34,10 @@ public:
     
     //void setId( int );
     void setSelectable( bool );
-
+    //
+    bool isSelectable(){ return mSelectable; }
+    //
+    
 signals:
     //void signalMouseEnter( int );
     void signalMouseEnter( SvgCard* );

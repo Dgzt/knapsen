@@ -154,7 +154,7 @@ void MainWindow::setServerConfig()
 void MainWindow::setGameSignals()
 {
     connect( client, SIGNAL( signalInitialize( QString, QString, Knapsen::TypeOfCards ) ),      cWidget, SLOT( slotInitialize( QString, QString, Knapsen::TypeOfCards ) ) );
-    connect( client, SIGNAL( signalNewPlayerCard( int, const Card* ) ),                         cWidget, SLOT( slotNewPlayerCard( int, const Card* ) ) );
+    //connect( client, SIGNAL( signalNewPlayerCard( int, const Card* ) ),                         cWidget, SLOT( slotNewPlayerCard( int, const Card* ) ) );
     //connect( client, SIGNAL( signalNewOpponentCardId( int ) ),                                  cWidget, SLOT( slotNewOpponentCardId( int ) ) );
     connect( client, SIGNAL( signalNewTrumpCard( const Card* ) ),                               cWidget, SLOT( slotNewTrumpCard( const Card* ) ) );
     connect( client, SIGNAL( signalTrumpCardHide() ),                                           cWidget, SLOT( slotTrumpCardHide() ) );

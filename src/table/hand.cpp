@@ -1,8 +1,8 @@
 #include <KDE/KDebug>
+//
+#include <QtCore/QDebug>
+//
 #include <QtSvg/QSvgRenderer>
-//
-#include <QtGui/QPainter>
-//
 //
 #include <QtCore/QSizeF>
 #include <QtCore/QPointF>
@@ -13,9 +13,12 @@
 
 const int ENHANCEMENT_Y = 20;
 
+const int INVALID_HIGHLIGHT_CARD_ID = -1;
+
 Hand::Hand( QSvgRenderer* renderer, double scale ) :
     mRenderer( renderer ),
-    mScale( scale )
+    mScale( scale ),
+    mHighlightCardId( INVALID_HIGHLIGHT_CARD_ID )
 {
     kDebug() << "mScale:" << mScale;
 }
@@ -48,12 +51,14 @@ QRectF Hand::boundingRect() const
 void Hand::paint( QPainter* /*painter*/, const QStyleOptionGraphicsItem* /*option*/, QWidget* /*widget*/ )
 {}
 
-//void Hand::slotMouseEnter( int id )
 void Hand::slotMouseEnter( SvgCard* svgCard )
 {
-    int id = getCardId( svgCard );
+    //int id = getCardId( svgCard );
+    int id = mCards.indexOf( svgCard );
+    
+    qDebug() << "slotMouseEnter(): " << id;
 
-    //Highlight card
+    /*//Highlight card
     mCards.at( id )->setPos( mCards.at( id )->pos().x(),
                              mCards.at( id )->pos().y()-ENHANCEMENT_Y );
     
@@ -61,15 +66,32 @@ void Hand::slotMouseEnter( SvgCard* svgCard )
     for( int i = id + 1; i < mCards.size(); ++i ){
         mCards.at( i )->setPos( mCards.at( i )->pos().x() + ( mCards.at( i )->getSizeF().width() ) / 2, 
                                 mCards.at( i )->pos().y() );
+    }*/
+    
+    if( id != mHighlightCardId ){
+        //Highlight card
+        mCards.at( id )->setPos( mCards.at( id )->pos().x(),
+                                 mCards.at( id )->pos().y()-ENHANCEMENT_Y );
+    
+        //Next cards move right
+        for( int i = id + 1; i < mCards.size(); ++i ){
+            mCards.at( i )->setPos( mCards.at( i )->pos().x() + ( mCards.at( i )->getSizeF().width() ) / 2, 
+                                    mCards.at( i )->pos().y() );
+        }
+        
+        mHighlightCardId = id;
     }
+    
 }
 
-//void Hand::slotMouseLeave( int id )
 void Hand::slotMouseLeave( SvgCard* svgCard )
 {
-    int id = getCardId( svgCard );
+    //int id = getCardId( svgCard );
+    int id = mCards.indexOf( svgCard );
     
-    //Highlight back
+    qDebug() << "slotMouseLeave(): " << id;
+    
+    /*//Highlight back
     mCards.at( id )->setPos( mCards.at( id )->pos().x(),
                              mCards.at( id )->pos().y()+ENHANCEMENT_Y );
     
@@ -77,13 +99,29 @@ void Hand::slotMouseLeave( SvgCard* svgCard )
     for( int i = id + 1; i < mCards.size(); ++i ){
         mCards.at( i )->setPos( mCards.at( i )->pos().x() - ( mCards.at( i )->getSizeF().width() ) / 2, 
                                 mCards.at( i )->pos().y() );
+    }*/
+    
+    if( id == mHighlightCardId ){
+        //Highlight back
+        mCards.at( id )->setPos( mCards.at( id )->pos().x(),
+                                 mCards.at( id )->pos().y()+ENHANCEMENT_Y );
+    
+        //Next cards move back
+        for( int i = id + 1; i < mCards.size(); ++i ){
+            mCards.at( i )->setPos( mCards.at( i )->pos().x() - ( mCards.at( i )->getSizeF().width() ) / 2, 
+                                    mCards.at( i )->pos().y() );
+        }
+    
+        mHighlightCardId = INVALID_HIGHLIGHT_CARD_ID;
     }
+    
 }
 
 //void Hand::slotCardClicked( int id )
 void Hand::slotCardClicked( SvgCard* svgCard )
 {
-    int id = getCardId( svgCard );
+    //int id = getCardId( svgCard );
+    int id = mCards.indexOf( svgCard );
     
     emit signalSelectedCardId( id );
     
@@ -92,6 +130,8 @@ void Hand::slotCardClicked( SvgCard* svgCard )
     for( int i = id; i < mCards.size(); ++i ){
         mCards.at( i )->setPos( mCards.at( i )->x() - mCards.at( i )->getSizeF().width(), mCards.at( i )->y() );
     }
+    
+    mHighlightCardId = INVALID_HIGHLIGHT_CARD_ID;
     
     emit signalSizeChanged();
 }
@@ -110,8 +150,6 @@ void Hand::newCard( QString cardText )
     
     cardSvgItem->setPos( x, 0 );
     
-    //cardSvgItem->setId( mCards.size() );
-    
     mCards.append( cardSvgItem );
     
     connect( cardSvgItem, SIGNAL( signalMouseEnter( SvgCard* ) ),    this, SLOT( slotMouseEnter( SvgCard* ) ) );
@@ -121,18 +159,31 @@ void Hand::newCard( QString cardText )
     emit signalSizeChanged();
 }
 
-int Hand::getCardId( SvgCard* svgCard )
+/*void Hand::highlightCard( int id )
 {
-    int id = -1;
+    //Highlight card
+    mCards.at( id )->setPos( mCards.at( id )->pos().x(),
+                             mCards.at( id )->pos().y()-ENHANCEMENT_Y );
     
-    for( int i = 0; i < mCards.size(); ++i ){
-        if( svgCard == mCards.at( i ) ){
-            id = i;
-        }
+    //Next cards move right
+    for( int i = id + 1; i < mCards.size(); ++i ){
+        mCards.at( i )->setPos( mCards.at( i )->pos().x() + ( mCards.at( i )->getSizeF().width() ) / 2, 
+                                mCards.at( i )->pos().y() );
     }
-    
-    return id;
-}
+}*/
+
+/*void Hand::removeHighlight( int id )
+{
+    //Remove highlight
+    mCards.at( id )->setPos( mCards.at( id )->pos().x(),
+                             mCards.at( id )->pos().y()+ENHANCEMENT_Y );
+        
+    //Next cards move back
+    for( int i = id + 1; i < mCards.size(); ++i ){
+        mCards.at( i )->setPos( mCards.at( i )->pos().x() - ( mCards.at( i )->getSizeF().width() ) / 2, 
+                                mCards.at( i )->pos().y() );
+    }
+}*/
 
 void Hand::slotNewCard()
 {

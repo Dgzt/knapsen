@@ -17,9 +17,15 @@ class Hand: public QGraphicsObject
     
     QList< SvgCard* > mCards;
     
-    void newCard( QString );
+    //
+    int mHighlightCardId;
+    //
     
-    int getCardId( SvgCard* );
+    
+    void newCard( QString );
+
+    //void highlightCard( int );
+    //void removeHighlight( int );
     
 public:
     Hand( QSvgRenderer*, double );
@@ -28,12 +34,9 @@ public:
     virtual void paint( QPainter * , const QStyleOptionGraphicsItem * , QWidget * );
     
 private slots:
-    //void slotMouseEnter( int );
     void slotMouseEnter( SvgCard* );
-    //void slotMouseLeave( int );
     void slotMouseLeave( SvgCard* );
     
-    //void slotCardClicked( int id ){ emit signalSelectedCardId( id ); }
     void slotCardClicked( SvgCard* );
     
 public slots:

@@ -521,7 +521,7 @@ void CentralWidget::slotInitialize( QString playerName, QString opponentName, Kn
     mTrumpCard->setSelectable( false );
     mTrumpCard->setZValue( 0 );
     
-    connect( mTrumpCard, SIGNAL( click() ), this, SLOT( slotSelectTrumpCardSlot() ) );
+    //connect( mTrumpCard, SIGNAL( click() ), this, SLOT( slotSelectTrumpCardSlot() ) );
     
     scene()->addItem( mTrumpCard );
     

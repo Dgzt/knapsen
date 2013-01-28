@@ -7,7 +7,6 @@
 SvgCard::SvgCard( QSvgRenderer* renderer, double scale, QGraphicsItem* parentItem ) :
     QGraphicsSvgItem(parentItem),
     mScale( scale ),
-    //mId( -1 ),
     mSelectable( false )
 {
     setSharedRenderer( renderer );
@@ -20,7 +19,6 @@ void SvgCard::mousePressEvent( QGraphicsSceneMouseEvent* )
 {
     if( mSelectable ){
         emit signalClick();
-        //emit signalClick( mId );
         emit signalClick( this );
     }
 }
@@ -28,7 +26,6 @@ void SvgCard::mousePressEvent( QGraphicsSceneMouseEvent* )
 void SvgCard::hoverEnterEvent( QGraphicsSceneHoverEvent* )
 {
     if( mSelectable ){
-        //emit signalMouseEnter( mId );
         emit signalMouseEnter( this );
     }
 }
@@ -36,7 +33,6 @@ void SvgCard::hoverEnterEvent( QGraphicsSceneHoverEvent* )
 void SvgCard::hoverLeaveEvent( QGraphicsSceneHoverEvent* )
 {
     if( mSelectable ){
-        //emit signalMouseLeave( mId );
         emit signalMouseLeave( this );
     }
 }
@@ -46,18 +42,18 @@ QSizeF SvgCard::getSizeF()
     return QSizeF( boundingRect().width()*mScale, boundingRect().height()*mScale );
 }
 
-/*void SvgCard::setId( int id )
-{
-    mId = id;
-}*/
-
 void SvgCard::setSelectable( bool selectable )
 {
     mSelectable = selectable;
-    kDebug() << /*mId <<*/ mSelectable;
     
     if( mSelectable ){
         setCursor( QCursor( Qt::PointingHandCursor ) );
+        
+        //
+        if( isUnderMouse() ){
+            emit signalMouseEnter( this );
+        }
+        //
     }else{
         setCursor( QCursor( Qt::ArrowCursor ) );
     }
