@@ -626,6 +626,11 @@ void CentralWidget::slotInitialize( QString playerName, QString opponentName, Kn
     scene()->addItem( mOpponentScoreTable );
     scene()->addItem( mPlayerScoreTable );
     
+    connect( mClient, SIGNAL( signalOpponentTricksChanged( int ) ), this, SLOT( slotOpponentTricksChanged( int ) ) );
+    connect( mClient, SIGNAL( signalOpponentScoresChanged( int ) ), this, SLOT( slotOpponentScoresChanged( int ) ) );
+    connect( mClient, SIGNAL( signalPlayerTricksChanged( int ) ),   this, SLOT( slotPlayerTricksChanged( int ) ) );
+    connect( mClient, SIGNAL( signalPlayerScoresChanged( int ) ),   this, SLOT( slotPlayerScoresChanged( int ) ) );
+    
     //Set twenty button
     QPushButton *twentyButton = new QPushButton( i18n( "Twenty" ) );
     twentyButton->setAttribute( Qt::WA_NoSystemBackground );

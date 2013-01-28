@@ -98,75 +98,48 @@ private slots:
     //
     void slotOpponentCardsSizeChanged();
     void slotPlayerCardsSizeChanged();
-    //
-    //void slotClick( int );
-    //
-    void slotShowOpponentArrow();
-    void slotShowPlayerArrow();
-    void slotHideOpponentArrow();
-    void slotHidePlayerArrow();
-    //
-    void slotTwentyButtonClicked(){ emit signalTwentyButtonClicked(); }
-    void slotFortyButtonClicked(){ emit signalFortyButtonClicked(); }
-    void slotCloseButtonClicked(){ emit signalCloseButtonClicked(); }
-    void slotSelectTrumpCardSlot(){ emit signalSelectTrumpCard(); }
-    void slotCoverOpponentCards();
     
-public slots:
-    //void slotInitialize( QString, QString, Knapsen::TypeOfCards, int );
     void slotInitialize( QString, QString, Knapsen::TypeOfCards );
-    
-    //void slotNewPlayerCard( int, const Card* );
-    //void slotNewOpponentCardId( int );
     
     void slotNewTrumpCard( const Card* );
     void slotHideTrumpCard();
     void slotTrumpCardSelectableChanged( bool );
     
-    //void slotPlayerCardSelectableChanged( int, bool );
-    
     void slotNewCentralCard( int, const Card* );
     void slotClearCentralCards();
     
-    //void slotOpponentSelectedCardId( int );
-    
-    void slotOpponentTricksChanged( int );
-    
-    void slotOpponentScoresChanged( int );
-    
-    void slotPlayerTricksChanged( int );
-    
-    void slotPlayerScoresChanged( int );
-    
     void slotHideDeck();
     void slotCloseDeck();
+    
+    void slotOpponentTricksChanged( int );
+    void slotOpponentScoresChanged( int );
+    void slotPlayerTricksChanged( int );
+    void slotPlayerScoresChanged( int );
+    
+    void slotShowOpponentArrow();
+    void slotShowPlayerArrow();
+    void slotHideOpponentArrow();
+    void slotHidePlayerArrow();
+    //
+    //void slotTwentyButtonClicked(){ emit signalTwentyButtonClicked(); }
+    //void slotFortyButtonClicked(){ emit signalFortyButtonClicked(); }
+    //void slotCloseButtonClicked(){ emit signalCloseButtonClicked(); }
+    //void slotSelectTrumpCardSlot(){ emit signalSelectTrumpCard(); }
+    void slotCoverOpponentCards();
+    
+    void slotNewRound();
+    
+    void slotStartGame();
+    
+public slots:
+    
+    
     
     void slotTwentyButtonVisible( bool );
     void slotFortyButtonVisible( bool );
     void slotCloseButtonVisible( bool );
     
     void slotShowOpponentCards( int, Card, int, Card );
-    
-    //
-    //void slotPlayerInAction();
-    //void slotOpponentinAction();
-    //
-    
-    //
-    void slotNewRound();
-    //
-    
-    void slotStartGame();
-    
-signals:
-    void signalSelectCardId( int );
-    void signalSelectTrumpCard();
-    void signalTwentyButtonClicked();
-    void signalFortyButtonClicked();
-    void signalCloseButtonClicked();
-    
-    
-    void signalHideShowedOpponentCards();
     
 };
 
