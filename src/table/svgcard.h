@@ -27,19 +27,13 @@ public:
     QSizeF getSizeF();
     //
     
-    //void setId( int );
     void setSelectable( bool );
-    //
     bool isSelectable(){ return mSelectable; }
-    //
     
 signals:
-    //void signalMouseEnter( int );
     void signalMouseEnter( SvgCard* );
-    //void signalMouseLeave( int );
     void signalMouseLeave( SvgCard* );
     
-    //void signalClick( int );
     void signalClick( SvgCard* );
     void signalClick();
     

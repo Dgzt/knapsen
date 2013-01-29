@@ -120,6 +120,13 @@ private slots:
     void slotShowPlayerArrow();
     void slotHideOpponentArrow();
     void slotHidePlayerArrow();
+    
+    void slotTwentyButtonVisible( bool );
+    void slotFortyButtonVisible( bool );
+    void slotCloseButtonVisible( bool );
+    
+    void slotShowOpponentCards( int, Card, int, Card );
+    
     //
     //void slotTwentyButtonClicked(){ emit signalTwentyButtonClicked(); }
     //void slotFortyButtonClicked(){ emit signalFortyButtonClicked(); }
@@ -130,17 +137,7 @@ private slots:
     void slotNewRound();
     
     void slotStartGame();
-    
-public slots:
-    
-    
-    
-    void slotTwentyButtonVisible( bool );
-    void slotFortyButtonVisible( bool );
-    void slotCloseButtonVisible( bool );
-    
-    void slotShowOpponentCards( int, Card, int, Card );
-    
+
 };
 
 
