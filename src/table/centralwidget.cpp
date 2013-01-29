@@ -565,17 +565,19 @@ void CentralWidget::slotOpponentCardsSizeChanged()
     mOpponentCards->setPos( opponentHandPos );
     
     //Set Opponent' score table's size
-    //mOpponentScoreTable->setPos( mOpponentCards->pos().x() - SCORE_TABLE_CARDS_DISTANCE - mOpponentScoreTable->boundingRect().width(),
+    //mOpponentScoreTable->setPos( mOpponentCards->pos().x() + mOpponentCards->boundingRect().width() + SCORE_TABLE_CARDS_DISTANCE + mCardSize.width()/2,
     //                             mOpponentCards->y() );
-    mOpponentScoreTable->setPos( mOpponentCards->pos().x() + mOpponentCards->boundingRect().width() + SCORE_TABLE_CARDS_DISTANCE + mCardSize.width()/2,
+    mOpponentScoreTable->setPos( mOpponentCards->pos().x() + mOpponentCards->boundingRect().width() + SCORE_TABLE_CARDS_DISTANCE/* + mCardSize.width()/2*/,
                                  mOpponentCards->y() );
     
+    
     //Set Opponent's arrow's size
-    //mOpponentArrow->setPos( mOpponentCards->pos().x() - SCORE_TABLE_CARDS_DISTANCE - mOpponentArrow->pos().x(),
-    //                        mOpponentCards->pos().y() );
-    mOpponentArrow->setPos( mOpponentCards->pos().x() + mOpponentCards->boundingRect().width() + SCORE_TABLE_CARDS_DISTANCE + mCardSize.width()/2,
+    //mOpponentArrow->setPos( mOpponentCards->pos().x() + mOpponentCards->boundingRect().width() + SCORE_TABLE_CARDS_DISTANCE + mCardSize.width()/2,
+    //                        mOpponentCards->pos().y() + mCardSize.height() - mOpponentArrow->boundingRect().height() );
+    mOpponentArrow->setPos( mOpponentCards->pos().x() + mOpponentCards->boundingRect().width() + SCORE_TABLE_CARDS_DISTANCE/* + mCardSize.width()/2*/,
                             mOpponentCards->pos().y() + mCardSize.height() - mOpponentArrow->boundingRect().height() );
 
+    
 }
 
 void CentralWidget::slotPlayerCardsSizeChanged()
@@ -587,16 +589,18 @@ void CentralWidget::slotPlayerCardsSizeChanged()
     mPlayerCards->setPos( playerHandPos );
     
     //Set Player's score table's size
-    //mPlayerScoreTable->setPos( mPlayerCards->pos().x() - SCORE_TABLE_CARDS_DISTANCE - mPlayerScoreTable->boundingRect().width(),
+    //mPlayerScoreTable->setPos( mPlayerCards->pos().x() + mPlayerCards->boundingRect().width() + SCORE_TABLE_CARDS_DISTANCE + mCardSize.width()/2,
     //                           mPlayerCards->y() + mCardSize.height() - mPlayerScoreTable->boundingRect().height() );
-    mPlayerScoreTable->setPos( mPlayerCards->pos().x() + mPlayerCards->boundingRect().width() + SCORE_TABLE_CARDS_DISTANCE + mCardSize.width()/2,
+    mPlayerScoreTable->setPos( mPlayerCards->pos().x() + mPlayerCards->boundingRect().width() + SCORE_TABLE_CARDS_DISTANCE/* + mCardSize.width()/2*/,
                                mPlayerCards->y() + mCardSize.height() - mPlayerScoreTable->boundingRect().height() );
     
+    
     //Set Player's arrow's size
-    //mPlayerArrow->setPos( mPlayerCards->pos().x() - SCORE_TABLE_CARDS_DISTANCE - mPlayerArrow->boundingRect().width(),
+    //mPlayerArrow->setPos( mPlayerCards->pos().x() + mPlayerCards->boundingRect().width() + SCORE_TABLE_CARDS_DISTANCE + mCardSize.width()/2,
     //                      mPlayerCards->pos().y() );
-    mPlayerArrow->setPos( mPlayerCards->pos().x() + mPlayerCards->boundingRect().width() + SCORE_TABLE_CARDS_DISTANCE + mCardSize.width()/2,
+    mPlayerArrow->setPos( mPlayerCards->pos().x() + mPlayerCards->boundingRect().width() + SCORE_TABLE_CARDS_DISTANCE/* + mCardSize.width()/2*/,
                           mPlayerCards->pos().y() );
+    
     
 }
 

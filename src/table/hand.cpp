@@ -45,6 +45,12 @@ QRectF Hand::boundingRect() const
         }
     }
     
+    //
+    if( mCards.size() > 0 && mHighlightCardId != INVALID_HIGHLIGHT_CARD_ID && mHighlightCardId != ( mCards.size() - 1 )  ){
+        width += mCards.at( 0 )->getSizeF().width() / 2;
+    }
+    //
+    
     return QRectF( QPointF(0,0), QSizeF( width, height ) );
 }
 
@@ -80,6 +86,9 @@ void Hand::slotMouseEnter( SvgCard* svgCard )
         }
         
         mHighlightCardId = id;
+        
+        //
+        emit signalSizeChanged();
     }
     
 }
@@ -113,6 +122,9 @@ void Hand::slotMouseLeave( SvgCard* svgCard )
         }
     
         mHighlightCardId = INVALID_HIGHLIGHT_CARD_ID;
+        
+        //
+        emit signalSizeChanged();
     }
     
 }
