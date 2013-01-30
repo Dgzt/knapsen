@@ -21,6 +21,10 @@ class Hand: public QGraphicsObject
     int mHighlightCardId;
     //
     
+    //
+    QPair< int, int > *mShowOpponentCardsId;
+    //
+    
     
     void newCard( QString );
 
@@ -39,6 +43,10 @@ private slots:
     
     void slotCardClicked( SvgCard* );
     
+    //
+    void slotHideCards();
+    //
+    
 public slots:
     void slotNewCard(){ newCard( "back" ); }
     void slotNewCard( const Card* );
@@ -49,9 +57,15 @@ public slots:
     void slotRemoveCard( int );
     //
     
+    //
+    void slotShowCards( int, Card, int, Card );
+    //
+    
 signals:
     void signalSizeChanged();
     void signalSelectedCardId( int );
+    
+    void signalHiddenShowedCard();
     
 };
 

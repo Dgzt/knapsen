@@ -126,10 +126,6 @@ protected:
     QString getCommandPartOfCommand( QString );
     QString getValuePartOfCommand( QString );
     
-    //void setNumberOfCardsInHand( int );
-    //int getNumberOfCardsInHand() const{ return mNumberOfCardsInHand; }
-    int getNumberOfCardsInHand(){ return mCards.size(); }
-    
     void newGame();
     void newRound();
     
@@ -139,9 +135,7 @@ protected:
     //int addNewCard( Card* );
     void addNewCard( Card* card ){ mCards.append( card ); }
     //void removeCard( int );
-    //
-    Card* takeCard( int id ){ return mCards.takeAt( id ); }
-    //
+
     
     
     //Set selectable OR not selectable all avalibe card
@@ -167,14 +161,19 @@ public:
     //Get nickname
     QString getName() const { return mName; }
     
-    int getNumberOfCardsInHandNow();
+    //int getNumberOfCardsInHandNow();
+    int getNumberOfCardsInHand(){ return mCards.size(); }
     
-    Card* getCard( int );
+    //Card* getCard( int );
+    Card* getCard( int id ){ return mCards[ id ]; }
+    Card* takeCard( int id ){ return mCards.takeAt( id ); }
     
     //If this card is king, then return equal suit of queen, 
     //else this card is queen, then return equal suit of king
     //int getPositionOfPairOfCard( Card );
-    int getPositionOfPairOfCard( const Card* );
+    //int getPositionOfPairOfCard( const Card* );
+    int getPositionOfPairOfCardId( int );
+    
     
     void addTricks( int );
     int getTricks() const{ return mTricks; }
@@ -268,7 +267,8 @@ signals:
     //Signals to server
     void signalNewPlayer( Player* );
     void signalPlayerDisconnected( Player* );
-    void signalSelectedCard( Card*, int );
+    //void signalSelectedCard( Card*, int );
+    void signalSelectedCardId( int );
     void signalTwentyButtonClicked();
     void signalFortyButtonClicked();
     void signalCloseButtonClicked();

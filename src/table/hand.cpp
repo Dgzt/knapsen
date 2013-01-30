@@ -7,11 +7,14 @@
 #include <QtCore/QSizeF>
 #include <QtCore/QPointF>
 //
+//
+#include <QtCore/QTimer>
+//
 #include "engine/card.h"
 #include "table/svgcard.h"
 #include "table/hand.h"
 
-const int ENHANCEMENT_Y = 20;
+const double HIGHLIGHT_Y_PERCENT = 20;
 
 const int INVALID_HIGHLIGHT_CARD_ID = -1;
 
@@ -20,7 +23,7 @@ Hand::Hand( QSvgRenderer* renderer, double scale ) :
     mScale( scale ),
     mHighlightCardId( INVALID_HIGHLIGHT_CARD_ID )
 {
-    kDebug() << "mScale:" << mScale;
+    mShowOpponentCardsId = 0;
 }
 
 QRectF Hand::boundingRect() const
@@ -76,9 +79,13 @@ void Hand::slotMouseEnter( SvgCard* svgCard )
     
     if( id != mHighlightCardId ){
         //Highlight card
-        mCards.at( id )->setPos( mCards.at( id )->pos().x(),
+        /*mCards.at( id )->setPos( mCards.at( id )->pos().x(),
                                  mCards.at( id )->pos().y()-ENHANCEMENT_Y );
-    
+        */
+        mCards.at( id )->setPos( mCards.at( id )->pos().x(),
+                                 mCards.at( id )->pos().y() - mCards.at( id )->getSizeF().height() * ( HIGHLIGHT_Y_PERCENT / 100 ) );
+        
+        
         //Next cards move right
         for( int i = id + 1; i < mCards.size(); ++i ){
             mCards.at( i )->setPos( mCards.at( i )->pos().x() + ( mCards.at( i )->getSizeF().width() ) / 2, 
@@ -112,9 +119,13 @@ void Hand::slotMouseLeave( SvgCard* svgCard )
     
     if( id == mHighlightCardId ){
         //Highlight back
-        mCards.at( id )->setPos( mCards.at( id )->pos().x(),
+        /*mCards.at( id )->setPos( mCards.at( id )->pos().x(),
                                  mCards.at( id )->pos().y()+ENHANCEMENT_Y );
-    
+        */
+        mCards.at( id )->setPos( mCards.at( id )->pos().x(),
+                                 mCards.at( id )->pos().y() + mCards.at( id )->getSizeF().height() * ( HIGHLIGHT_Y_PERCENT / 100 ) );
+        
+        
         //Next cards move back
         for( int i = id + 1; i < mCards.size(); ++i ){
             mCards.at( i )->setPos( mCards.at( i )->pos().x() - ( mCards.at( i )->getSizeF().width() ) / 2, 
@@ -214,4 +225,70 @@ void Hand::slotRemoveCard( int )
     delete mCards.takeLast();
     
     emit signalSizeChanged();
+}
+
+void Hand::slotShowCards( int id1, Card card1, int id2, Card card2 )
+{
+    SvgCard* card;
+    
+    for( int i = id1 + 1; i < mCards.size(); ++i ){
+        card = mCards.at( i );
+        card->setPos( card->x() + card->getSizeF().width() / 2, card->y() );
+    }
+    
+    mCards.at( id1 )->setPos( mCards.at( id1 )->x(),  
+                              mCards.at( id1 )->y() + ( mCards.at( id1 )->getSizeF().height() * ( HIGHLIGHT_Y_PERCENT / 100 ) ) );
+    
+    mCards.at( id1 )->setElementId( card1.getCardText() );
+    
+    for( int i = id2 + 1; i < mCards.size(); ++i ){
+        card = mCards.at( i );
+        card->setPos( card->x() + card->getSizeF().width() / 2, card->y() );
+    }
+    
+    mCards.at( id2 )->setPos( mCards.at( id2 )->x(),  
+                              mCards.at( id2 )->y() + ( mCards.at( id2 )->getSizeF().height() * ( HIGHLIGHT_Y_PERCENT / 100 ) ) );
+    
+    mCards.at( id2 )->setElementId( card2.getCardText() );
+    
+    emit signalSizeChanged();
+    
+    mShowOpponentCardsId = new QPair< int, int>( id1, id2 );
+    
+    QTimer::singleShot( 1000, this, SLOT( slotHideCards() ) );
+}
+
+void Hand::slotHideCards()
+{
+    kDebug() << "Hide";
+    
+    SvgCard* card;
+    int id1 = mShowOpponentCardsId->first;
+    int id2 = mShowOpponentCardsId->second;
+    
+    delete mShowOpponentCardsId;
+    mShowOpponentCardsId = 0;
+    
+    mCards.at( id1 )->setPos( mCards.at( id1 )->x(),  
+                              mCards.at( id1 )->y() - ( mCards.at( id1 )->getSizeF().height() * ( HIGHLIGHT_Y_PERCENT / 100 ) ) );
+    
+    mCards.at( id1 )->setElementId( "back" );
+    
+    for( int i = id1 + 1; i < mCards.size(); ++i ){
+        card = mCards.at( i );
+        card->setPos( card->x() - card->getSizeF().width() / 2, card->y() );
+    }
+    
+    
+    mCards.at( id2 )->setPos( mCards.at( id2 )->x(),  
+                              mCards.at( id2 )->y() - ( mCards.at( id2 )->getSizeF().height() * ( HIGHLIGHT_Y_PERCENT / 100 ) ) );
+    
+    mCards.at( id2 )->setElementId( "back" );
+    
+    for( int i = id2 + 1; i < mCards.size(); ++i ){
+        card = mCards.at( i );
+        card->setPos( card->x() - card->getSizeF().width() / 2, card->y() );
+    }
+    
+    emit signalHiddenShowedCard();
 }

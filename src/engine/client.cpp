@@ -112,11 +112,8 @@ void Client::slotProcessCommands()
             bool ok;
             mSizeOfDeck = valuesArray->at( 2 ).toInt( &ok );
             mSizeOfDeckNow = mSizeOfDeck;
-            //int numberOfCardsInHand = valuesArray->at( 3 ).toInt( &ok );
             
             setLowestCard( mSizeOfDeck );
-            
-            //setNumberOfCardsInHand( numberOfCardsInHand );
             
             emit signalInitialize( getName(), valuesArray->at( 0 ), typeOfCards );
             

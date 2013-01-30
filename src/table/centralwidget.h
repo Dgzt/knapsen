@@ -11,7 +11,7 @@ class QSvgRenderer;
 class MyTextItem;
 class ScoreTable;
 class QGraphicsPixmapItem;
-class QTimer;
+//class QTimer;
 class Card;
 
 class Hand;
@@ -34,7 +34,7 @@ class CentralWidget : public QGraphicsView
     //
     
     //
-    QPair< int, int > *mShowOpponentCardsId;
+    //QPair< int, int > *mShowOpponentCardsId;
     //
     
     MyTextItem* mOpponentName;
@@ -54,7 +54,7 @@ class CentralWidget : public QGraphicsView
     Hand* mPlayerCards;
     
     //
-    QTimer *mOpponentCardsShowTimer;
+    //QTimer *mOpponentCardsShowTimer;
     //
     
     //
@@ -125,14 +125,14 @@ private slots:
     void slotFortyButtonVisible( bool );
     void slotCloseButtonVisible( bool );
     
-    void slotShowOpponentCards( int, Card, int, Card );
+    //void slotShowOpponentCards( int, Card, int, Card );
     
     //
     //void slotTwentyButtonClicked(){ emit signalTwentyButtonClicked(); }
     //void slotFortyButtonClicked(){ emit signalFortyButtonClicked(); }
     //void slotCloseButtonClicked(){ emit signalCloseButtonClicked(); }
     //void slotSelectTrumpCardSlot(){ emit signalSelectTrumpCard(); }
-    void slotCoverOpponentCards();
+    //void slotCoverOpponentCards();
     
     void slotNewRound();
     

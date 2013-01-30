@@ -90,7 +90,8 @@ private slots:
     void slotNewPlayer( Player* );
     void slotPlayerDisconnected( Player* );
     
-    void slotPlayerSelectedCard( Card*, int );
+    //void slotPlayerSelectedCard( Card*, int );
+    void slotPlayerSelectedCardId( int );
     
     void slotPlayerTwentyButtonClicked();
     void slotPlayerFortyButtonClicked();

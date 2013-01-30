@@ -51,7 +51,7 @@ CentralWidget::CentralWidget( QWidget* parent ):
     mCentralCards = 0;
     
     //
-    mOpponentCardsShowTimer = 0;
+    //mOpponentCardsShowTimer = 0;
     //
     
     //
@@ -65,7 +65,7 @@ CentralWidget::CentralWidget( QWidget* parent ):
     mTwentyButton = 0;
     mFortyButton = 0;
     
-    mShowOpponentCardsId = 0;
+    //mShowOpponentCardsId = 0;
     
     //Set View's stuff
     setFrameStyle( QFrame::NoFrame );
@@ -125,11 +125,11 @@ void CentralWidget::clearWidget()
     scene()->removeItem( mCloseButton );
     
     //
-    if( mOpponentCardsShowTimer ){
+    /*if( mOpponentCardsShowTimer ){
         mOpponentCardsShowTimer->stop();
         delete mOpponentCardsShowTimer;
         mOpponentCardsShowTimer = 0;
-    }
+    }*/
     //
     
     delete mOpponentName;
@@ -311,20 +311,21 @@ void CentralWidget::slotInitialize( QString playerName, QString opponentName, Kn
     
     //
     mOpponentCards = new Hand( mRenderer, mScale );
-    connect( mClient, SIGNAL( signalNewOpponentCard() ),                        mOpponentCards, SLOT( slotNewCard() ) );
-    connect( mClient, SIGNAL( signalOpponentSelectedCardId( int ) ),            mOpponentCards, SLOT( slotRemoveCard( int ) ) );
     
-    connect( mOpponentCards, SIGNAL( signalSizeChanged() ),                     this, SLOT( slotOpponentCardsSizeChanged() ) );
+    connect( mClient, SIGNAL( signalNewOpponentCard() ),                         mOpponentCards, SLOT( slotNewCard() ) );
+    connect( mClient, SIGNAL( signalOpponentSelectedCardId( int ) ),             mOpponentCards, SLOT( slotRemoveCard( int ) ) );
+    connect( mClient, SIGNAL( signalShowOpponentCards( int, Card, int, Card ) ), mOpponentCards, SLOT( slotShowCards( int, Card, int, Card ) ) );
+    connect( mOpponentCards, SIGNAL( signalSizeChanged() ),                      this, SLOT( slotOpponentCardsSizeChanged() ) );
+    connect( mOpponentCards, SIGNAL( signalHiddenShowedCard() ),                 mClient, SLOT( slotProcessCommands() ) );
     
     scene()->addItem( mOpponentCards );
     
     mPlayerCards = new Hand( mRenderer, mScale );
-    connect( mClient, SIGNAL( signalNewPlayerCard( const Card* ) ),             mPlayerCards, SLOT( slotNewCard( const Card* ) ) );
-    connect( mClient, SIGNAL( signalPlayerCardSelectableChanged( int, bool ) ), mPlayerCards, SLOT( slotSelectableChanged( int , bool ) ) );
     
-    connect( mPlayerCards, SIGNAL( signalSizeChanged() ),                       this, SLOT( slotPlayerCardsSizeChanged() ) );
-    
-    connect( mPlayerCards, SIGNAL( signalSelectedCardId( int ) ),               mClient, SLOT( slotSelectCardId( int ) ) );
+    connect( mClient, SIGNAL( signalNewPlayerCard( const Card* ) ),              mPlayerCards, SLOT( slotNewCard( const Card* ) ) );
+    connect( mClient, SIGNAL( signalPlayerCardSelectableChanged( int, bool ) ),  mPlayerCards, SLOT( slotSelectableChanged( int , bool ) ) );
+    connect( mPlayerCards, SIGNAL( signalSizeChanged() ),                        this, SLOT( slotPlayerCardsSizeChanged() ) );
+    connect( mPlayerCards, SIGNAL( signalSelectedCardId( int ) ),                mClient, SLOT( slotSelectCardId( int ) ) );
     
     scene()->addItem( mPlayerCards );
     //
@@ -488,9 +489,9 @@ void CentralWidget::slotCloseButtonVisible( bool visible )
     mCloseButton->setVisible( visible );
 }
 
-void CentralWidget::slotShowOpponentCards( int card1Pos, Card card1, int card2Pos, Card card2 )
+/*void CentralWidget::slotShowOpponentCards( int card1Pos, Card card1, int card2Pos, Card card2 )
 {
-    /*mOpponentCards[ card1Pos ].setElementId( card1.getCardText() );
+    mOpponentCards[ card1Pos ].setElementId( card1.getCardText() );
     mOpponentCards[ card2Pos ].setElementId( card2.getCardText() );
     
     mShowOpponentCardsId = new QPair< int, int >;
@@ -503,8 +504,8 @@ void CentralWidget::slotShowOpponentCards( int card1Pos, Card card1, int card2Po
     
     connect( mOpponentCardsShowTimer, SIGNAL( timeout() ), this, SLOT( slotCoverOpponentCards() ) );
     
-    mOpponentCardsShowTimer->start();*/
-}
+    mOpponentCardsShowTimer->start();
+}*/
 
 void CentralWidget::slotNewRound()
 {
@@ -624,9 +625,9 @@ void CentralWidget::slotHidePlayerArrow()
     mPlayerArrow->setVisible( false );
 }
 
-void CentralWidget::slotCoverOpponentCards()
+/*void CentralWidget::slotCoverOpponentCards()
 {
-    /*mOpponentCards[ mShowOpponentCardsId->first ].setElementId( "back" );
+    mOpponentCards[ mShowOpponentCardsId->first ].setElementId( "back" );
     mOpponentCards[ mShowOpponentCardsId->second ].setElementId( "back" );
     
     delete mShowOpponentCardsId;
@@ -635,5 +636,5 @@ void CentralWidget::slotCoverOpponentCards()
     delete mOpponentCardsShowTimer;
     mOpponentCardsShowTimer = 0;
     
-    emit signalHideShowedOpponentCards();*/
-}
+    emit signalHideShowedOpponentCards();
+}*/

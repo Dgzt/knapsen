@@ -248,7 +248,7 @@ void Player::setSelectableTrumpMarriagesCards( Trump* trump )
     }
 }
 
-int Player::getNumberOfCardsInHandNow()
+/*int Player::getNumberOfCardsInHandNow()
 {
     int ret = 0;
     
@@ -259,12 +259,12 @@ int Player::getNumberOfCardsInHandNow()
     }
     
     return ret;
-}
+}*/
 
-Card* Player::getCard( int id )
+/*Card* Player::getCard( int id )
 {
     return mCards[ id ];
-}
+}*/
 
 void Player::newGame()
 {
@@ -301,24 +301,29 @@ void Player::setLowestCard( int sizeOfDeck )
     }
 }
 
-int Player::getPositionOfPairOfCard( const Card* card )
+/*int Player::getPositionOfPairOfCard( const Card* card )
 {
-    /*for( int i = 0; i < mNumberOfCardsInHand; ++i ){
-        if( mCards[i] != 0 && card->getSuit() == mCards[i]->getSuit() &&
-            ( ( card->getType() == Card::King && mCards[i]->getType() == Card::Queen ) ||
-              ( card->getType() == Card::Queen && mCards[i]->getType() == Card::King ) )
-        ){
-            return i;
-        }
-    }
-    
-    //Error
-    return -1;*/
-    
     for( int i = 0; i < mCards.size(); ++i ){
         if( card->getSuit() == mCards.at( i )->getSuit() &&
             ( ( card->getType() == Card::King && mCards.at( i )->getType() == Card::Queen ) ||
               ( card->getType() == Card::Queen && mCards.at( i )->getType() == Card::King ) )
+        ){
+            //return i;
+            return i+1;
+        }
+    }
+    
+    //Error
+    return -1;
+}*/
+
+int Player::getPositionOfPairOfCardId( int id )
+{
+    
+    for( int i = 0; i < mCards.size(); ++i ){
+        if( mCards.at( id )->getSuit() == mCards.at( i )->getSuit() &&
+            ( ( mCards.at( id )->getType() == Card::King && mCards.at( i )->getType() == Card::Queen ) ||
+              ( mCards.at( id )->getType() == Card::Queen && mCards.at( i )->getType() == Card::King ) )
         ){
             return i;
         }
@@ -479,7 +484,7 @@ void Player::newCommand( QString command )
         
         if( ok ){
             
-            if( mCards[ ret ]->isSelectable() ){
+            if( mCards.at( ret )->isSelectable() ){
                 setSelectableAllCards( false );
                 
                 if( isTwentyButtonVisible() ){
@@ -494,10 +499,9 @@ void Player::newCommand( QString command )
                     setCloseButtonVisible( false );
                 }
                 
-                //emit signalSelectedCard( getCard( ret ), ret );
-                //removeCard( ret );
+                //emit signalSelectedCard( takeCard( ret ), ret );
+                emit signalSelectedCardId( ret );
                 
-                emit signalSelectedCard( takeCard( ret ), ret );
             }else{
                 kDebug() << "ERROR!" << getName() << "selected" << ret << "card id, but this is not selectable!";
             }

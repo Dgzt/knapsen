@@ -176,7 +176,8 @@ void Server::roundOver()
         }else if( nextPlayer->getTricks() >= 66 ){
             winnerPlayer = nextPlayer;
             looserPlayer = currentPlayer;
-        }else if( currentPlayer->getNumberOfCardsInHandNow() == 0 ){
+        //}else if( currentPlayer->getNumberOfCardsInHandNow() == 0 ){
+        }else if( currentPlayer->getNumberOfCardsInHand() == 0 ){
             winnerPlayer = currentPlayer;
             looserPlayer = nextPlayer;
         }
@@ -303,7 +304,8 @@ bool Server::isRoundOver()
     }
         
     //If a player have not card in hand, then win the round who win the last turn
-    if( mPlayerList.at( mCurrentPlayerId )->getNumberOfCardsInHandNow()  == 0 ){
+    //if( mPlayerList.at( mCurrentPlayerId )->getNumberOfCardsInHandNow()  == 0 ){
+    if( mPlayerList.at( mCurrentPlayerId )->getNumberOfCardsInHand()  == 0 ){
         return true;
     }
         
@@ -371,13 +373,14 @@ void Server::slotNewPlayer( Player* player )
         
         mPlayerList.append( player );
         
-        connect( player, SIGNAL( signalSelectedCard( Card*, int ) ),		this, SLOT( slotPlayerSelectedCard( Card*, int ) ) ); 
-        connect( player, SIGNAL( signalTwentyButtonClicked() ),				this, SLOT( slotPlayerTwentyButtonClicked() ) );
-        connect( player, SIGNAL( signalFortyButtonClicked() ),				this, SLOT( slotPlayerFortyButtonClicked() ) );
-        connect( player, SIGNAL( signalCloseButtonClicked() ),				this, SLOT( slotPlayerClickedToCloseButton() ) );
-        connect( player, SIGNAL( signalChangeTrumpCard( Player* ) ),		this, SLOT( slotPlayerChangeTrumpCard( Player* ) ) );
-        connect( player, SIGNAL( signalStartNextRound( Player* ) ),			this, SLOT( slotPlayerWantStartNextRound( Player* ) ) );
-        connect( player, SIGNAL( signalStartNextGame( Player* ) ),			this, SLOT( slotPlayerWantStartNextGame( Player* ) ) );
+        //connect( player, SIGNAL( signalSelectedCard( Card*, int ) ),    this, SLOT( slotPlayerSelectedCard( Card*, int ) ) ); 
+        connect( player, SIGNAL( signalSelectedCardId( int ) ),         this, SLOT( slotPlayerSelectedCardId( int ) ) );
+        connect( player, SIGNAL( signalTwentyButtonClicked() ),         this, SLOT( slotPlayerTwentyButtonClicked() ) );
+        connect( player, SIGNAL( signalFortyButtonClicked() ),          this, SLOT( slotPlayerFortyButtonClicked() ) );
+        connect( player, SIGNAL( signalCloseButtonClicked() ),          this, SLOT( slotPlayerClickedToCloseButton() ) );
+        connect( player, SIGNAL( signalChangeTrumpCard( Player* ) ),    this, SLOT( slotPlayerChangeTrumpCard( Player* ) ) );
+        connect( player, SIGNAL( signalStartNextRound( Player* ) ),     this, SLOT( slotPlayerWantStartNextRound( Player* ) ) );
+        connect( player, SIGNAL( signalStartNextGame( Player* ) ),      this, SLOT( slotPlayerWantStartNextGame( Player* ) ) );
         
         emit signalPlayerConnected( player->getName() );
         
@@ -444,14 +447,12 @@ void Server::slotPlayerDisconnected( Player* player )
     
 }
 
-void Server::slotPlayerSelectedCard( Card* selectedCard, int cardPosition )
+/*void Server::slotPlayerSelectedCard( Card* selectedCard, int cardPosition )
 {
     kDebug() << "Selected card:" << selectedCard->getCardText();
     
     mCentralCards->add( selectedCard );
 
-    //Player* nextPlayer = getNextPlayer();
-        
     if( !mCentralCards->isFull() ){
         kDebug() << "Next player step.";
         
@@ -464,7 +465,8 @@ void Server::slotPlayerSelectedCard( Card* selectedCard, int cardPosition )
             int posOfPairOfCard = getCurrentPlayer()->getPositionOfPairOfCard( selectedCard );
             
             //kDebug() << "Pair this card position:" << currentPlayer->getPositionOfPairOfCard( selectedCard );
-            kDebug() << "Pair this card position:" << posOfPairOfCard;
+            //kDebug() << "Pair this card position:" << posOfPairOfCard;
+            kDebug() << "Position of card:" << cardPosition << "position of pair of card:" << posOfPairOfCard;
             
             //nextPlayer->sendVisibleOpponentCards( cardPosition, selectedCard, posOfPairOfCard, currentPlayer->getCard( posOfPairOfCard ) );
             getNextPlayer()->sendVisibleOpponentCards( cardPosition, selectedCard, posOfPairOfCard, getCurrentPlayer()->getCard( posOfPairOfCard ) );
@@ -542,29 +544,29 @@ void Server::slotPlayerSelectedCard( Card* selectedCard, int cardPosition )
         if( !mPlayerWhoClickedToCloseButtonThisRound && mDeck->getDeckSize() > 0 ){
             //currentPlayer->sendSelectableAllCards();
             getCurrentPlayer()->sendSelectableAllCards();
-            /*for( int i = 0; i < mPlayerList.size(); ++i ){
-                if( mPlayerList.at( i ) != getCurrentPlayer() ){
-                    mPlayerList.at( i )->sendOpponentInAction();
-                }
-            }*/
+            //for( int i = 0; i < mPlayerList.size(); ++i ){
+            //    if( mPlayerList.at( i ) != getCurrentPlayer() ){
+            //        mPlayerList.at( i )->sendOpponentInAction();
+            //    }
+            //}
             getNextPlayer()->sendOpponentInAction();
         }else{ // mDeck->getDeckSize() == 0
             //currentPlayer->sendSelectableCertainCards( mCentralCards, mTrump );
             getCurrentPlayer()->sendSelectableCertainCards( mCentralCards, mTrump );
-            /*for( int i = 0; i < mPlayerList.size(); ++i ){
-                if( mPlayerList.at( i ) != getCurrentPlayer() ){
-                    mPlayerList.at( i )->sendOpponentInAction();
-                }
-            }*/
+            //for( int i = 0; i < mPlayerList.size(); ++i ){
+            //    if( mPlayerList.at( i ) != getCurrentPlayer() ){
+            //        mPlayerList.at( i )->sendOpponentInAction();
+            //    }
+            ///
             getNextPlayer()->sendOpponentInAction();
         }
         
-        /*
+        //
         //Show opponent's arrow and send commands end
-        for( int i = 0; i < mPlayerList.size(); ++i ){
-            mPlayerList.at( i )->sendCommandsEnd();
-        }
-        */
+        //for( int i = 0; i < mPlayerList.size(); ++i ){
+        //    mPlayerList.at( i )->sendCommandsEnd();
+        //}
+        //
         
     }else{ // !mCentralCards->isFull()
         //nextPlayer->sendOpponentSelectedCardId( cardPosition );
@@ -580,7 +582,101 @@ void Server::slotPlayerSelectedCard( Card* selectedCard, int cardPosition )
     for( int i = 0; i < mPlayerList.size(); ++i ){
         mPlayerList.at( i )->sendCommandsEnd();
     }
+}*/
+
+void Server::slotPlayerSelectedCardId( int selectedCardId )
+{
+    kDebug() << "Selected card:" << getCurrentPlayer()->getCard( selectedCardId )->getCardText();
+    
+    if( mCentralCards->isEmpty() ){
+        kDebug() << "is empty";
+        
+        if( mTwentyButtonClickedThisTurn || mFortyButtonClickedThisTurn ){
+            
+            int posOfPairOfCard = getCurrentPlayer()->getPositionOfPairOfCardId( selectedCardId );
+            
+            kDebug() << "Position of card:" << selectedCardId << "position of pair of card:" << posOfPairOfCard;
+            
+            getNextPlayer()->sendVisibleOpponentCards( selectedCardId, 
+                                                       getCurrentPlayer()->getCard( selectedCardId ),
+                                                       posOfPairOfCard,
+                                                       getCurrentPlayer()->getCard( posOfPairOfCard ) );
+            
+            if( getCurrentPlayer()->getTricks() > 0 ){
+                
+                if( mTwentyButtonClickedThisTurn ){
+                    addTricks( getCurrentPlayer(), 20 );
+                }else{ // mTwentyButtonClickedThisTurn
+                    addTricks( getCurrentPlayer(), 40 );
+                }
+                
+                if( isRoundOver() ){
+                    roundOver();
+                    
+                    for( int i = 0; i < mPlayerList.size(); ++i ){
+                        mPlayerList.at( i )->sendCommandsEnd();
+                    }
+                    
+                    return;
+                }
+                
+            }else{ // getCurrentPlayer()->getTricks() > 0
+                mWaitingMarriage = new QPair< Player*, int >;
+                mWaitingMarriage->first = getCurrentPlayer();
+                
+                if( mTwentyButtonClickedThisTurn ){
+                    mWaitingMarriage->second = 20;
+                }else{ //mTwentyButtonClickedThisTurn
+                    mWaitingMarriage->second = 40;
+                }
+            }
+            
+            mTwentyButtonClickedThisTurn = false;
+            mFortyButtonClickedThisTurn = false;            
+        }
+        
+        if( mClickedToCloseButtonThisTurn ){
+            getNextPlayer()->sendOpponentClickedToCloseButton();
+        }
+        
+        getNextPlayer()->sendOpponentSelectedCardId( selectedCardId );
+        
+        mCentralCards->add( getCurrentPlayer()->takeCard( selectedCardId ) );
+        
+        getNextPlayer()->sendOpponentAddNewCentralCard( mCentralCards->getCard( 0 ) );
+        
+        setCurrentPlayer( getNextPlayer() );
+        
+        if( !mPlayerWhoClickedToCloseButtonThisRound && mDeck->getDeckSize() > 0 ){
+            getCurrentPlayer()->sendSelectableAllCards();
+            getNextPlayer()->sendOpponentInAction();
+        }else{ // mDeck->getDeckSize() == 0
+            getCurrentPlayer()->sendSelectableCertainCards( mCentralCards, mTrump );
+            getNextPlayer()->sendOpponentInAction();
+        }
+        
+        for( int i = 0; i < mPlayerList.size(); ++i ){
+            mPlayerList.at( i )->sendCommandsEnd();
+        }
+        
+    }else{ //mCentralCards->isEmpty()
+        kDebug() << "isn't empty";
+        getNextPlayer()->sendOpponentSelectedCardId( selectedCardId );
+        
+        mCentralCards->add( getCurrentPlayer()->takeCard( selectedCardId ) );
+        
+        getNextPlayer()->sendOpponentAddNewCentralCard( mCentralCards->getCard( 1 ) );
+        QTimer::singleShot( 1000, this, SLOT( slotCheckCentralCards() ) );
+        
+        //
+        getNextPlayer()->sendCommandsEnd();
+    }
+    
+    /*for( int i = 0; i < mPlayerList.size(); ++i ){
+        mPlayerList.at( i )->sendCommandsEnd();
+    }*/
 }
+
 
 void Server::slotPlayerTwentyButtonClicked()
 {
