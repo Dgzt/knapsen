@@ -50,6 +50,7 @@ private slots:
 public slots:
     void slotNewCard(){ newCard( "back" ); }
     void slotNewCard( const Card* );
+    void slotChangeCard( int, const Card* );
     
     void slotSelectableChanged( int, bool );
     

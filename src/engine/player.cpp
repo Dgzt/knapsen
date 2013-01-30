@@ -128,6 +128,18 @@ int Player::changeTrumpCard( Trump *trump )
         }
     }*/
     
+    for( int i = 0; i < mCards.size(); ++i ){
+        if( mCards.at( i )->getSuit() == trump->getCardSuit() && mCards.at( i )->getType() == mLowestCardType ){
+            kDebug() << i;
+            
+            Card* tmpCard = trump->getCard();
+            trump->addNewCard( mCards.at( i ) );
+            mCards[ i ] = tmpCard;
+            
+            return i;
+        }
+    }
+    
     return -1; //If this function return this value, then this is a bug.
 }
 

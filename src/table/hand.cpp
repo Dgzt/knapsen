@@ -202,6 +202,11 @@ void Hand::slotNewCard( const Card* card )
     newCard( card->getCardText() );
 }
 
+void Hand::slotChangeCard( int id, const Card* card )
+{
+    mCards.at( id )->setElementId( card->getCardText() );
+}
+
 void Hand::slotSelectableChanged( int id, bool enabled )
 {
     kDebug() << id << enabled;

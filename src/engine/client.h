@@ -70,6 +70,7 @@ signals:
     
     //void signalNewPlayerCard( int, const Card* );
     void signalNewPlayerCard( const Card* );
+    void signalChangePlayerCard( int, const Card* );
     
     void signalNewTrumpCard( const Card* );
     

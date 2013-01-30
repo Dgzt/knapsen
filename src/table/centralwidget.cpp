@@ -306,6 +306,7 @@ void CentralWidget::slotInitialize( QString playerName, QString opponentName, Kn
     connect( mClient, SIGNAL( signalHideTrumpCard() ),                    this, SLOT( slotHideTrumpCard() ) );
     connect( mClient, SIGNAL( signalCloseDeck() ),                        this, SLOT( slotCloseDeck() ) ); 
     //connect( mTrumpCard, SIGNAL( click() ), this, SLOT( slotSelectTrumpCardSlot() ) );
+    connect( mTrumpCard, SIGNAL( signalClick() ),                         mClient, SLOT( slotSelectTrumpCard() ) );
     
     scene()->addItem( mTrumpCard );
     
@@ -323,6 +324,7 @@ void CentralWidget::slotInitialize( QString playerName, QString opponentName, Kn
     mPlayerCards = new Hand( mRenderer, mScale );
     
     connect( mClient, SIGNAL( signalNewPlayerCard( const Card* ) ),              mPlayerCards, SLOT( slotNewCard( const Card* ) ) );
+    connect( mClient, SIGNAL( signalChangePlayerCard( int, const Card* ) ),      mPlayerCards, SLOT( slotChangeCard( int, const Card* ) ) );
     connect( mClient, SIGNAL( signalPlayerCardSelectableChanged( int, bool ) ),  mPlayerCards, SLOT( slotSelectableChanged( int , bool ) ) );
     connect( mPlayerCards, SIGNAL( signalSizeChanged() ),                        this, SLOT( slotPlayerCardsSizeChanged() ) );
     connect( mPlayerCards, SIGNAL( signalSelectedCardId( int ) ),                mClient, SLOT( slotSelectCardId( int ) ) );

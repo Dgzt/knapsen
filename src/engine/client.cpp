@@ -461,11 +461,11 @@ void Client::slotSelectCardId( int id )
 
 void Client::slotSelectTrumpCard()
 {
-    /*kDebug() << "Select trump card.";
+    kDebug() << "Select trump card.";
     
     int ret = changeTrumpCard( mTrump );
     
-    emit signalNewPlayerCard( ret, getCard(ret) );
+    emit signalChangePlayerCard( ret, getCard( ret ) );
     emit signalNewTrumpCard( mTrump->getCard() );
     
     mTrump->getCard()->setSelectable( false );
@@ -482,7 +482,7 @@ void Client::slotSelectTrumpCard()
         setFortyButtonVisible( true );
     }
     
-    sendChangeTrumpCard();*/
+    sendChangeTrumpCard();
 }
 
 void Client::slotTwentyButtonClicked()
