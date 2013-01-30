@@ -40,8 +40,8 @@ void Deck::buildDeck()
     }
     
     //
-    mCards[ 11 ] = new Card( 17 );
-    mCards[ 18 ] = new Card( 16 );
+    //mCards[ 11 ] = new Card( 17 );
+    //mCards[ 18 ] = new Card( 16 );
     //
     
     kDebug() << "Generated deck:";

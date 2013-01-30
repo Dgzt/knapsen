@@ -28,8 +28,8 @@ class Hand: public QGraphicsObject
     
     void newCard( QString );
 
-    //void highlightCard( int );
-    //void removeHighlight( int );
+    void highlightCard( int );
+    void removeHighlight( int );
     
 public:
     Hand( QSvgRenderer*, double );

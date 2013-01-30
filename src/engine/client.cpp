@@ -222,7 +222,7 @@ void Client::slotProcessCommands()
             kDebug() << getName() << "Selectable trump card.";
             
             mTrump->getCard()->setSelectable( true );
-            emit signalTrumpCardSelectableChanged( mTrump->getCard()->isSelectable() );
+            emit signalTrumpCardSelectableChanged( true );
         }
         
         if( getCommandPartOfCommand( commandList.first() ) == SELECTABLE_ALL_CARDS_COMMAND ){

@@ -66,22 +66,9 @@ void Hand::slotMouseEnter( SvgCard* svgCard )
     int id = mCards.indexOf( svgCard );
     
     kDebug() /*<< "slotMouseEnter(): "*/ << id;
-
-    /*//Highlight card
-    mCards.at( id )->setPos( mCards.at( id )->pos().x(),
-                             mCards.at( id )->pos().y()-ENHANCEMENT_Y );
     
-    //Next cards move right
-    for( int i = id + 1; i < mCards.size(); ++i ){
-        mCards.at( i )->setPos( mCards.at( i )->pos().x() + ( mCards.at( i )->getSizeF().width() ) / 2, 
-                                mCards.at( i )->pos().y() );
-    }*/
-    
-    if( id != mHighlightCardId ){
+    /*if( id != mHighlightCardId ){
         //Highlight card
-        /*mCards.at( id )->setPos( mCards.at( id )->pos().x(),
-                                 mCards.at( id )->pos().y()-ENHANCEMENT_Y );
-        */
         mCards.at( id )->setPos( mCards.at( id )->pos().x(),
                                  mCards.at( id )->pos().y() - mCards.at( id )->getSizeF().height() * ( HIGHLIGHT_Y_PERCENT / 100 ) );
         
@@ -96,8 +83,18 @@ void Hand::slotMouseEnter( SvgCard* svgCard )
         
         //
         emit signalSizeChanged();
+    }*/
+    
+    if( mHighlightCardId != INVALID_HIGHLIGHT_CARD_ID ){
+        removeHighlight( mHighlightCardId );
+        
+        mHighlightCardId = INVALID_HIGHLIGHT_CARD_ID;
     }
     
+    highlightCard( id );
+    mHighlightCardId = id;
+    
+    emit signalSizeChanged();
 }
 
 void Hand::slotMouseLeave( SvgCard* svgCard )
@@ -107,21 +104,8 @@ void Hand::slotMouseLeave( SvgCard* svgCard )
     
     kDebug() /*<< "slotMouseLeave(): "*/ << id;
     
-    /*//Highlight back
-    mCards.at( id )->setPos( mCards.at( id )->pos().x(),
-                             mCards.at( id )->pos().y()+ENHANCEMENT_Y );
-    
-    //Next cards move back
-    for( int i = id + 1; i < mCards.size(); ++i ){
-        mCards.at( i )->setPos( mCards.at( i )->pos().x() - ( mCards.at( i )->getSizeF().width() ) / 2, 
-                                mCards.at( i )->pos().y() );
-    }*/
-    
-    if( id == mHighlightCardId ){
+    /*if( id == mHighlightCardId ){
         //Highlight back
-        /*mCards.at( id )->setPos( mCards.at( id )->pos().x(),
-                                 mCards.at( id )->pos().y()+ENHANCEMENT_Y );
-        */
         mCards.at( id )->setPos( mCards.at( id )->pos().x(),
                                  mCards.at( id )->pos().y() + mCards.at( id )->getSizeF().height() * ( HIGHLIGHT_Y_PERCENT / 100 ) );
         
@@ -136,8 +120,14 @@ void Hand::slotMouseLeave( SvgCard* svgCard )
         
         //
         emit signalSizeChanged();
-    }
+    }*/
     
+    if( id == mHighlightCardId ){
+        removeHighlight( mHighlightCardId );
+        mHighlightCardId = INVALID_HIGHLIGHT_CARD_ID;
+        
+        emit signalSizeChanged();
+    }
 }
 
 //void Hand::slotCardClicked( int id )
@@ -182,31 +172,30 @@ void Hand::newCard( QString cardText )
     emit signalSizeChanged();
 }
 
-/*void Hand::highlightCard( int id )
+void Hand::highlightCard( int id )
 {
-    //Highlight card
     mCards.at( id )->setPos( mCards.at( id )->pos().x(),
-                             mCards.at( id )->pos().y()-ENHANCEMENT_Y );
-    
+                             mCards.at( id )->pos().y() - mCards.at( id )->getSizeF().height() * ( HIGHLIGHT_Y_PERCENT / 100 ) );
+            
     //Next cards move right
     for( int i = id + 1; i < mCards.size(); ++i ){
         mCards.at( i )->setPos( mCards.at( i )->pos().x() + ( mCards.at( i )->getSizeF().width() ) / 2, 
                                 mCards.at( i )->pos().y() );
-    }
-}*/
+    } 
+}
 
-/*void Hand::removeHighlight( int id )
+void Hand::removeHighlight( int id )
 {
-    //Remove highlight
+    //Remove highlightCard
     mCards.at( id )->setPos( mCards.at( id )->pos().x(),
-                             mCards.at( id )->pos().y()+ENHANCEMENT_Y );
+                             mCards.at( id )->pos().y() + mCards.at( id )->getSizeF().height() * ( HIGHLIGHT_Y_PERCENT / 100 ) );
         
     //Next cards move back
     for( int i = id + 1; i < mCards.size(); ++i ){
         mCards.at( i )->setPos( mCards.at( i )->pos().x() - ( mCards.at( i )->getSizeF().width() ) / 2, 
                                 mCards.at( i )->pos().y() );
     }
-}*/
+}
 
 void Hand::slotNewCard( const Card* card )
 {
