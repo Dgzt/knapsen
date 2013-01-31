@@ -21,7 +21,7 @@ protected:
     //
     
 public:
-    SvgCard( QSvgRenderer*, double, QGraphicsItem* parentItem = 0 );
+    SvgCard( QSvgRenderer*, double, QString cardText = "back", QGraphicsItem* parentItem = 0 );
     
     //
     QSizeF getSizeF();

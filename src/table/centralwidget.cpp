@@ -276,23 +276,18 @@ void CentralWidget::slotInitialize( QString playerName, QString opponentName, Kn
     
     //Setup deck
     mDeck = new SvgCard( mRenderer, mScale );
-    mDeck->setElementId( "back" );
     mDeck->setVisible( false );
     mDeck->setZValue( 1 );
     
-    scene()->addItem( mDeck );
-    
     connect( mClient, SIGNAL( signalHideDeck() ), this, SLOT( slotHideDeck() ) );
+    
+    scene()->addItem( mDeck );
     
     //Set size of card
     mCardSize = mDeck->getSizeF();
     
     //Setup trump card
     mTrumpCard = new SvgCard( mRenderer, mScale );
-    //mTrumpCard->setSharedRenderer( mRenderer );
-    mTrumpCard->setElementId( "back" );
-    //mTrumpCard->setScale( SCALE_VALUE );
-    //mTrumpCard->setScale( mScale );
     //mTrumpCard->setTransformOriginPoint( 0, mTrumpCard->boundingRect().height()/2 );
     mTrumpCard->setTransformOriginPoint( 0,0 );
     //mTrumpCard->setRotation( 90 );
@@ -491,24 +486,6 @@ void CentralWidget::slotCloseButtonVisible( bool visible )
     mCloseButton->setVisible( visible );
 }
 
-/*void CentralWidget::slotShowOpponentCards( int card1Pos, Card card1, int card2Pos, Card card2 )
-{
-    mOpponentCards[ card1Pos ].setElementId( card1.getCardText() );
-    mOpponentCards[ card2Pos ].setElementId( card2.getCardText() );
-    
-    mShowOpponentCardsId = new QPair< int, int >;
-    mShowOpponentCardsId->first = card1Pos;
-    mShowOpponentCardsId->second = card2Pos;
-    
-    mOpponentCardsShowTimer = new QTimer( this );
-    mOpponentCardsShowTimer->setSingleShot( true );
-    mOpponentCardsShowTimer->setInterval( 1000 );
-    
-    connect( mOpponentCardsShowTimer, SIGNAL( timeout() ), this, SLOT( slotCoverOpponentCards() ) );
-    
-    mOpponentCardsShowTimer->start();
-}*/
-
 void CentralWidget::slotNewRound()
 {
     /*for( int i = 0; i < mNumberOfCardsInHand; ++i ){
@@ -538,9 +515,7 @@ void CentralWidget::slotNewRound()
 void CentralWidget::slotStartGame()
 {
     kDebug() << "Start game.";
-    
-    //mCardSize = mDeck->boundingRect().size()*mScale;
-    
+
     setInGamePositions();
     
     mOpponentName->setVisible( true );
@@ -628,17 +603,3 @@ void CentralWidget::slotHidePlayerArrow()
 {
     mPlayerArrow->setVisible( false );
 }
-
-/*void CentralWidget::slotCoverOpponentCards()
-{
-    mOpponentCards[ mShowOpponentCardsId->first ].setElementId( "back" );
-    mOpponentCards[ mShowOpponentCardsId->second ].setElementId( "back" );
-    
-    delete mShowOpponentCardsId;
-    mShowOpponentCardsId = 0;
-    
-    delete mOpponentCardsShowTimer;
-    mOpponentCardsShowTimer = 0;
-    
-    emit signalHideShowedOpponentCards();
-}*/

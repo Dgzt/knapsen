@@ -164,8 +164,9 @@ void Hand::newCard( QString cardText )
 {
     kDebug() << cardText;
     
-    SvgCard *cardSvgItem = new SvgCard( mRenderer, mScale, this );
-    cardSvgItem->setElementId( cardText );
+    //c
+    //cardSvgItem->setElementId( cardText );
+    SvgCard *cardSvgItem = new SvgCard( mRenderer, mScale, cardText, this );
     
     double x = 0;
     for( int i = 0; i < mCards.size(); ++i ){

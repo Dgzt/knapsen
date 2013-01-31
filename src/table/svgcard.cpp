@@ -4,13 +4,15 @@
 #include <KDE/KDebug>
 #include "table/svgcard.h"
 
-SvgCard::SvgCard( QSvgRenderer* renderer, double scale, QGraphicsItem* parentItem ) :
+SvgCard::SvgCard( QSvgRenderer* renderer, double scale, QString cardText, QGraphicsItem* parentItem ) :
     QGraphicsSvgItem(parentItem),
     mScale( scale ),
     mSelectable( false )
 {
     setSharedRenderer( renderer );
     setScale( mScale );
+    
+    setElementId( cardText );
     
     setAcceptHoverEvents( true );
 }
