@@ -516,6 +516,9 @@ void CentralWidget::slotNewRound()
         mPlayerCards[ i ].setVisible( false );
     }*/
     
+    mOpponentCards->removeAllCards();
+    mPlayerCards->removeAllCards();
+    
     if( mTrumpCard->zValue() == 1 ){
         mTrumpCard->setZValue( 0 );
         mDeck->setZValue( 1 );
@@ -536,8 +539,7 @@ void CentralWidget::slotStartGame()
 {
     kDebug() << "Start game.";
     
-    //mCardSize = mDeck->boundingRect().size()*SCALE_VALUE;
-    mCardSize = mDeck->boundingRect().size()*mScale;
+    //mCardSize = mDeck->boundingRect().size()*mScale;
     
     setInGamePositions();
     

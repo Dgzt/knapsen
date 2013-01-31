@@ -37,6 +37,10 @@ public:
     virtual QRectF boundingRect() const;
     virtual void paint( QPainter * , const QStyleOptionGraphicsItem * , QWidget * );
     
+    //
+    void removeAllCards();
+    //
+    
 private slots:
     void slotMouseEnter( SvgCard* );
     void slotMouseLeave( SvgCard* );

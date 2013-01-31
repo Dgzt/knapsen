@@ -289,12 +289,6 @@ void Player::newGame()
 void Player::newRound()
 {
     //Clear cards
-    /*for( int i = 0; i < mNumberOfCardsInHand; ++i ){
-        if( mCards[ i ] != 0 ){
-            delete mCards[ i ];
-            mCards[ i ] = 0;
-        }
-    }*/
     while( mCards.size() != 0 ){
         Card* card = mCards.takeAt(0);
         delete card;

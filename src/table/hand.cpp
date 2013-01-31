@@ -60,6 +60,17 @@ QRectF Hand::boundingRect() const
 void Hand::paint( QPainter* /*painter*/, const QStyleOptionGraphicsItem* /*option*/, QWidget* /*widget*/ )
 {}
 
+void Hand::removeAllCards()
+{
+    while( mCards.size() != 0 ){
+        delete mCards.takeAt( 0 );
+    }
+    
+    mHighlightCardId = INVALID_HIGHLIGHT_CARD_ID;
+    
+    emit signalSizeChanged();
+}
+
 void Hand::slotMouseEnter( SvgCard* svgCard )
 {
     //int id = getCardId( svgCard );
