@@ -1,13 +1,9 @@
-#include <QtCore/QTimer>
-#include <QtCore/QSignalMapper>
-#include <QtGui/QPainter>
 #include <QtGui/QGraphicsScene>
 #include <QtGui/QResizeEvent>
 #include <QtGui/QPushButton>
 #include <QtGui/QGraphicsProxyWidget>
 #include <QtGui/QGraphicsTextItem>
 #include <QtSvg/QSvgRenderer>
-#include <QtSvg/QGraphicsSvgItem>
 #include <KDE/KStandardDirs>
 #include <KDE/KGlobal>
 #include <KDE/KLocalizedString>
@@ -15,12 +11,9 @@
 #include "table/svgcard.h"
 #include "table/mytextitem.h"
 #include "table/scoretable.h"
-//
 #include "engine/client.h"
 #include "engine/card.h"
 #include "table/hand.h"
-//
-
 #include "table/centralwidget.h"
 
 const int CENTRAL_CARDS_SIZE = 2;
@@ -28,9 +21,9 @@ const int CENTRAL_CARDS_SIZE = 2;
 const double GERMAN_CARDS_SCALE_VALUE = 0.6; //0.6
 const double FRENCH_CARDS_SCALE_VALUE = 1.4; //1.4
 
-const int NAME_CARDS_DISTANCE = 5;
-const int SCORE_TABLE_CARDS_DISTANCE = 10;
-const int CARDS_BUTTON_DISTANCE = 5;
+const int NAME_CARDS_DISTANCE = 5; //5
+const int SCORE_TABLE_CARDS_DISTANCE = 10; //10
+const int CARDS_BUTTON_DISTANCE = 5; //5
 
 CentralWidget::CentralWidget( QWidget* parent ): 
     QGraphicsView( parent ),
@@ -300,7 +293,6 @@ void CentralWidget::slotInitialize( QString playerName, QString opponentName, Kn
     connect( mClient, SIGNAL( signalTrumpCardSelectableChanged( bool ) ), this, SLOT( slotTrumpCardSelectableChanged( bool ) ) );
     connect( mClient, SIGNAL( signalHideTrumpCard() ),                    this, SLOT( slotHideTrumpCard() ) );
     connect( mClient, SIGNAL( signalCloseDeck() ),                        this, SLOT( slotCloseDeck() ) ); 
-    //connect( mTrumpCard, SIGNAL( click() ), this, SLOT( slotSelectTrumpCardSlot() ) );
     connect( mTrumpCard, SIGNAL( signalClick() ),                         mClient, SLOT( slotSelectTrumpCard() ) );
     
     scene()->addItem( mTrumpCard );

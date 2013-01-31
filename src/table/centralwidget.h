@@ -11,7 +11,6 @@ class QSvgRenderer;
 class MyTextItem;
 class ScoreTable;
 class QGraphicsPixmapItem;
-//class QTimer;
 class Card;
 
 class Hand;
@@ -33,30 +32,15 @@ class CentralWidget : public QGraphicsView
     double mScale;
     //
     
-    //
-    //QPair< int, int > *mShowOpponentCardsId;
-    //
-    
     MyTextItem* mOpponentName;
     MyTextItem* mPlayerName;
     
     QSvgRenderer* mRenderer;
-    //QGraphicsSvgItem* mDeck;
     SvgCard* mDeck;
     
-    //
-    //int mNumberOfCardsInHand;
-    //
-    
-    //QGraphicsSvgItem* mOpponentCards;
-    //MySvgItem* mPlayerCards;
     Hand* mOpponentCards;
     Hand* mPlayerCards;
-    
-    //
-    //QTimer *mOpponentCardsShowTimer;
-    //
-    
+
     //
     QGraphicsPixmapItem* mPlayerArrow;
     QGraphicsPixmapItem* mOpponentArrow;
@@ -75,19 +59,11 @@ class CentralWidget : public QGraphicsView
     
     void setInGamePositions();
     
-    //
-    //void setOpponentScoreTablePos();
-    //void setPlayerScoreTablePos();
-    //
-    
 public:
     CentralWidget( QWidget* parent = 0 );
     ~CentralWidget();
     
-    //
-    //void setClient( Client* client ){ mClient = client; }
     void setClient( Client* );
-    //
     
     void clearWidget();
     
@@ -124,15 +100,6 @@ private slots:
     void slotTwentyButtonVisible( bool );
     void slotFortyButtonVisible( bool );
     void slotCloseButtonVisible( bool );
-    
-    //void slotShowOpponentCards( int, Card, int, Card );
-    
-    //
-    //void slotTwentyButtonClicked(){ emit signalTwentyButtonClicked(); }
-    //void slotFortyButtonClicked(){ emit signalFortyButtonClicked(); }
-    //void slotCloseButtonClicked(){ emit signalCloseButtonClicked(); }
-    //void slotSelectTrumpCardSlot(){ emit signalSelectTrumpCard(); }
-    //void slotCoverOpponentCards();
     
     void slotNewRound();
     
