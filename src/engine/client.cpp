@@ -173,6 +173,11 @@ void Client::slotProcessCommands()
             kDebug() << getName() << "new opponent card.";
             
             emit signalNewOpponentCard();
+            
+            mSizeOfDeckNow--;
+            if( mSizeOfDeckNow == 0 ){
+                emit signalHideDeck();
+            }
         }
         
         if( getCommandPartOfCommand( commandList.first() ) == NEW_TRUMP_CARD_COMMAND ){
@@ -437,6 +442,8 @@ void Client::slotSelectCardId( int id )
     removeCard( id );*/
     int pos = mCentralCards->add( takeCard( id ) );
     
+    kDebug() << "Central cards pos:" << pos;
+    
     emit signalNewCentralCard( pos, mCentralCards->getCard( pos ) );
     
     if( isTwentyButtonVisible() ){
@@ -451,7 +458,7 @@ void Client::slotSelectCardId( int id )
         setCloseButtonVisible( false );
     }
     
-    if( mTrump->getCard()->isSelectable() ){
+    if( !mTrump->isEmpty() && mTrump->getCard()->isSelectable() ){
         mTrump->getCard()->setSelectable( false );
         emit signalTrumpCardSelectableChanged( false );
     }
