@@ -30,6 +30,9 @@ class Server : public QTcpServer
     
     //Type of cards, German suits or french suits
     Knapsen::TypeOfCards mTypeOfCards;
+    
+    //Enable Schnapsen button
+    bool mSchnapsenButton;
 
     //The player lists
     QList<Player*> mPlayerList;
@@ -122,6 +125,9 @@ public:
     
     //Set type of cards, german suits or french suits
     void setTypeOfCards( Knapsen::TypeOfCards typeOfCards ){ mTypeOfCards = typeOfCards; }
+    
+    //Set schnapsen button
+    void setEnableSchnapsenButton( bool enable ){ mSchnapsenButton = enable; }
     
     void addBot( QString, Knapsen::GameDifficulty );
     

@@ -113,6 +113,9 @@ class Player : public QTcpSocket
     //If this variable is visible, then visible the close button
     bool mCloseButtonVisible;
     
+    //If this variable is visible, then visible the schnapsen button
+    bool mSchnapsenButtonVisible;
+    
     
     virtual void newCommand( QString );
     

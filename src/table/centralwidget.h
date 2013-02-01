@@ -56,6 +56,7 @@ class CentralWidget : public QGraphicsView
     QGraphicsProxyWidget* mCloseButton;
     QGraphicsProxyWidget* mTwentyButton;
     QGraphicsProxyWidget* mFortyButton;
+    QGraphicsProxyWidget* mSchnapsenButton;
     
     void setInGamePositions();
     

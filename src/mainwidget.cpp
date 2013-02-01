@@ -149,23 +149,20 @@ void MainWindow::setServerConfig()
     }else{ // if( Settings::frenchSuits() )
         server->setTypeOfCards( Knapsen::FrenchSuits );
     }
+    
+    //Set Schnapsen button
+    if( Settings::schnapsenButton() ){
+        server->setEnableSchnapsenButton( true );
+    }
+    
 }
 
 void MainWindow::setGameSignals()
 {
-    //
-    connect( client, SIGNAL( error( QAbstractSocket::SocketError ) ),                           this,   SLOT( slotSocketError( QAbstractSocket::SocketError ) ) );
-    connect( client, SIGNAL( signalGameError( Client::GameErrorType ) ),                        this,   SLOT( slotGameError( Client::GameErrorType ) ) );
-    //
-    connect( client, SIGNAL( signalEndRound( QString, int ) ),                                  this,	 SLOT( slotEndRound( QString, int ) ) );
-    connect( client, SIGNAL( signalEndGame( QString ) ),                                        this,	 SLOT( slotEndGame( QString ) ) );
-    
-    //connect( cWidget, SIGNAL( signalSelectCardId( int ) ),                                      client, SLOT( slotSelectCardId( int ) ) );
-    //connect( cWidget, SIGNAL( signalSelectTrumpCard() ),                                        client, SLOT( slotSelectTrumpCard() ) );
-    //connect( cWidget, SIGNAL( signalTwentyButtonClicked() ),                                    client, SLOT( slotTwentyButtonClicked() ) );
-    //connect( cWidget, SIGNAL( signalFortyButtonClicked() ),                                     client, SLOT( slotFortyButtonClicked() ) );
-    //connect( cWidget, SIGNAL( signalCloseButtonClicked() ),                                     client, SLOT( slotCloseButtonClicked() ) );
-    //connect( cWidget, SIGNAL( signalHideShowedOpponentCards() ),                                client, SLOT( slotProcessCommands() ) );
+    connect( client, SIGNAL( error( QAbstractSocket::SocketError ) ),    this,   SLOT( slotSocketError( QAbstractSocket::SocketError ) ) );
+    connect( client, SIGNAL( signalGameError( Client::GameErrorType ) ), this,   SLOT( slotGameError( Client::GameErrorType ) ) );
+    connect( client, SIGNAL( signalEndRound( QString, int ) ),           this,   SLOT( slotEndRound( QString, int ) ) );
+    connect( client, SIGNAL( signalEndGame( QString ) ),                 this,   SLOT( slotEndGame( QString ) ) );
 }
 
 void MainWindow::newGameSlot()

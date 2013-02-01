@@ -11,7 +11,8 @@ Player::Player( QString name ):
     mScores( 0 ),
     mTwentyButtonVisible( false ),
     mFortyButtonVisible( false ),
-    mCloseButtonVisible( false )
+    mCloseButtonVisible( false ),
+    mSchnapsenButtonVisible( false )
 {       
     //mCards = 0;
     

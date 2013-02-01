@@ -28,7 +28,6 @@ const int CARDS_BUTTON_DISTANCE = 5; //5
 CentralWidget::CentralWidget( QWidget* parent ): 
     QGraphicsView( parent ),
     mGameIsRunning( false ),
-    //mNumberOfCardsInHand( 0 ),
     mScale( 0.0 )
 {
     mOpponentName = 0;
@@ -58,7 +57,7 @@ CentralWidget::CentralWidget( QWidget* parent ):
     mTwentyButton = 0;
     mFortyButton = 0;
     
-    //mShowOpponentCardsId = 0;
+    mSchnapsenButton = 0;
     
     //Set View's stuff
     setFrameStyle( QFrame::NoFrame );
@@ -92,70 +91,101 @@ void CentralWidget::clearWidget()
     
     mGameIsRunning = false;
     
-    scene()->removeItem( mOpponentName );
-    scene()->removeItem( mPlayerName );
-    scene()->removeItem( mDeck );
-    /*for( int i = 0; i < mNumberOfCardsInHand; ++i ){
-        scene()->removeItem( &mOpponentCards[i] );
-        scene()->removeItem( &mPlayerCards[i] );
-    }*/
-    //
-    scene()->removeItem( mOpponentCards );
-    scene()->removeItem( mPlayerCards );
-    //
-    scene()->removeItem( mTrumpCard );
-    //
-    scene()->removeItem( mPlayerArrow );
-    scene()->removeItem( mOpponentArrow );
-    //
-    scene()->removeItem( mOpponentScoreTable );
-    scene()->removeItem( mPlayerScoreTable );
-    for( int i = 0; i < CENTRAL_CARDS_SIZE; ++i ){
-        scene()->removeItem( &mCentralCards[i] );
+    disconnect( mClient, 0, 0, 0 );
+    
+    //Delete deck
+    if( mDeck ){
+        scene()->removeItem( mDeck );
+        delete mDeck;
+        mDeck = 0;
     }
-    scene()->removeItem( mTwentyButton );
-    scene()->removeItem( mFortyButton );
-    scene()->removeItem( mCloseButton );
     
-    //
-    /*if( mOpponentCardsShowTimer ){
-        mOpponentCardsShowTimer->stop();
-        delete mOpponentCardsShowTimer;
-        mOpponentCardsShowTimer = 0;
-    }*/
-    //
+    //Delete trump
+    if( mTrumpCard ){
+        disconnect( mTrumpCard, 0, 0, 0 );
+        scene()->removeItem( mTrumpCard );
+        delete mTrumpCard;
+        mTrumpCard = 0;
+    }
     
-    delete mOpponentName;
-    delete mPlayerName;
-    //delete mRenderer;
-    //delete mDeck;
-    delete mOpponentCards; 
-    delete mPlayerCards;
-    //delete mTrumpCard;
-    delete mPlayerArrow;
-    delete mOpponentArrow;
-    delete mOpponentScoreTable;
-    delete mPlayerScoreTable;
-    //delete[] mCentralCards;
-    delete mTwentyButton;
-    delete mFortyButton;
-    delete mCloseButton;
+    if( mCloseButton ){
+        disconnect( mCloseButton, 0, 0, 0 );
+        scene()->removeItem( mCloseButton );
+        delete mCloseButton;
+        mCloseButton = 0;
+    }
     
-    mOpponentName = 0;
-    mPlayerName = 0;
-    mRenderer = 0;
-    mDeck = 0;
-    mOpponentCards = 0;
-    mPlayerCards = 0;
-    mTrumpCard = 0;
-    mPlayerArrow = 0;
-    mOpponentArrow = 0;
-    mOpponentScoreTable = 0;
-    mPlayerScoreTable = 0;
-    mCentralCards = 0;
-    mTwentyButton = 0;
-    mFortyButton = 0;
-    mCloseButton = 0;
+    if( mOpponentName ){
+        scene()->removeItem( mOpponentName );
+        delete mOpponentName;
+        mOpponentName = 0;
+    }
+    
+    if( mPlayerName ){
+        scene()->removeItem( mPlayerName );
+        delete mPlayerName;
+        mPlayerName = 0;
+    }
+    
+    if( mSchnapsenButton ){
+        disconnect( mSchnapsenButton, 0, 0, 0 );
+        scene()->removeItem( mSchnapsenButton );
+        delete mSchnapsenButton;
+        mSchnapsenButton = 0;
+    }
+    
+    if( mFortyButton ){
+        disconnect( mFortyButton, 0, 0, 0 );
+        scene()->removeItem( mFortyButton );
+        delete mFortyButton;
+        mFortyButton = 0;
+    }
+    
+    if( mTwentyButton ){
+        disconnect( mTwentyButton, 0, 0, 0 );
+        scene()->removeItem( mTwentyButton );
+        delete mTwentyButton;
+        mTwentyButton = 0;
+    }
+    
+    if( mOpponentArrow ){
+        scene()->removeItem( mOpponentArrow );
+        delete mOpponentArrow;
+        mOpponentArrow = 0;
+    }
+    
+    if( mPlayerArrow ){
+        scene()->removeItem( mPlayerArrow );
+        delete mPlayerArrow;
+        mPlayerArrow = 0;
+    }
+    
+    if( mOpponentScoreTable ){
+        scene()->removeItem( mOpponentScoreTable );
+        delete mOpponentScoreTable;
+        mOpponentScoreTable = 0;
+    }
+    
+    if( mPlayerScoreTable ){
+        scene()->removeItem( mPlayerScoreTable );
+        delete mPlayerScoreTable;
+        mPlayerScoreTable = 0;
+    }
+    
+    if( mOpponentCards ){
+        disconnect( mOpponentCards, 0, 0, 0 );
+        scene()->removeItem( mOpponentCards );
+        delete mOpponentCards;
+        mOpponentCards = 0;
+    }
+    
+    if( mPlayerCards ){
+        disconnect( mPlayerCards, 0, 0, 0 );
+        scene()->removeItem( mPlayerCards );
+        delete mPlayerCards;
+        mPlayerCards = 0;
+    }
+    
 }
 
 void CentralWidget::setInGamePositions()
@@ -203,19 +233,21 @@ void CentralWidget::setInGamePositions()
     
     mCentralCards[1].setPos( cenralCard2Pos );
     
-    //Set position of twenty button
+    /*//Set position of twenty button
     QPoint twentyButtonPos;
     twentyButtonPos.setX( width() / 2 - mCardSize.width() );
     twentyButtonPos.setY( mPlayerCards->y() - CARDS_BUTTON_DISTANCE - mTwentyButton->boundingRect().height() );
     
     mTwentyButton->setGeometry( QRect( twentyButtonPos, QSize( mCardSize.width(), 20 ) ) );
+    */
     
-    //Set position of forty button
+    /*//Set position of forty button
     QPoint fortyButtonPos;
     fortyButtonPos.setX( width() / 2 );
     fortyButtonPos.setY( twentyButtonPos.y() );
     
     mFortyButton->setGeometry( QRect( fortyButtonPos, QSize( mCardSize.width(), 20 ) ) );
+    */
     
     //Set position of close button
     QPoint closeButtonPos;
@@ -367,8 +399,7 @@ void CentralWidget::slotInitialize( QString playerName, QString opponentName, Kn
     QPushButton *twentyButton = new QPushButton( i18n( "Twenty" ) );
     twentyButton->setAttribute( Qt::WA_NoSystemBackground );
     mTwentyButton = scene()->addWidget( twentyButton );
-    mTwentyButton->setVisible( false );
-    //connect( twentyButton, SIGNAL( clicked() ), this, SLOT( slotTwentyButtonClicked() ) );
+    mTwentyButton->setVisible( /*false*/ true );
     
     connect( mClient, SIGNAL( signalTwentyButtonVisible( bool ) ) , this, SLOT( slotTwentyButtonVisible( bool ) ) );
     connect( twentyButton, SIGNAL( clicked() ),                     mClient, SLOT( slotTwentyButtonClicked() ) );
@@ -377,11 +408,15 @@ void CentralWidget::slotInitialize( QString playerName, QString opponentName, Kn
     QPushButton *fortyButton = new QPushButton( i18n( "Forty" ) );
     fortyButton->setAttribute( Qt::WA_NoSystemBackground );
     mFortyButton = scene()->addWidget( fortyButton );
-    mFortyButton->setVisible( false );
-    //connect( fortyButton, SIGNAL(clicked()), this, SLOT( slotFortyButtonClicked() ) );
+    mFortyButton->setVisible( /*false*/ true );
     
     connect( mClient, SIGNAL( signalFortyButtonVisible( bool ) ) , this, SLOT( slotFortyButtonVisible( bool ) ) );
     connect( fortyButton, SIGNAL( clicked() ),                     mClient, SLOT( slotFortyButtonClicked() ) );
+    
+    QPushButton *schnapsenButton = new QPushButton( i18n( "Schnapsen" ) );
+    schnapsenButton->setAttribute( Qt::WA_NoSystemBackground );
+    mSchnapsenButton = scene()->addWidget( schnapsenButton );
+    mSchnapsenButton->setVisible( true );
     
     //Set close button
     QPushButton *closeButton = new QPushButton( i18n( "Close" ) );
@@ -560,19 +595,26 @@ void CentralWidget::slotPlayerCardsSizeChanged()
     
     mPlayerCards->setPos( playerHandPos );
     
-    //Set Player's score table's size
-    //mPlayerScoreTable->setPos( mPlayerCards->pos().x() + mPlayerCards->boundingRect().width() + SCORE_TABLE_CARDS_DISTANCE + mCardSize.width()/2,
-    //                           mPlayerCards->y() + mCardSize.height() - mPlayerScoreTable->boundingRect().height() );
-    mPlayerScoreTable->setPos( mPlayerCards->pos().x() + mPlayerCards->boundingRect().width() + SCORE_TABLE_CARDS_DISTANCE/* + mCardSize.width()/2*/,
+    //Set Player's score table's position
+    mPlayerScoreTable->setPos( mPlayerCards->x() + mPlayerCards->boundingRect().width() + SCORE_TABLE_CARDS_DISTANCE/* + mCardSize.width()/2*/,
                                mPlayerCards->y() + mCardSize.height() - mPlayerScoreTable->boundingRect().height() );
     
     
-    //Set Player's arrow's size
-    //mPlayerArrow->setPos( mPlayerCards->pos().x() + mPlayerCards->boundingRect().width() + SCORE_TABLE_CARDS_DISTANCE + mCardSize.width()/2,
-    //                      mPlayerCards->pos().y() );
+    //Set Player's arrow's position
     mPlayerArrow->setPos( mPlayerCards->pos().x() + mPlayerCards->boundingRect().width() + SCORE_TABLE_CARDS_DISTANCE/* + mCardSize.width()/2*/,
                           mPlayerCards->pos().y() );
     
+    //Set schnapsen button position
+    mSchnapsenButton->setPos( mPlayerCards->x() - SCORE_TABLE_CARDS_DISTANCE - mSchnapsenButton->boundingRect().width(),
+                              mPlayerCards->y() + mPlayerCards->boundingRect().height() - mCardSize.height() );
+    
+    //Set forty button position
+    mFortyButton->setPos( mPlayerCards->x() - SCORE_TABLE_CARDS_DISTANCE - mFortyButton->boundingRect().width(),
+                          mPlayerCards->y() + mPlayerCards->boundingRect().height() - ( mCardSize.height() + mFortyButton->boundingRect().height() ) /2  );
+    
+    //Set twenty button position
+    mTwentyButton->setPos( mPlayerCards->x() - SCORE_TABLE_CARDS_DISTANCE - mTwentyButton->boundingRect().width(),
+                           mPlayerCards->y() + mPlayerCards->boundingRect().height() - mTwentyButton->boundingRect().height() );
     
 }
 

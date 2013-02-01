@@ -16,6 +16,7 @@ Server::Server( QObject* parent ) :
     mSizeOfDeck( 20 ),
     mNumberOfCardsInHand( 5 ),
     mTypeOfCards( Knapsen::GermanSuits ),
+    mSchnapsenButton( false ),
     mCurrentPlayerId(0),
     mGameStarterPlayerId(0),
     mRoundStarterPlayerId(0),
@@ -1006,8 +1007,7 @@ void Server::startGame()
     for( int i = 0; i < mPlayerList.size(); ++i ){
         for( int j = 0; j < mPlayerList.size(); ++j ){
             if( mPlayerList.at( j ) != mPlayerList.at( i ) ){
-                //mPlayerList.at( i )->sendInitializeTable( mPlayerList.at( j )->getName(), mTypeOfCards, mSizeOfDeck, mNumberOfCardsInHand );
-                mPlayerList.at( i )->sendInitializeTable( mPlayerList.at( j )->getName(), mTypeOfCards, mSizeOfDeck);
+                mPlayerList.at( i )->sendInitializeTable( mPlayerList.at( j )->getName(), mTypeOfCards, mSizeOfDeck );
             }
         }
     }
