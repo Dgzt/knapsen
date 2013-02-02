@@ -100,6 +100,7 @@ private slots:
     
     void slotTwentyButtonVisible( bool );
     void slotFortyButtonVisible( bool );
+    void slotSchnapsenButtonVisible( bool );
     void slotCloseButtonVisible( bool );
     
     void slotNewRound();

@@ -31,7 +31,7 @@ class Server : public QTcpServer
     //Type of cards, German suits or french suits
     Knapsen::TypeOfCards mTypeOfCards;
     
-    //Enable Schnapsen button
+    //Enable Schnapsen button in the game
     bool mSchnapsenButton;
 
     //The player lists
@@ -56,6 +56,8 @@ class Server : public QTcpServer
 
     bool mTwentyButtonClickedThisTurn;
     bool mFortyButtonClickedThisTurn;
+    
+    bool mSchnapsenButtonClickedThisRound;
     
     //Closing deck
     bool mClickedToCloseButtonThisTurn;
@@ -98,6 +100,7 @@ private slots:
     
     void slotPlayerTwentyButtonClicked();
     void slotPlayerFortyButtonClicked();
+    void slotPlayerSchnapsenButtonClicked();
     void slotPlayerClickedToCloseButton();
     
     void slotPlayerChangeTrumpCard( Player* );

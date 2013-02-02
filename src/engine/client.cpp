@@ -210,6 +210,12 @@ void Client::slotProcessCommands()
             setFortyButtonVisible( true );
         }
         
+        if( getCommandPartOfCommand( commandList.first() ) == SCHNAPSEN_BUTTON_VISIBLE_COMMAND ){
+            kDebug() << getName() << "Schnapsen button visible";
+            
+            setSchnapsenButtonVisible( true );
+        }
+        
         if( getCommandPartOfCommand( commandList.first() ) == CLOSE_BUTTON_VISIBLE_COMMAND ){
             kDebug() << getName() << "Close button visible.";
             
@@ -505,6 +511,15 @@ void Client::slotFortyButtonClicked()
     fortyButtonClicked();
     setSelectableTrumpMarriagesCards( mTrump );
     sendCommand( FORTY_BUTTON_CLICKED_COMMAND );
+}
+
+void Client::slotSchnapsenButtonClicked()
+{
+    kDebug();
+    
+    setSchnapsenButtonVisible( false );
+    
+    sendCommand( SCHNAPSEN_BUTTON_CLICKED_COMMAND );
 }
 
 void Client::slotCloseButtonClicked()

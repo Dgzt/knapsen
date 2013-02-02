@@ -399,7 +399,7 @@ void CentralWidget::slotInitialize( QString playerName, QString opponentName, Kn
     QPushButton *twentyButton = new QPushButton( i18n( "Twenty" ) );
     twentyButton->setAttribute( Qt::WA_NoSystemBackground );
     mTwentyButton = scene()->addWidget( twentyButton );
-    mTwentyButton->setVisible( /*false*/ true );
+    mTwentyButton->setVisible( false );
     
     connect( mClient, SIGNAL( signalTwentyButtonVisible( bool ) ) , this, SLOT( slotTwentyButtonVisible( bool ) ) );
     connect( twentyButton, SIGNAL( clicked() ),                     mClient, SLOT( slotTwentyButtonClicked() ) );
@@ -408,7 +408,7 @@ void CentralWidget::slotInitialize( QString playerName, QString opponentName, Kn
     QPushButton *fortyButton = new QPushButton( i18n( "Forty" ) );
     fortyButton->setAttribute( Qt::WA_NoSystemBackground );
     mFortyButton = scene()->addWidget( fortyButton );
-    mFortyButton->setVisible( /*false*/ true );
+    mFortyButton->setVisible( false );
     
     connect( mClient, SIGNAL( signalFortyButtonVisible( bool ) ) , this, SLOT( slotFortyButtonVisible( bool ) ) );
     connect( fortyButton, SIGNAL( clicked() ),                     mClient, SLOT( slotFortyButtonClicked() ) );
@@ -416,14 +416,16 @@ void CentralWidget::slotInitialize( QString playerName, QString opponentName, Kn
     QPushButton *schnapsenButton = new QPushButton( i18n( "Schnapsen" ) );
     schnapsenButton->setAttribute( Qt::WA_NoSystemBackground );
     mSchnapsenButton = scene()->addWidget( schnapsenButton );
-    mSchnapsenButton->setVisible( true );
+    mSchnapsenButton->setVisible( false );
+    
+    connect( mClient, SIGNAL( signalSchnapsenButtonVisible( bool ) ), this, SLOT( slotSchnapsenButtonVisible( bool ) ) );
+    connect( schnapsenButton, SIGNAL( clicked() ),                    mClient, SLOT( slotSchnapsenButtonClicked() ) );
     
     //Set close button
     QPushButton *closeButton = new QPushButton( i18n( "Close" ) );
     closeButton->setAttribute( Qt::WA_NoSystemBackground );
     mCloseButton = scene()->addWidget( closeButton );
     mCloseButton->setVisible( false );
-    //connect( closeButton, SIGNAL( clicked() ), this, SLOT( slotCloseButtonClicked() ) );
     
     connect( mClient, SIGNAL( signalCloseButtonVisible( bool ) ), this, SLOT( slotCloseButtonVisible( bool ) ) );
     connect( closeButton, SIGNAL( clicked() ),                    mClient, SLOT( slotCloseButtonClicked() ) );
@@ -506,6 +508,11 @@ void CentralWidget::slotTwentyButtonVisible( bool visible )
 void CentralWidget::slotFortyButtonVisible( bool visible )
 {
     mFortyButton->setVisible( visible );
+}
+
+void CentralWidget::slotSchnapsenButtonVisible( bool visible )
+{
+    mSchnapsenButton->setVisible( visible );
 }
 
 void CentralWidget::slotCloseButtonVisible( bool visible )

@@ -449,6 +449,12 @@ void Player::setFortyButtonVisible( bool fortyButtonVisible )
     emit signalFortyButtonVisible( mFortyButtonVisible );
 }
 
+void Player::setSchnapsenButtonVisible( bool schnapsenButtonVisible )
+{
+    mSchnapsenButtonVisible = schnapsenButtonVisible;
+    emit signalSchnapsenButtonVisible( mSchnapsenButtonVisible );
+}
+
 void Player::twentyButtonClicked()
 {
     setTwentyButtonVisible( false );
@@ -538,6 +544,18 @@ void Player::newCommand( QString command )
         }else{
             kDebug() << getName() << "ERROR! Forty button clicked, but forty button is not visible!";
         }
+    }
+    
+    if( getCommandPartOfCommand( command ) == SCHNAPSEN_BUTTON_CLICKED_COMMAND ){
+        kDebug() << getName() << "Schnapsen button clicked.";
+        
+        if( mSchnapsenButtonVisible ){
+            setSchnapsenButtonVisible( false );
+            emit signalSchnapsenButtonClicked();
+        }else{
+            kDebug() << getName() << "ERROR! Schnapsen button clicked, but schnapsen button is not visible!";
+        }
+        
     }
     
     if( getCommandPartOfCommand( command ) == CLOSE_BUTTON_CLICKED_COMMAND ){

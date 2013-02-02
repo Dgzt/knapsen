@@ -59,8 +59,10 @@ static const QString CLEAR_CENTRAL_CARDS_COMMAND = ":CLEAR_CENTRAL_CARDS";
 //
 static const QString TWENTY_BUTTON_VISIBLE_COMMAND = ":TWENTY_BUTTON_VISIBLE";
 static const QString FORTY_BUTTON_VISIBLE_COMMAND = ":FORTY_BUTTON_VISIBLE";
+static const QString SCHNAPSEN_BUTTON_VISIBLE_COMMAND = ":SCHNAPSEN_BUTTON_VISIBLE";
 static const QString TWENTY_BUTTON_CLICKED_COMMAND = ":TWENTY_BUTTON_CLICKED";
 static const QString FORTY_BUTTON_CLICKED_COMMAND = ":FORTY_BUTTON_CLICKED";
+static const QString SCHNAPSEN_BUTTON_CLICKED_COMMAND = ":SCHNAPSEN_BUTTON_CLICKED";
 static const QString VISIBLE_OPPONENT_CARDS_COMMAND = ":VISIBLE_OPPONENT_CARDS=";
 
 //
@@ -148,6 +150,7 @@ protected:
     
     void twentyButtonClicked();
     void fortyButtonClicked();
+    
     void setCloseButtonVisible( bool visible ){ mCloseButtonVisible = visible; emit signalCloseButtonVisible( visible ); }
     bool isCloseButtonVisible() const{ return mCloseButtonVisible; }
     
@@ -193,6 +196,9 @@ public:
     bool isTwentyButtonVisible() const{ return mTwentyButtonVisible; }
     void setFortyButtonVisible( bool );
     bool isFortyButtonVisible() const{ return mFortyButtonVisible; }
+    //
+    void setSchnapsenButtonVisible( bool );
+    //
     
     void setSelectableRegularMarriagesCards( Trump* );
     void setSelectableTrumpMarriagesCards( Trump* );
@@ -245,6 +251,9 @@ public:
     
     void sendTwentyButtonVisible(){ sendCommand( TWENTY_BUTTON_VISIBLE_COMMAND ); }
     void sendFortyButtonVisible(){ sendCommand( FORTY_BUTTON_VISIBLE_COMMAND ); }
+    //
+    void sendSchnapsenButtonVisible(){ sendCommand( SCHNAPSEN_BUTTON_VISIBLE_COMMAND ); }
+    //
     
     void sendCloseButtonVisible();
     
@@ -274,6 +283,7 @@ signals:
     void signalSelectedCardId( int );
     void signalTwentyButtonClicked();
     void signalFortyButtonClicked();
+    void signalSchnapsenButtonClicked();
     void signalCloseButtonClicked();
     void signalChangeTrumpCard( Player* );
     
@@ -285,6 +295,7 @@ signals:
     void signalPlayerCardSelectableChanged( int, bool );
     void signalTwentyButtonVisible( bool );
     void signalFortyButtonVisible( bool );
+    void signalSchnapsenButtonVisible( bool );
     void signalCloseButtonVisible( bool );
     
 };

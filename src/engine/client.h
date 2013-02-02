@@ -51,6 +51,7 @@ public slots:
     void slotSelectTrumpCard();
     void slotTwentyButtonClicked();
     void slotFortyButtonClicked();
+    void slotSchnapsenButtonClicked();
     void slotCloseButtonClicked();
     //
     void slotProcessCommands();
