@@ -198,6 +198,7 @@ public:
     bool isFortyButtonVisible() const{ return mFortyButtonVisible; }
     //
     void setSchnapsenButtonVisible( bool );
+    bool isSchnapsenButtonVisible(){ return mSchnapsenButtonVisible; }
     //
     
     void setSelectableRegularMarriagesCards( Trump* );

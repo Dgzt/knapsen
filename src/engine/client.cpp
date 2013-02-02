@@ -460,6 +460,10 @@ void Client::slotSelectCardId( int id )
         setFortyButtonVisible( false );
     }
     
+    if( isSchnapsenButtonVisible() ){
+        setSchnapsenButtonVisible( false );
+    }
+    
     if( isCloseButtonVisible() ){
         setCloseButtonVisible( false );
     }

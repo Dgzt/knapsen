@@ -508,6 +508,10 @@ void Player::newCommand( QString command )
                     setFortyButtonVisible( false );
                 }
                 
+                if( isSchnapsenButtonVisible() ){
+                    setSchnapsenButtonVisible( false );
+                }
+                
                 if( isCloseButtonVisible() ){
                     setCloseButtonVisible( false );
                 }
