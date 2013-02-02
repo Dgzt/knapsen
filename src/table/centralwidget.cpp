@@ -13,10 +13,10 @@
 #include "table/scoretable.h"
 #include "engine/client.h"
 #include "engine/card.h"
-#include "table/hand.h"
+#include "table/cards.h"
 #include "table/centralwidget.h"
 
-const int CENTRAL_CARDS_SIZE = 2;
+//const int CENTRAL_CARDS_SIZE = 2;
 
 const double GERMAN_CARDS_SCALE_VALUE = 0.6; //0.6
 const double FRENCH_CARDS_SCALE_VALUE = 1.4; //1.4
@@ -33,18 +33,11 @@ CentralWidget::CentralWidget( QWidget* parent ):
     mOpponentName = 0;
     mPlayerName = 0;
     mRenderer = 0;
-    //
-    //mNumberOfCardsInHand = 0;
-    //
     mOpponentCards = 0;
     mDeck = 0;
     mPlayerCards = 0;
     mTrumpCard = 0;
     mCentralCards = 0;
-    
-    //
-    //mOpponentCardsShowTimer = 0;
-    //
     
     //
     mPlayerArrow = 0;
@@ -93,14 +86,12 @@ void CentralWidget::clearWidget()
     
     disconnect( mClient, 0, 0, 0 );
     
-    //Delete deck
     if( mDeck ){
         scene()->removeItem( mDeck );
         delete mDeck;
         mDeck = 0;
     }
     
-    //Delete trump
     if( mTrumpCard ){
         disconnect( mTrumpCard, 0, 0, 0 );
         scene()->removeItem( mTrumpCard );
@@ -186,6 +177,12 @@ void CentralWidget::clearWidget()
         mPlayerCards = 0;
     }
     
+    if( mCentralCards ){
+        scene()->removeItem( mCentralCards );
+        delete mCentralCards;
+        mCentralCards = 0;
+    }
+    
 }
 
 void CentralWidget::setInGamePositions()
@@ -221,34 +218,9 @@ void CentralWidget::setInGamePositions()
     mTrumpCard->setPos( trumpPos );
     
     //Set position of centralcards
-    QPoint cenralCard1Pos;
-    cenralCard1Pos.setX( halpOfWidth - mCardSize.width()/2 );
-    cenralCard1Pos.setY( ( height()-mCardSize.height() ) / 2 );
-    
-    mCentralCards[0].setPos( cenralCard1Pos );
-    
-    QPoint cenralCard2Pos;
-    cenralCard2Pos.setX( halpOfWidth );
-    cenralCard2Pos.setY( cenralCard1Pos.y() );
-    
-    mCentralCards[1].setPos( cenralCard2Pos );
-    
-    /*//Set position of twenty button
-    QPoint twentyButtonPos;
-    twentyButtonPos.setX( width() / 2 - mCardSize.width() );
-    twentyButtonPos.setY( mPlayerCards->y() - CARDS_BUTTON_DISTANCE - mTwentyButton->boundingRect().height() );
-    
-    mTwentyButton->setGeometry( QRect( twentyButtonPos, QSize( mCardSize.width(), 20 ) ) );
-    */
-    
-    /*//Set position of forty button
-    QPoint fortyButtonPos;
-    fortyButtonPos.setX( width() / 2 );
-    fortyButtonPos.setY( twentyButtonPos.y() );
-    
-    mFortyButton->setGeometry( QRect( fortyButtonPos, QSize( mCardSize.width(), 20 ) ) );
-    */
-    
+    mCentralCards->setPos( ( width() - mCardSize.width() ) / 2,
+                           ( height() - mCardSize.height() ) /2 );
+
     //Set position of close button
     QPoint closeButtonPos;
     closeButtonPos.setX( mDeck->scenePos().x() );
@@ -330,7 +302,7 @@ void CentralWidget::slotInitialize( QString playerName, QString opponentName, Kn
     scene()->addItem( mTrumpCard );
     
     //
-    mOpponentCards = new Hand( mRenderer, mScale );
+    mOpponentCards = new Cards( mRenderer, mScale );
     
     connect( mClient, SIGNAL( signalNewOpponentCard() ),                         mOpponentCards, SLOT( slotNewCard() ) );
     connect( mClient, SIGNAL( signalOpponentSelectedCardId( int ) ),             mOpponentCards, SLOT( slotRemoveCard( int ) ) );
@@ -340,7 +312,7 @@ void CentralWidget::slotInitialize( QString playerName, QString opponentName, Kn
     
     scene()->addItem( mOpponentCards );
     
-    mPlayerCards = new Hand( mRenderer, mScale );
+    mPlayerCards = new Cards( mRenderer, mScale );
     
     connect( mClient, SIGNAL( signalNewPlayerCard( const Card* ) ),              mPlayerCards, SLOT( slotNewCard( const Card* ) ) );
     connect( mClient, SIGNAL( signalChangePlayerCard( int, const Card* ) ),      mPlayerCards, SLOT( slotChangeCard( int, const Card* ) ) );
@@ -352,19 +324,12 @@ void CentralWidget::slotInitialize( QString playerName, QString opponentName, Kn
     //
     
     //Setup central cards
-    mCentralCards = new QGraphicsSvgItem[ CENTRAL_CARDS_SIZE ];
-    for( int i = 0; i < CENTRAL_CARDS_SIZE; ++i ){
-        mCentralCards[i].setSharedRenderer( mRenderer );
-        //mCentralCards[i].setScale( SCALE_VALUE );
-        mCentralCards[i].setScale( mScale );
-        mCentralCards[i].setVisible( false );
-        mCentralCards[i].setElementId( "" );
-        
-        scene()->addItem( &mCentralCards[i] );
-    }
+    mCentralCards = new Cards( mRenderer, mScale );
     
-    connect( mClient, SIGNAL( signalNewCentralCard( int, const Card* ) ), this, SLOT( slotNewCentralCard( int, const Card* ) ) );
-    connect( mClient, SIGNAL( signalClearCentralCards() ),                this, SLOT( slotClearCentralCards() ) );
+    connect( mClient, SIGNAL( signalNewCentralCard( const Card* ) ), mCentralCards, SLOT( slotNewCard( const Card* ) ) );
+    connect( mClient, SIGNAL( signalClearCentralCards() ),           mCentralCards, SLOT( slotRemoveAllCards() ) );
+    
+    scene()->addItem( mCentralCards );
     
     //Arrows
     QPixmap arrowImage( KGlobal::dirs()->findResource( "appdata", "pics/arrow.png" ) );
@@ -453,20 +418,6 @@ void CentralWidget::slotTrumpCardSelectableChanged( bool selectable )
     mTrumpCard->setSelectable( selectable );
 }
 
-void CentralWidget::slotNewCentralCard( int id, const Card* card )
-{
-    mCentralCards[ id ].setElementId( card->getCardText() );
-    mCentralCards[ id ].setVisible( true );
-}
-
-void CentralWidget::slotClearCentralCards()
-{
-    for( int i = 0; i < CENTRAL_CARDS_SIZE; ++i ){
-        mCentralCards[ i ].setElementId( "back" );
-        mCentralCards[ i ].setVisible( false );
-    }
-}
-
 void CentralWidget::slotOpponentTricksChanged( int tricks )
 {
     mOpponentScoreTable->setTricks( tricks );
@@ -527,8 +478,9 @@ void CentralWidget::slotNewRound()
         mPlayerCards[ i ].setVisible( false );
     }*/
     
-    mOpponentCards->removeAllCards();
-    mPlayerCards->removeAllCards();
+    mOpponentCards->slotRemoveAllCards();
+    mPlayerCards->slotRemoveAllCards();
+    mCentralCards->slotRemoveAllCards();
     
     if( mTrumpCard->zValue() == 1 ){
         mTrumpCard->setZValue( 0 );
@@ -538,9 +490,6 @@ void CentralWidget::slotNewRound()
     if( !mDeck->isVisible() ){
         mDeck->setVisible( true );
     }
-    
-    mCentralCards[ 0 ].setVisible( false );
-    mCentralCards[ 1 ].setVisible( false );
     
     mOpponentScoreTable->setTricks( 0 );
     mPlayerScoreTable->setTricks( 0 );
@@ -556,11 +505,6 @@ void CentralWidget::slotStartGame()
     mPlayerName->setVisible( true );
     
     mDeck->setVisible( true );
-    
-    /*for( int i = 0; i < mNumberOfCardsInHand; ++i ){
-        mPlayerCards[ i ].setVisible( true );
-        mOpponentCards[ i ].setVisible( true );
-    }*/
     
     mOpponentScoreTable->setVisible( true );
     mPlayerScoreTable->setVisible( true );
@@ -579,15 +523,11 @@ void CentralWidget::slotOpponentCardsSizeChanged()
     mOpponentCards->setPos( opponentHandPos );
     
     //Set Opponent' score table's size
-    //mOpponentScoreTable->setPos( mOpponentCards->pos().x() + mOpponentCards->boundingRect().width() + SCORE_TABLE_CARDS_DISTANCE + mCardSize.width()/2,
-    //                             mOpponentCards->y() );
     mOpponentScoreTable->setPos( mOpponentCards->pos().x() + mOpponentCards->boundingRect().width() + SCORE_TABLE_CARDS_DISTANCE/* + mCardSize.width()/2*/,
                                  mOpponentCards->y() );
     
     
     //Set Opponent's arrow's size
-    //mOpponentArrow->setPos( mOpponentCards->pos().x() + mOpponentCards->boundingRect().width() + SCORE_TABLE_CARDS_DISTANCE + mCardSize.width()/2,
-    //                        mOpponentCards->pos().y() + mCardSize.height() - mOpponentArrow->boundingRect().height() );
     mOpponentArrow->setPos( mOpponentCards->pos().x() + mOpponentCards->boundingRect().width() + SCORE_TABLE_CARDS_DISTANCE/* + mCardSize.width()/2*/,
                             mOpponentCards->pos().y() + mCardSize.height() - mOpponentArrow->boundingRect().height() );
 

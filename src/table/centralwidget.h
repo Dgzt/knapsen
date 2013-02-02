@@ -13,7 +13,7 @@ class ScoreTable;
 class QGraphicsPixmapItem;
 class Card;
 
-class Hand;
+class Cards;
 class Client;
 
 class CentralWidget : public QGraphicsView
@@ -38,8 +38,8 @@ class CentralWidget : public QGraphicsView
     QSvgRenderer* mRenderer;
     SvgCard* mDeck;
     
-    Hand* mOpponentCards;
-    Hand* mPlayerCards;
+    Cards* mOpponentCards;
+    Cards* mPlayerCards;
 
     //
     QGraphicsPixmapItem* mPlayerArrow;
@@ -51,7 +51,8 @@ class CentralWidget : public QGraphicsView
     
     SvgCard* mTrumpCard;
     
-    QGraphicsSvgItem* mCentralCards;
+    //QGraphicsSvgItem* mCentralCards;
+    Cards* mCentralCards;
     
     QGraphicsProxyWidget* mCloseButton;
     QGraphicsProxyWidget* mTwentyButton;
@@ -81,10 +82,7 @@ private slots:
     void slotNewTrumpCard( const Card* );
     void slotHideTrumpCard();
     void slotTrumpCardSelectableChanged( bool );
-    
-    void slotNewCentralCard( int, const Card* );
-    void slotClearCentralCards();
-    
+
     void slotHideDeck();
     void slotCloseDeck();
     

@@ -75,7 +75,8 @@ signals:
     
     void signalNewTrumpCard( const Card* );
     
-    void signalNewCentralCard( int, const Card* );
+    //void signalNewCentralCard( int, const Card* );
+    void signalNewCentralCard( const Card* );
     
     void signalClearCentralCards();
     

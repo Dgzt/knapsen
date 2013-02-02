@@ -30,7 +30,7 @@ CentralCards::~CentralCards()
     kDebug() << "End.";
 }
 
-int CentralCards::add( Card *card )
+/*int CentralCards::add( Card *card )
 {
     kDebug() << "Begin.";
     
@@ -47,6 +47,20 @@ int CentralCards::add( Card *card )
     
     kDebug() << "End.";
     return pos;
+}*/
+
+void CentralCards::add( Card *card )
+{
+    kDebug() << "Begin.";
+    
+    for( int i = 0; i < MAX_CENTRALCARDS; ++i ){
+        if( mCards[i] == 0 ){
+            mCards[i] = card;
+            break;
+        }
+    }
+    
+    kDebug() << "End.";
 }
 
 void CentralCards::clear()

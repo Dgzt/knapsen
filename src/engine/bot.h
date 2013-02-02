@@ -43,7 +43,7 @@ private slots:
     
     void slotCloseDeck(){ mDeckIsClosed = true; }
     
-    void slotNewCentralCard( int, const Card* );
+    void slotNewCentralCard( const Card* );
     
     void slotShowOpponentCards( int, Card, int, Card );
     

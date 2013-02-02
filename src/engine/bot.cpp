@@ -16,7 +16,7 @@ Bot::Bot( QString name, Knapsen::GameDifficulty difficulty ):
     connect( this, SIGNAL( signalPlayerInAction() ),                            this, SLOT( slotPlayerInAction() ) );
     connect( this, SIGNAL( signalNewRound() ),                                  this, SLOT( slotNewRound() ) );
     connect( this, SIGNAL( signalCloseDeck() ),                                 this, SLOT( slotCloseDeck() ) );
-    connect( this, SIGNAL( signalNewCentralCard( int , const Card* ) ),         this, SLOT( slotNewCentralCard( int, const Card* ) ) );
+    connect( this, SIGNAL( signalNewCentralCard( const Card* ) ),               this, SLOT( slotNewCentralCard( const Card* ) ) );
     connect( this, SIGNAL( signalShowOpponentCards( int, Card, int, Card ) ),   this, SLOT( slotShowOpponentCards( int, Card, int, Card ) ) );
     connect( this, SIGNAL( signalEndRound( QString, int ) ),                    this, SLOT( slotEndRound( QString, int ) ) );
     connect( this, SIGNAL( signalEndGame( QString ) ),                          this, SLOT( slotendGame( QString ) ) );
@@ -405,7 +405,7 @@ void Bot::slotNewRound()
     }
 }
 
-void Bot::slotNewCentralCard( int , const Card* card )
+void Bot::slotNewCentralCard( const Card* card )
 {
     if( card->getType() == Card::Queen ){
         for( int i = 0; i < 4; ++i ){

@@ -1,12 +1,11 @@
 
 set(knapsen_HDRS
     enums.h
-    
-    table/hand.h
-    
     table/scoretable.h
     table/mytextitem.h
     table/svgcard.h
+    table/centralwidget.h
+    table/cards.h
     engine/card.h
     engine/deck.h
     dialogs/waitingforopponent.h
@@ -21,16 +20,15 @@ set(knapsen_HDRS
     dialogs/waitforserverdialog.h
     dialogs/waitforclientdialog.h
     dialogs/newgamedialog.h
-    table/centralwidget.h
     mainwidget.h
 )
 
 set(knapsen_SRCS
-    table/hand.cpp
-    
     table/scoretable.cpp
     table/mytextitem.cpp
     table/svgcard.cpp
+    table/centralwidget.cpp
+    table/cards.cpp
     engine/card.cpp
     engine/deck.cpp
     dialogs/waitingforopponent.cpp
@@ -45,7 +43,6 @@ set(knapsen_SRCS
     dialogs/waitforserverdialog.cpp
     dialogs/waitforclientdialog.cpp
     dialogs/newgamedialog.cpp
-    table/centralwidget.cpp
     mainwidget.cpp
     main.cpp
 )

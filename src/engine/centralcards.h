@@ -12,7 +12,8 @@ public:
     CentralCards();
     ~CentralCards();
     
-    int add( Card* );
+    //int add( Card* );
+    void add( Card* );
     void clear();
     
     bool isEmpty();
