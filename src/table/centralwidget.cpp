@@ -352,13 +352,13 @@ void CentralWidget::slotInitialize( QString playerName, QString opponentName, Kn
     mOpponentScoreTable->setVisible( false );
     mPlayerScoreTable->setVisible( false );
     
+    connect( mClient, SIGNAL( signalOpponentTricksChanged( int ) ),     mOpponentScoreTable, SLOT( slotTricksChanged( int ) ) );
+    connect( mClient, SIGNAL( signalOpponentScoresChanged( int ) ),     mOpponentScoreTable, SLOT( slotScoresChanged( int ) ) );
+    connect( mClient, SIGNAL( signalPlayerTricksChanged( int ) ),       mPlayerScoreTable, SLOT( slotTricksChanged( int ) ) );
+    connect( mClient, SIGNAL( signalPlayerScoresChanged( int ) ),       mPlayerScoreTable, SLOT( slotScoresChanged( int ) ) );
+    
     scene()->addItem( mOpponentScoreTable );
     scene()->addItem( mPlayerScoreTable );
-    
-    connect( mClient, SIGNAL( signalOpponentTricksChanged( int ) ), this, SLOT( slotOpponentTricksChanged( int ) ) );
-    connect( mClient, SIGNAL( signalOpponentScoresChanged( int ) ), this, SLOT( slotOpponentScoresChanged( int ) ) );
-    connect( mClient, SIGNAL( signalPlayerTricksChanged( int ) ),   this, SLOT( slotPlayerTricksChanged( int ) ) );
-    connect( mClient, SIGNAL( signalPlayerScoresChanged( int ) ),   this, SLOT( slotPlayerScoresChanged( int ) ) );
     
     //Set twenty button
     QPushButton *twentyButton = new QPushButton( i18n( "Twenty" ) );
@@ -418,26 +418,6 @@ void CentralWidget::slotTrumpCardSelectableChanged( bool selectable )
     mTrumpCard->setSelectable( selectable );
 }
 
-void CentralWidget::slotOpponentTricksChanged( int tricks )
-{
-    mOpponentScoreTable->setTricks( tricks );
-}
-
-void CentralWidget::slotOpponentScoresChanged( int scores )
-{
-    mOpponentScoreTable->setScores( scores );
-}
-
-void CentralWidget::slotPlayerTricksChanged( int tricks )
-{
-    mPlayerScoreTable->setTricks( tricks );
-}
-
-void CentralWidget::slotPlayerScoresChanged( int scores )
-{
-    mPlayerScoreTable->setScores( scores );
-}
-
 void CentralWidget::slotHideDeck()
 {
     mDeck->setVisible( false );
@@ -473,11 +453,6 @@ void CentralWidget::slotCloseButtonVisible( bool visible )
 
 void CentralWidget::slotNewRound()
 {
-    /*for( int i = 0; i < mNumberOfCardsInHand; ++i ){
-        mOpponentCards[ i ].setVisible( false );
-        mPlayerCards[ i ].setVisible( false );
-    }*/
-    
     mOpponentCards->slotRemoveAllCards();
     mPlayerCards->slotRemoveAllCards();
     mCentralCards->slotRemoveAllCards();
@@ -491,8 +466,8 @@ void CentralWidget::slotNewRound()
         mDeck->setVisible( true );
     }
     
-    mOpponentScoreTable->setTricks( 0 );
-    mPlayerScoreTable->setTricks( 0 );
+    mOpponentScoreTable->slotTricksChanged( 0 );
+    mPlayerScoreTable->slotTricksChanged( 0 );
 }
 
 void CentralWidget::slotStartGame()

@@ -85,12 +85,7 @@ private slots:
 
     void slotHideDeck();
     void slotCloseDeck();
-    
-    void slotOpponentTricksChanged( int );
-    void slotOpponentScoresChanged( int );
-    void slotPlayerTricksChanged( int );
-    void slotPlayerScoresChanged( int );
-    
+
     void slotShowOpponentArrow();
     void slotShowPlayerArrow();
     void slotHideOpponentArrow();

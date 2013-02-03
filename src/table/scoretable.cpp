@@ -13,8 +13,8 @@ ScoreTable::ScoreTable()
     tricksItem = new QGraphicsTextItem( this );
     scoreItem = new QGraphicsTextItem( this );
     
-    setTricks( 0 );
-    scoreItem->setPlainText( SCORE_TEXT+" "+QString::number( 0 ) );
+    slotTricksChanged( 0 );
+    slotScoresChanged( 0 );
     
     tricksItem->setPos( 0, 0 );
     scoreItem->setPos( 0, tricksItem->boundingRect().height() );
@@ -38,14 +38,16 @@ QRectF ScoreTable::boundingRect() const
     return ret;
 }
 
-void ScoreTable::setTricks( int tricks )
+//void ScoreTable::setTricks( int tricks )
+void ScoreTable::slotTricksChanged( int tricks )
 {
     tricksItem->setPlainText( TRICKS_TEXT+" "+QString::number( tricks ) );
     
     update();
 }
 
-void ScoreTable::setScores( int scores )
+//void ScoreTable::setScores( int scores )
+void ScoreTable::slotScoresChanged( int scores )
 {
     scoreItem->setPlainText( SCORE_TEXT+" "+QString::number( scores ) );
     
