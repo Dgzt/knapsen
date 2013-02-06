@@ -14,17 +14,33 @@
 #include "table/svgcard.h"
 #include "table/cards.h"
 
+//
+#include "QtCore/QTimeLine"
+#include "QtGui/QGraphicsItemAnimation"
+//
+
 const double HIGHLIGHT_Y_PERCENT = 20;
 
 const int INVALID_HIGHLIGHT_CARD_ID = -1;
 
-Cards::Cards( QSvgRenderer* renderer, double scale ) :
+/*Cards::Cards( QSvgRenderer* renderer, double scale ) :
     mRenderer( renderer ),
     mScale( scale ),
-    mHighlightCardId( INVALID_HIGHLIGHT_CARD_ID )
+    mHighlightCardId( INVALID_HIGHLIGHT_CARD_ID ),
+    mCardIsComing( false )
+{
+    mShowOpponentCardsId = 0;
+}*/
+
+Cards::Cards( QSizeF cardSize ) : 
+    QGraphicsObject(),
+    mCardSize( cardSize ),
+    mHighlightCardId( INVALID_HIGHLIGHT_CARD_ID ),
+    mCardIsComing( false )
 {
     mShowOpponentCardsId = 0;
 }
+
 
 QRectF Cards::boundingRect() const
 {
@@ -53,6 +69,14 @@ QRectF Cards::boundingRect() const
         width += mCards.at( 0 )->getSizeF().width() / 2;
     }
     //
+    
+    if( mCardIsComing ){
+        if( mCards.size() == 0 ){
+            width += mCardSize.width();
+        }else{
+            width += mCardSize.width() / 2;
+        }
+    }
     
     return QRectF( QPointF(0,0), QSizeF( width, height ) );
 }
@@ -160,7 +184,7 @@ void Cards::slotCardClicked( SvgCard* svgCard )
     emit signalSizeChanged();
 }
 
-void Cards::newCard( QString cardText )
+/*void Cards::newCard( QString cardText )
 {
     kDebug() << cardText;
     
@@ -181,8 +205,41 @@ void Cards::newCard( QString cardText )
     connect( cardSvgItem, SIGNAL( signalMouseLeave( SvgCard* ) ),    this, SLOT( slotMouseLeave( SvgCard* ) ) );
     connect( cardSvgItem, SIGNAL( signalClick( SvgCard* ) ),         this, SLOT( slotCardClicked( SvgCard* ) ) );
     
+    emit signalSizeChanged();*/
+    
+    /*cardSvgItem->stackBefore( mDeck );
+    
+    connect( cardSvgItem, SIGNAL( signalMouseEnter( SvgCard* ) ),    this, SLOT( slotMouseEnter( SvgCard* ) ) );
+    connect( cardSvgItem, SIGNAL( signalMouseLeave( SvgCard* ) ),    this, SLOT( slotMouseLeave( SvgCard* ) ) );
+    connect( cardSvgItem, SIGNAL( signalClick( SvgCard* ) ),         this, SLOT( slotCardClicked( SvgCard* ) ) );
+    
+    double x = 0;
+    for( int i = 0; i < mCards.size(); ++i ){
+        x+=mCards.at( i )->getSizeF().width()/2;
+    }
+    
+    mCards.append( cardSvgItem );
+    
     emit signalSizeChanged();
-}
+    
+    //cardSvgItem->setPos( mapFromScene( 0, 0 ) + mCoordFromCard );
+    cardSvgItem->setPos( mapFromScene( 0, 0 ) + mDeck->pos() );
+    
+    QTimeLine* timeLine = new QTimeLine( 1000 );
+    timeLine->setFrameRange( 0, 100 );
+    
+    connect( timeLine, SIGNAL( finished() ), this, SLOT( slotTimeLineFinished() ) );
+    
+    QGraphicsItemAnimation* animation = new QGraphicsItemAnimation;
+    animation->setItem( cardSvgItem );
+    animation->setTimeLine( timeLine );
+    
+    //animation->setPosAt( 0.0, mapFromScene( 0, 0 ) + mCoordFromCard );
+    
+    animation->setPosAt( 1.0, QPointF( x, 0 ) );
+    
+    timeLine->start();
+}*/
 
 void Cards::highlightCard( int id )
 {
@@ -209,9 +266,61 @@ void Cards::removeHighlight( int id )
     }
 }
 
-void Cards::slotNewCard( const Card* card )
+/*void Cards::slotNewCard( const Card* card )
 {
     newCard( card->getCardText() );
+}*/
+
+/*void Cards::slotNewCard( SvgCard* svgCard )
+{
+    kDebug() << svgCard->elementId() << "arrived.";
+    
+    svgCard->setParentItem( this );
+    
+    double x = 0;
+    for( int i = 0; i < mCards.size(); ++i ){
+        x+=mCards.at( i )->getSizeF().width()/2;
+    }
+    
+    svgCard->setPos( x, 0 );
+    
+    mCards.append( svgCard );
+    
+    emit signalSizeChanged();
+    
+    //emit signalCardArriwed();
+}*/
+
+QPointF Cards::getNewCardPos()
+{
+    QPointF pos( 0.0, 0.0 );
+    
+    if( mCards.size() != 0 ){
+        pos.setX( mCards.size() * ( mCards.at( 0 )->getSizeF().width() / 2 ) );
+    }
+    
+    return pos;
+}
+
+void Cards::cardWillArrive()
+{
+    mCardIsComing = true;
+}
+
+void Cards::addNewCard( SvgCard* svgCard )
+{
+    svgCard->setParentItem( this );
+    
+    svgCard->setPos( getNewCardPos() );
+    
+    mCards.append( svgCard );
+    
+    mCardIsComing = false;
+}
+
+void Cards::slotNewCardArrived()
+{
+    kDebug() << "Arrived.";
 }
 
 void Cards::slotChangeCard( int id, const Card* card )

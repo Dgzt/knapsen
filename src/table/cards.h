@@ -2,18 +2,21 @@
 #define CARDS_H
 
 #include <QtGui/QGraphicsObject>
+//#include <QtCore/QObject>
+//#include <QtGui/QGraphicsItemGroup>
 
 class QSvgRenderer;
 class SvgCard;
 class Card;
 
 class Cards: public QGraphicsObject
+//class Cards : public QObject, public QGraphicsItemGroup
 {
     Q_OBJECT
     
-    QSvgRenderer* mRenderer;
-    
-    double mScale;
+    //
+    QSizeF mCardSize;
+    //
     
     QList< SvgCard* > mCards;
     
@@ -25,21 +28,27 @@ class Cards: public QGraphicsObject
     QPair< int, int > *mShowOpponentCardsId;
     //
     
+    //
+    bool mCardIsComing;
+    //
     
-    void newCard( QString );
 
     void highlightCard( int );
     void removeHighlight( int );
     
 public:
-    Cards( QSvgRenderer*, double );
+    //Cards( QSvgRenderer*, double );
+    Cards( QSizeF );
     
     virtual QRectF boundingRect() const;
     virtual void paint( QPainter * , const QStyleOptionGraphicsItem * , QWidget * );
     
-    //
-    //void removeAllCards();
-    //
+    
+    QPointF getNewCardPos();
+    
+    void cardWillArrive();
+    
+    void addNewCard( SvgCard* );
     
 private slots:
     void slotMouseEnter( SvgCard* );
@@ -51,9 +60,16 @@ private slots:
     void slotHideCards();
     //
     
+    //
+    void slotTimeLineFinished(){ emit signalCardArriwed(); }
+    //
+    
 public slots:
-    void slotNewCard(){ newCard( "back" ); }
-    void slotNewCard( const Card* );
+    //void slotNewCard(){ newCard( "back" ); }
+    //void slotNewCard( const Card* );
+    //void slotNewCard( SvgCard* );
+    void slotNewCardArrived();
+    
     void slotChangeCard( int, const Card* );
     
     void slotSelectableChanged( int, bool );
@@ -73,6 +89,10 @@ signals:
     void signalSelectedCardId( int );
     
     void signalHiddenShowedCard();
+    
+    //
+    void signalCardArriwed();
+    //
     
 };
 

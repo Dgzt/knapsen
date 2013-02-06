@@ -61,6 +61,9 @@ class CentralWidget : public QGraphicsView
     
     void setInGamePositions();
     
+    void setOpponentNamePos();
+    void setPlayerNamePos();
+    
 public:
     CentralWidget( QWidget* parent = 0 );
     ~CentralWidget();
@@ -79,10 +82,19 @@ private slots:
     
     void slotInitialize( QString, QString, Knapsen::TypeOfCards );
     
-    void slotNewTrumpCard( const Card* );
+    //void slotDeckArrived();
+    
+    void slotNewTrumpCard( /*const*/ Card* );
     void slotHideTrumpCard();
     void slotTrumpCardSelectableChanged( bool );
-
+    
+    //
+    void slotNewOpponentCard();
+    void slotNewPlayerCard( /*const*/ Card* );
+    
+    void slotAnimatedCardArrived( SvgCard*, Cards* );
+    //
+    
     void slotHideDeck();
     void slotCloseDeck();
 
@@ -98,8 +110,9 @@ private slots:
     
     void slotNewRound();
     
-    void slotStartGame();
-
+    //void slotStartGame();
+    //void slotNewGame();
+    
 };
 
 

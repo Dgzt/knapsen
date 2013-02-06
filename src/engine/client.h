@@ -70,10 +70,10 @@ signals:
     void signalNewOpponentCard();
     
     //void signalNewPlayerCard( int, const Card* );
-    void signalNewPlayerCard( const Card* );
+    void signalNewPlayerCard( /*const*/ Card* );
     void signalChangePlayerCard( int, const Card* );
     
-    void signalNewTrumpCard( const Card* );
+    void signalNewTrumpCard( /*const*/ Card* );
     
     //void signalNewCentralCard( int, const Card* );
     void signalNewCentralCard( const Card* );
@@ -112,7 +112,8 @@ signals:
     void signalOpponentInAction();
     //
     
-    void signalStartGame();
+    //void signalStartGame();
+    void signalNewGame();
     
     //
     void signalEndRound( QString, int );

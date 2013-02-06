@@ -126,16 +126,22 @@ void Client::slotProcessCommands()
             bool ok;
             int ret = getValuePartOfCommand( commandList.first() ).toInt( &ok );
             if( ok ){
-                //int cardId = addNewCard( new Card( ret ) );
-                Card* card = new Card( ret );
-                addNewCard( card );
-                //emit signalNewPlayerCard( cardId, getCard( cardId ) );
-                emit signalNewPlayerCard( card );
                 
                 mSizeOfDeckNow--;
                 if( mSizeOfDeckNow == 0 ){
                     emit signalHideDeck();
                 }
+                
+                Card* card = new Card( ret );
+                addNewCard( card );
+                
+                
+                commandList.removeFirst();
+                
+                emit signalNewPlayerCard( card );
+                
+                break;
+                
             }else{
                 kDebug() << "ERROR! Cannot convert new player card value to int!";
             }
@@ -150,6 +156,10 @@ void Client::slotProcessCommands()
             
             mSizeOfDeckNow = mSizeOfDeck;
             emit signalNewRound();
+            
+            commandList.removeFirst();
+            
+            break;
         }
         
         /*if( getCommandPartOfCommand( commandList.first() ) == NEW_OPPONENT_CARD_COMMAND_ID ){
@@ -172,12 +182,16 @@ void Client::slotProcessCommands()
         if( getCommandPartOfCommand( commandList.first() ) == NEW_OPPONENT_CARD_COMMAND ){
             kDebug() << getName() << "new opponent card.";
             
-            emit signalNewOpponentCard();
-            
             mSizeOfDeckNow--;
             if( mSizeOfDeckNow == 0 ){
                 emit signalHideDeck();
             }
+            
+            commandList.removeFirst();
+            
+            emit signalNewOpponentCard();
+            
+            break;
         }
         
         if( getCommandPartOfCommand( commandList.first() ) == NEW_TRUMP_CARD_COMMAND ){
@@ -193,6 +207,11 @@ void Client::slotProcessCommands()
                 mTrump->addNewCard( new Card( ret ) );
                 
                 emit signalNewTrumpCard( mTrump->getCard() );
+                
+                //
+                commandList.removeFirst();
+                break;
+                //
             }else{
                 kDebug() << "ERROR! Cannot convert new trump card command value to int!";
             }
@@ -395,7 +414,8 @@ void Client::slotProcessCommands()
             
             emit signalPlayerScoresChanged( getScores() );
             emit signalOpponentScoresChanged( 0 );
-            emit signalStartGame();
+            //emit signalStartGame();
+            emit signalNewGame();
         }
         
         if( getCommandPartOfCommand( commandList.first() ) == END_ROUND_COMMAND ){
