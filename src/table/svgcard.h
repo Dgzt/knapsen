@@ -4,12 +4,13 @@
 #include <QtSvg/QGraphicsSvgItem>
 
 class QSvgRenderer;
+class Animation;
 
 class SvgCard : public QGraphicsSvgItem
 {
     Q_OBJECT
     
-    double mScale;
+    Animation* mAnimation;
     
     bool mSelectable;
     
@@ -21,11 +22,10 @@ protected:
     //
     
 public:
-    SvgCard( QSvgRenderer*, double, QString cardText = "back", QGraphicsItem* parentItem = 0 );
+    SvgCard( QSvgRenderer*, QString cardText = "back", QGraphicsItem* parentItem = 0 );
+    ~SvgCard();
     
-    //
-    QSizeF getSizeF();
-    //
+    Animation* getAnimation(){ return mAnimation; }
     
     void setSelectable( bool );
     bool isSelectable(){ return mSelectable; }

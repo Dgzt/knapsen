@@ -8,7 +8,7 @@ set(knapsen_HDRS
     table/mytextitem.h
     table/svgcard.h
     table/centralwidget.h
-    table/cards.h
+    table/cardsgroup.h
     engine/card.h
     engine/deck.h
     dialogs/waitingforopponent.h
@@ -33,7 +33,7 @@ set(knapsen_SRCS
     table/mytextitem.cpp
     table/svgcard.cpp
     table/centralwidget.cpp
-    table/cards.cpp
+    table/cardsgroup.cpp
     engine/card.cpp
     engine/deck.cpp
     dialogs/waitingforopponent.cpp
