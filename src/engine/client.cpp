@@ -462,18 +462,14 @@ void Client::slotConnected()
     sendCommand( NAME_COMMAND+getName() );
 }
 
-void Client::slotSelectCardId( int id )
+/*void Client::slotSelectCardId( int id )
 {
     kDebug() << "Select card:" << id;
     setSelectableAllCards( false );
     
-    //int pos = mCentralCards->add( takeCard( id ) );
     Card* card = takeCard( id );
     mCentralCards->add( card );
     
-    //kDebug() << "Central cards pos:" << pos;
-    
-    //emit signalNewCentralCard( pos, mCentralCards->getCard( pos ) );
     emit signalNewCentralCard( card );
     
     if( isTwentyButtonVisible() ){
@@ -498,6 +494,40 @@ void Client::slotSelectCardId( int id )
     }
     
     sendCommand( SELECTED_CARD_ID_COMMAND+QString::number( id ) );
+}*/
+
+void Client::slotSelectCardId( int id )
+{
+    kDebug() << "Select card:" << id;
+    setSelectableAllCards( false );
+    
+    /*Card* card = takeCard( id );
+    mCentralCards->add( card );
+    
+    emit signalNewCentralCard( card );
+    
+    if( isTwentyButtonVisible() ){
+        setTwentyButtonVisible( false );
+    }
+    
+    if( isFortyButtonVisible() ){
+        setFortyButtonVisible( false );
+    }
+    
+    if( isSchnapsenButtonVisible() ){
+        setSchnapsenButtonVisible( false );
+    }
+    
+    if( isCloseButtonVisible() ){
+        setCloseButtonVisible( false );
+    }
+    
+    if( !mTrump->isEmpty() && mTrump->getCard()->isSelectable() ){
+        mTrump->getCard()->setSelectable( false );
+        emit signalTrumpCardSelectableChanged( false );
+    }
+    
+    sendCommand( SELECTED_CARD_ID_COMMAND+QString::number( id ) );*/
 }
 
 void Client::slotSelectTrumpCard()

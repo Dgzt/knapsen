@@ -117,7 +117,7 @@ void CentralWidget::slotInitialize( QString playerNameStr, QString opponentNameS
     connect( mTrumpCard->getAnimation(), SIGNAL( signalAnimationEnd() ), mClient, SLOT( slotProcessCommands() ) );
     
     //Setup Opponent's cards
-    mOpponentCards = new CardsGroup( /*mDeck->boundingRect().size()*/ );
+    mOpponentCards = new CardsGroup;
     scene()->addItem( mOpponentCards );
     
     connect( mClient, SIGNAL( signalNewOpponentCard() ), this, SLOT( slotNewOpponentCard() ) );
@@ -125,29 +125,26 @@ void CentralWidget::slotInitialize( QString playerNameStr, QString opponentNameS
     connect( mOpponentCards, SIGNAL( signalCardArrived() ), mClient, SLOT( slotProcessCommands() ) );
     
     //Setup Player's cards
-    mPlayerCards = new CardsGroup( /*mDeck->boundingRect().size()*/ );
+    mPlayerCards = new CardsGroup;
     scene()->addItem( mPlayerCards );
     
     connect( mClient, SIGNAL( signalNewPlayerCard( Card* ) ), this, SLOT( slotNewPlayerCard( Card* ) ) );
     connect( mClient, SIGNAL( signalPlayerCardSelectableChanged( int , bool ) ), mPlayerCards, SLOT( slotSelectableChanged( int , bool ) ) );
     connect( mPlayerCards, SIGNAL( signalSizeChanged() ), this, SLOT( slotPlayerCardsSizeChanged() ) );
     connect( mPlayerCards, SIGNAL( signalCardArrived() ), mClient, SLOT( slotProcessCommands() ) );
-    connect( mPlayerCards, SIGNAL( signalSelectedCard( int, SvgCard* ) ), this, SLOT( slotPlayerSelectedCard( int , SvgCard* ) ) );
-
+    connect( mPlayerCards, SIGNAL( signalSelectedCardId( int ) ), mClient, SLOT( slotSelectCardId( int ) ) );
+    
     //Setup central cards
-    mCentralCards = new CardsGroup(/* mDeck->boundingRect().size() */);
+    mCentralCards = new CardsGroup;
     
-    //mCentralCards->setPos( sceneRect().width() / 2, 
-    //                       ( sceneRect().height() - mCentralCards->boundingRect().height() ) / 2 );
-    mCentralCards->setPos( ( sceneRect().width() - ( mDeck->boundingRect().size().width() * 1.5 ) ) / 2, 
-                           ( sceneRect().height() - mCentralCards->boundingRect().height() ) / 2 );
-    
-    //mCentralCards->setNewPos( mCentralCards->pos() );
+    /*mCentralCards->setPos( ( sceneRect().width() - ( mDeck->boundingRect().size().width() * 1.5 ) ) / 2, 
+                           ( sceneRect().height() - mDeck->boundingRect().height() ) / 2 );*/
+    connect( mCentralCards, SIGNAL( signalSizeChanged() ), this, SLOT( slotCentralCardsSizeChanged() ) ); 
+    connect( mPlayerCards, SIGNAL( signalSelectedCard( SvgCard* ) ), mCentralCards, SLOT( slotAddNewCard( SvgCard* ) ) );
     
     scene()->addItem( mCentralCards );
     
     connect( mClient, SIGNAL( signalNewGame() ), this, SLOT( slotNewGame() ) );
-    //connect( mClient, SIGNAL( signalNewRound() ), this, SLOT( slotNewRound() ) );
 }
 
 void CentralWidget::slotNewGame()
@@ -210,6 +207,10 @@ void CentralWidget::slotNewGame()
     mPlayerScoreTable->setVisible( true );
     mPlayerScoreTable->getAnimation()->startAnimation();
     
+    //
+    mCentralCards->setPos( sceneRect().width() / 2,
+                           ( sceneRect().height() - mDeck->boundingRect().height() ) / 2 );
+    
 }
 
 void CentralWidget::slotNewRound()
@@ -236,12 +237,17 @@ void CentralWidget::slotNewOpponentCard()
 {
     kDebug();
     
+    //SvgCard* svgCard = new SvgCard( mRenderer );
+    //mOpponentCards->addNewCard( svgCard, mDeck );
+    
     SvgCard* svgCard = new SvgCard( mRenderer );
-    //svgCard->setPos( mDeck->pos() );
+    //
+    svgCard->setPos( mDeck->pos() );
+    svgCard->setVisible( false );
+    scene()->addItem( svgCard );
+    //
     
-    //scene()->addItem( svgCard );
-    
-    mOpponentCards->addNewCard( svgCard, mDeck );
+    mOpponentCards->slotAddNewCard( svgCard );
 }
 
 void CentralWidget::slotNewPlayerCard( Card* card )
@@ -250,8 +256,14 @@ void CentralWidget::slotNewPlayerCard( Card* card )
     
     SvgCard* svgCard = new SvgCard( mRenderer );
     svgCard->getAnimation()->setCard( card );
+    //
+    svgCard->setPos( mDeck->pos() );
+    svgCard->setVisible( false );
+    scene()->addItem( svgCard );
+    //
     
-    mPlayerCards->addNewCard( svgCard, mDeck );
+    //mPlayerCards->addNewCard( svgCard, mDeck );
+    mPlayerCards->slotAddNewCard( svgCard );
 }
 
 void CentralWidget::slotNewTrumpCard( Card* card )
@@ -289,8 +301,9 @@ void CentralWidget::slotOpponentCardsSizeChanged()
     QPointF cardsGroupEndPos( ( sceneRect().width() - mOpponentCards->boundingRect().width() ) / 2,
                               mOpponentCards->y() );
     
-    mOpponentCards->getAnimation()->setEndPosition( cardsGroupEndPos );
-    mOpponentCards->getAnimation()->startAnimation();
+    //mOpponentCards->getAnimation()->setEndPosition( cardsGroupEndPos );
+    //mOpponentCards->getAnimation()->startAnimation();
+    mOpponentCards->setPos( cardsGroupEndPos );
     
     //Set player's score table new position
     QPointF scoreTableEndPos( cardsGroupEndPos.x() + mOpponentCards->boundingRect().width() + CARDS_SCORE_TABLE_DISTANCE,
@@ -308,8 +321,9 @@ void CentralWidget::slotPlayerCardsSizeChanged()
     QPointF cardsGroupEndPos( ( sceneRect().width() - mPlayerCards->boundingRect().width() ) / 2,
                               mPlayerCards->y() );
     
-    mPlayerCards->getAnimation()->setEndPosition( cardsGroupEndPos );
-    mPlayerCards->getAnimation()->startAnimation();
+    //mPlayerCards->getAnimation()->setEndPosition( cardsGroupEndPos );
+    //mPlayerCards->getAnimation()->startAnimation();
+    mPlayerCards->setPos( cardsGroupEndPos );
     
     //Set player's score table new position
     QPointF scoreTableEndPos( cardsGroupEndPos.x() + mPlayerCards->boundingRect().width() + CARDS_SCORE_TABLE_DISTANCE,
@@ -320,50 +334,14 @@ void CentralWidget::slotPlayerCardsSizeChanged()
     
 }
 
-/*void CentralWidget::slotOpponentCardsSizeChanged()
+void CentralWidget::slotCentralCardsSizeChanged()
 {
-    kDebug() << "a";
+    kDebug();
     
-    //mOpponentCards->setPos( ( sceneRect().width() - mOpponentCards->boundingRect().width() ) /2, mOpponentCards->y() );
-
-    QPointF endPos( ( sceneRect().width() - mOpponentCards->boundingRect().width() ) /2, mOpponentCards->y() );
-    kDebug() << "b";
-    mOpponentCards->setNewPos( endPos );
-    kDebug() << "c";
-    Animation* animation = new Animation( mOpponentCards, endPos );
-    kDebug() << "d";
-    animation->startAnimation();
-    kDebug() << "e";
-}*/
-
-/*void CentralWidget::slotPlayerCardsSizeChanged()
-{
-    kDebug() << "a";
+    QPointF cardsGroupEndPos( ( sceneRect().width() - mCentralCards->boundingRect().width() ) / 2,
+                              mCentralCards->y() );
     
-    //mPlayerCards->setPos( ( sceneRect().width() - mPlayerCards->boundingRect().width() ) /2, mPlayerCards->y() );
-    
-    QPointF endPos( ( sceneRect().width() - mPlayerCards->boundingRect().width() ) /2, mPlayerCards->y() );
-    kDebug() << "b";
-    mPlayerCards->setNewPos( endPos );
-    kDebug() << "c";
-    Animation* animation = new Animation( mPlayerCards, endPos );
-    kDebug() << "d";
-    animation->startAnimation();
-    kDebug() << "e";
-}*/
-
-void CentralWidget::slotPlayerSelectedCard( int id, SvgCard* svgCard )
-{
-    kDebug() << id << svgCard->elementId();
-    
-    /*svgCard->setParentItem( 0 ); //Set to top-level item
-    svgCard->setPos( mPlayerCards->pos() + svgCard->pos() );
-    
-    mCentralCards->newCardArrive();
-    
-    Animation* animation = new Animation( svgCard, mCentralCards->pos() + mCentralCards->getNewCardPos() );
-    //animation->startAnimation();
-    animation->slotStartAnimation();*/
+    mCentralCards->setPos( cardsGroupEndPos );
 }
 
 void CentralWidget::setClient( Client* client )

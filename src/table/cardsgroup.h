@@ -13,7 +13,7 @@ class CardsGroup : public QGraphicsObject
     
     //QSizeF mCardSize;
     
-    Animation* mAnimation;
+    //Animation* mAnimation;
     
     int mHighlightCardId;
     
@@ -21,6 +21,10 @@ class CardsGroup : public QGraphicsObject
     
     //
     QPointF getNewCardPos();
+    //
+    
+    //
+    void setCardsPosition();
     //
     
     void highlightCard( int );
@@ -33,10 +37,15 @@ public:
     QRectF boundingRect() const;
     void paint( QPainter*, const QStyleOptionGraphicsItem*, QWidget* );
     
-    Animation* getAnimation(){ return mAnimation; }
+    //Animation* getAnimation(){ return mAnimation; }
     
     //
-    void addNewCard( SvgCard*, QGraphicsItem* );
+    void setPos( qreal, qreal );
+    void setPos( QPointF point ){ setPos( point.x(), point.y() ); }
+    // 
+    
+    //
+    //void addNewCard( SvgCard*, QGraphicsItem* );
     //
     
 private slots:
@@ -48,16 +57,20 @@ private slots:
     void slotCardClicked( SvgCard* );
     
 public slots:
+    //
+    void slotAddNewCard( SvgCard* );
+    //
     void slotSelectableChanged( int, bool );
     
 signals:
-    //
     void signalSizeChanged();
-    //
-    //
+    
     void signalCardArrived();
+    
     //
-    void signalSelectedCard( int, SvgCard* );
+    void signalSelectedCard( SvgCard* );
+    //
+    void signalSelectedCardId( int );
     
 };
 

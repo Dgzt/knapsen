@@ -56,8 +56,11 @@ private slots:
     
     void slotOpponentCardsSizeChanged();
     void slotPlayerCardsSizeChanged();
+    //
+    void slotCentralCardsSizeChanged();
+    //
     
-    void slotPlayerSelectedCard( int, SvgCard* );
+    //void slotPlayerSelectedCard( SvgCard* );
     
 protected:
     virtual void resizeEvent( QResizeEvent* );
