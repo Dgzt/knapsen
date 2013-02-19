@@ -167,13 +167,8 @@ void CardsGroup::slotCardAnimatedEnd()
     
     mCards.last()->getAnimation()->disconnect();
     
-    /*if( mArriveCard ){
-        svgCard->setElementId( mArriveCard->getCardText() );
-        
-        mArriveCard = 0;
-    }*/
-    
-    //mCards.append( svgCard );
+    connect( mCards.last(), SIGNAL( signalMouseEnter(SvgCard*) ), this, SLOT( slotMouseEnter(SvgCard*) ) );
+    connect( mCards.last(), SIGNAL( signalMouseLeave(SvgCard*) ), this, SLOT( slotMouseLeave(SvgCard*) ) );
     
     emit signalCardArrived();
 }
