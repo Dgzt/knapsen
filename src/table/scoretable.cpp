@@ -3,7 +3,8 @@
 #include <QtGui/QPainter>
 #include <KDE/KLocalizedString>
 #include <KDE/KDebug>
-#include "scoretable.h"
+#include "table/animation.h"
+#include "table/scoretable.h"
 
 const QString TRICKS_TEXT = i18n( "Tricks:" );
 const QString SCORE_TEXT = i18n( "Score:" );
@@ -18,6 +19,13 @@ ScoreTable::ScoreTable()
     
     tricksItem->setPos( 0, 0 );
     scoreItem->setPos( 0, tricksItem->boundingRect().height() );
+    
+    mAnimation = new Animation( this ); 
+}
+
+ScoreTable::~ScoreTable()
+{
+    delete mAnimation;
 }
 
 QRectF ScoreTable::boundingRect() const

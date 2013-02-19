@@ -4,6 +4,7 @@
 #include <QtGui/QGraphicsItemAnimation>
 
 class MyTextItem;
+class ScoreTable;
 class SvgCard;
 class CardsGroup;
 //
@@ -23,6 +24,7 @@ private slots:
     
 public:
     Animation( MyTextItem* );
+    Animation( ScoreTable* );
     Animation( SvgCard* );
     Animation( CardsGroup* );
     ~Animation();

@@ -141,27 +141,13 @@ void CardsGroup::addNewCard( SvgCard* svgCard, QGraphicsItem* fromItem )
     //Add the card to scene
     svgCard->setParentItem( this );
     svgCard->setVisible( false );
-    scene()->addItem( svgCard );
-    
-    QRectF oldBoundingRect = boundingRect();
-    kDebug() << oldBoundingRect;
+    //scene()->addItem( svgCard );
     
     QPointF endPosition = getNewCardPos();
     
     mCards.append( svgCard );
     
-    QRectF newBoundingRect = boundingRect();
-    kDebug() << newBoundingRect;
-    
-    kDebug() << pos();
-    
-    //Move the cards group to the new position
-    QPointF cardsGroupEndPos( pos().x() - ( newBoundingRect.width() - oldBoundingRect.width() ) / 2,
-                              pos().y() );
-    
-    mAnimation->setEndPosition( cardsGroupEndPos );
-    mAnimation->startAnimation();
-    
+    emit signalSizeChanged();
     
     //Move the card to the new position
     svgCard->setPos( mapFromItem( fromItem, QPointF( 0, 0 ) ) );

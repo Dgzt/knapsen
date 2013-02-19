@@ -72,7 +72,8 @@ void Animation::slotTimeLineTimeOut()
 #include <KDE/KDebug>
 #include <QtCore/QTimeLine>
 #include <engine/card.h>
-#include <table/mytextitem.h>
+#include "table/mytextitem.h"
+#include "table/scoretable.h"
 #include "table/svgcard.h"
 #include "table/cardsgroup.h"
 #include "table/animation.h"
@@ -82,6 +83,15 @@ const int ANIMATION_TIME = 2000;
 Animation::Animation( MyTextItem* gItem )
 {
     setItem( gItem );
+    
+    setupTimeLine();
+    
+    mCard = 0;
+}
+
+Animation::Animation( ScoreTable* scoreTable )
+{
+    setItem( scoreTable );
     
     setupTimeLine();
     

@@ -5,6 +5,7 @@
 #include <QtCore/QPointF>
 #include "engine/client.h"
 #include "table/mytextitem.h"
+#include "table/scoretable.h"
 #include "table/svgcard.h"
 #include "table/animation.h"
 #include "table/cardsgroup.h"
@@ -18,6 +19,7 @@ const int SCENE_WIDTH = 900; //1000
 const int SCENE_HEIGHT = 850; //1000
 
 const int NAME_DISTANCE = 10;
+const int CARDS_SCORE_TABLE_DISTANCE = 10;
 
 const int DECK_TRUMPCARD_DISTANCE = 30;
 
@@ -32,7 +34,9 @@ CentralWidget::CentralWidget( QWidget* parent ):
     mDeck = 0;
     mTrumpCard = 0;
     mOpponentCards = 0;
+    mOpponentScoreTable = 0;
     mPlayerCards = 0;
+    mPlayerScoreTable = 0;
     mCentralCards = 0;
     
     //Set graphics scene
@@ -68,12 +72,23 @@ void CentralWidget::slotInitialize( QString playerNameStr, QString opponentNameS
     
     scene()->addItem( mOpponentName );
     
+    //Setup opponent's score table
+    mOpponentScoreTable = new ScoreTable;
+    mOpponentScoreTable->setVisible( false );
+    
+    scene()->addItem( mOpponentScoreTable );
+    
     //Setup player's name
     mPlayerName = new MyTextItem( playerNameStr );
     mPlayerName->setVisible( false );
     
     scene()->addItem( mPlayerName );
     
+    //Setup player's score table
+    mPlayerScoreTable = new ScoreTable;
+    mPlayerScoreTable->setVisible( false );
+    
+    scene()->addItem( mPlayerScoreTable );
     
     //Setup type of cards
     if( typeOfCards == Knapsen::GermanSuits ){
@@ -103,27 +118,19 @@ void CentralWidget::slotInitialize( QString playerNameStr, QString opponentNameS
     
     //Setup Opponent's cards
     mOpponentCards = new CardsGroup( /*mDeck->boundingRect().size()*/ );
-    
-    //mOpponentCards->setPos( sceneRect().width() / 2,
-    //                        opponentName->pos().y() + opponentName->boundingRect().height() + NAME_DISTANCE );
-    
     scene()->addItem( mOpponentCards );
     
     connect( mClient, SIGNAL( signalNewOpponentCard() ), this, SLOT( slotNewOpponentCard() ) );
-    //connect( mOpponentCards, SIGNAL( signalSizeChanged() ), this, SLOT( slotOpponentCardsSizeChanged() ) );
+    connect( mOpponentCards, SIGNAL( signalSizeChanged() ), this, SLOT( slotOpponentCardsSizeChanged() ) );
     connect( mOpponentCards, SIGNAL( signalCardArrived() ), mClient, SLOT( slotProcessCommands() ) );
     
     //Setup Player's cards
     mPlayerCards = new CardsGroup( /*mDeck->boundingRect().size()*/ );
-    
-    //mPlayerCards->setPos( sceneRect().width() / 2,
-    //                      playerName->pos().y() - NAME_DISTANCE - mPlayerCards->boundingRect().height() );
-    
     scene()->addItem( mPlayerCards );
     
     connect( mClient, SIGNAL( signalNewPlayerCard( Card* ) ), this, SLOT( slotNewPlayerCard( Card* ) ) );
     connect( mClient, SIGNAL( signalPlayerCardSelectableChanged( int , bool ) ), mPlayerCards, SLOT( slotSelectableChanged( int , bool ) ) );
-    //connect( mPlayerCards, SIGNAL( signalSizeChanged() ), this, SLOT( slotPlayerCardsSizeChanged() ) );
+    connect( mPlayerCards, SIGNAL( signalSizeChanged() ), this, SLOT( slotPlayerCardsSizeChanged() ) );
     connect( mPlayerCards, SIGNAL( signalCardArrived() ), mClient, SLOT( slotProcessCommands() ) );
     connect( mPlayerCards, SIGNAL( signalSelectedCard( int, SvgCard* ) ), this, SLOT( slotPlayerSelectedCard( int , SvgCard* ) ) );
 
@@ -151,7 +158,6 @@ void CentralWidget::slotNewGame()
     mOpponentName->setPos( ( sceneRect().width() - mOpponentName->boundingRect().width() ) / 2,
                              mapToScene( 0, 0 ).y() - mOpponentName->boundingRect().height() );
     
-    
     QPointF endOpponentNamePos( mOpponentName->x(), 
                                 NAME_DISTANCE );
     
@@ -159,6 +165,21 @@ void CentralWidget::slotNewGame()
     
     mOpponentName->setVisible( true );
     mOpponentName->getAnimation()->startAnimation();
+    
+    //Setup opponent's cards pos
+    mOpponentCards->setPos( sceneRect().width() / 2,
+                            endOpponentNamePos.y() + mOpponentName->boundingRect().height() + NAME_DISTANCE );
+    
+    //Opponent's score table
+    mOpponentScoreTable->setPos( mapToScene( width(), height() ).x(),
+                                 mOpponentCards->pos().y() );
+    
+    QPointF endOpponentScoreTablePos( mOpponentCards->x() + CARDS_SCORE_TABLE_DISTANCE,
+                                      mOpponentScoreTable->y() );
+    
+    mOpponentScoreTable->getAnimation()->setEndPosition( endOpponentScoreTablePos );
+    mOpponentScoreTable->setVisible( true );
+    mOpponentScoreTable->getAnimation()->startAnimation();
     
     //Player's name
     mPlayerName->setPos( ( sceneRect().width() - mPlayerName->boundingRect().width() ) /2,
@@ -174,14 +195,20 @@ void CentralWidget::slotNewGame()
     
     mPlayerName->getAnimation()->startAnimation();
     
-    //Setup opponent's cards pos
-    mOpponentCards->setPos( sceneRect().width() / 2,
-                            endOpponentNamePos.y() + mOpponentName->boundingRect().height() + NAME_DISTANCE );
-        
-    
     //Setup player's cards pos
     mPlayerCards->setPos( sceneRect().width() / 2,
                           endPlayerNamePos.y() - NAME_DISTANCE - mDeck->boundingRect().height() );
+    
+    //Player's score table
+    mPlayerScoreTable->setPos( mOpponentScoreTable->x(),
+                               endPlayerNamePos.y() - NAME_DISTANCE - mPlayerScoreTable->boundingRect().height() );
+    
+    QPointF endPlayerScoreTablePos( mPlayerCards->x() + CARDS_SCORE_TABLE_DISTANCE,
+                                    mPlayerScoreTable->y() );
+    
+    mPlayerScoreTable->getAnimation()->setEndPosition( endPlayerScoreTablePos );
+    mPlayerScoreTable->setVisible( true );
+    mPlayerScoreTable->getAnimation()->startAnimation();
     
 }
 
@@ -210,9 +237,9 @@ void CentralWidget::slotNewOpponentCard()
     kDebug();
     
     SvgCard* svgCard = new SvgCard( mRenderer );
-    svgCard->setPos( mDeck->pos() );
+    //svgCard->setPos( mDeck->pos() );
     
-    scene()->addItem( svgCard );
+    //scene()->addItem( svgCard );
     
     mOpponentCards->addNewCard( svgCard, mDeck );
 }
@@ -252,6 +279,45 @@ void CentralWidget::slotNewTrumpCard( Card* card )
     mTrumpCard->setVisible( true );
     
     mTrumpCard->getAnimation()->startAnimation();
+}
+
+void CentralWidget::slotOpponentCardsSizeChanged()
+{
+    kDebug();
+    
+    //Set player's cards new position
+    QPointF cardsGroupEndPos( ( sceneRect().width() - mOpponentCards->boundingRect().width() ) / 2,
+                              mOpponentCards->y() );
+    
+    mOpponentCards->getAnimation()->setEndPosition( cardsGroupEndPos );
+    mOpponentCards->getAnimation()->startAnimation();
+    
+    //Set player's score table new position
+    QPointF scoreTableEndPos( cardsGroupEndPos.x() + mOpponentCards->boundingRect().width() + CARDS_SCORE_TABLE_DISTANCE,
+                              mOpponentScoreTable->y() );
+    
+    mOpponentScoreTable->getAnimation()->setEndPosition( scoreTableEndPos );
+    mOpponentScoreTable->getAnimation()->startAnimation();
+}
+
+void CentralWidget::slotPlayerCardsSizeChanged()
+{
+    kDebug();
+    
+    //Set player's cards new position
+    QPointF cardsGroupEndPos( ( sceneRect().width() - mPlayerCards->boundingRect().width() ) / 2,
+                              mPlayerCards->y() );
+    
+    mPlayerCards->getAnimation()->setEndPosition( cardsGroupEndPos );
+    mPlayerCards->getAnimation()->startAnimation();
+    
+    //Set player's score table new position
+    QPointF scoreTableEndPos( cardsGroupEndPos.x() + mPlayerCards->boundingRect().width() + CARDS_SCORE_TABLE_DISTANCE,
+                              mPlayerScoreTable->y() );
+    
+    mPlayerScoreTable->getAnimation()->setEndPosition( scoreTableEndPos );
+    mPlayerScoreTable->getAnimation()->startAnimation();
+    
 }
 
 /*void CentralWidget::slotOpponentCardsSizeChanged()

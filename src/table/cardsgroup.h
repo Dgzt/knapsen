@@ -15,10 +15,6 @@ class CardsGroup : public QGraphicsObject
     
     Animation* mAnimation;
     
-    //
-    //SvgCard* mArriveCard;
-    //
-    
     int mHighlightCardId;
     
     QList< SvgCard* > mCards;
@@ -37,6 +33,8 @@ public:
     QRectF boundingRect() const;
     void paint( QPainter*, const QStyleOptionGraphicsItem*, QWidget* );
     
+    Animation* getAnimation(){ return mAnimation; }
+    
     //
     void addNewCard( SvgCard*, QGraphicsItem* );
     //
@@ -53,6 +51,9 @@ public slots:
     void slotSelectableChanged( int, bool );
     
 signals:
+    //
+    void signalSizeChanged();
+    //
     //
     void signalCardArrived();
     //

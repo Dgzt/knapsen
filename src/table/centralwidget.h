@@ -11,6 +11,7 @@ class Card;
 class CardsGroup;
 //
 class MyTextItem;
+class ScoreTable;
 //
 //
 //class Animation;
@@ -26,10 +27,8 @@ class CentralWidget : public QGraphicsView
     
     //
     MyTextItem* mOpponentName;
-    //Animation* mOpponentNameAnimation;
     
     MyTextItem* mPlayerName;
-    //Animation* mPlayerNameAnimation;
     //
     
     SvgCard* mDeck;
@@ -37,7 +36,10 @@ class CentralWidget : public QGraphicsView
     SvgCard* mTrumpCard;
     
     CardsGroup* mOpponentCards;
+    ScoreTable* mOpponentScoreTable;
+    
     CardsGroup* mPlayerCards;
+    ScoreTable* mPlayerScoreTable;
     
     CardsGroup* mCentralCards;
     
@@ -52,8 +54,8 @@ private slots:
     
     void slotNewTrumpCard( Card* );
     
-    //void slotOpponentCardsSizeChanged();
-    //void slotPlayerCardsSizeChanged();
+    void slotOpponentCardsSizeChanged();
+    void slotPlayerCardsSizeChanged();
     
     void slotPlayerSelectedCard( int, SvgCard* );
     
