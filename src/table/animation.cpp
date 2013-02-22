@@ -107,14 +107,14 @@ Animation::Animation( SvgCard* svgCard )
     mCard = 0;
 }
 
-Animation::Animation( CardsGroup* cardsGroup )
+/*Animation::Animation( CardsGroup* cardsGroup )
 {
     setItem( cardsGroup );
     
     setupTimeLine();
     
     mCard = 0;
-}
+}*/
 
 Animation::~Animation()
 {

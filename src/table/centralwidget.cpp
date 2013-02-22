@@ -15,7 +15,7 @@
 #include <QtCore/QTimer>
 //
 
-const int SCENE_WIDTH = 900; //1000
+const int SCENE_WIDTH = 1000; //1000
 const int SCENE_HEIGHT = 850; //1000
 
 const int NAME_DISTANCE = 10;
@@ -118,7 +118,7 @@ void CentralWidget::slotInitialize( QString playerNameStr, QString opponentNameS
     
     //Setup Opponent's cards
     mOpponentCards = new CardsGroup;
-    scene()->addItem( mOpponentCards );
+    //scene()->addItem( mOpponentCards );
     
     connect( mClient, SIGNAL( signalNewOpponentCard() ), this, SLOT( slotNewOpponentCard() ) );
     connect( mOpponentCards, SIGNAL( signalSizeChanged() ), this, SLOT( slotOpponentCardsSizeChanged() ) );
@@ -126,7 +126,7 @@ void CentralWidget::slotInitialize( QString playerNameStr, QString opponentNameS
     
     //Setup Player's cards
     mPlayerCards = new CardsGroup;
-    scene()->addItem( mPlayerCards );
+    //scene()->addItem( mPlayerCards );
     
     connect( mClient, SIGNAL( signalNewPlayerCard( Card* ) ), this, SLOT( slotNewPlayerCard( Card* ) ) );
     connect( mClient, SIGNAL( signalPlayerCardSelectableChanged( int , bool ) ), mPlayerCards, SLOT( slotSelectableChanged( int , bool ) ) );
@@ -142,7 +142,7 @@ void CentralWidget::slotInitialize( QString playerNameStr, QString opponentNameS
     connect( mCentralCards, SIGNAL( signalSizeChanged() ), this, SLOT( slotCentralCardsSizeChanged() ) ); 
     connect( mPlayerCards, SIGNAL( signalSelectedCard( SvgCard* ) ), mCentralCards, SLOT( slotAddNewCard( SvgCard* ) ) );
     
-    scene()->addItem( mCentralCards );
+    //scene()->addItem( mCentralCards );
     
     connect( mClient, SIGNAL( signalNewGame() ), this, SLOT( slotNewGame() ) );
 }
@@ -169,7 +169,7 @@ void CentralWidget::slotNewGame()
     
     //Opponent's score table
     mOpponentScoreTable->setPos( mapToScene( width(), height() ).x(),
-                                 mOpponentCards->pos().y() );
+                                 mOpponentCards->y() );
     
     QPointF endOpponentScoreTablePos( mOpponentCards->x() + CARDS_SCORE_TABLE_DISTANCE,
                                       mOpponentScoreTable->y() );

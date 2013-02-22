@@ -1,17 +1,22 @@
 #ifndef CARDS_GROUP_H
 #define CARDS_GROUP_H
 
-#include <QtGui/QGraphicsObject>
+//#include <QtGui/QGraphicsObject>
+#include <QtCore/QObject>
+#include <QtCore/QPointF>
 
 class SvgCard;
 class Animation;
 class Card;
 
-class CardsGroup : public QGraphicsObject
+//class CardsGroup : public QGraphicsObject
+class CardsGroup : public QObject
 {
     Q_OBJECT
     
     //QSizeF mCardSize;
+    
+    QPointF mPos;
     
     //Animation* mAnimation;
     
@@ -31,15 +36,18 @@ class CardsGroup : public QGraphicsObject
     void removeHighlight( int );
     
 public:
-    CardsGroup(/* QSizeF */);
+    CardsGroup();
     ~CardsGroup();
     
     QRectF boundingRect() const;
-    void paint( QPainter*, const QStyleOptionGraphicsItem*, QWidget* );
+    //void paint( QPainter*, const QStyleOptionGraphicsItem*, QWidget* );
     
     //Animation* getAnimation(){ return mAnimation; }
     
     //
+    qreal x(){ return mPos.x(); }
+    qreal y(){ return mPos.y(); }
+    
     void setPos( qreal, qreal );
     void setPos( QPointF point ){ setPos( point.x(), point.y() ); }
     // 

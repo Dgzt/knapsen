@@ -10,9 +10,8 @@ const int INVALID_HIGHLIGHT_CARD_ID = -1;
 
 const double HIGHLIGHT_Y_PERCENT = 20;
 
-CardsGroup::CardsGroup(/* QSizeF cardSize */) : 
-    //mCardSize( cardSize ),
-    //mCardArrive( false ),
+CardsGroup::CardsGroup() :
+    mPos( 0,0 ),
     mHighlightCardId( INVALID_HIGHLIGHT_CARD_ID )
 {
     //mAnimation = new Animation( this );
@@ -34,8 +33,8 @@ QRectF CardsGroup::boundingRect() const
     return QRectF( 0, 0, width, 0 );
 }
 
-void CardsGroup::paint( QPainter* , const QStyleOptionGraphicsItem* , QWidget* )
-{}
+/*void CardsGroup::paint( QPainter* , const QStyleOptionGraphicsItem* , QWidget* )
+{}*/
 
 /*QPointF CardsGroup::getNewCardPos()
 {
@@ -76,8 +75,8 @@ void CardsGroup::setCardsPosition()
     for( int i = 0; i < mCards.size(); ++i ){
         QPointF distance( i * halfCardWidth, 0 );
         
-        if( mCards.at( i )->pos().x() != pos().x() + distance.x() ){
-            mCards.at( i )->getAnimation()->setEndPosition( pos() + distance );
+        if( mCards.at( i )->pos().x() != /*pos().x()*/ mPos.x() + distance.x() ){
+            mCards.at( i )->getAnimation()->setEndPosition( /*pos()*/ mPos + distance );
             mCards.at( i )->getAnimation()->startAnimation();
         }
     }
@@ -165,7 +164,8 @@ void CardsGroup::slotCardClicked( SvgCard* svgCard )
 
 void CardsGroup::setPos( qreal x, qreal y )
 {
-    QGraphicsObject::setPos( x, y );
+    //QGraphicsObject::setPos( x, y );
+    mPos = QPointF( x, y );
     
     kDebug() << x << y;
     

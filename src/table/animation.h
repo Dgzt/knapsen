@@ -26,7 +26,7 @@ public:
     Animation( MyTextItem* );
     Animation( ScoreTable* );
     Animation( SvgCard* );
-    Animation( CardsGroup* );
+    //Animation( CardsGroup* );
     ~Animation();
     
     void setEndPosition( QPointF );
