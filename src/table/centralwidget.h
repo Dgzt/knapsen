@@ -13,8 +13,7 @@ class CardsGroup;
 class MyTextItem;
 class ScoreTable;
 //
-//
-//class Animation;
+
 //
 
 class CentralWidget : public QGraphicsView
@@ -43,6 +42,10 @@ class CentralWidget : public QGraphicsView
     
     CardsGroup* mCentralCards;
     
+    //Buttons
+    QGraphicsProxyWidget* mCloseButton;
+    
+    
 private slots:
     void slotInitialize( QString, QString, Knapsen::TypeOfCards );
     
@@ -61,6 +64,10 @@ private slots:
     //
     
     //void slotPlayerSelectedCard( SvgCard* );
+    void slotCloseButtonVisible( bool );
+    
+    void slotCloseDeck();
+    
     
 protected:
     virtual void resizeEvent( QResizeEvent* );

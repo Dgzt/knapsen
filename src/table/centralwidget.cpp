@@ -1,8 +1,11 @@
 #include <KDE/KGlobal>
 #include <KDE/KStandardDirs>
 #include <KDE/KDebug>
+#include <KDE/KLocalizedString>
 #include <QtSvg/QSvgRenderer>
 #include <QtCore/QPointF>
+#include <QtGui/QPushButton>
+#include <QtGui/QGraphicsProxyWidget>
 #include "engine/client.h"
 #include "table/mytextitem.h"
 #include "table/scoretable.h"
@@ -23,6 +26,10 @@ const int CARDS_SCORE_TABLE_DISTANCE = 10;
 
 const int DECK_TRUMPCARD_DISTANCE = 30;
 
+const int BUTTON_DISTANCE = 10;
+
+const int BUTTON_HEIGHT = 30;
+
 CentralWidget::CentralWidget( QWidget* parent ): 
     QGraphicsView( parent )
 {
@@ -38,6 +45,9 @@ CentralWidget::CentralWidget( QWidget* parent ):
     mPlayerCards = 0;
     mPlayerScoreTable = 0;
     mCentralCards = 0;
+    //
+    mCloseButton = 0;
+    //
     
     //Set graphics scene
     QGraphicsScene* gScene = new QGraphicsScene( 0, 0, SCENE_WIDTH, SCENE_HEIGHT );
@@ -145,6 +155,16 @@ void CentralWidget::slotInitialize( QString playerNameStr, QString opponentNameS
     //scene()->addItem( mCentralCards );
     
     connect( mClient, SIGNAL( signalNewGame() ), this, SLOT( slotNewGame() ) );
+    
+    //Close button
+    QPushButton *closeButton = new QPushButton( i18n( "Close" ) );
+    closeButton->setAttribute( Qt::WA_NoSystemBackground );
+    mCloseButton = scene()->addWidget( closeButton );
+    mCloseButton->setVisible( false );
+    
+    connect( mClient, SIGNAL( signalCloseButtonVisible( bool ) ), this, SLOT( slotCloseButtonVisible( bool ) ) );
+    connect( mClient, SIGNAL( signalCloseDeck() ), this, SLOT( slotCloseDeck() ) );
+    connect( closeButton, SIGNAL( clicked() ), mClient, SLOT( slotCloseButtonClicked() ) );
 }
 
 void CentralWidget::slotNewGame()
@@ -210,7 +230,6 @@ void CentralWidget::slotNewGame()
     //
     mCentralCards->setPos( sceneRect().width() / 2,
                            ( sceneRect().height() - mDeck->boundingRect().height() ) / 2 );
-    
 }
 
 void CentralWidget::slotNewRound()
@@ -231,6 +250,10 @@ void CentralWidget::slotNewRound()
     mDeck->setVisible( true );
     
     mDeck->getAnimation()->startAnimation();
+    
+    //Set close button position
+    mCloseButton->setGeometry( QRectF( QPointF( endDeckPos.x(), endDeckPos.y() + mDeck->boundingRect().height() + BUTTON_DISTANCE ), 
+                                       QSizeF( mDeck->boundingRect().width(), BUTTON_HEIGHT ) ) );
 }
 
 void CentralWidget::slotNewOpponentCard()
@@ -342,6 +365,16 @@ void CentralWidget::slotCentralCardsSizeChanged()
                               mCentralCards->y() );
     
     mCentralCards->setPos( cardsGroupEndPos );
+}
+
+void CentralWidget::slotCloseButtonVisible( bool visible )
+{
+    mCloseButton->setVisible( visible );
+}
+
+void CentralWidget::slotCloseDeck()
+{
+    mTrumpCard->setElementId( "back" );
 }
 
 void CentralWidget::setClient( Client* client )

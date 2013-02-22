@@ -14,17 +14,17 @@ class CardsGroup : public QObject
 {
     Q_OBJECT
     
-    //QSizeF mCardSize;
-    
     QPointF mPos;
-    
-    //Animation* mAnimation;
     
     int mHighlightCardId;
     
+    //
+    //int mSelectedCardId;
+    //
+    
     QList< SvgCard* > mCards;
     
-    //
+    ///
     QPointF getNewCardPos();
     //
     

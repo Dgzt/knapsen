@@ -78,7 +78,7 @@ void Animation::slotTimeLineTimeOut()
 #include "table/cardsgroup.h"
 #include "table/animation.h"
 
-const int ANIMATION_TIME = 2000;
+const int ANIMATION_TIME = 200;
 
 Animation::Animation( MyTextItem* gItem )
 {

@@ -6,13 +6,14 @@
 #include "table/animation.h"
 #include "table/cardsgroup.h"
 
-const int INVALID_HIGHLIGHT_CARD_ID = -1;
+const int INVALID_CARD_ID = -1;
 
 const double HIGHLIGHT_Y_PERCENT = 20;
 
 CardsGroup::CardsGroup() :
     mPos( 0,0 ),
-    mHighlightCardId( INVALID_HIGHLIGHT_CARD_ID )
+    mHighlightCardId( INVALID_CARD_ID )//,
+    //mSelectedCardId( INVALID_CARD_ID )
 {
     //mAnimation = new Animation( this );
 }
@@ -113,10 +114,10 @@ void CardsGroup::slotMouseEnter( SvgCard* svgCard )
     
     kDebug() << id;
     
-    if( mHighlightCardId != INVALID_HIGHLIGHT_CARD_ID ){
+    if( mHighlightCardId != INVALID_CARD_ID ){
         removeHighlight( mHighlightCardId );
         
-        mHighlightCardId = INVALID_HIGHLIGHT_CARD_ID;
+        mHighlightCardId = INVALID_CARD_ID;
     }
     
     highlightCard( id );
@@ -133,7 +134,7 @@ void CardsGroup::slotMouseLeave( SvgCard* svgCard )
     
     if( id == mHighlightCardId ){
         removeHighlight( mHighlightCardId );
-        mHighlightCardId = INVALID_HIGHLIGHT_CARD_ID;
+        mHighlightCardId = INVALID_CARD_ID;
         
         //emit signalSizeChanged();
     }
