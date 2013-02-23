@@ -501,10 +501,10 @@ void Client::slotSelectCardId( int id )
     kDebug() << "Select card:" << id;
     setSelectableAllCards( false );
     
-    /*Card* card = takeCard( id );
+    Card* card = takeCard( id );
     mCentralCards->add( card );
     
-    emit signalNewCentralCard( card );
+    //emit signalNewCentralCard( card );
     
     if( isTwentyButtonVisible() ){
         setTwentyButtonVisible( false );
@@ -527,7 +527,7 @@ void Client::slotSelectCardId( int id )
         emit signalTrumpCardSelectableChanged( false );
     }
     
-    sendCommand( SELECTED_CARD_ID_COMMAND+QString::number( id ) );*/
+    sendCommand( SELECTED_CARD_ID_COMMAND+QString::number( id ) );
 }
 
 void Client::slotSelectTrumpCard()

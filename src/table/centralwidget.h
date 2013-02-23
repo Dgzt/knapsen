@@ -44,6 +44,13 @@ class CentralWidget : public QGraphicsView
     
     //Buttons
     QGraphicsProxyWidget* mCloseButton;
+    QGraphicsProxyWidget* mSchnapsenButton;
+    QGraphicsProxyWidget* mTwentyButton;
+    QGraphicsProxyWidget* mFortyButton;
+    
+    //Arrows
+    QGraphicsPixmapItem* mPlayerArrow;
+    QGraphicsPixmapItem* mOpponentArrow;
     
     
 private slots:
@@ -65,8 +72,18 @@ private slots:
     
     //void slotPlayerSelectedCard( SvgCard* );
     void slotCloseButtonVisible( bool );
+    void slotSchnapsenButtonVisible( bool );
+    void slotTwentyButtonVisible( bool );
+    void slotFortyButtonVisible( bool );
     
     void slotCloseDeck();
+    
+    //
+    void slotShowPlayerArrow();
+    void slotHidePlayerArrow();
+    void slotShowOpponentArrow();
+    void slotHideOpponentArrow();
+    //
     
     
 protected:

@@ -26,8 +26,9 @@ const int CARDS_SCORE_TABLE_DISTANCE = 10;
 
 const int DECK_TRUMPCARD_DISTANCE = 30;
 
-const int BUTTON_DISTANCE = 10;
-
+//const int BUTTON_X_DISTANCE = 10;
+const int BUTTON_Y_DISTANCE = 2;
+const int BUTTON_WIDTH = 100;
 const int BUTTON_HEIGHT = 30;
 
 CentralWidget::CentralWidget( QWidget* parent ): 
@@ -47,6 +48,14 @@ CentralWidget::CentralWidget( QWidget* parent ):
     mCentralCards = 0;
     //
     mCloseButton = 0;
+    mSchnapsenButton = 0;
+    mTwentyButton = 0;
+    mFortyButton = 0;
+    //
+    
+    //
+    mPlayerArrow = 0;
+    mOpponentArrow = 0;
     //
     
     //Set graphics scene
@@ -165,6 +174,45 @@ void CentralWidget::slotInitialize( QString playerNameStr, QString opponentNameS
     connect( mClient, SIGNAL( signalCloseButtonVisible( bool ) ), this, SLOT( slotCloseButtonVisible( bool ) ) );
     connect( mClient, SIGNAL( signalCloseDeck() ), this, SLOT( slotCloseDeck() ) );
     connect( closeButton, SIGNAL( clicked() ), mClient, SLOT( slotCloseButtonClicked() ) );
+    
+    //Schnapsen button
+    QPushButton* schnapsenButton = new QPushButton( i18n( "Schnapsen" ) );
+    schnapsenButton->setAttribute( Qt::WA_NoSystemBackground );
+    mSchnapsenButton = scene()->addWidget( schnapsenButton );
+    mSchnapsenButton->setVisible( false );
+    
+    connect( mClient, SIGNAL( signalSchnapsenButtonVisible( bool ) ), this, SLOT( slotSchnapsenButtonVisible( bool ) ) );
+    connect( schnapsenButton, SIGNAL( clicked() ), mClient, SLOT( slotSchnapsenButtonClicked() ) );
+    
+    //Twenty button
+    QPushButton* twentyButton = new QPushButton( i18n( "Twenty" ) );
+    twentyButton->setAttribute( Qt::WA_NoSystemBackground );
+    mTwentyButton = scene()->addWidget( twentyButton );
+    mTwentyButton->setVisible( false );
+    
+    connect( mClient, SIGNAL( signalTwentyButtonVisible( bool ) ), this, SLOT( slotTwentyButtonVisible( bool ) ) );
+    connect( twentyButton, SIGNAL( clicked() ), mClient, SLOT( slotTwentyButtonClicked() ) );
+    
+    //Forty button
+    QPushButton* fortyButton = new QPushButton( i18n( "Forty" ) );
+    fortyButton->setAttribute( Qt::WA_NoSystemBackground );
+    mFortyButton = scene()->addWidget( fortyButton );
+    mFortyButton->setVisible( false );
+    
+    connect( mClient, SIGNAL( signalFortyButtonVisible( bool ) ), this, SLOT( slotFortyButtonVisible( bool ) ) );
+    connect( fortyButton, SIGNAL( clicked() ), mClient, SLOT( slotFortyButtonClicked() ) );
+    
+    //Arrows
+    QPixmap arrowImage( KGlobal::dirs()->findResource( "appdata", "pics/arrow.png" ) );
+    mPlayerArrow = scene()->addPixmap( arrowImage );
+    mOpponentArrow = scene()->addPixmap( arrowImage );
+    
+    mPlayerArrow->setVisible( false );
+    mOpponentArrow->setVisible( false );
+    
+    connect( mClient, SIGNAL( signalPlayerInAction() ), this, SLOT( slotShowPlayerArrow() ) );
+    connect( mPlayerCards, SIGNAL( signalSelectedCardId(int) ), this, SLOT( slotHidePlayerArrow() ) );
+    connect( mClient, SIGNAL( signalOpponentInAction() ), this, SLOT( slotShowOpponentArrow() ) );
 }
 
 void CentralWidget::slotNewGame()
@@ -252,7 +300,7 @@ void CentralWidget::slotNewRound()
     mDeck->getAnimation()->startAnimation();
     
     //Set close button position
-    mCloseButton->setGeometry( QRectF( QPointF( endDeckPos.x(), endDeckPos.y() + mDeck->boundingRect().height() + BUTTON_DISTANCE ), 
+    mCloseButton->setGeometry( QRectF( QPointF( endDeckPos.x(), endDeckPos.y() + mDeck->boundingRect().height() + BUTTON_Y_DISTANCE ), 
                                        QSizeF( mDeck->boundingRect().width(), BUTTON_HEIGHT ) ) );
 }
 
@@ -334,6 +382,11 @@ void CentralWidget::slotOpponentCardsSizeChanged()
     
     mOpponentScoreTable->getAnimation()->setEndPosition( scoreTableEndPos );
     mOpponentScoreTable->getAnimation()->startAnimation();
+    
+    //Set position of arrow
+    mOpponentArrow->setPos( scoreTableEndPos.x(), 
+                            mOpponentCards->y() + mOpponentCards->boundingRect().height() - mOpponentArrow->boundingRect().height() );
+    //mOpponentArrow->setVisible( true );
 }
 
 void CentralWidget::slotPlayerCardsSizeChanged()
@@ -355,6 +408,24 @@ void CentralWidget::slotPlayerCardsSizeChanged()
     mPlayerScoreTable->getAnimation()->setEndPosition( scoreTableEndPos );
     mPlayerScoreTable->getAnimation()->startAnimation();
     
+    //Set forty button geometry
+    mFortyButton->setGeometry( QRectF( QPointF( scoreTableEndPos.x(), scoreTableEndPos.y() - BUTTON_Y_DISTANCE - BUTTON_HEIGHT ),
+                                       QSizeF( BUTTON_WIDTH, BUTTON_HEIGHT ) ) );
+    //mFortyButton->setVisible( true );
+    
+    //Set twenty button geometry
+    mTwentyButton->setGeometry( QRectF( QPointF( mFortyButton->x(), mFortyButton->y() - BUTTON_Y_DISTANCE - BUTTON_HEIGHT ),
+                                       QSizeF( BUTTON_WIDTH, BUTTON_HEIGHT ) ) );
+    //mTwentyButton->setVisible( true );
+    
+    //Set schnapsen button geometry
+    mSchnapsenButton->setGeometry( QRectF( QPointF( mTwentyButton->x(), mTwentyButton->y() - BUTTON_Y_DISTANCE - BUTTON_HEIGHT ),
+                                       QSizeF( BUTTON_WIDTH, BUTTON_HEIGHT ) ) );
+    //mSchnapsenButton->setVisible( true );
+    
+    //Set position of arrow
+    mPlayerArrow->setPos( mSchnapsenButton->x(), mPlayerCards->y() );
+    //mPlayerArrow->setVisible( true );
 }
 
 void CentralWidget::slotCentralCardsSizeChanged()
@@ -372,9 +443,44 @@ void CentralWidget::slotCloseButtonVisible( bool visible )
     mCloseButton->setVisible( visible );
 }
 
+void CentralWidget::slotSchnapsenButtonVisible( bool visible )
+{
+    mSchnapsenButton->setVisible( visible );
+}
+
+void CentralWidget::slotTwentyButtonVisible( bool visible )
+{
+    mTwentyButton->setVisible( visible );
+}
+
+void CentralWidget::slotFortyButtonVisible( bool visible )
+{
+    mFortyButton->setVisible( visible );
+}
+
 void CentralWidget::slotCloseDeck()
 {
     mTrumpCard->setElementId( "back" );
+}
+
+void CentralWidget::slotShowPlayerArrow()
+{
+    mPlayerArrow->show();
+}
+
+void CentralWidget::slotHidePlayerArrow()
+{
+    mPlayerArrow->hide();
+}
+
+void CentralWidget::slotShowOpponentArrow()
+{
+    mOpponentArrow->show();
+}
+
+void CentralWidget::slotHideOpponentArrow()
+{
+    mOpponentArrow->hide();
 }
 
 void CentralWidget::setClient( Client* client )

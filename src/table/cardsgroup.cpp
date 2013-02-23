@@ -25,13 +25,15 @@ CardsGroup::~CardsGroup()
 
 QRectF CardsGroup::boundingRect() const
 {
-    qreal width = 0.0;
+    qreal width = 0;
+    qreal height = 0;
     
     if( mCards.size() > 0 ){
         width = ( mCards.size() + 1 ) * ( mCards.at( 0 )->boundingRect().width() / 2 );
+        height = mCards.at( 0 )->boundingRect().height();
     }
     
-    return QRectF( 0, 0, width, 0 );
+    return QRectF( 0, 0, width, height );
 }
 
 /*void CardsGroup::paint( QPainter* , const QStyleOptionGraphicsItem* , QWidget* )
