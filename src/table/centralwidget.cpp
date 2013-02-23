@@ -140,6 +140,9 @@ void CentralWidget::slotInitialize( QString playerNameStr, QString opponentNameS
     //scene()->addItem( mOpponentCards );
     
     connect( mClient, SIGNAL( signalNewOpponentCard() ), this, SLOT( slotNewOpponentCard() ) );
+    //
+    connect( mClient, SIGNAL( signalOpponentSelectedCard( int, Card* ) ), mOpponentCards, SLOT( slotSelectedCard( int, Card* ) ) );
+    //
     connect( mOpponentCards, SIGNAL( signalSizeChanged() ), this, SLOT( slotOpponentCardsSizeChanged() ) );
     connect( mOpponentCards, SIGNAL( signalCardArrived() ), mClient, SLOT( slotProcessCommands() ) );
     
@@ -160,6 +163,9 @@ void CentralWidget::slotInitialize( QString playerNameStr, QString opponentNameS
                            ( sceneRect().height() - mDeck->boundingRect().height() ) / 2 );*/
     connect( mCentralCards, SIGNAL( signalSizeChanged() ), this, SLOT( slotCentralCardsSizeChanged() ) ); 
     connect( mPlayerCards, SIGNAL( signalSelectedCard( SvgCard* ) ), mCentralCards, SLOT( slotAddNewCard( SvgCard* ) ) );
+    //
+    connect( mOpponentCards, SIGNAL( signalSelectedCard( SvgCard* ) ), mCentralCards, SLOT( slotAddNewCard( SvgCard* ) ) );
+    //
     
     //scene()->addItem( mCentralCards );
     

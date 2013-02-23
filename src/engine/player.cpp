@@ -664,10 +664,17 @@ void Player::sendSelectableCertainCards( CentralCards *centralCards, Trump* trum
     sendCommand( SELECTABLE_CERTAIN_CARDS_COMMAND );
 }
 
-void Player::sendOpponentAddNewCentralCard( const Card *card )
+/*void Player::sendOpponentAddNewCentralCard( const Card *card )
 {
     kDebug() << getName() << "Opponent add new central card.";
     sendCommand( OPPONENT_ADD_NEW_CENTRAL_CARD_COMMAND+QString::number( card->getValue() ) );
+}*/
+
+void Player::sendOpponentSelectedCard( int id , const Card* card )
+{
+    kDebug() << getName() << id << card->getCardText();
+    
+    sendCommand( OPPONENT_SELECTED_CARD_COMMAND + QString::number( id ) + "," + QString::number( card->getValue() ) );
 }
 
 void Player::addTricks( int tricks )

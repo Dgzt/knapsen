@@ -277,7 +277,7 @@ void Client::slotProcessCommands()
             emit signalOpponentInAction();
         }
         
-        if( getCommandPartOfCommand( commandList.first() ) == OPPONENT_SELECTED_CARD_ID_COMMAND ){
+        /*if( getCommandPartOfCommand( commandList.first() ) == OPPONENT_SELECTED_CARD_ID_COMMAND ){
             kDebug() << getName() << "Opponent selected card id:" << getValuePartOfCommand( commandList.first() );
             
             bool ok;
@@ -287,9 +287,9 @@ void Client::slotProcessCommands()
             }else{
                 kDebug() << "ERROR! Cannot convert opponent selected card id command value to int!";
             }
-        }
+        }*/
         
-        if( getCommandPartOfCommand( commandList.first() ) == OPPONENT_ADD_NEW_CENTRAL_CARD_COMMAND ){
+        /*if( getCommandPartOfCommand( commandList.first() ) == OPPONENT_ADD_NEW_CENTRAL_CARD_COMMAND ){
             kDebug() << getName() << "Opponent add new central card.";
             
             bool ok;
@@ -301,6 +301,38 @@ void Client::slotProcessCommands()
                 //emit signalNewCentralCard( pos, mCentralCards->getCard( pos ) );
                 emit signalNewCentralCard( card );
             }
+        }*/
+        
+        if( getCommandPartOfCommand( commandList.first() ) == OPPONENT_SELECTED_CARD_COMMAND ){
+            kDebug() << getName() << "Opponent selected new card.";
+            
+            QList< QString >* valuesArray = getValues( getValuePartOfCommand( commandList.first() ) );
+            
+            try{
+                if( valuesArray->size() != 2 ){
+                    throw 1;
+                }
+                
+                bool ok;
+                
+                int cardId = valuesArray->at( 0 ).toInt( &ok );
+                if( !ok ) throw 2;
+                
+                int cardValue = valuesArray->at( 1 ).toInt( &ok );
+                if( !ok ) throw 2;
+                
+                Card* card = new Card( cardValue );
+                mCentralCards->add( card );
+                
+                commandList.removeFirst();
+                emit signalOpponentSelectedCard( cardId, card );
+                break;
+                
+            }catch( int error ){
+                
+            }
+            
+            delete valuesArray;
         }
         
         if( getCommandPartOfCommand( commandList.first() ) == VISIBLE_OPPONENT_CARDS_COMMAND ){
@@ -402,8 +434,11 @@ void Client::slotProcessCommands()
         if( getCommandPartOfCommand( commandList.first() ) == CLEAR_CENTRAL_CARDS_COMMAND ){
             kDebug() << getName() << "Clear central cards command.";
             
-            mCentralCards->clear();
-            emit signalClearCentralCards();
+            //mCentralCards->clear();
+            //emit signalClearCentralCards();
+            
+            commandList.removeFirst();
+            break;
         }
         
         if( getCommandPartOfCommand( commandList.first() ) == NEW_GAME_COMMAND ){

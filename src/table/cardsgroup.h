@@ -70,6 +70,10 @@ public slots:
     //
     void slotSelectableChanged( int, bool );
     
+    //
+    void slotSelectedCard( int, Card* );
+    //
+    
 signals:
     void signalSizeChanged();
     

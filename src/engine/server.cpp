@@ -641,11 +641,14 @@ void Server::slotPlayerSelectedCardId( int selectedCardId )
             getNextPlayer()->sendOpponentClickedToCloseButton();
         }
         
-        getNextPlayer()->sendOpponentSelectedCardId( selectedCardId );
+        //getNextPlayer()->sendOpponentSelectedCardId( selectedCardId );
         
-        mCentralCards->add( getCurrentPlayer()->takeCard( selectedCardId ) );
+        //mCentralCards->add( getCurrentPlayer()->takeCard( selectedCardId ) );
         
-        getNextPlayer()->sendOpponentAddNewCentralCard( mCentralCards->getCard( 0 ) );
+        //getNextPlayer()->sendOpponentAddNewCentralCard( mCentralCards->getCard( 0 ) );
+        Card* selectedCard = getCurrentPlayer()->takeCard( selectedCardId );
+        mCentralCards->add( selectedCard );
+        getNextPlayer()->sendOpponentSelectedCard( selectedCardId, selectedCard );
         
         setCurrentPlayer( getNextPlayer() );
         
@@ -663,11 +666,15 @@ void Server::slotPlayerSelectedCardId( int selectedCardId )
         
     }else{ //mCentralCards->isEmpty()
         kDebug() << "isn't empty";
-        getNextPlayer()->sendOpponentSelectedCardId( selectedCardId );
+        //getNextPlayer()->sendOpponentSelectedCardId( selectedCardId );
         
-        mCentralCards->add( getCurrentPlayer()->takeCard( selectedCardId ) );
+        //mCentralCards->add( getCurrentPlayer()->takeCard( selectedCardId ) );
         
-        getNextPlayer()->sendOpponentAddNewCentralCard( mCentralCards->getCard( 1 ) );
+        //getNextPlayer()->sendOpponentAddNewCentralCard( mCentralCards->getCard( 1 ) );
+        Card* selectedCard = getCurrentPlayer()->takeCard( selectedCardId );
+        mCentralCards->add( selectedCard );
+        getNextPlayer()->sendOpponentSelectedCard( selectedCardId, selectedCard );
+        
         QTimer::singleShot( 1000, this, SLOT( slotCheckCentralCards() ) );
         
         //

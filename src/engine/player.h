@@ -41,8 +41,9 @@ static const QString OPPONENT_IN_ACTION_COMMAND = ":OPPONENT_IN_ACTION";
 //
 
 static const QString SELECTED_CARD_ID_COMMAND = ":SELECTED_CARD_ID=";
-static const QString OPPONENT_SELECTED_CARD_ID_COMMAND = ":OPPONENT_SELECTED_CARD_ID=";
-static const QString OPPONENT_ADD_NEW_CENTRAL_CARD_COMMAND = ":OPPONENT_ADD_NEW_CENTRAL_CARD=";
+//static const QString OPPONENT_SELECTED_CARD_ID_COMMAND = ":OPPONENT_SELECTED_CARD_ID=";
+//static const QString OPPONENT_ADD_NEW_CENTRAL_CARD_COMMAND = ":OPPONENT_ADD_NEW_CENTRAL_CARD=";
+static const QString OPPONENT_SELECTED_CARD_COMMAND = ":OPPONENT_SELECTED_CARD=";
 
 //
 static const QString PLAYER_TRICKS_CHANGED_COMMAND = ":PLAYER_TRICKS_CHANGED=";
@@ -236,10 +237,13 @@ public:
     
     void sendOpponentInAction(){ sendCommand( OPPONENT_IN_ACTION_COMMAND ); }
     
-    void sendOpponentSelectedCardId( int id ){ sendCommand( OPPONENT_SELECTED_CARD_ID_COMMAND+QString::number( id ) ); }
+    //void sendOpponentSelectedCardId( int id ){ sendCommand( OPPONENT_SELECTED_CARD_ID_COMMAND+QString::number( id ) ); }
     
-    //void sendOpponentAddNewCentralCard( Card );
-    void sendOpponentAddNewCentralCard( const Card* );
+    //void sendOpponentAddNewCentralCard( const Card* );
+    
+    //
+    void sendOpponentSelectedCard( int, const Card* );
+    //
     
     //
     void sendOpponentTricksChanged( int value ){ sendCommand( OPPONENT_TRICKS_CHANGED_COMMAND+QString::number( value ) ); }

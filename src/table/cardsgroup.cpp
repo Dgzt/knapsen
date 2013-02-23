@@ -233,6 +233,12 @@ void CardsGroup::slotAddNewCard( SvgCard* svgCard )
     //QPointF endPosition = getNewCardPos();
     //kDebug() << endPosition;
     
+    //
+    if( !mCards.empty() ){
+        mCards.last()->stackBefore( svgCard );
+    }
+    //
+    
     mCards.append( svgCard );
    
     connect( svgCard->getAnimation(), SIGNAL( signalAnimationEnd() ), this, SLOT( slotCardAnimatedEnd() ) );
@@ -252,4 +258,19 @@ void CardsGroup::slotSelectableChanged( int id, bool enabled )
     kDebug() << id << enabled;
     
     mCards.at( id )->setSelectable( enabled );
+}
+
+void CardsGroup::slotSelectedCard( int id, Card* card )
+{
+    SvgCard* svgCard1 = mCards.takeAt( id );
+    
+    //
+    svgCard1->getAnimation()->setCard( card );
+    //
+    
+    emit signalSelectedCard( svgCard1 );
+    
+    //
+    emit signalSizeChanged();
+    //
 }

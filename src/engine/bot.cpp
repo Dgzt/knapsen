@@ -22,8 +22,9 @@ Bot::Bot( QString name, Knapsen::GameDifficulty difficulty ):
     connect( this, SIGNAL( signalEndGame( QString ) ),                          this, SLOT( slotendGame( QString ) ) );
     
     //
-    connect( this, SIGNAL( signalNewPlayerCard( Card* ) ), this, SLOT( slotNewPlayerCard( Card* ) ) );
-    connect( this, SIGNAL( signalNewOpponentCard() ), this, SLOT( slotNewOpponentCard() ) );
+    connect( this, SIGNAL( signalNewPlayerCard( Card* ) ), this, SLOT( slotProcessCommands() ) );
+    connect( this, SIGNAL( signalNewOpponentCard() ), this, SLOT( slotProcessCommands() ) );
+    connect( this, SIGNAL( signalOpponentSelectedCard( int, Card* ) ), this, SLOT( slotProcessCommands() ) );
     //
     
     pairOfQueenWasInCentralCards[0].first = pairOfKingWasInCentralCards[0].first = Card::Heart;
