@@ -41,6 +41,11 @@ private slots:
     
     void slotNewRound();
     
+    //
+    void slotNewPlayerCard( Card* ){ emit slotProcessCommands(); }
+    void slotNewOpponentCard(){ emit slotProcessCommands(); }
+    //
+    
     void slotCloseDeck(){ mDeckIsClosed = true; }
     
     void slotNewCentralCard( const Card* );

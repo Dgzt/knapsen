@@ -155,10 +155,9 @@ void Client::slotProcessCommands()
             emit signalClearCentralCards();
             
             mSizeOfDeckNow = mSizeOfDeck;
-            emit signalNewRound();
             
             commandList.removeFirst();
-            
+            emit signalNewRound();
             break;
         }
         
