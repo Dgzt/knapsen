@@ -18,11 +18,7 @@ class CardsGroup : public QObject
     
     int mHighlightCardId;
     
-    //
-    //int mSelectedCardId;
-    //
-    
-    QList< SvgCard* > mCards;
+    QList< SvgCard* >* mCards;
     
     ///
     QPointF getNewCardPos();
@@ -40,9 +36,6 @@ public:
     ~CardsGroup();
     
     QRectF boundingRect() const;
-    //void paint( QPainter*, const QStyleOptionGraphicsItem*, QWidget* );
-    
-    //Animation* getAnimation(){ return mAnimation; }
     
     //
     qreal x(){ return mPos.x(); }
@@ -50,10 +43,10 @@ public:
     
     void setPos( qreal, qreal );
     void setPos( QPointF point ){ setPos( point.x(), point.y() ); }
-    // 
     
     //
-    //void addNewCard( SvgCard*, QGraphicsItem* );
+    //void clear( QPointF );
+    QList< SvgCard* >* takeCards();
     //
     
 private slots:
@@ -73,6 +66,7 @@ public slots:
     //
     void slotSelectedCard( int, Card* );
     //
+    
     
 signals:
     void signalSizeChanged();

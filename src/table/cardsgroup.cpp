@@ -15,12 +15,13 @@ CardsGroup::CardsGroup() :
     mHighlightCardId( INVALID_CARD_ID )//,
     //mSelectedCardId( INVALID_CARD_ID )
 {
-    //mAnimation = new Animation( this );
+    mCards = new QList< SvgCard* >;
 }
 
 CardsGroup::~CardsGroup()
 {
     //delete mAnimation;
+    delete mCards;
 }
 
 QRectF CardsGroup::boundingRect() const
@@ -28,41 +29,20 @@ QRectF CardsGroup::boundingRect() const
     qreal width = 0;
     qreal height = 0;
     
-    if( mCards.size() > 0 ){
-        width = ( mCards.size() + 1 ) * ( mCards.at( 0 )->boundingRect().width() / 2 );
-        height = mCards.at( 0 )->boundingRect().height();
+    if( mCards->size() > 0 ){
+        width = ( mCards->size() + 1 ) * ( mCards->at( 0 )->boundingRect().width() / 2 );
+        height = mCards->at( 0 )->boundingRect().height();
     }
     
     return QRectF( 0, 0, width, height );
 }
 
-/*void CardsGroup::paint( QPainter* , const QStyleOptionGraphicsItem* , QWidget* )
-{}*/
-
-/*QPointF CardsGroup::getNewCardPos()
-{
-    int width = 0.0;
-    
-    if( mCards.size() != 0 ){
-        width = mCards.size() * ( mCardSize.width() / 2 );
-    }
-    
-    return QPointF( width, 0.0 );
-}*/
-
-/*void CardsGroup::newCardArrive()
-{
-    mCardArrive = true;
-    
-    emit signalSizeChanged();
-}*/
-
 QPointF CardsGroup::getNewCardPos()
 {
     qreal width = 0.0;
     
-    if( mCards.size() > 0 ){
-        width = ( (qreal)mCards.size() / 2 )  * mCards.at( 0 )->boundingRect().width();
+    if( mCards->size() > 0 ){
+        width = ( (qreal)mCards->size() / 2 )  * mCards->at( 0 )->boundingRect().width();
     }
     
     return QPointF( width, 0.0 );
@@ -71,24 +51,24 @@ QPointF CardsGroup::getNewCardPos()
 void CardsGroup::setCardsPosition()
 {
     qreal halfCardWidth = 0.0;
-    if( mCards.size() >= 1 ){
-        halfCardWidth = mCards.first()->boundingRect().width() / 2;
+    if( mCards->size() >= 1 ){
+        halfCardWidth = mCards->first()->boundingRect().width() / 2;
     }
     
-    for( int i = 0; i < mCards.size(); ++i ){
+    for( int i = 0; i < mCards->size(); ++i ){
         QPointF distance( i * halfCardWidth, 0 );
         
-        if( mCards.at( i )->pos().x() != /*pos().x()*/ mPos.x() + distance.x() ){
-            mCards.at( i )->getAnimation()->setEndPosition( /*pos()*/ mPos + distance );
-            mCards.at( i )->getAnimation()->startAnimation();
+        if( mCards->at( i )->pos().x() != /*pos().x()*/ mPos.x() + distance.x() ){
+            mCards->at( i )->getAnimation()->setEndPosition( /*pos()*/ mPos + distance );
+            mCards->at( i )->getAnimation()->startAnimation();
         }
     }
 }
 
 void CardsGroup::highlightCard( int id )
 {
-    mCards.at( id )->setPos( mCards.at( id )->pos().x(),
-                             mCards.at( id )->pos().y() - /*mCardSize.height()*/ mCards.at(id)->boundingRect().height() * ( HIGHLIGHT_Y_PERCENT / 100 ) );
+    mCards->at( id )->setPos( mCards->at( id )->pos().x(),
+                             mCards->at( id )->pos().y() - /*mCardSize.height()*/ mCards->at( id )->boundingRect().height() * ( HIGHLIGHT_Y_PERCENT / 100 ) );
             
     //Next cards move right
     /*for( int i = id + 1; i < mCards.size(); ++i ){
@@ -100,8 +80,8 @@ void CardsGroup::highlightCard( int id )
 void CardsGroup::removeHighlight( int id )
 {
     //Remove highlightCard
-    mCards.at( id )->setPos( mCards.at( id )->pos().x(),
-                             mCards.at( id )->pos().y() + /*mCardSize.height()*/ mCards.at(id)->boundingRect().height() * ( HIGHLIGHT_Y_PERCENT / 100 ) );
+    mCards->at( id )->setPos( mCards->at( id )->pos().x(),
+                             mCards->at( id )->pos().y() + /*mCardSize.height()*/ mCards->at(id)->boundingRect().height() * ( HIGHLIGHT_Y_PERCENT / 100 ) );
         
     //Next cards move back
     /*for( int i = id + 1; i < mCards.size(); ++i ){
@@ -112,7 +92,7 @@ void CardsGroup::removeHighlight( int id )
 
 void CardsGroup::slotMouseEnter( SvgCard* svgCard )
 {
-    int id = mCards.indexOf( svgCard );
+    int id = mCards->indexOf( svgCard );
     
     kDebug() << id;
     
@@ -130,7 +110,7 @@ void CardsGroup::slotMouseEnter( SvgCard* svgCard )
 
 void CardsGroup::slotMouseLeave( SvgCard* svgCard )
 {
-    int id = mCards.indexOf( svgCard );
+    int id = mCards->indexOf( svgCard );
     
     kDebug() << id;
     
@@ -144,25 +124,23 @@ void CardsGroup::slotMouseLeave( SvgCard* svgCard )
 
 void CardsGroup::slotCardClicked( SvgCard* svgCard )
 {
-    int id = mCards.indexOf( svgCard );
+    int id = mCards->indexOf( svgCard );
     
     kDebug() << id;
     
+    //
+    mHighlightCardId = INVALID_CARD_ID;
+    //
+    
     emit signalSelectedCardId( id );
     
-    SvgCard* svgCard1 = mCards.takeAt( id );
+    SvgCard* svgCard1 = mCards->takeAt( id );
     
     emit signalSelectedCard( svgCard1 );
     
     //
     emit signalSizeChanged();
     //
-    
-    //emit signalSelectedCard( id, svgCard );
-    
-    //mHighlightCardId = INVALID_HIGHLIGHT_CARD_ID;
-    
-    //emit signalSizeChanged();
 }
 
 void CardsGroup::setPos( qreal x, qreal y )
@@ -170,99 +148,66 @@ void CardsGroup::setPos( qreal x, qreal y )
     //QGraphicsObject::setPos( x, y );
     mPos = QPointF( x, y );
     
-    kDebug() << x << y;
-    
-    /*qreal cardWidth = 0.0;
-    if( mCards.size() >= 1 ){
-        cardWidth = mCards.at( 0 )->boundingRect().size().width();
-    }
-    
-    for( int i = 0; i < mCards.size(); ++i ){
-        
-        QPointF cardEndPosition( x + i * ( cardWidth / 2 ), y );
-        
-        mCards.at( i )->getAnimation()->setEndPosition( cardEndPosition );
-        mCards.at( i )->getAnimation()->startAnimation();
-    }*/
     setCardsPosition();
-    
 }
 
-/*void CardsGroup::addNewCard( SvgCard* svgCard, QGraphicsItem* fromItem )
+/*void CardsGroup::clear( QPointF pos )
 {
-    kDebug();
+    for( int i = 0; i < mCards.size(); ++i ){
+        mCards.at( i )->getAnimation()->setEndPosition( pos );
+        mCards.at( i )->getAnimation()->startAnimation();
+    }
     
-    //Add the card to scene
-    svgCard->setParentItem( this );
-    svgCard->setVisible( false );
-    //scene()->addItem( svgCard );
-    
-    QPointF endPosition = getNewCardPos();
-    
-    mCards.append( svgCard );
-    
-    emit signalSizeChanged();
-    
-    //Move the card to the new position
-    svgCard->setPos( mapFromItem( fromItem, QPointF( 0, 0 ) ) );
-    
-    svgCard->getAnimation()->setEndPosition( endPosition );
-    
-    svgCard->setVisible( true );
-    
-    connect( svgCard->getAnimation(), SIGNAL( signalAnimationEnd() ), this, SLOT( slotCardAnimatedEnd() ) );
-    
-    svgCard->getAnimation()->startAnimation();
 }*/
+
+QList< SvgCard* >* CardsGroup::takeCards()
+{
+    QList< SvgCard* >* retCards = mCards;
+    mCards = new QList< SvgCard* >;
+    
+    return retCards;
+}
 
 void CardsGroup::slotCardAnimatedEnd()
 {
     kDebug();
     
-    mCards.last()->getAnimation()->disconnect();
+    mCards->last()->getAnimation()->disconnect();
     
-    connect( mCards.last(), SIGNAL( signalMouseEnter(SvgCard*) ), this, SLOT( slotMouseEnter(SvgCard*) ) );
-    connect( mCards.last(), SIGNAL( signalMouseLeave(SvgCard*) ), this, SLOT( slotMouseLeave(SvgCard*) ) );
-    connect( mCards.last(), SIGNAL( signalClick( SvgCard* ) ), this, SLOT( slotCardClicked(SvgCard*) ) );
+    connect( mCards->last(), SIGNAL( signalMouseEnter(SvgCard*) ), this, SLOT( slotMouseEnter(SvgCard*) ) );
+    connect( mCards->last(), SIGNAL( signalMouseLeave(SvgCard*) ), this, SLOT( slotMouseLeave(SvgCard*) ) );
+    connect( mCards->last(), SIGNAL( signalClick( SvgCard* ) ), this, SLOT( slotCardClicked(SvgCard*) ) );
     
     emit signalCardArrived();
 }
 
 void CardsGroup::slotAddNewCard( SvgCard* svgCard )
 {
-    //QPointF endPosition = getNewCardPos();
-    //kDebug() << endPosition;
-    
     //
-    if( !mCards.empty() ){
-        mCards.last()->stackBefore( svgCard );
+    if( !mCards->empty() ){
+        mCards->last()->stackBefore( svgCard );
     }
     //
     
-    mCards.append( svgCard );
+    mCards->append( svgCard );
    
     connect( svgCard->getAnimation(), SIGNAL( signalAnimationEnd() ), this, SLOT( slotCardAnimatedEnd() ) );
     
     emit signalSizeChanged();
     
-    //Move the card to the new position
-    //svgCard->getAnimation()->setEndPosition( pos() + endPosition );
-    
     svgCard->setVisible( true );
-    
-    //svgCard->getAnimation()->startAnimation();
 }
 
 void CardsGroup::slotSelectableChanged( int id, bool enabled )
 {
     kDebug() << id << enabled;
     
-    mCards.at( id )->setSelectable( enabled );
+    mCards->at( id )->setSelectable( enabled );
 }
 
 void CardsGroup::slotSelectedCard( int id, Card* card )
 {
-    SvgCard* svgCard1 = mCards.takeAt( id );
+    SvgCard* svgCard1 = mCards->takeAt( id );
     
     //
     svgCard1->getAnimation()->setCard( card );

@@ -17,7 +17,7 @@ class Animation : public QGraphicsItemAnimation
 
     Card* mCard;
     
-    void setupTimeLine();
+    void setupTimeLine( int );
     
 private slots:
     void slotTimeLineTimeOut();

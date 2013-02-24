@@ -78,7 +78,9 @@ signals:
     //void signalNewCentralCard( int, const Card* );
     //void signalNewCentralCard( const Card* );
     
-    void signalClearCentralCards();
+    //void signalClearCentralCards();
+    void signalOpponentGetCentralCards();
+    void signalPlayerGetCentralCards();
     
     //void signalOpponentSelectedCardId( int );
     void signalOpponentSelectedCard( int, Card* );

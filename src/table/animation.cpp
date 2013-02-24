@@ -1,74 +1,3 @@
-/*#include <KDE/KDebug>
-#include <QtCore/QTimeLine>
-#include "table/mytextitem.h"
-#include "engine/card.h"
-#include "table/svgcard.h"
-#include "table/cardsgroup.h"
-#include "table/animation.h"
-
-Animation::Animation( MyTextItem* textItem, QPointF endPoint )
-{
-    setItem( textItem );
-    
-    setupTimeLine();
-    
-    setPosAt( 1.0, endPoint );
-    
-    mCard = 0;
-}
-
-Animation::Animation( SvgCard* svgCard, QPointF endPoint, Card* card )
-{
-    setItem( svgCard );
-        
-    setupTimeLine();
-    
-    setPosAt( 1.0, endPoint );
-    
-    mCard = card;
-}
-
-Animation::Animation( CardsGroup* cardsGroup, QPointF endPos )
-{
-    setItem( cardsGroup );
-    
-    setupTimeLine();
-    
-    setPosAt( 1.0, endPos );
-    
-    mCard = 0;
-}
-
-void Animation::setupTimeLine()
-{
-    mTimeLine = new QTimeLine( 2000 );
-    mTimeLine->setFrameRange( 0, 100 );
-    setTimeLine( mTimeLine );
-    
-    connect( mTimeLine, SIGNAL( finished() ), this, SLOT( slotTimeLineTimeOut() ) );
-}
-
-void Animation::slotStartAnimation()
-{
-    mTimeLine->start();
-}
-
-void Animation::slotTimeLineTimeOut()
-{
-    SvgCard* svgCard = (SvgCard*)item();
-    
-    if( mCard ){
-        svgCard->setElementId( mCard->getCardText() );
-    }
-    
-    emit signalAnimationEnd();
-    
-    emit signalCardArrived();
-    emit signalCardArrived( svgCard );
-    
-    //disconnect( this, 0, 0, 0 );
-    //deleteLater();
-}*/
 #include <KDE/KDebug>
 #include <QtCore/QTimeLine>
 #include <engine/card.h>
@@ -78,13 +7,17 @@ void Animation::slotTimeLineTimeOut()
 #include "table/cardsgroup.h"
 #include "table/animation.h"
 
-const int ANIMATION_TIME = 2000;
+const int ANIMATION_TIME = 200;
+
+const int CARD_ANIMATION_TIME = 500; //200
+const int MYTEXTITEM_ANIMATION_TIME = 1000; //1000
+const int SCORE_TABLE_ANIMATION_TIME = 1000; //100
 
 Animation::Animation( MyTextItem* gItem )
 {
     setItem( gItem );
     
-    setupTimeLine();
+    setupTimeLine( MYTEXTITEM_ANIMATION_TIME );
     
     mCard = 0;
 }
@@ -93,7 +26,7 @@ Animation::Animation( ScoreTable* scoreTable )
 {
     setItem( scoreTable );
     
-    setupTimeLine();
+    setupTimeLine( SCORE_TABLE_ANIMATION_TIME );
     
     mCard = 0;
 }
@@ -102,29 +35,20 @@ Animation::Animation( SvgCard* svgCard )
 {
     setItem( svgCard );
     
-    setupTimeLine();
+    setupTimeLine( CARD_ANIMATION_TIME );
     
     mCard = 0;
 }
-
-/*Animation::Animation( CardsGroup* cardsGroup )
-{
-    setItem( cardsGroup );
-    
-    setupTimeLine();
-    
-    mCard = 0;
-}*/
 
 Animation::~Animation()
 {
     kDebug() << "---------------------------------------------------";
 }
 
-void Animation::setupTimeLine()
+void Animation::setupTimeLine( int time )
 {
-    QTimeLine* timeLine = new QTimeLine( ANIMATION_TIME );
-    timeLine->setFrameRange( 0, 200 );
+    QTimeLine* timeLine = new QTimeLine( time );
+    timeLine->setFrameRange( 0, time );
     setTimeLine( timeLine );
     
     connect( timeLine, SIGNAL( finished() ), this, SLOT( slotTimeLineTimeOut() ) );

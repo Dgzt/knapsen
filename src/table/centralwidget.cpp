@@ -166,6 +166,10 @@ void CentralWidget::slotInitialize( QString playerNameStr, QString opponentNameS
     //
     connect( mOpponentCards, SIGNAL( signalSelectedCard( SvgCard* ) ), mCentralCards, SLOT( slotAddNewCard( SvgCard* ) ) );
     //
+    //
+    connect( mClient, SIGNAL( signalPlayerGetCentralCards() ), this, SLOT( slotPlayerGetCentralCards() ) );
+    connect( mClient, SIGNAL( signalOpponentGetCentralCards() ), this, SLOT( slotOpponentGetCentralCards() ) );
+    //
     
     //scene()->addItem( mCentralCards );
     
@@ -489,6 +493,49 @@ void CentralWidget::slotHideOpponentArrow()
     mOpponentArrow->hide();
 }
 
+void CentralWidget::slotPlayerGetCentralCards()
+{
+    kDebug();
+    
+    QPointF endPos( mapToScene( width(), height() ) );
+    
+    setRemoveCard( endPos );
+}
+
+void CentralWidget::slotOpponentGetCentralCards()
+{
+    kDebug();
+    
+    QPointF endPos( mapToScene( width(), height() ).x(),
+                    mapToScene( width(), 0 ).y() - mDeck->boundingRect().height() );
+    
+    setRemoveCard( endPos );
+}
+
+void CentralWidget::setRemoveCard( QPointF pos )
+{
+    mRemoveCards = mCentralCards->takeCards();
+    
+    for( int i = 0; i < mRemoveCards->size(); ++i ){
+        mRemoveCards->at( i )->getAnimation()->setEndPosition( pos );
+        connect( mRemoveCards->at( i )->getAnimation(), SIGNAL( signalAnimationEnd() ), this, SLOT( slotRemoveCardArrived() ) );
+        mRemoveCards->at( i )->getAnimation()->startAnimation();
+    }
+}
+
+void CentralWidget::slotRemoveCardArrived()
+{
+    mRemoveCards->first()->disconnect();
+    delete mRemoveCards->takeFirst();
+    
+    if( mRemoveCards->empty() ){
+        delete mRemoveCards;
+        mRemoveCards = 0;
+        
+        mClient->slotProcessCommands();
+    }
+}
+
 void CentralWidget::setClient( Client* client )
 {
     mClient = client;
@@ -502,4 +549,9 @@ void CentralWidget::clearWidget()
     
     delete mRenderer;
     mRenderer = 0;
+    
+    if( mRemoveCards ){
+        delete mRemoveCards;
+        mRemoveCards = 0;
+    }
 }

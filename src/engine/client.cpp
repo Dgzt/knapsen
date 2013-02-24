@@ -152,7 +152,7 @@ void Client::slotProcessCommands()
             newRound();
             
             mCentralCards->clear();
-            emit signalClearCentralCards();
+            //emit signalClearCentralCards();
             
             mSizeOfDeckNow = mSizeOfDeck;
             
@@ -431,13 +431,29 @@ void Client::slotProcessCommands()
             emit signalCloseDeck();
         }
         
-        if( getCommandPartOfCommand( commandList.first() ) == CLEAR_CENTRAL_CARDS_COMMAND ){
+        /*if( getCommandPartOfCommand( commandList.first() ) == CLEAR_CENTRAL_CARDS_COMMAND ){
             kDebug() << getName() << "Clear central cards command.";
             
             //mCentralCards->clear();
             //emit signalClearCentralCards();
             
             commandList.removeFirst();
+            break;
+        }*/
+        
+        if( getCommandPartOfCommand( commandList.first() ) == PLAYER_GET_CENTRAL_CARDS_COMMAND ){
+            kDebug() << getName() << "Player get central cards.";
+            
+            commandList.removeFirst();
+            emit signalPlayerGetCentralCards();
+            break;
+        }
+        
+        if( getCommandPartOfCommand( commandList.first() ) == OPPONENT_GET_CENTRAL_CARDS_COMMAND ){
+            kDebug() << getName() << "Opponent get central cards.";
+            
+            commandList.removeFirst();
+            emit signalOpponentGetCentralCards();
             break;
         }
         

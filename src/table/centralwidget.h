@@ -52,6 +52,12 @@ class CentralWidget : public QGraphicsView
     QGraphicsPixmapItem* mPlayerArrow;
     QGraphicsPixmapItem* mOpponentArrow;
     
+    //
+    QList< SvgCard* >* mRemoveCards;
+    
+    void setRemoveCard( QPointF );
+    //
+    
     
 private slots:
     void slotInitialize( QString, QString, Knapsen::TypeOfCards );
@@ -83,6 +89,13 @@ private slots:
     void slotHidePlayerArrow();
     void slotShowOpponentArrow();
     void slotHideOpponentArrow();
+    //
+    
+    //
+    void slotPlayerGetCentralCards();
+    void slotOpponentGetCentralCards();
+    
+    void slotRemoveCardArrived();
     //
     
     

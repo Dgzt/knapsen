@@ -830,8 +830,18 @@ void Server::slotCheckCentralCards()
         //Clear central cards
         mCentralCards->clear();
         
-        for( int i = 0; i < mPlayerList.size(); ++i ){
+        /*for( int i = 0; i < mPlayerList.size(); ++i ){
             mPlayerList.at( i )->sendClearCentralCards();
+        }*/
+        
+        for( int i = 0; i < mPlayerList.size(); ++i ){
+            
+            if( getCurrentPlayer() == mPlayerList.at( i ) ){
+                mPlayerList.at( i )->sendPlayerGetCentralCards();
+            }else{
+                mPlayerList.at( i )->sendOpponentGetCentralCards();
+            }
+            
         }
         
         //If player closed the deck

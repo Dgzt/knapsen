@@ -55,7 +55,9 @@ static const QString OPPONENT_SCORES_CHANGED_COMMAND = ":OPPONENT_SCORES_CHANGED
 static const QString OPPONENT_DISCONNECTED_COMMAND = ":OPPONENT_DISCONNECTED";
 
 //
-static const QString CLEAR_CENTRAL_CARDS_COMMAND = ":CLEAR_CENTRAL_CARDS";
+//static const QString CLEAR_CENTRAL_CARDS_COMMAND = ":CLEAR_CENTRAL_CARDS";
+static const QString PLAYER_GET_CENTRAL_CARDS_COMMAND = ":PLAYER_GET_CENTRAL_CARDS";
+static const QString OPPONENT_GET_CENTRAL_CARDS_COMMAND = ":OPPONENT_GET_CENTRAL_CARDS";
 
 //
 static const QString TWENTY_BUTTON_VISIBLE_COMMAND = ":TWENTY_BUTTON_VISIBLE";
@@ -252,7 +254,9 @@ public:
     
     void sendOpponentDisconnected(){ sendCommand( OPPONENT_DISCONNECTED_COMMAND ); }
     
-    void sendClearCentralCards(){ sendCommand( CLEAR_CENTRAL_CARDS_COMMAND ); }
+    //void sendClearCentralCards(){ sendCommand( CLEAR_CENTRAL_CARDS_COMMAND ); }
+    void sendPlayerGetCentralCards(){ sendCommand( PLAYER_GET_CENTRAL_CARDS_COMMAND ); }
+    void sendOpponentGetCentralCards(){ sendCommand( OPPONENT_GET_CENTRAL_CARDS_COMMAND ); }
     
     void sendTwentyButtonVisible(){ sendCommand( TWENTY_BUTTON_VISIBLE_COMMAND ); }
     void sendFortyButtonVisible(){ sendCommand( FORTY_BUTTON_VISIBLE_COMMAND ); }
