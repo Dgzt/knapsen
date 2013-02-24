@@ -16,7 +16,10 @@ class Client : public Player
     CentralCards *mCentralCards;
     Trump *mTrump;
     
-    QList<QString> commandList;
+    QList<QString> mCommandList;
+    //
+    bool mCommandsUnderProcessing;
+    //
     
     //
     QList<QString>* getValues( QString );
