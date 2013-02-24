@@ -24,6 +24,7 @@ Bot::Bot( QString name, Knapsen::GameDifficulty difficulty ):
     //
     connect( this, SIGNAL( signalNewPlayerCard( Card* ) ), this, SLOT( slotProcessCommands() ) );
     connect( this, SIGNAL( signalNewOpponentCard() ), this, SLOT( slotProcessCommands() ) );
+    connect( this, SIGNAL( signalNewTrumpCard( Card* ) ), this, SLOT( slotProcessCommands() ) );
     connect( this, SIGNAL( signalOpponentSelectedCard( int, Card* ) ), this, SLOT( slotProcessCommands() ) );
     connect( this, SIGNAL( signalOpponentGetCentralCards() ), this, SLOT( slotProcessCommands() ) );
     connect( this, SIGNAL( signalPlayerGetCentralCards() ), this, SLOT( slotProcessCommands() ) );

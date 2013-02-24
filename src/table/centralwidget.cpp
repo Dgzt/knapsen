@@ -58,6 +58,10 @@ CentralWidget::CentralWidget( QWidget* parent ):
     mOpponentArrow = 0;
     //
     
+    //
+    mRemoveCards = 0;
+    //
+    
     //Set graphics scene
     QGraphicsScene* gScene = new QGraphicsScene( 0, 0, SCENE_WIDTH, SCENE_HEIGHT );
     setScene( gScene );

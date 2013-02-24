@@ -205,10 +205,11 @@ void Client::slotProcessCommands()
                 
                 mTrump->addNewCard( new Card( ret ) );
                 
-                emit signalNewTrumpCard( mTrump->getCard() );
+                //emit signalNewTrumpCard( mTrump->getCard() );
                 
                 //
                 commandList.removeFirst();
+                emit signalNewTrumpCard( mTrump->getCard() );
                 break;
                 //
             }else{
