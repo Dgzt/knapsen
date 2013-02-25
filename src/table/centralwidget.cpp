@@ -112,11 +112,17 @@ void CentralWidget::slotInitialize( QString playerNameStr, QString opponentNameS
     mPlayerName = new MyTextItem( playerNameStr, NAME_ANIMATION_TIME );
     mPlayerName->setVisible( false );
     
+    connect( mClient, SIGNAL( signalOpponentTricksChanged( int ) ), mOpponentScoreTable, SLOT( slotTricksChanged( int ) ) );
+    connect( mClient, SIGNAL( signalOpponentScoresChanged( int ) ), mOpponentScoreTable, SLOT( slotScoresChanged( int ) ) );
+    
     scene()->addItem( mPlayerName );
     
     //Setup player's score table
     mPlayerScoreTable = new ScoreTable( SCORE_TABLE_ANIMATION_TIME );
     mPlayerScoreTable->setVisible( false );
+    
+    connect( mClient, SIGNAL( signalPlayerTricksChanged( int ) ), mPlayerScoreTable, SLOT( slotTricksChanged( int ) ) );
+    connect( mClient, SIGNAL( signalPlayerScoresChanged( int ) ), mPlayerScoreTable, SLOT( slotScoresChanged( int ) ) );
     
     scene()->addItem( mPlayerScoreTable );
     
