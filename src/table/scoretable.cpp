@@ -9,7 +9,7 @@
 const QString TRICKS_TEXT = i18n( "Tricks:" );
 const QString SCORE_TEXT = i18n( "Score:" );
 
-ScoreTable::ScoreTable()
+ScoreTable::ScoreTable( int animationTime )
 {
     tricksItem = new QGraphicsTextItem( this );
     scoreItem = new QGraphicsTextItem( this );
@@ -20,7 +20,7 @@ ScoreTable::ScoreTable()
     tricksItem->setPos( 0, 0 );
     scoreItem->setPos( 0, tricksItem->boundingRect().height() );
     
-    mAnimation = new Animation( this ); 
+    mAnimation = new Animation( this, animationTime ); 
 }
 
 ScoreTable::~ScoreTable()

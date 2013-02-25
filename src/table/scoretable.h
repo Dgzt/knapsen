@@ -17,7 +17,7 @@ class ScoreTable : public QGraphicsObject
     QGraphicsTextItem* scoreItem;
     
 public:
-    ScoreTable();
+    ScoreTable( int );
     ~ScoreTable();
     
     virtual QRectF boundingRect() const;

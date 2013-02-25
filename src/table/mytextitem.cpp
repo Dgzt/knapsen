@@ -4,10 +4,10 @@
 #include "table/animation.h"
 #include "table/mytextitem.h"
 
-MyTextItem::MyTextItem( const QString& text, QGraphicsItem* parent ) :
-    QGraphicsTextItem( text, parent )
+MyTextItem::MyTextItem( QString text, int animationTime ) :
+    QGraphicsTextItem( text )
 {
-    mAnimation = new Animation( this );
+    mAnimation = new Animation( this, animationTime );
     
     connect( mAnimation, SIGNAL( signalAnimationEnd() ), this, SLOT( slotAnimationEnd() ) );
 }

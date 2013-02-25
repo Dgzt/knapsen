@@ -22,7 +22,7 @@ protected:
     //
     
 public:
-    SvgCard( QSvgRenderer*, QString cardText = "back", QGraphicsItem* parentItem = 0 );
+    SvgCard( QSvgRenderer*, int, QString cardText = "back" );
     ~SvgCard();
     
     Animation* getAnimation(){ return mAnimation; }

@@ -4,6 +4,7 @@
 //#include <QtGui/QGraphicsObject>
 #include <QtCore/QObject>
 #include <QtCore/QPointF>
+#include <QtCore/QPair>
 
 class SvgCard;
 class Animation;
@@ -19,6 +20,10 @@ class CardsGroup : public QObject
     int mHighlightCardId;
     
     QList< SvgCard* >* mCards;
+    
+    //
+    QPair< int, QPointF >* mShowCards;
+    //
     
     ///
     QPointF getNewCardPos();
@@ -57,6 +62,10 @@ private slots:
     
     void slotCardClicked( SvgCard* );
     
+    //
+    void slotHideCards();
+    //
+    
 public slots:
     //
     void slotAddNewCard( SvgCard* );
@@ -65,6 +74,10 @@ public slots:
     
     //
     void slotSelectedCard( int, Card* );
+    //
+    
+    //
+    void slotShowCards( int, Card, int, Card );
     //
     
     
@@ -77,6 +90,10 @@ signals:
     void signalSelectedCard( SvgCard* );
     //
     void signalSelectedCardId( int );
+    
+    //
+    void signalHideCards();
+    //
     
 };
 

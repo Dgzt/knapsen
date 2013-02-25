@@ -39,7 +39,7 @@ void Deck::buildDeck()
         
     }
     
-    //
+    //Marriages
     //mCards[ 11 ] = new Card( 17 );
     //mCards[ 18 ] = new Card( 16 );
     //

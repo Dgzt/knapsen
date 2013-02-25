@@ -1,5 +1,9 @@
 #include <KDE/KDebug>
 #include <QtCore/QRectF>
+//
+#include <QtCore/QPair>
+#include <QtCore/QTimer>
+//
 #include <QtGui/QGraphicsScene>
 #include "engine/card.h"
 #include "table/svgcard.h"
@@ -16,6 +20,8 @@ CardsGroup::CardsGroup() :
     //mSelectedCardId( INVALID_CARD_ID )
 {
     mCards = new QList< SvgCard* >;
+    
+    mShowCards = 0;
 }
 
 CardsGroup::~CardsGroup()
@@ -68,7 +74,7 @@ void CardsGroup::setCardsPosition()
 void CardsGroup::highlightCard( int id )
 {
     mCards->at( id )->setPos( mCards->at( id )->pos().x(),
-                             mCards->at( id )->pos().y() - /*mCardSize.height()*/ mCards->at( id )->boundingRect().height() * ( HIGHLIGHT_Y_PERCENT / 100 ) );
+                             mCards->at( id )->pos().y() - mCards->at( id )->boundingRect().height() * ( HIGHLIGHT_Y_PERCENT / 100 ) );
             
     //Next cards move right
     /*for( int i = id + 1; i < mCards.size(); ++i ){
@@ -81,7 +87,7 @@ void CardsGroup::removeHighlight( int id )
 {
     //Remove highlightCard
     mCards->at( id )->setPos( mCards->at( id )->pos().x(),
-                             mCards->at( id )->pos().y() + /*mCardSize.height()*/ mCards->at(id)->boundingRect().height() * ( HIGHLIGHT_Y_PERCENT / 100 ) );
+                             mCards->at( id )->pos().y() + mCards->at(id)->boundingRect().height() * ( HIGHLIGHT_Y_PERCENT / 100 ) );
         
     //Next cards move back
     /*for( int i = id + 1; i < mCards.size(); ++i ){
@@ -151,15 +157,6 @@ void CardsGroup::setPos( qreal x, qreal y )
     setCardsPosition();
 }
 
-/*void CardsGroup::clear( QPointF pos )
-{
-    for( int i = 0; i < mCards.size(); ++i ){
-        mCards.at( i )->getAnimation()->setEndPosition( pos );
-        mCards.at( i )->getAnimation()->startAnimation();
-    }
-    
-}*/
-
 QList< SvgCard* >* CardsGroup::takeCards()
 {
     QList< SvgCard* >* retCards = mCards;
@@ -218,4 +215,49 @@ void CardsGroup::slotSelectedCard( int id, Card* card )
     //
     emit signalSizeChanged();
     //
+}
+
+void CardsGroup::slotShowCards( int card0Id, Card card0, int card1Id, Card card1 )
+{
+    kDebug();
+    
+    //
+    mShowCards = new QPair< int, QPointF >[2];
+    mShowCards[0].first = card0Id;
+    mShowCards[0].second = mCards->at( card0Id )->pos();
+    mShowCards[1].first = card1Id;
+    mShowCards[1].second = mCards->at( card1Id )->pos();
+    //
+    
+    QPointF card1EndPos( mCards->at( card0Id )->pos().x(),
+                         mCards->at( card0Id )->pos().y() + mCards->at( card0Id )->boundingRect().height() * ( HIGHLIGHT_Y_PERCENT / 100 ) );
+            
+    QPointF card2EndPos( mCards->at( card1Id )->pos().x(),
+                         mCards->at( card1Id )->pos().y() + mCards->at( card1Id )->boundingRect().height() * ( HIGHLIGHT_Y_PERCENT / 100 ) );
+            
+    mCards->at( card0Id )->setPos( card1EndPos );
+    mCards->at( card1Id )->setPos( card2EndPos );
+    
+    mCards->at( card0Id )->setElementId( card0.getCardText() );
+    mCards->at( card1Id )->setElementId( card1.getCardText() );
+    
+    QTimer::singleShot( 2000, this, SLOT( slotHideCards() ) );
+}
+
+void CardsGroup::slotHideCards()
+{
+    int card0Id = mShowCards[0].first;
+    QPointF card0Pos = mShowCards[0].second;
+    int card1Id = mShowCards[1].first;
+    QPointF card1Pos = mShowCards[1].second;
+    
+    delete[] mShowCards;
+    mShowCards = 0;
+    
+    mCards->at( card0Id )->setElementId( "back" );
+    mCards->at( card0Id )->setPos( card0Pos );
+    mCards->at( card1Id )->setElementId( "back" );
+    mCards->at( card1Id )->setPos( card1Pos );
+    
+    emit signalHideCards();
 }

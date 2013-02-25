@@ -23,10 +23,10 @@ private slots:
     void slotTimeLineTimeOut();
     
 public:
-    Animation( MyTextItem* );
+    /*Animation( MyTextItem* );
     Animation( ScoreTable* );
-    Animation( SvgCard* );
-    //Animation( CardsGroup* );
+    Animation( SvgCard* );*/
+    Animation( QGraphicsItem*, int );
     ~Animation();
     
     void setEndPosition( QPointF );

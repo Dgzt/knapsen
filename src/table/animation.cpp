@@ -6,14 +6,15 @@
 #include "table/svgcard.h"
 #include "table/cardsgroup.h"
 #include "table/animation.h"
-
+/*
 const int ANIMATION_TIME = 200;
 
 const int CARD_ANIMATION_TIME = 500; //200
 const int MYTEXTITEM_ANIMATION_TIME = 1000; //1000
 const int SCORE_TABLE_ANIMATION_TIME = 1000; //100
+*/
 
-Animation::Animation( MyTextItem* gItem )
+/*Animation::Animation( MyTextItem* gItem )
 {
     setItem( gItem );
     
@@ -38,11 +39,20 @@ Animation::Animation( SvgCard* svgCard )
     setupTimeLine( CARD_ANIMATION_TIME );
     
     mCard = 0;
+}*/
+
+Animation::Animation( QGraphicsItem* graphicsItem, int animationTime )
+{
+    setItem( graphicsItem );
+    
+    setupTimeLine( animationTime );
+    
+    mCard = 0;
 }
 
 Animation::~Animation()
 {
-    kDebug() << "---------------------------------------------------";
+    kDebug() << "Deleting.";
 }
 
 void Animation::setupTimeLine( int time )

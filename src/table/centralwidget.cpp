@@ -26,10 +26,17 @@ const int CARDS_SCORE_TABLE_DISTANCE = 10;
 
 const int DECK_TRUMPCARD_DISTANCE = 30;
 
-//const int BUTTON_X_DISTANCE = 10;
 const int BUTTON_Y_DISTANCE = 2;
 const int BUTTON_WIDTH = 100;
 const int BUTTON_HEIGHT = 30;
+
+//
+const int NAME_ANIMATION_TIME = 2000; //2000
+const int SCORE_TABLE_ANIMATION_TIME = 2000; //2000
+const int DECK_ANIMATION_TIME = 2000; //2000
+const int TRUMP_ANIMATION_TIME = 1000; //2000
+const int CARD_ANIMATION_TIME = 500; //500
+//
 
 CentralWidget::CentralWidget( QWidget* parent ): 
     QGraphicsView( parent )
@@ -90,25 +97,25 @@ void CentralWidget::slotInitialize( QString playerNameStr, QString opponentNameS
     kDebug() << "Initialize.";
     
     //Setup opponent's name
-    mOpponentName = new MyTextItem( opponentNameStr );
+    mOpponentName = new MyTextItem( opponentNameStr, NAME_ANIMATION_TIME );
     mOpponentName->setVisible( false );
     
     scene()->addItem( mOpponentName );
     
     //Setup opponent's score table
-    mOpponentScoreTable = new ScoreTable;
+    mOpponentScoreTable = new ScoreTable( SCORE_TABLE_ANIMATION_TIME );
     mOpponentScoreTable->setVisible( false );
     
     scene()->addItem( mOpponentScoreTable );
     
     //Setup player's name
-    mPlayerName = new MyTextItem( playerNameStr );
+    mPlayerName = new MyTextItem( playerNameStr, NAME_ANIMATION_TIME );
     mPlayerName->setVisible( false );
     
     scene()->addItem( mPlayerName );
     
     //Setup player's score table
-    mPlayerScoreTable = new ScoreTable;
+    mPlayerScoreTable = new ScoreTable( SCORE_TABLE_ANIMATION_TIME );
     mPlayerScoreTable->setVisible( false );
     
     scene()->addItem( mPlayerScoreTable );
@@ -123,7 +130,7 @@ void CentralWidget::slotInitialize( QString playerNameStr, QString opponentNameS
     }
     
     //Setup Deck
-    mDeck = new SvgCard( mRenderer );
+    mDeck = new SvgCard( mRenderer, DECK_ANIMATION_TIME );
     mDeck->setVisible( false );
     
     connect( mDeck->getAnimation(), SIGNAL( signalAnimationEnd() ), mClient, SLOT( slotProcessCommands() ) );
@@ -131,7 +138,7 @@ void CentralWidget::slotInitialize( QString playerNameStr, QString opponentNameS
     scene()->addItem( mDeck );
     
     //Setup trump card
-    mTrumpCard = new SvgCard( mRenderer );
+    mTrumpCard = new SvgCard( mRenderer, TRUMP_ANIMATION_TIME );
     mTrumpCard->setVisible( false );
     
     scene()->addItem( mTrumpCard );
@@ -144,11 +151,15 @@ void CentralWidget::slotInitialize( QString playerNameStr, QString opponentNameS
     //scene()->addItem( mOpponentCards );
     
     connect( mClient, SIGNAL( signalNewOpponentCard() ), this, SLOT( slotNewOpponentCard() ) );
-    //
     connect( mClient, SIGNAL( signalOpponentSelectedCard( int, Card* ) ), mOpponentCards, SLOT( slotSelectedCard( int, Card* ) ) );
+    //
+    connect( mClient, SIGNAL( signalShowOpponentCards( int, Card, int, Card ) ), mOpponentCards, SLOT( slotShowCards( int, Card, int, Card ) ) );
     //
     connect( mOpponentCards, SIGNAL( signalSizeChanged() ), this, SLOT( slotOpponentCardsSizeChanged() ) );
     connect( mOpponentCards, SIGNAL( signalCardArrived() ), mClient, SLOT( slotProcessCommands() ) );
+    //
+    connect( mOpponentCards, SIGNAL( signalHideCards() ), mClient, SLOT( slotProcessCommands() ) );
+    //
     
     //Setup Player's cards
     mPlayerCards = new CardsGroup;
@@ -314,6 +325,7 @@ void CentralWidget::slotNewRound()
     //Set close button position
     mCloseButton->setGeometry( QRectF( QPointF( endDeckPos.x(), endDeckPos.y() + mDeck->boundingRect().height() + BUTTON_Y_DISTANCE ), 
                                        QSizeF( mDeck->boundingRect().width(), BUTTON_HEIGHT ) ) );
+
 }
 
 void CentralWidget::slotNewOpponentCard()
@@ -323,7 +335,7 @@ void CentralWidget::slotNewOpponentCard()
     //SvgCard* svgCard = new SvgCard( mRenderer );
     //mOpponentCards->addNewCard( svgCard, mDeck );
     
-    SvgCard* svgCard = new SvgCard( mRenderer );
+    SvgCard* svgCard = new SvgCard( mRenderer, CARD_ANIMATION_TIME );
     //
     svgCard->setPos( mDeck->pos() );
     svgCard->setVisible( false );
@@ -337,7 +349,7 @@ void CentralWidget::slotNewPlayerCard( Card* card )
 {
     kDebug();
     
-    SvgCard* svgCard = new SvgCard( mRenderer );
+    SvgCard* svgCard = new SvgCard( mRenderer, CARD_ANIMATION_TIME );
     svgCard->getAnimation()->setCard( card );
     //
     svgCard->setPos( mDeck->pos() );

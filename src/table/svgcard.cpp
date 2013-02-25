@@ -5,11 +5,10 @@
 #include "table/animation.h"
 #include "table/svgcard.h"
 
-SvgCard::SvgCard( QSvgRenderer* renderer, QString cardText, QGraphicsItem* parentItem ) :
-    QGraphicsSvgItem( parentItem ),
+SvgCard::SvgCard( QSvgRenderer* renderer, int animationTime, QString cardText ) :
     mSelectable( false )
 {
-    mAnimation = new Animation( this );
+    mAnimation = new Animation( this, animationTime );
     
     setSharedRenderer( renderer );
     
