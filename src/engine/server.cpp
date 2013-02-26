@@ -1036,7 +1036,7 @@ void Server::addBot( QString botName, Knapsen::GameDifficulty difficulty )
 void Server::startGame()
 {
     kDebug() << "Start game.";
-    mSizeOfDeck = 12;
+    
     //Initialize deck
     mDeck = new Deck( mSizeOfDeck );
     
