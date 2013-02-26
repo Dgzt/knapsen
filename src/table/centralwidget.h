@@ -70,7 +70,11 @@ private slots:
     
     void slotNewTrumpCard( Card* );
     //
+    void slotTrumpCardSelectableChanged( bool );
+    //
+    //
     void slotOpponentChangeTrumpCard( int, Card* );
+    void slotPlayerChangeTrumpCard( int );
     //
     
     void slotOpponentCardsSizeChanged();

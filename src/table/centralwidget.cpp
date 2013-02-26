@@ -147,6 +147,12 @@ void CentralWidget::slotInitialize( QString playerNameStr, QString opponentNameS
     mTrumpCard = new SvgCard( mRenderer, TRUMP_ANIMATION_TIME );
     mTrumpCard->setVisible( false );
     
+    //
+    connect( mClient, SIGNAL( signalTrumpCardSelectableChanged( bool ) ), this, SLOT( slotTrumpCardSelectableChanged( bool ) ) );
+    connect( mTrumpCard, SIGNAL( signalClick() ), mClient, SLOT( slotSelectTrumpCard() ) );
+    connect( mClient, SIGNAL( signalPlayerChangeTrumpCard( int ) ), this, SLOT( slotPlayerChangeTrumpCard( int ) ) );
+    //
+    
     scene()->addItem( mTrumpCard );
     
     connect( mClient, SIGNAL( signalNewTrumpCard( Card* ) ), this, SLOT( slotNewTrumpCard( Card* ) ) );
@@ -388,6 +394,11 @@ void CentralWidget::slotNewTrumpCard( Card* card )
     mTrumpCard->getAnimation()->startAnimation();
 }
 
+void CentralWidget::slotTrumpCardSelectableChanged( bool selectable )
+{
+    mTrumpCard->setSelectable( selectable );
+}
+
 void CentralWidget::slotOpponentChangeTrumpCard( int opponentCardId, Card* newTrumpCard )
 {
     kDebug();
@@ -398,10 +409,25 @@ void CentralWidget::slotOpponentChangeTrumpCard( int opponentCardId, Card* newTr
     newSvgTrumpCard->getAnimation()->setNewCardText( newTrumpCard->getCardText() );
     newSvgTrumpCard->getAnimation()->startAnimation();
     
-    //mTrumpCard->getAnimation()->setNewCardText( SvgCard::EmptyCard() );
     mTrumpCard->disconnect();
     mTrumpCard->setElementId( SvgCard::EmptyCard() );
     mOpponentCards->slotAddNewCard( mTrumpCard );
+    
+    mTrumpCard = newSvgTrumpCard;
+}
+
+void CentralWidget::slotPlayerChangeTrumpCard( int playerCardId )
+{
+    kDebug();
+    kDebug() << playerCardId;
+    
+    SvgCard* newSvgTrumpCard = mPlayerCards->takeCard( playerCardId );
+    newSvgTrumpCard->disconnect();
+    newSvgTrumpCard->getAnimation()->setEndPosition( mTrumpCard->pos() );
+    newSvgTrumpCard->getAnimation()->startAnimation();
+    
+    mTrumpCard->disconnect();
+    mPlayerCards->slotAddNewCard( mTrumpCard );
     
     mTrumpCard = newSvgTrumpCard;
 }

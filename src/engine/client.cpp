@@ -536,7 +536,7 @@ void Client::slotSelectCardId( int id )
     sendCommand( SELECTED_CARD_ID_COMMAND+QString::number( id ) );
 }
 
-void Client::slotSelectTrumpCard()
+/*void Client::slotSelectTrumpCard()
 {
     kDebug() << "Select trump card.";
     
@@ -550,6 +550,28 @@ void Client::slotSelectTrumpCard()
     
     getCard( ret )->setSelectable( true );
     emit signalPlayerCardSelectableChanged( ret, true );
+    
+    if( haveRegularMarriages( mTrump ) ){
+        setTwentyButtonVisible( true );
+    }
+    
+    if( haveTrumpMarriages( mTrump ) ){
+        setFortyButtonVisible( true );
+    }
+    
+    sendChangeTrumpCard();
+}*/
+
+void Client::slotSelectTrumpCard()
+{
+    kDebug();
+    
+    int id = changeTrumpCard( mTrump );
+    
+    emit signalPlayerChangeTrumpCard( id );
+    
+    mTrump->getCard()->setSelectable( false );
+    emit signalTrumpCardSelectableChanged( false );
     
     if( haveRegularMarriages( mTrump ) ){
         setTwentyButtonVisible( true );
