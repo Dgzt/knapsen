@@ -175,6 +175,9 @@ void CentralWidget::slotInitialize( QString playerNameStr, QString opponentNameS
     //
     connect( mOpponentCards, SIGNAL( signalHideCards() ), mClient, SLOT( slotProcessCommands() ) );
     //
+    //
+    
+    //
     
     //Setup Player's cards
     mPlayerCards = new CardsGroup;
@@ -251,6 +254,7 @@ void CentralWidget::slotInitialize( QString playerNameStr, QString opponentNameS
     connect( mClient, SIGNAL( signalPlayerInAction() ), this, SLOT( slotShowPlayerArrow() ) );
     connect( mPlayerCards, SIGNAL( signalSelectedCardId(int) ), this, SLOT( slotHidePlayerArrow() ) );
     connect( mClient, SIGNAL( signalOpponentInAction() ), this, SLOT( slotShowOpponentArrow() ) );
+    connect( mOpponentCards, SIGNAL( signalSelectedCard( SvgCard* ) ), this, SLOT( slotHideOpponentArrow() ) );
 }
 
 void CentralWidget::slotNewGame()
