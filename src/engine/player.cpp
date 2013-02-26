@@ -115,21 +115,7 @@ void Player::sendInitializeTable( QString opponentName, Knapsen::TypeOfCards typ
 
 int Player::changeTrumpCard( Trump *trump )
 {
-    /*//This value will be modify. Only for don't write warning the compiler.
-    
-    for( int i = 0; i < mNumberOfCardsInHand; ++i ){
-        if( mCards[i] != 0 && mCards[i]->getSuit() == trump->getCardSuit() && mCards[i]->getType() == mLowestCardType ){
-            kDebug() << i;
-            
-            Card *tmpCard = trump->getCard();
-            trump->addNewCard( mCards[i] );
-            mCards[i]=tmpCard;
-            
-            return i;
-        }
-    }*/
-    
-    for( int i = 0; i < mCards.size(); ++i ){
+    /*for( int i = 0; i < mCards.size(); ++i ){
         if( mCards.at( i )->getSuit() == trump->getCardSuit() && mCards.at( i )->getType() == mLowestCardType ){
             kDebug() << i;
             
@@ -141,18 +127,30 @@ int Player::changeTrumpCard( Trump *trump )
         }
     }
     
-    return -1; //If this function return this value, then this is a bug.
+    return -1; //If this function return this value, then this is a bug.*/
+    
+    int ret = -1; //If this function return this value, then this is a bug.
+    
+    for( int i = 0; i < mCards.size(); ++i ){
+        if( mCards.at( i )->getSuit() == trump->getCardSuit() && mCards.at( i )->getType() == mLowestCardType ){
+            kDebug() << i;
+            
+            Card* newTrumpCard = mCards.takeAt( i );
+            Card* oldTrumpCard = trump->getCard();
+            
+            mCards.append( oldTrumpCard );
+            trump->addNewCard( newTrumpCard );
+            
+            ret = i;
+            break;
+        }
+    }
+    
+    return ret;
 }
 
 void Player::setSelectableAllCards( bool enabled )
 {
-    /*for( int i = 0; i < mNumberOfCardsInHand; ++i ){
-        if( mCards[ i ] != 0 ){
-            mCards[ i ]->setSelectable( enabled );
-            emit signalPlayerCardSelectableChanged( i, enabled );
-        }
-    }*/
-    
     for( int i = 0; i < mCards.size(); ++i ){
         mCards.at(i)->setSelectable( enabled );
         emit signalPlayerCardSelectableChanged( i, enabled );
@@ -412,18 +410,6 @@ bool Player::haveTrumpMarriages( Trump* trump ) const
 
 bool Player::canChangeTrumpCard( Trump* trump ) const
 {
-    /*bool canChange = false;
-    
-    for( int i = 0; i < mNumberOfCardsInHand; ++i ){
-        
-        if( mCards[i] != 0 && mCards[i]->getSuit() == trump->getCardSuit() && mCards[i]->getType() == mLowestCardType ){
-            canChange = true;
-        }
-        
-    }
-    
-    return canChange;*/
-    
     bool canChange = false;
     
     for( int i = 0; i < mCards.size(); ++i ){
@@ -650,6 +636,11 @@ void Player::sendNewCard( Card* card )
 void Player::sendNewTrumpCard( Trump* trump )
 {
     sendCommand( NEW_TRUMP_CARD_COMMAND+QString::number( trump->getCard()->getValue() ) );
+}
+
+void Player::sendOpponentChangeTrumpCard( int id, Trump* trump )
+{
+    sendCommand( OPPONENT_CHANGE_TRUMP_CARD_COMMAND + QString::number( id ) + "," + QString::number( trump->getCard()->getValue() ) );
 }
 
 void Player::sendSelectableAllCards()

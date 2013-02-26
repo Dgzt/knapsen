@@ -52,6 +52,8 @@ public:
     //
     //void clear( QPointF );
     QList< SvgCard* >* takeCards();
+    
+    SvgCard* takeCard( int id ){ return mCards->takeAt( id ); }
     //
     
 private slots:

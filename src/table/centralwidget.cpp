@@ -161,6 +161,9 @@ void CentralWidget::slotInitialize( QString playerNameStr, QString opponentNameS
     //
     connect( mClient, SIGNAL( signalShowOpponentCards( int, Card, int, Card ) ), mOpponentCards, SLOT( slotShowCards( int, Card, int, Card ) ) );
     //
+    //
+    connect( mClient, SIGNAL( signalOpponentChangeTrumpCard( int, Card* ) ), this, SLOT( slotOpponentChangeTrumpCard( int, Card* ) ) );
+    //
     connect( mOpponentCards, SIGNAL( signalSizeChanged() ), this, SLOT( slotOpponentCardsSizeChanged() ) );
     connect( mOpponentCards, SIGNAL( signalCardArrived() ), mClient, SLOT( slotProcessCommands() ) );
     //
@@ -356,7 +359,8 @@ void CentralWidget::slotNewPlayerCard( Card* card )
     kDebug();
     
     SvgCard* svgCard = new SvgCard( mRenderer, CARD_ANIMATION_TIME );
-    svgCard->getAnimation()->setCard( card );
+    //svgCard->getAnimation()->setCard( card );
+    svgCard->getAnimation()->setNewCardText( card->getCardText() );
     //
     svgCard->setPos( mDeck->pos() );
     svgCard->setVisible( false );
@@ -370,28 +374,36 @@ void CentralWidget::slotNewPlayerCard( Card* card )
 void CentralWidget::slotNewTrumpCard( Card* card )
 {
     kDebug();
-    
-    /*mTrumpCard->setPos( mDeck->pos() );
-    
-    
-    mTrumpCard->setVisible( true );
-    
-    Animation* animation = new Animation( mTrumpCard, endTrumpCardPos, card );
-    connect( animation, SIGNAL( signalCardArrived() ), mClient, SLOT( slotProcessCommands() ) );
-    
-    //animation->startAnimation();
-    animation->slotStartAnimation();*/
 
     mTrumpCard->setPos( mDeck->pos() );
     
     QPointF endTrumpCardPos( mDeck->pos().x() + mDeck->boundingRect().width() + DECK_TRUMPCARD_DISTANCE, mDeck->pos().y() );
     
     mTrumpCard->getAnimation()->setEndPosition( endTrumpCardPos );
-    mTrumpCard->getAnimation()->setCard( card );
+    //mTrumpCard->getAnimation()->setCard( card );
+    mTrumpCard->getAnimation()->setNewCardText( card->getCardText() );
     
     mTrumpCard->setVisible( true );
     
     mTrumpCard->getAnimation()->startAnimation();
+}
+
+void CentralWidget::slotOpponentChangeTrumpCard( int opponentCardId, Card* newTrumpCard )
+{
+    kDebug();
+    kDebug() << opponentCardId << newTrumpCard->getCardText();
+    
+    SvgCard* newSvgTrumpCard = mOpponentCards->takeCard( opponentCardId );
+    newSvgTrumpCard->getAnimation()->setEndPosition( mTrumpCard->pos() );
+    newSvgTrumpCard->getAnimation()->setNewCardText( newTrumpCard->getCardText() );
+    newSvgTrumpCard->getAnimation()->startAnimation();
+    
+    //mTrumpCard->getAnimation()->setNewCardText( SvgCard::EmptyCard() );
+    mTrumpCard->disconnect();
+    mTrumpCard->setElementId( SvgCard::EmptyCard() );
+    mOpponentCards->slotAddNewCard( mTrumpCard );
+    
+    mTrumpCard = newSvgTrumpCard;
 }
 
 void CentralWidget::slotOpponentCardsSizeChanged()

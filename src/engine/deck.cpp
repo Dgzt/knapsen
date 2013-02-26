@@ -44,6 +44,11 @@ void Deck::buildDeck()
     //mCards[ 18 ] = new Card( 16 );
     //
     
+    //Can change trump card
+    mCards[ 19 ] = new Card( 3 );
+    mCards[ 18 ] = new Card( 3 );
+    mCards[ 13 ] = new Card( 0 );
+    
     kDebug() << "Generated deck:";
     for( int i = 0; i < mCards.size(); ++i ){
         kDebug() << i << ":" << mCards.at( i )->getValue();

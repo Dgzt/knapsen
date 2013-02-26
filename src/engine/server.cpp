@@ -749,8 +749,10 @@ void Server::slotPlayerChangeTrumpCard( Player *player )
     
     int id = player->changeTrumpCard( mTrump );
     
+    /*mTrump->getCard()->setSelectable( false );
+    player->getCard( id )->setSelectable( true );*/
     mTrump->getCard()->setSelectable( false );
-    player->getCard( id )->setSelectable( true );
+    player->getCard( player->getNumberOfCardsInHand() - 1 )->setSelectable( true );
         
     if( player->haveRegularMarriages( mTrump ) ){
         player->setTwentyButtonVisible( true );
@@ -763,7 +765,8 @@ void Server::slotPlayerChangeTrumpCard( Player *player )
     for( int i = 0; i < mPlayerList.size(); ++i ){
         
         if( mPlayerList.at(i) != player ){
-            mPlayerList.at(i)->sendNewTrumpCard( mTrump );
+            //mPlayerList.at(i)->sendNewTrumpCard( mTrump );
+            mPlayerList.at( i )->sendOpponentChangeTrumpCard( id, mTrump );
         }
         
     }
@@ -858,9 +861,9 @@ void Server::slotCheckCentralCards()
                     
                     mTrump->clearTrumpCard( false );
                     
-                    for( int i = 0; i < mPlayerList.size(); ++i ){
+                    /*for( int i = 0; i < mPlayerList.size(); ++i ){
                         mPlayerList.at( i )->sendClearTrumpCard();
-                    }
+                    }*/
                     
                 }
                 

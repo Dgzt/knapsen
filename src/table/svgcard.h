@@ -22,13 +22,17 @@ protected:
     //
     
 public:
-    SvgCard( QSvgRenderer*, int, QString cardText = "back" );
+    SvgCard( QSvgRenderer*, int/*, QString cardText = "back"*/ );
     ~SvgCard();
     
     Animation* getAnimation(){ return mAnimation; }
     
     void setSelectable( bool );
     bool isSelectable(){ return mSelectable; }
+    
+    //
+    static QString EmptyCard(){ return "back"; }
+    //
     
 signals:
     void signalMouseEnter( SvgCard* );

@@ -77,6 +77,7 @@ signals:
     void signalChangePlayerCard( int, const Card* );
     
     void signalNewTrumpCard( /*const*/ Card* );
+    void signalOpponentChangeTrumpCard( int, Card* );
     
     //void signalNewCentralCard( int, const Card* );
     //void signalNewCentralCard( const Card* );

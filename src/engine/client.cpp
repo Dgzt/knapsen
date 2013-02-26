@@ -3,6 +3,9 @@
 #include "trump.h"
 #include "client.h"
 
+const int WRONG_VALUE_ARRAY_SIZE = 1;
+const int WRONG_VALUE = 2;
+
 Client::Client( QString name ): 
     Player( name ),
     mSizeOfDeck( 0 ),
@@ -172,6 +175,40 @@ void Client::slotProcessCommands()
             }else{
                 kDebug() << "ERROR! Cannot convert new trump card command value to int!";
             }
+            return;
+        }
+        
+        if( getCommandPartOfCommand( command ) == OPPONENT_CHANGE_TRUMP_CARD_COMMAND ){
+            kDebug() << getName() << "Opponent changed trump card.";
+            
+            QList< QString >* valueArray = getValues( getValuePartOfCommand( command ) );
+            try{
+                if( valueArray->size() != 2 ){
+                    throw WRONG_VALUE_ARRAY_SIZE;
+                }
+                
+                bool ok;
+                int cardId = valueArray->at( 0 ).toInt( &ok );
+                if( !ok ) throw WRONG_VALUE;
+                
+                int trumpCardValue = valueArray->at( 1 ).toInt( &ok );
+                if( !ok ) throw WRONG_VALUE;
+                
+                mTrump->clearTrumpCard( true );
+                mTrump->addNewCard( new Card( trumpCardValue ) );
+                
+                emit signalOpponentChangeTrumpCard( cardId, mTrump->getCard() );
+                
+            }catch( int error ){
+                if( error == WRONG_VALUE_ARRAY_SIZE ){
+                    kDebug() << "ERROR! Wrong size of values in opponent change trump card command!";
+                }
+                if( error == WRONG_VALUE ){
+                    kDebug() << "ERROR! Wrong value in opponent change trump card command!";
+                }
+            }
+            
+            delete valueArray;
             return;
         }
         

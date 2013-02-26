@@ -26,9 +26,11 @@ static const QString NEW_OPPONENT_CARD_COMMAND = ":NEW_OPPONENT_CARD";
 
 //
 static const QString NEW_TRUMP_CARD_COMMAND = ":NEW_TRUMP_CARD=";
-static const QString CLEAR_TRUMP_CARD_COMMAND = ":CLEAR_TRUMP_CARD";
 static const QString TRUMP_CARD_SELECTABLE_COMMAND = ":TRUMP_CARD_SELECTABLE";
 static const QString CHANGE_TRUMP_CARD_COMMAND = ":CHANGE_TRUMP_CARD";
+static const QString OPPONENT_CHANGE_TRUMP_CARD_COMMAND = ":OPPONENT_CHANGE_TRUMP_CARD=";
+
+//static const QString CLEAR_TRUMP_CARD_COMMAND = ":CLEAR_TRUMP_CARD";
 
 //
 static const QString SELECTABLE_ALL_CARDS_COMMAND = ":SELECTABLE_ALL_CARDS";
@@ -229,7 +231,10 @@ public:
     //Set and send the new trump card
     void sendNewTrumpCard( Trump* );
     
-    void sendClearTrumpCard(){ sendCommand( CLEAR_TRUMP_CARD_COMMAND ); }
+    //Send the opponent change trump card
+    void sendOpponentChangeTrumpCard( int, Trump* );
+    
+    //void sendClearTrumpCard(){ sendCommand( CLEAR_TRUMP_CARD_COMMAND ); }
     
     //Set and send enabled all card
     void sendSelectableAllCards();

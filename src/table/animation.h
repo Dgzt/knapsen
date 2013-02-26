@@ -8,14 +8,15 @@ class ScoreTable;
 class SvgCard;
 class CardsGroup;
 //
-class Card;
+//class Card;
 //
 
 class Animation : public QGraphicsItemAnimation
 {
     Q_OBJECT
 
-    Card* mCard;
+    //Card* mCard;
+    QString mNewCardText;
     
     void setupTimeLine( int );
     
@@ -32,7 +33,8 @@ public:
     void setEndPosition( QPointF );
     
     //
-    void setCard( Card* );
+    //void setCard( Card* );
+    void setNewCardText( QString cardText ){ mNewCardText = cardText; }
     //
     
     void startAnimation();

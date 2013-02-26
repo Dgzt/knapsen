@@ -181,8 +181,11 @@ void CardsGroup::slotCardAnimatedEnd()
 void CardsGroup::slotAddNewCard( SvgCard* svgCard )
 {
     //
-    if( !mCards->empty() ){
-        mCards->last()->stackBefore( svgCard );
+    /*if( !mCards->empty() ){
+        //mCards->last()->stackBefore( svgCard );
+    }*/
+    for( int i = 0; i < mCards->size(); ++i ){
+        mCards->at( i )->stackBefore( svgCard );
     }
     //
     
@@ -207,7 +210,8 @@ void CardsGroup::slotSelectedCard( int id, Card* card )
     SvgCard* svgCard1 = mCards->takeAt( id );
     
     //
-    svgCard1->getAnimation()->setCard( card );
+    //svgCard1->getAnimation()->setCard( card );
+    svgCard1->getAnimation()->setNewCardText( card->getCardText() );
     //
     
     emit signalSelectedCard( svgCard1 );

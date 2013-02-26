@@ -41,13 +41,14 @@ Animation::Animation( SvgCard* svgCard )
     mCard = 0;
 }*/
 
-Animation::Animation( QGraphicsItem* graphicsItem, int animationTime )
+Animation::Animation( QGraphicsItem* graphicsItem, int animationTime ) : 
+    mNewCardText( "" )
 {
     setItem( graphicsItem );
     
     setupTimeLine( animationTime );
     
-    mCard = 0;
+    //mCard = 0;
 }
 
 Animation::~Animation()
@@ -72,10 +73,10 @@ void Animation::setEndPosition( QPointF endPos )
     setPosAt( 1.0, endPos );
 }
 
-void Animation::setCard( Card* card )
+/*void Animation::setCard( Card* card )
 {
     mCard = card;
-}
+}*/
 
 void Animation::startAnimation()
 {
@@ -84,8 +85,12 @@ void Animation::startAnimation()
 
 void Animation::slotTimeLineTimeOut()
 {
-    if( mCard ){
+    /*if( mCard ){
         ( (SvgCard*)item() )->setElementId( mCard->getCardText() );
+    }*/
+    if( !mNewCardText.isEmpty() ){
+        ( (SvgCard*)item() )->setElementId( mNewCardText );
+        mNewCardText.clear();
     }
     
     emit signalAnimationEnd();

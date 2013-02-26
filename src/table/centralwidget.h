@@ -69,6 +69,9 @@ private slots:
     void slotNewPlayerCard( Card* );
     
     void slotNewTrumpCard( Card* );
+    //
+    void slotOpponentChangeTrumpCard( int, Card* );
+    //
     
     void slotOpponentCardsSizeChanged();
     void slotPlayerCardsSizeChanged();

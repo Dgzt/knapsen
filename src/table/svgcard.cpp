@@ -5,14 +5,15 @@
 #include "table/animation.h"
 #include "table/svgcard.h"
 
-SvgCard::SvgCard( QSvgRenderer* renderer, int animationTime, QString cardText ) :
+SvgCard::SvgCard( QSvgRenderer* renderer, int animationTime/*, QString cardText */) :
     mSelectable( false )
 {
     mAnimation = new Animation( this, animationTime );
     
     setSharedRenderer( renderer );
     
-    setElementId( cardText );
+    //setElementId( cardText );
+    setElementId( SvgCard::EmptyCard() );
     
     setAcceptHoverEvents( true );
 }
