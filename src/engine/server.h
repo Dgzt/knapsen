@@ -90,6 +90,9 @@ class Server : public QTcpServer
     void addNewCard( Player*, Card* );
     void addTricks( Player*, int );
     void addScores( Player*, int );
+    //
+    void addTrumpCardToPlayer( Player* );
+    //
 
 private slots:
     void slotNewPlayer( Player* );

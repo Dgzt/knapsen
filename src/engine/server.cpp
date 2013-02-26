@@ -495,6 +495,19 @@ void Server::addScores( Player* player, int newScores )
     }
 }
 
+void Server::addTrumpCardToPlayer( Player* player )
+{
+    player->sendNewCardTrumpCard();
+    
+    for( int i = 0; i < mPlayerList.size(); ++i ){
+        if( mPlayerList.at( i ) != player ){
+            mPlayerList.at( i )->sendNewOpponentCardTrumpCard();
+        }
+    }
+    
+    mTrump->clearTrumpCard( true );
+}
+
 void Server::slotNewPlayer( Player* player )
 {
     kDebug() << player->getName();
@@ -857,14 +870,15 @@ void Server::slotCheckCentralCards()
                     addNewCard( getNextPlayer(), mDeck->getCard() );
                     
                 }else{
-                    addNewCard( getNextPlayer(), mTrump->getCard() );
+                    //addNewCard( getNextPlayer(), mTrump->getCard() );
                     
-                    mTrump->clearTrumpCard( false );
+                    //mTrump->clearTrumpCard( false );
                     
                     /*for( int i = 0; i < mPlayerList.size(); ++i ){
                         mPlayerList.at( i )->sendClearTrumpCard();
                     }*/
                     
+                    addTrumpCardToPlayer( getNextPlayer() );
                 }
                 
             }
@@ -1022,7 +1036,7 @@ void Server::addBot( QString botName, Knapsen::GameDifficulty difficulty )
 void Server::startGame()
 {
     kDebug() << "Start game.";
-    
+    mSizeOfDeck = 12;
     //Initialize deck
     mDeck = new Deck( mSizeOfDeck );
     

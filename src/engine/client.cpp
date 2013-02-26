@@ -106,30 +106,6 @@ void Client::slotProcessCommands()
             delete valuesArray;
         }
         
-        if( getCommandPartOfCommand( command ) == NEW_PLAYER_CARD_COMMAND ){
-            kDebug() << getName() << "new card:" << getValuePartOfCommand( command );
-            
-            bool ok;
-            int ret = getValuePartOfCommand( command ).toInt( &ok );
-            if( ok ){
-                
-                mSizeOfDeckNow--;
-                if( mSizeOfDeckNow == 0 ){
-                    emit signalHideDeck();
-                }
-                
-                Card* card = new Card( ret );
-                addNewCard( card );
-                
-                
-                emit signalNewPlayerCard( card );
-                //break;
-            }else{
-                kDebug() << "ERROR! Cannot convert new player card value to int!";
-            }
-            return;
-        }
-        
         if( getCommandPartOfCommand( command ) == NEW_ROUND_COMMAND ){
             kDebug() << getName() << "New round.";
             newRound();
@@ -144,16 +120,62 @@ void Client::slotProcessCommands()
             return;
         }
         
-        if( getCommandPartOfCommand( command ) == NEW_OPPONENT_CARD_COMMAND ){
-            kDebug() << getName() << "new opponent card.";
+        if( getCommandPartOfCommand( command ) == NEW_PLAYER_CARD_COMMAND ){
+            kDebug() << getName() << "new card:" << getValuePartOfCommand( command );
             
-            mSizeOfDeckNow--;
+            bool ok;
+            int ret = getValuePartOfCommand( command ).toInt( &ok );
+            if( ok ){
+                
+                bool lastCard = false;
+                --mSizeOfDeckNow;
+                if( mSizeOfDeckNow == 0 ){
+                    lastCard = true;
+                }
+                
+                Card* card = new Card( ret );
+                addNewCard( card );
+                
+                emit signalNewPlayerCard( lastCard, card );
+                
+            }else{
+                kDebug() << "ERROR! Cannot convert new player card value to int!";
+            }
+            return;
+        }
+        
+        if( getCommandPartOfCommand( command ) == NEW_OPPONENT_CARD_COMMAND ){
+            kDebug() << getName() << "New opponent card.";
+            
+            bool lastCard = false;
+
+            --mSizeOfDeckNow;
             if( mSizeOfDeckNow == 0 ){
-                emit signalHideDeck();
+                lastCard = true;
             }
             
-            emit signalNewOpponentCard();
-            //break;
+            emit signalNewOpponentCard( lastCard );
+            return;
+        }
+        
+        if( getCommandPartOfCommand( command ) == NEW_PLAYER_CARD_TRUMP_CARD_COMMAND ){
+            kDebug() << "Add the trump card to player.";
+            
+            Card* newCard = mTrump->getCard();
+            mTrump->clearTrumpCard( false );
+            
+            addNewCard( newCard );
+            
+            emit signalNewPlayerCardTrumpCard();
+            return;
+        }
+        
+        if( getCommandPartOfCommand( command ) == NEW_OPPONENT_CARD_TRUMP_CARD_COMMAND ){
+            kDebug() << "Add the trump card to the opponent.";
+            
+            mTrump->clearTrumpCard( true );
+            
+            emit signalNewOpponentCardTrumpCard();
             return;
         }
         
@@ -168,6 +190,8 @@ void Client::slotProcessCommands()
                 }
                 
                 mTrump->addNewCard( new Card( ret ) );
+                
+                --mSizeOfDeckNow;
                 
                 emit signalNewTrumpCard( mTrump->getCard() );
                 //break;

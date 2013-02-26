@@ -69,11 +69,14 @@ signals:
     //void signalInitialize( QString, QString, Knapsen::TypeOfCards, int );
     void signalInitialize( QString, QString, Knapsen::TypeOfCards );
     
-    //void signalNewOpponentCardId( int );
-    void signalNewOpponentCard();
+    //void signalNewOpponentCard();
+    void signalNewOpponentCard( bool );
+    void signalNewOpponentCardTrumpCard();
     
-    //void signalNewPlayerCard( int, const Card* );
-    void signalNewPlayerCard( /*const*/ Card* );
+    //void signalNewPlayerCard( /*const*/ Card* );
+    void signalNewPlayerCard( bool, Card* );
+    void signalNewPlayerCardTrumpCard();
+    
     void signalChangePlayerCard( int, const Card* );
     
     void signalNewTrumpCard( /*const*/ Card* );
@@ -100,7 +103,7 @@ signals:
     
     void signalPlayerScoresChanged( int );
     
-    void signalHideDeck();
+    //void signalHideDeck();
     
     void signalCloseDeck();
     

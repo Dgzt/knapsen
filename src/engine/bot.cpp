@@ -16,19 +16,21 @@ Bot::Bot( QString name, Knapsen::GameDifficulty difficulty ):
     connect( this, SIGNAL( signalPlayerInAction() ),                            this, SLOT( slotPlayerInAction() ) );
     connect( this, SIGNAL( signalNewRound() ),                                  this, SLOT( slotNewRound() ) );
     connect( this, SIGNAL( signalCloseDeck() ),                                 this, SLOT( slotCloseDeck() ) );
-    connect( this, SIGNAL( signalNewCentralCard( const Card* ) ),               this, SLOT( slotNewCentralCard( const Card* ) ) );
+    //connect( this, SIGNAL( signalNewCentralCard( const Card* ) ),               this, SLOT( slotNewCentralCard( const Card* ) ) );
     connect( this, SIGNAL( signalShowOpponentCards( int, Card, int, Card ) ),   this, SLOT( slotShowOpponentCards( int, Card, int, Card ) ) );
     connect( this, SIGNAL( signalEndRound( QString, int ) ),                    this, SLOT( slotEndRound( QString, int ) ) );
     connect( this, SIGNAL( signalEndGame( QString ) ),                          this, SLOT( slotendGame( QString ) ) );
     
     //
-    connect( this, SIGNAL( signalNewPlayerCard( Card* ) ), this, SLOT( slotProcessCommands() ) );
-    connect( this, SIGNAL( signalNewOpponentCard() ), this, SLOT( slotProcessCommands() ) );
+    connect( this, SIGNAL( signalNewPlayerCard( bool, Card* ) ), this, SLOT( slotProcessCommands() ) );
+    connect( this, SIGNAL( signalNewOpponentCard( bool ) ), this, SLOT( slotProcessCommands() ) );
     connect( this, SIGNAL( signalNewTrumpCard( Card* ) ), this, SLOT( slotProcessCommands() ) );
     connect( this, SIGNAL( signalOpponentSelectedCard( int, Card* ) ), this, SLOT( slotProcessCommands() ) );
     connect( this, SIGNAL( signalOpponentGetCentralCards() ), this, SLOT( slotProcessCommands() ) );
     connect( this, SIGNAL( signalPlayerGetCentralCards() ), this, SLOT( slotProcessCommands() ) );
     connect( this, SIGNAL( signalOpponentChangeTrumpCard( int, Card* ) ), this, SLOT( slotProcessCommands() ) );
+    connect( this, SIGNAL( signalNewPlayerCardTrumpCard() ), this, SLOT( slotProcessCommands() ) );
+    connect( this, SIGNAL( signalNewOpponentCardTrumpCard() ), this, SLOT( slotProcessCommands() ) );
     //
     
     pairOfQueenWasInCentralCards[0].first = pairOfKingWasInCentralCards[0].first = Card::Heart;

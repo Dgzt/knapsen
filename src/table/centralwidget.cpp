@@ -162,7 +162,8 @@ void CentralWidget::slotInitialize( QString playerNameStr, QString opponentNameS
     mOpponentCards = new CardsGroup;
     //scene()->addItem( mOpponentCards );
     
-    connect( mClient, SIGNAL( signalNewOpponentCard() ), this, SLOT( slotNewOpponentCard() ) );
+    connect( mClient, SIGNAL( signalNewOpponentCard( bool ) ), this, SLOT( slotNewOpponentCard( bool ) ) );
+    connect( mClient, SIGNAL( signalNewOpponentCardTrumpCard() ), this, SLOT( slotNewOpponentCardTrumpCard() ) );
     connect( mClient, SIGNAL( signalOpponentSelectedCard( int, Card* ) ), mOpponentCards, SLOT( slotSelectedCard( int, Card* ) ) );
     //
     connect( mClient, SIGNAL( signalShowOpponentCards( int, Card, int, Card ) ), mOpponentCards, SLOT( slotShowCards( int, Card, int, Card ) ) );
@@ -182,7 +183,8 @@ void CentralWidget::slotInitialize( QString playerNameStr, QString opponentNameS
     //Setup Player's cards
     mPlayerCards = new CardsGroup;
     
-    connect( mClient, SIGNAL( signalNewPlayerCard( Card* ) ), this, SLOT( slotNewPlayerCard( Card* ) ) );
+    connect( mClient, SIGNAL( signalNewPlayerCard( bool, Card* ) ), this, SLOT( slotNewPlayerCard( bool, Card* ) ) );
+    connect( mClient, SIGNAL( signalNewPlayerCardTrumpCard() ), this, SLOT( slotNewPlayerCardTrumpCard() ) );
     connect( mClient, SIGNAL( signalPlayerCardSelectableChanged( int , bool ) ), mPlayerCards, SLOT( slotSelectableChanged( int , bool ) ) );
     connect( mPlayerCards, SIGNAL( signalSizeChanged() ), this, SLOT( slotPlayerCardsSizeChanged() ) );
     connect( mPlayerCards, SIGNAL( signalCardArrived() ), mClient, SLOT( slotProcessCommands() ) );
@@ -347,7 +349,7 @@ void CentralWidget::slotNewRound()
 
 }
 
-void CentralWidget::slotNewOpponentCard()
+void CentralWidget::slotNewOpponentCard( bool lastCard )
 {
     kDebug();
     
@@ -361,10 +363,39 @@ void CentralWidget::slotNewOpponentCard()
     scene()->addItem( svgCard );
     //
     
+    //
+    if( lastCard ){
+        mDeck->setVisible( false );
+    }
+    //
+    
     mOpponentCards->slotAddNewCard( svgCard );
 }
 
-void CentralWidget::slotNewPlayerCard( Card* card )
+void CentralWidget::slotNewOpponentCardTrumpCard()
+{
+    kDebug();
+    
+    mTrumpCard->disconnect();
+    
+    mTrumpCard->setElementId( SvgCard::EmptyCard() );
+    mOpponentCards->slotAddNewCard( mTrumpCard );
+    
+    mTrumpCard = 0;
+}
+
+void CentralWidget::slotNewPlayerCardTrumpCard()
+{
+    kDebug();
+    
+    mTrumpCard->disconnect();
+    
+    mPlayerCards->slotAddNewCard( mTrumpCard );
+    
+    mTrumpCard = 0;
+}
+
+void CentralWidget::slotNewPlayerCard( bool lastCard, Card* card )
 {
     kDebug();
     
@@ -376,6 +407,10 @@ void CentralWidget::slotNewPlayerCard( Card* card )
     svgCard->setVisible( false );
     scene()->addItem( svgCard );
     //
+    
+    if( lastCard ){
+        mDeck->setVisible( false );
+    }
     
     //mPlayerCards->addNewCard( svgCard, mDeck );
     mPlayerCards->slotAddNewCard( svgCard );

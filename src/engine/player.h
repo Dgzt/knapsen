@@ -21,8 +21,13 @@ static const QString INITIALIZE_TABLE_COMMAND = ":INITIALIZE_TABLE=";
 
 //
 static const QString NEW_PLAYER_CARD_COMMAND = ":NEW_PLAYER_CARD=";
-//static const QString NEW_OPPONENT_CARD_COMMAND_ID = ":NEW_OPPONENT_CARD_ID=";
+//
+static const QString NEW_PLAYER_CARD_TRUMP_CARD_COMMAND = ":NEW_PLAYER_CARD_TRUMP_CARD";
+//
 static const QString NEW_OPPONENT_CARD_COMMAND = ":NEW_OPPONENT_CARD";
+//
+static const QString NEW_OPPONENT_CARD_TRUMP_CARD_COMMAND = ":NEW_OPPONENT_CARD_TRUMP_CARD";
+//
 
 //
 static const QString NEW_TRUMP_CARD_COMMAND = ":NEW_TRUMP_CARD=";
@@ -221,12 +226,12 @@ public:
     void sendInitializeTable( QString, Knapsen::TypeOfCards, int );
     
     //Set and send the new card
-    //int sendNewCard( Card* );
     void sendNewCard( Card* );
+    void sendNewCardTrumpCard(){ sendCommand( NEW_PLAYER_CARD_TRUMP_CARD_COMMAND ); }
     
     //Send to player the new opponent card id
-    //void sendNewOpponentCard( int id ){ sendCommand( NEW_OPPONENT_CARD_COMMAND_ID+QString::number( id ) ); }
     void sendNewOpponentCard(){ sendCommand( NEW_OPPONENT_CARD_COMMAND ); }
+    void sendNewOpponentCardTrumpCard(){ sendCommand( NEW_OPPONENT_CARD_TRUMP_CARD_COMMAND ); }
     
     //Set and send the new trump card
     void sendNewTrumpCard( Trump* );
