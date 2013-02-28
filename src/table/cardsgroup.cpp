@@ -1,8 +1,9 @@
 #include <KDE/KDebug>
 #include <QtCore/QRectF>
-//
 #include <QtCore/QPair>
 #include <QtCore/QTimer>
+//
+#include <QtCore/QTimeLine>
 //
 #include <QtGui/QGraphicsScene>
 #include "engine/card.h"
@@ -165,37 +166,25 @@ QList< SvgCard* >* CardsGroup::takeCards()
     return retCards;
 }
 
-void CardsGroup::slotCardAnimatedEnd()
-{
-    kDebug();
-    
-    mCards->last()->getAnimation()->disconnect();
-    
-    connect( mCards->last(), SIGNAL( signalMouseEnter(SvgCard*) ), this, SLOT( slotMouseEnter(SvgCard*) ) );
-    connect( mCards->last(), SIGNAL( signalMouseLeave(SvgCard*) ), this, SLOT( slotMouseLeave(SvgCard*) ) );
-    connect( mCards->last(), SIGNAL( signalClick( SvgCard* ) ), this, SLOT( slotCardClicked(SvgCard*) ) );
-    
-    emit signalCardArrived();
-}
-
 void CardsGroup::slotAddNewCard( SvgCard* svgCard )
 {
-    //
-    /*if( !mCards->empty() ){
-        //mCards->last()->stackBefore( svgCard );
-    }*/
     for( int i = 0; i < mCards->size(); ++i ){
         mCards->at( i )->stackBefore( svgCard );
     }
-    //
     
     mCards->append( svgCard );
-   
-    connect( svgCard->getAnimation(), SIGNAL( signalAnimationEnd() ), this, SLOT( slotCardAnimatedEnd() ) );
     
-    emit signalSizeChanged();
+    connect( svgCard, SIGNAL( signalMouseEnter(SvgCard*) ), this, SLOT( slotMouseEnter(SvgCard*) ) );
+    connect( svgCard, SIGNAL( signalMouseLeave(SvgCard*) ), this, SLOT( slotMouseLeave(SvgCard*) ) );
+    connect( svgCard, SIGNAL( signalClick( SvgCard* ) ), this, SLOT( slotCardClicked(SvgCard*) ) );
     
     svgCard->setVisible( true );
+    
+    //This signal will start the animation of svgCard
+    emit signalSizeChanged();
+    
+    //When end of the animation then continue the processing commands in client
+    QTimer::singleShot( svgCard->getAnimation()->timeLine()->duration(), this, SLOT( slotCardAnimatedEnd() ) );
 }
 
 void CardsGroup::slotSelectableChanged( int id, bool enabled )

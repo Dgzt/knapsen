@@ -57,7 +57,8 @@ public:
     //
     
 private slots:
-    void slotCardAnimatedEnd();
+    //void slotCardAnimatedEnd();
+    void slotCardAnimatedEnd(){ emit signalCardArrived(); }
     
     void slotMouseEnter( SvgCard* );
     void slotMouseLeave( SvgCard* );

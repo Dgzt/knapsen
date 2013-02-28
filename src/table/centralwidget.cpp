@@ -4,6 +4,9 @@
 #include <KDE/KLocalizedString>
 #include <QtSvg/QSvgRenderer>
 #include <QtCore/QPointF>
+//
+#include <QtCore/QTimeLine>
+//
 #include <QtGui/QPushButton>
 #include <QtGui/QGraphicsProxyWidget>
 #include "engine/client.h"
@@ -147,16 +150,14 @@ void CentralWidget::slotInitialize( QString playerNameStr, QString opponentNameS
     mTrumpCard = new SvgCard( mRenderer, TRUMP_ANIMATION_TIME );
     mTrumpCard->setVisible( false );
     
-    //
+    connect( mClient, SIGNAL( signalNewTrumpCard( Card* ) ), this, SLOT( slotNewTrumpCard( Card* ) ) );
     connect( mClient, SIGNAL( signalTrumpCardSelectableChanged( bool ) ), this, SLOT( slotTrumpCardSelectableChanged( bool ) ) );
     connect( mTrumpCard, SIGNAL( signalClick() ), mClient, SLOT( slotSelectTrumpCard() ) );
     connect( mClient, SIGNAL( signalPlayerChangeTrumpCard( int ) ), this, SLOT( slotPlayerChangeTrumpCard( int ) ) );
-    //
     
     scene()->addItem( mTrumpCard );
     
-    connect( mClient, SIGNAL( signalNewTrumpCard( Card* ) ), this, SLOT( slotNewTrumpCard( Card* ) ) );
-    connect( mTrumpCard->getAnimation(), SIGNAL( signalAnimationEnd() ), mClient, SLOT( slotProcessCommands() ) );
+    //connect( mTrumpCard->getAnimation(), SIGNAL( signalAnimationEnd() ), mClient, SLOT( slotProcessCommands() ) );
     
     //Setup Opponent's cards
     mOpponentCards = new CardsGroup;
@@ -431,6 +432,8 @@ void CentralWidget::slotNewTrumpCard( Card* card )
     mTrumpCard->setVisible( true );
     
     mTrumpCard->getAnimation()->startAnimation();
+    
+    QTimer::singleShot( mTrumpCard->getAnimation()->timeLine()->duration(), mClient, SLOT( slotProcessCommands() ) );
 }
 
 void CentralWidget::slotTrumpCardSelectableChanged( bool selectable )
