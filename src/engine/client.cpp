@@ -106,6 +106,18 @@ void Client::slotProcessCommands()
             delete valuesArray;
         }
         
+        if( getCommandPartOfCommand( command ) == NEW_GAME_COMMAND ){
+            kDebug() << getName() << "Start game.";
+            
+            newGame();
+            
+            emit signalPlayerScoresChanged( getScores() );
+            emit signalOpponentScoresChanged( 0 );
+            emit signalNewGame();
+            
+            return;
+        }
+        
         if( getCommandPartOfCommand( command ) == NEW_ROUND_COMMAND ){
             kDebug() << getName() << "New round.";
             newRound();
@@ -435,16 +447,6 @@ void Client::slotProcessCommands()
             emit signalOpponentGetCentralCards();
             //break;
             return;
-        }
-        
-        if( getCommandPartOfCommand( command ) == NEW_GAME_COMMAND ){
-            kDebug() << getName() << "Start game.";
-            
-            newGame();
-            
-            emit signalPlayerScoresChanged( getScores() );
-            emit signalOpponentScoresChanged( 0 );
-            emit signalNewGame();
         }
         
         if( getCommandPartOfCommand( command ) == END_ROUND_COMMAND ){

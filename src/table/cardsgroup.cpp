@@ -184,6 +184,7 @@ void CardsGroup::slotAddNewCard( SvgCard* svgCard )
     emit signalSizeChanged();
     
     //When end of the animation then continue the processing commands in client
+    kDebug() << "New card's duration:" << svgCard->getAnimation()->timeLine()->duration();
     QTimer::singleShot( svgCard->getAnimation()->timeLine()->duration(), this, SLOT( slotCardAnimatedEnd() ) );
 }
 
