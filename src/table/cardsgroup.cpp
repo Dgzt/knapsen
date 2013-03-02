@@ -166,6 +166,16 @@ QList< SvgCard* >* CardsGroup::takeCards()
     return retCards;
 }
 
+SvgCard* CardsGroup::takeCard( int id )
+{
+    SvgCard* card = mCards->takeAt( id );
+    
+    //Remove connects from signalMouseEnter, signalMouseLeave, signalClick signals
+    card->disconnect();
+    
+    return card;
+}
+
 void CardsGroup::slotAddNewCard( SvgCard* svgCard )
 {
     for( int i = 0; i < mCards->size(); ++i ){
@@ -174,18 +184,21 @@ void CardsGroup::slotAddNewCard( SvgCard* svgCard )
     
     mCards->append( svgCard );
     
-    connect( svgCard, SIGNAL( signalMouseEnter(SvgCard*) ), this, SLOT( slotMouseEnter(SvgCard*) ) );
-    connect( svgCard, SIGNAL( signalMouseLeave(SvgCard*) ), this, SLOT( slotMouseLeave(SvgCard*) ) );
-    connect( svgCard, SIGNAL( signalClick( SvgCard* ) ), this, SLOT( slotCardClicked(SvgCard*) ) );
-    
-    svgCard->setVisible( true );
-    
     //This signal will start the animation of svgCard
     emit signalSizeChanged();
     
     //When end of the animation then continue the processing commands in client
-    kDebug() << "New card's duration:" << svgCard->getAnimation()->timeLine()->duration();
     QTimer::singleShot( svgCard->getAnimation()->timeLine()->duration(), this, SLOT( slotCardAnimatedEnd() ) );
+}
+
+void CardsGroup::slotCardAnimatedEnd()
+{
+    kDebug();
+    connect( mCards->last(), SIGNAL( signalMouseEnter(SvgCard*) ), this, SLOT( slotMouseEnter(SvgCard*) ) );
+    connect( mCards->last(), SIGNAL( signalMouseLeave(SvgCard*) ), this, SLOT( slotMouseLeave(SvgCard*) ) );
+    connect( mCards->last(), SIGNAL( signalClick( SvgCard* ) ), this, SLOT( slotCardClicked(SvgCard*) ) );
+    
+    emit signalCardArrived();
 }
 
 void CardsGroup::slotSelectableChanged( int id, bool enabled )

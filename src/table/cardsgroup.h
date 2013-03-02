@@ -49,16 +49,13 @@ public:
     void setPos( qreal, qreal );
     void setPos( QPointF point ){ setPos( point.x(), point.y() ); }
     
-    //
-    //void clear( QPointF );
     QList< SvgCard* >* takeCards();
     
-    SvgCard* takeCard( int id ){ return mCards->takeAt( id ); }
-    //
+    SvgCard* takeCard( int );
     
 private slots:
-    //void slotCardAnimatedEnd();
-    void slotCardAnimatedEnd(){ emit signalCardArrived(); }
+    void slotCardAnimatedEnd();
+    //void slotCardAnimatedEnd(){ emit signalCardArrived(); }
     
     void slotMouseEnter( SvgCard* );
     void slotMouseLeave( SvgCard* );

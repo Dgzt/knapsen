@@ -536,8 +536,6 @@ void Client::slotSelectCardId( int id )
     Card* card = takeCard( id );
     mCentralCards->add( card );
     
-    //emit signalNewCentralCard( card );
-    
     if( isTwentyButtonVisible() ){
         setTwentyButtonVisible( false );
     }
@@ -594,10 +592,13 @@ void Client::slotSelectTrumpCard()
     
     int id = changeTrumpCard( mTrump );
     
-    emit signalPlayerChangeTrumpCard( id );
-    
     mTrump->getCard()->setSelectable( false );
-    emit signalTrumpCardSelectableChanged( false );
+    
+    //Set the new trump card's selectable to false
+    emit signalPlayerCardSelectableChanged( id, false );
+    
+    //Change cards on the GUI
+    emit signalPlayerChangeTrumpCard( id );
     
     if( haveRegularMarriages( mTrump ) ){
         setTwentyButtonVisible( true );
