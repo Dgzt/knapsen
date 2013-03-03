@@ -601,26 +601,32 @@ void CentralWidget::slotOpponentGetCentralCards()
 
 void CentralWidget::setRemoveCard( QPointF pos )
 {
-    mRemoveCards = mCentralCards->takeCards();
+    mRemoveCards = new QList< SvgCard* >;
+    //Get the 2 central cards
+    mRemoveCards->append( mCentralCards->takeFirst() );
+    mRemoveCards->append( mCentralCards->takeFirst() );
     
     for( int i = 0; i < mRemoveCards->size(); ++i ){
         mRemoveCards->at( i )->getAnimation()->setEndPosition( pos );
-        connect( mRemoveCards->at( i )->getAnimation(), SIGNAL( signalAnimationEnd() ), this, SLOT( slotRemoveCardArrived() ) );
         mRemoveCards->at( i )->getAnimation()->startAnimation();
     }
+    
+    QTimer::singleShot( CARD_ANIMATION_TIME, this, SLOT( slotRemoveCardArrived() ) );
 }
 
 void CentralWidget::slotRemoveCardArrived()
 {
-    mRemoveCards->first()->disconnect();
-    delete mRemoveCards->takeFirst();
-    
-    if( mRemoveCards->empty() ){
-        delete mRemoveCards;
-        mRemoveCards = 0;
+    while( !mRemoveCards->empty() ){
+        SvgCard* card = mRemoveCards->takeFirst();
         
-        mClient->slotProcessCommands();
+        scene()->removeItem( card );
+        delete card;
     }
+    
+    delete mRemoveCards;
+    mRemoveCards = 0;
+    
+    mClient->slotProcessCommands();
 }
 
 void CentralWidget::setClient( Client* client )

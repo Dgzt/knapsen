@@ -158,14 +158,6 @@ void CardsGroup::setPos( qreal x, qreal y )
     setCardsPosition();
 }
 
-QList< SvgCard* >* CardsGroup::takeCards()
-{
-    QList< SvgCard* >* retCards = mCards;
-    mCards = new QList< SvgCard* >;
-    
-    return retCards;
-}
-
 SvgCard* CardsGroup::takeCard( int id )
 {
     SvgCard* card = mCards->takeAt( id );

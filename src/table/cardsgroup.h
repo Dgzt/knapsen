@@ -49,9 +49,10 @@ public:
     void setPos( qreal, qreal );
     void setPos( QPointF point ){ setPos( point.x(), point.y() ); }
     
-    QList< SvgCard* >* takeCards();
-    
     SvgCard* takeCard( int );
+    //
+    SvgCard* takeFirst(){ return takeCard( 0 ); }
+    //
     
 private slots:
     void slotCardAnimatedEnd();
