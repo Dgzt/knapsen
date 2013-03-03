@@ -168,6 +168,17 @@ SvgCard* CardsGroup::takeCard( int id )
     return card;
 }
 
+void CardsGroup::clear()
+{
+    kDebug();
+    
+    while( !mCards->empty() ){
+        delete mCards->takeLast();
+    }
+    
+    emit signalSizeChanged();
+}
+
 void CardsGroup::slotAddNewCard( SvgCard* svgCard )
 {
     for( int i = 0; i < mCards->size(); ++i ){

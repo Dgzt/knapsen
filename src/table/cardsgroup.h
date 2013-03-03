@@ -54,6 +54,9 @@ public:
     SvgCard* takeFirstCard(){ return takeCard( 0 ); }
     //
     
+    bool isEmpty(){ return mCards->isEmpty(); }
+    void clear();
+    
 private slots:
     void slotCardAnimatedEnd();
     //void slotCardAnimatedEnd(){ emit signalCardArrived(); }

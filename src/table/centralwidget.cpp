@@ -48,6 +48,8 @@ CentralWidget::CentralWidget( QWidget* parent ):
     QGraphicsView( parent )
 {
     //
+    mTrumpCard = 0;
+    
     mRemoveCards = 0;
     //
     
@@ -299,6 +301,24 @@ void CentralWidget::slotNewGame()
 void CentralWidget::slotNewRound()
 {
     kDebug();
+    
+    //If this round isn't the first round then clear the table
+    if( !mOpponentCards->isEmpty() ){
+        mOpponentCards->clear();
+    }
+    
+    if( !mPlayerCards->isEmpty() ){
+        mPlayerCards->clear();
+    }
+    
+    if( !mCentralCards->isEmpty() ){
+        mCentralCards->clear();
+    }
+    
+    if( mTrumpCard ){
+        delete mTrumpCard;
+        mTrumpCard = 0;
+    }
     
     QPointF startDeckPos( mapToScene( 0, 0 ).x() - mDeck->boundingRect().width(),
                           ( sceneRect().height() - mDeck->boundingRect().height() ) / 2 );
