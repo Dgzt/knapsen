@@ -51,7 +51,7 @@ public:
     
     SvgCard* takeCard( int );
     //
-    SvgCard* takeFirst(){ return takeCard( 0 ); }
+    SvgCard* takeFirstCard(){ return takeCard( 0 ); }
     //
     
 private slots:

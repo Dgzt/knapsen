@@ -1,6 +1,9 @@
 #ifndef centralwidget_h
 #define centralwidget_h
 
+//
+#include <QtCore/QPointer>
+//
 #include <QtGui/QGraphicsView>
 #include "enums.h"
 
@@ -23,34 +26,54 @@ class CentralWidget : public QGraphicsView
     Client* mClient;
     
     QSvgRenderer* mRenderer;
+    //QPointer< QSvgRenderer > mRenderer;
     
     //
     MyTextItem* mOpponentName;
+    //QPointer< MyTextItem > mOpponentName;
     
     MyTextItem* mPlayerName;
+    //QPointer< MyTextItem > mPlayerName;
     //
     
     SvgCard* mDeck;
+    //QPointer< SvgCard > mDeck;
     
     SvgCard* mTrumpCard;
+    //QPointer< SvgCard > mTrumpCard;
     
     CardsGroup* mOpponentCards;
+    //QPointer< CardsGroup > mOpponentCards;
     ScoreTable* mOpponentScoreTable;
+    //QPointer< ScoreTable > mOpponentScoreTable;
     
     CardsGroup* mPlayerCards;
+    //QPointer< CardsGroup > mPlayerCards;
     ScoreTable* mPlayerScoreTable;
+    //QPointer< ScoreTable > mPlayerScoreTable;
     
     CardsGroup* mCentralCards;
+    //QPointer< CardsGroup > mCentralCards;
     
     //Buttons
     QGraphicsProxyWidget* mCloseButton;
+    //QPointer< QGraphicsProxyWidget > mCloseButton;
     QGraphicsProxyWidget* mSchnapsenButton;
+    //QPointer< QGraphicsProxyWidget > mSchnapsenButton;
     QGraphicsProxyWidget* mTwentyButton;
+    //QPointer< QGraphicsProxyWidget > mTwentyButton;
     QGraphicsProxyWidget* mFortyButton;
+    //QPointer< QGraphicsProxyWidget > mFortyButton;
     
     //Arrows
     QGraphicsPixmapItem* mPlayerArrow;
+    //QPointer< QGraphicsPixmapItem > mPlayerArrow;
     QGraphicsPixmapItem* mOpponentArrow;
+    //QPointer< QGraphicsPixmapItem > mOpponentArrow;
+    
+    //
+    QTimer* mTimer;
+    //
     
     //
     QList< SvgCard* >* mRemoveCards;

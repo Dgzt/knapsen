@@ -47,30 +47,6 @@ const int CARD_ANIMATION_TIME = 1000; //100
 CentralWidget::CentralWidget( QWidget* parent ): 
     QGraphicsView( parent )
 {
-    mRenderer = 0;
-    
-    mOpponentName = 0;
-    mPlayerName = 0;
-    
-    mDeck = 0;
-    mTrumpCard = 0;
-    mOpponentCards = 0;
-    mOpponentScoreTable = 0;
-    mPlayerCards = 0;
-    mPlayerScoreTable = 0;
-    mCentralCards = 0;
-    //
-    mCloseButton = 0;
-    mSchnapsenButton = 0;
-    mTwentyButton = 0;
-    mFortyButton = 0;
-    //
-    
-    //
-    mPlayerArrow = 0;
-    mOpponentArrow = 0;
-    //
-    
     //
     mRemoveCards = 0;
     //
@@ -91,7 +67,6 @@ CentralWidget::CentralWidget( QWidget* parent ):
     
     //setAlignment(Qt::AlignLeft | Qt::AlignTop);
     setAlignment( Qt::AlignCenter | Qt::AlignCenter );
-    
 }
 
 void CentralWidget::resizeEvent( QResizeEvent* ){
@@ -156,7 +131,7 @@ void CentralWidget::slotInitialize( QString playerNameStr, QString opponentNameS
     //connect( mTrumpCard, SIGNAL( signalClick() ), mClient, SLOT( slotSelectTrumpCard() ) );
     connect( mClient, SIGNAL( signalPlayerChangeTrumpCard( int ) ), this, SLOT( slotPlayerChangeTrumpCard( int ) ) );
     
-    scene()->addItem( mTrumpCard );
+    //scene()->addItem( mTrumpCard );
     
     //connect( mTrumpCard->getAnimation(), SIGNAL( signalAnimationEnd() ), mClient, SLOT( slotProcessCommands() ) );
     
@@ -242,6 +217,12 @@ void CentralWidget::slotInitialize( QString playerNameStr, QString opponentNameS
     connect( mClient, SIGNAL( signalOpponentInAction() ), this, SLOT( slotShowOpponentArrow() ) );
     connect( mOpponentCards, SIGNAL( signalSelectedCard( SvgCard* ) ), this, SLOT( slotHideOpponentArrow() ) );
     
+    //Set timer
+    mTimer = new QTimer;
+    mTimer->setSingleShot( true );
+    
+    connect( mTimer, SIGNAL( timeout() ), mClient, SLOT( slotProcessCommands() ) );
+    
     //Start game signal-slot
     connect( mClient, SIGNAL( signalNewGame() ), this, SLOT( slotNewGame() ) );
     connect( mClient, SIGNAL( signalNewRound() ), this, SLOT( slotNewRound() ) );
@@ -311,7 +292,8 @@ void CentralWidget::slotNewGame()
     mCentralCards->setPos( sceneRect().width() / 2,
                            ( sceneRect().height() - mDeck->boundingRect().height() ) / 2 );
     
-    QTimer::singleShot( mPlayerName->getAnimation()->timeLine()->duration(), mClient, SLOT( slotProcessCommands() ) );
+    //QTimer::singleShot( mPlayerName->getAnimation()->timeLine()->duration(), mClient, SLOT( slotProcessCommands() ) );
+    mTimer->start( NAME_ANIMATION_TIME );
 }
 
 void CentralWidget::slotNewRound()
@@ -337,7 +319,8 @@ void CentralWidget::slotNewRound()
     mCloseButton->setGeometry( QRectF( QPointF( endDeckPos.x(), endDeckPos.y() + mDeck->boundingRect().height() + BUTTON_Y_DISTANCE ), 
                                        QSizeF( mDeck->boundingRect().width(), BUTTON_HEIGHT ) ) );
 
-    QTimer::singleShot( mDeck->getAnimation()->timeLine()->duration() + DECK_DELAY_TIME, mClient, SLOT( slotProcessCommands() ) );
+    //QTimer::singleShot( mDeck->getAnimation()->timeLine()->duration() + DECK_DELAY_TIME, mClient, SLOT( slotProcessCommands() ) );
+    mTimer->start( DECK_ANIMATION_TIME + DECK_DELAY_TIME );
 }
 
 void CentralWidget::slotNewOpponentCard( bool lastCard )
@@ -418,7 +401,8 @@ void CentralWidget::slotNewTrumpCard( Card* card )
     
     mTrumpCard->getAnimation()->startAnimation();
     
-    QTimer::singleShot( mTrumpCard->getAnimation()->timeLine()->duration(), mClient, SLOT( slotProcessCommands() ) );
+    //QTimer::singleShot( mTrumpCard->getAnimation()->timeLine()->duration(), mClient, SLOT( slotProcessCommands() ) );
+    mTimer->start( CARD_ANIMATION_TIME );
 }
 
 void CentralWidget::slotTrumpCardSelectableChanged( bool selectable )
@@ -603,8 +587,8 @@ void CentralWidget::setRemoveCard( QPointF pos )
 {
     mRemoveCards = new QList< SvgCard* >;
     //Get the 2 central cards
-    mRemoveCards->append( mCentralCards->takeFirst() );
-    mRemoveCards->append( mCentralCards->takeFirst() );
+    mRemoveCards->append( mCentralCards->takeFirstCard() );
+    mRemoveCards->append( mCentralCards->takeFirstCard() );
     
     for( int i = 0; i < mRemoveCards->size(); ++i ){
         mRemoveCards->at( i )->getAnimation()->setEndPosition( pos );
@@ -616,7 +600,7 @@ void CentralWidget::setRemoveCard( QPointF pos )
 
 void CentralWidget::slotRemoveCardArrived()
 {
-    while( !mRemoveCards->empty() ){
+    /*while( !mRemoveCards->empty() ){
         SvgCard* card = mRemoveCards->takeFirst();
         
         scene()->removeItem( card );
@@ -627,6 +611,20 @@ void CentralWidget::slotRemoveCardArrived()
     mRemoveCards = 0;
     
     mClient->slotProcessCommands();
+    */
+    if( mRemoveCards ){
+        while( !mRemoveCards->empty() ){
+            SvgCard* card = mRemoveCards->takeFirst();
+        
+            scene()->removeItem( card );
+            delete card;
+        }
+    
+        delete mRemoveCards;
+        mRemoveCards = 0;
+    
+        mClient->slotProcessCommands();
+    }
 }
 
 void CentralWidget::setClient( Client* client )
@@ -638,13 +636,25 @@ void CentralWidget::setClient( Client* client )
 
 void CentralWidget::clearWidget()
 {
+    //Remove connects from all signal
+    //mClient->disconnect();
+    
     scene()->clear();
     
+    if( mTimer->isActive() ){
+        mTimer->stop();
+    }
+    delete mTimer;
+    
     delete mRenderer;
-    mRenderer = 0;
+    //mRenderer = 0;
     
     if( mRemoveCards ){
         delete mRemoveCards;
         mRemoveCards = 0;
     }
+    
+    delete mOpponentCards;
+    delete mPlayerCards;
+    delete mCentralCards;
 }
