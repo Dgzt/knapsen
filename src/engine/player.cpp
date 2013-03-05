@@ -164,29 +164,8 @@ void Player::setSelectableCertainCards( CentralCards *centralCards, Trump *trump
     }
 }
 
-void Player::setSelectableRegularMarriagesCards( Trump* trump )
+void Player::setSelectableRegularMarriageCards( const Trump* trump )
 {
-    /*for( int i = 0; i < mNumberOfCardsInHand; ++i ){
-        
-        if( mCards[ i ] != 0 && 
-            mCards[ i ]->getSuit() != trump->getCardSuit() && 
-            mCards[ i ]->getType() == Card::King
-        ){
-            for( int j = 0; j < mNumberOfCardsInHand; ++j ){
-            
-                if( mCards[ j ] != 0 &&
-                    mCards[ j ]->getSuit() == mCards[ i ]->getSuit() &&
-                    mCards[ j ]->getType() == Card::Queen
-                ){
-                    mCards[ i ]->setSelectable( true );
-                    mCards[ j ]->setSelectable( true );
-                    emit signalPlayerCardSelectableChanged( i, mCards[ i ]->isSelectable() );
-                    emit signalPlayerCardSelectableChanged( j, mCards[ j ]->isSelectable() );
-                }
-            }
-        }
-    }*/
-    
     for( int i = 0; i < mCards.size(); ++i ){
         
         if( mCards.at( i )->getSuit() != trump->getCardSuit() && 
@@ -207,31 +186,8 @@ void Player::setSelectableRegularMarriagesCards( Trump* trump )
     }
 }
 
-void Player::setSelectableTrumpMarriagesCards( Trump* trump )
+void Player::setSelectableTrumpMarriageCards( const Trump* trump )
 {
-    /*for( int i = 0; i < mNumberOfCardsInHand; ++i ){
-        
-        if( mCards[ i ] != 0 && 
-            mCards[ i ]->getSuit() == trump->getCardSuit() && 
-            mCards[ i ]->getType() == Card::King
-        ){
-            for( int j = 0; j < mNumberOfCardsInHand; ++j ){
-                
-                if( mCards[ j ] != 0 &&
-                    mCards[ j ]->getSuit() == mCards[ i ]->getSuit() &&
-                    mCards[ j ]->getType() == Card::Queen
-                ){
-                    mCards[ i ]->setSelectable( true );
-                    mCards[ j ]->setSelectable( true );
-                    emit signalPlayerCardSelectableChanged( i, mCards[ i ]->isSelectable() );
-                    emit signalPlayerCardSelectableChanged( j, mCards[ j ]->isSelectable() );
-                }
-                
-            }
-        }
-
-    }*/
-    
     for( int i = 0; i < mCards.size(); ++i ){
         
         if( mCards.at( i )->getSuit() == trump->getCardSuit() && 
@@ -253,24 +209,6 @@ void Player::setSelectableTrumpMarriagesCards( Trump* trump )
 
     }
 }
-
-/*int Player::getNumberOfCardsInHandNow()
-{
-    int ret = 0;
-    
-    for( int i = 0; i < getNumberOfCardsInHand(); ++i ){
-        if( getCard( i ) != 0 ){
-            ++ret;
-        }
-    }
-    
-    return ret;
-}*/
-
-/*Card* Player::getCard( int id )
-{
-    return mCards[ id ];
-}*/
 
 void Player::newGame()
 {

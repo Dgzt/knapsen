@@ -703,7 +703,7 @@ void Server::slotPlayerSelectedCardId( int selectedCardId )
 void Server::slotPlayerTwentyButtonClicked()
 {
     kDebug() << getCurrentPlayer()->getName() << "Clicked to twenty button.";
-    getCurrentPlayer()->setSelectableRegularMarriagesCards( mTrump );
+    getCurrentPlayer()->setSelectableRegularMarriageCards( mTrump );
     
     mTwentyButtonClickedThisTurn = true;
 }
@@ -711,7 +711,7 @@ void Server::slotPlayerTwentyButtonClicked()
 void Server::slotPlayerFortyButtonClicked()
 {
     kDebug() << getCurrentPlayer()->getName() << "Clicked to forty button.";
-    getCurrentPlayer()->setSelectableTrumpMarriagesCards( mTrump );
+    getCurrentPlayer()->setSelectableTrumpMarriageCards( mTrump );
     
     mFortyButtonClickedThisTurn = true;
 }

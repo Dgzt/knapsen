@@ -292,29 +292,94 @@ public:
      */
     bool canChangeTrumpCard( const Trump* trump ) const;
     
-    int changeTrumpCard( Trump* );
+    /*!
+     * Change the trump card with the lowest card. The suit of lowst card is equal with 
+     * suit of trump card. The card is Jack or Nine what was set in the setting.
+     * 
+     * @param trump The trump.
+     * @return What was the position the lowest card.
+     */
+    int changeTrumpCard( Trump* trump );
     
-    void setTwentyButtonVisible( bool );
+    /*!
+     * If the given value is true then the twenty button 
+     * will visible and enabled, if the given value is false
+     * then will invisible and disabled.
+     * 
+     * @param visible Set the twenty button visible.
+     */
+    void setTwentyButtonVisible( bool visible );
+    
+    /*!
+     * Return the state of twenty button. If the twenty
+     * button is visible then return true else false.
+     * 
+     * @return True/False.
+     */
     bool isTwentyButtonVisible() const{ return mTwentyButtonVisible; }
-    void setFortyButtonVisible( bool );
-    bool isFortyButtonVisible() const{ return mFortyButtonVisible; }
-    //
-    void setSchnapsenButtonVisible( bool );
-    bool isSchnapsenButtonVisible(){ return mSchnapsenButtonVisible; }
-    //
     
-    void setSelectableRegularMarriagesCards( Trump* );
-    void setSelectableTrumpMarriagesCards( Trump* );
+    /*!
+     * If the given value is true then the forty button
+     * will visible and enabled, if the given value is false
+     * then will invisible and disabled.
+     * 
+     * @param visible Set the forty button visible.
+     */
+    void setFortyButtonVisible( bool visible );
+    
+    /*!
+     * Return the sate of forty button. If the forty 
+     * button is visible then return true else false. 
+     * 
+     * @return True/False.
+     */
+    bool isFortyButtonVisible() const{ return mFortyButtonVisible; }
+    
+    /*!
+     * If the given value is true then the schnapsen button
+     * will visible and enabled, if the given value is false
+     * then will invisible and disabled.
+     * 
+     * @param visible Set the schnapsen button visible.
+     */
+    void setSchnapsenButtonVisible( bool visible );
+    
+    /*!
+     * Return the sate of schnapsen button. If the schnapsen 
+     * button is visible then return true else false. 
+     * 
+     * @return True/False.
+     */
+    bool isSchnapsenButtonVisible(){ return mSchnapsenButtonVisible; }
+    
+    /*!
+     * Set true King and Queen cards's selectable that suit aren't
+     * equal with suit of trump cards.
+     * 
+     * @param trump The trump.
+     */
+    void setSelectableRegularMarriageCards( const Trump* trump );
+    
+    /*!
+     * Set true King and Queen cards's selectable that suit are
+     * equal with suit of trump cards.
+     * 
+     * @param trump The trump.
+     */
+    void setSelectableTrumpMarriageCards( const Trump* trump );
     
     //-- Commands --
     
-    //
+    /*!
+     * Send to the client the name is busy.
+     */
     void sendNameIsBusy(){ sendCommand( NAME_IS_BUSY_COMMAND ); }
     
+    /*!
+     * Send to the client the server is full.
+     */
     void sendServerIsFull(){ sendCommand( SERVER_IS_FULL_COMMAND ); }
-    //
 
-    //void sendInitializeTable( QString, Knapsen::TypeOfCards, int, int );
     void sendInitializeTable( QString, Knapsen::TypeOfCards, int );
     
     //Set and send the new card
