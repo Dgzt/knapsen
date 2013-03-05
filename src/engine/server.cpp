@@ -299,7 +299,7 @@ void Server::roundOver()
                 winnerPlayer = nextPlayer;
                 looserPlayer = currentPlayer;
             //}else if( currentPlayer->getNumberOfCardsInHandNow() == 0 ){
-            }else if( currentPlayer->getNumberOfCardsInHand() == 0 ){
+            }else if( currentPlayer->getNumberOfCards() == 0 ){
                 winnerPlayer = currentPlayer;
                 looserPlayer = nextPlayer;
             }
@@ -434,7 +434,7 @@ bool Server::isRoundOver()
     }
         
     //If a player have not card in hand, then win the round who win the last turn
-    if( getCurrentPlayer()->getNumberOfCardsInHand()  == 0 ){
+    if( getCurrentPlayer()->getNumberOfCards()  == 0 ){
         return true;
     }
     
@@ -765,7 +765,7 @@ void Server::slotPlayerChangeTrumpCard( Player *player )
     /*mTrump->getCard()->setSelectable( false );
     player->getCard( id )->setSelectable( true );*/
     mTrump->getCard()->setSelectable( false );
-    player->getCard( player->getNumberOfCardsInHand() - 1 )->setSelectable( true );
+    player->getCard( player->getNumberOfCards() - 1 )->setSelectable( true );
         
     if( player->haveRegularMarriages( mTrump ) ){
         player->setTwentyButtonVisible( true );

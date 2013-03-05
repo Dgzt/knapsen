@@ -65,7 +65,7 @@ void Bot::slotSelectCard()
     kDebug() << "In Action.";
     
     kDebug() << "Bot cards:";
-    for( int i = 0; i < getNumberOfCardsInHand(); ++i ){
+    for( int i = 0; i < getNumberOfCards(); ++i ){
         kDebug() << getCard( i )->getCardText();
     }
     kDebug() << "";
@@ -199,7 +199,7 @@ int Bot::getRandomCardId()
     kDebug() << "Return a random card id";
     
     QList<int> selectableCards;
-    for( int i = 0; i < getNumberOfCardsInHand(); ++i ){
+    for( int i = 0; i < getNumberOfCards(); ++i ){
         if( /*getCard( i ) != 0 && */getCard( i )->isSelectable() ){
             selectableCards.append( i );
         }
@@ -250,7 +250,7 @@ bool Bot::trySelectNotEqualTrump( Card::Type cardType )
     Card* card;
     Card::Suit trumpCardSuit = getTrump()->getCard()->getSuit();
     
-    for( int i = 0; i < getNumberOfCardsInHand(); ++i ){
+    for( int i = 0; i < getNumberOfCards(); ++i ){
         card = getCard( i );
         
         if( /*card != 0 && */card->isSelectable() && ( card->getSuit() != trumpCardSuit ) && ( card->getType() == cardType ) ){
@@ -276,7 +276,7 @@ bool Bot::trySelectPairWasNotInCentral( Card::Type cardType )
     
     Card* card;
     
-    for( int i = 0; i < getNumberOfCardsInHand(); ++i ){
+    for( int i = 0; i < getNumberOfCards(); ++i ){
         card = getCard( i );
         
         if( /*card != 0 &&*/ card->isSelectable() && ( card->getType() == cardType ) && ( mDeckIsClosed || getSizeOfDeckNow() == 0 || ( getPairOfCardWasInCentral( pairCardType, card->getSuit() ) ) ) ){
@@ -296,7 +296,7 @@ bool Bot::trySelectEqualTrump( Card::Type cardType )
     Card* card;
     Card::Suit trumpCardSuit = getTrump()->getCard()->getSuit();
     
-    for( int i = 0; i < getNumberOfCardsInHand(); ++i ){
+    for( int i = 0; i < getNumberOfCards(); ++i ){
         card = getCard( i );
         
         if( /*card != 0 && */card->isSelectable() && ( card->getSuit() == trumpCardSuit ) && ( card->getType() == cardType ) ){
@@ -313,7 +313,7 @@ bool Bot::trySelect( Card::Type cardType )
 {
     kDebug() << "If have " << cardType << " then I will select this.";
     
-    for( int i = 0; i < getNumberOfCardsInHand(); ++i ){
+    for( int i = 0; i < getNumberOfCards(); ++i ){
         if( /*getCard( i ) != 0 && */getCard( i )->isSelectable() && getCard( i )->getType() == cardType ){
             slotSelectCardId( i );
             return true;
@@ -331,7 +331,7 @@ bool Bot::trySelectEqualCentralMinPoints()
     int selectCardId = INVALID_CARD_ID;
     Card* centralCard0 = getCentralCards()->getCard(0);
                 
-    for( int i = 0; i < getNumberOfCardsInHand(); ++i ){
+    for( int i = 0; i < getNumberOfCards(); ++i ){
         
         card = getCard( i );
         
@@ -373,7 +373,7 @@ bool Bot::trySelectEqualTrumpMinPoints()
         Card* card;
         int selectCardId = INVALID_CARD_ID;
         
-        for( int i = 0; i < getNumberOfCardsInHand(); ++i ){
+        for( int i = 0; i < getNumberOfCards(); ++i ){
             
             card = getCard( i );
             

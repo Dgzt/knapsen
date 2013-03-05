@@ -15,7 +15,7 @@ public:
     void addNewCard( Card* );
     Card* getCard(){ return mCard; }
     
-    Card::Suit getCardSuit(){ return mCardSuit; }
+    Card::Suit getCardSuit() const{ return mCardSuit; }
     
     bool isEmpty();
     

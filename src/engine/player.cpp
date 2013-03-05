@@ -24,14 +24,9 @@ Player::~Player()
 {
     kDebug() << getName() << "deleting.";
     
-    /*if( mCards != 0 ){
-        for( int i = 0; i < mNumberOfCardsInHand; ++i ){
-            if( mCards[i] != 0 ){
-                delete mCards[i];
-            }
-        }
-        delete[] mCards;
-    }*/
+    while( !mCards.empty() ){
+        delete mCards.takeLast();
+    }
 }
 
 QString Player::getCommandPartOfCommand( QString text )
@@ -338,24 +333,8 @@ int Player::getPositionOfPairOfCardId( int id )
     return -1;
 }
 
-bool Player::haveRegularMarriages( Trump* trump ) const
+bool Player::haveRegularMarriages( const Trump* trump ) const
 {
-    /*bool ret = false;
-    
-    for( int i = 0; i < mNumberOfCardsInHand; ++i ){
-        if( mCards[ i ] != 0 && mCards[ i ]->getSuit() != trump->getCardSuit() && mCards[ i ]->getType() == Card::King ){
-            
-            for( int j = 0; j < mNumberOfCardsInHand; ++j ){
-                if( mCards[j] != 0 && mCards[j]->getType() == Card::Queen && mCards[j]->getSuit() == mCards[i]->getSuit() ){
-                    ret = true;
-                }
-            }
-            
-        }
-    }
-    
-    return ret;*/
-    
     bool ret = false;
     
     for( int i = 0; i < mCards.size(); ++i ){
@@ -373,24 +352,8 @@ bool Player::haveRegularMarriages( Trump* trump ) const
     return ret;
 }
 
-bool Player::haveTrumpMarriages( Trump* trump ) const
+bool Player::haveTrumpMarriages( const Trump* trump ) const
 {
-    /*bool ret = false;
-    
-    for( int i = 0; i < mNumberOfCardsInHand; ++i ){
-        if( mCards[ i ] != 0 && mCards[ i ]->getSuit() == trump->getCardSuit() && mCards[ i ]->getType() == Card::King ){
-            
-            for( int j = 0; j < mNumberOfCardsInHand; ++j ){
-                if( mCards[j] != 0 && mCards[j]->getType() == Card::Queen && mCards[j]->getSuit() == mCards[i]->getSuit() ){
-                    ret = true;
-                }
-            }
-            
-        }
-    }
-    
-    return ret;*/
-    
     bool ret = false;
     
     for( int i = 0; i < mCards.size(); ++i ){
@@ -584,7 +547,7 @@ bool Player::setSelectableCardsWhatEqualSuit( Card::Suit cardSuit )
 {
     bool haveSelectableCard = false;
     
-    for( int i = 0; i < getNumberOfCardsInHand(); ++i ){
+    for( int i = 0; i < getNumberOfCards(); ++i ){
         
         if( mCards[ i ] != 0 && mCards[ i ]->getSuit() == cardSuit ){
             mCards[ i ]->setSelectable( true );
@@ -668,15 +631,15 @@ void Player::sendOpponentSelectedCard( int id , const Card* card )
     sendCommand( OPPONENT_SELECTED_CARD_COMMAND + QString::number( id ) + "," + QString::number( card->getValue() ) );
 }
 
-void Player::addTricks( int tricks )
+void Player::addTricks( int newTricks )
 {
-    setTricks( getTricks() + tricks );
+    setTricks( getTricks() + newTricks );
     sendCommand( PLAYER_TRICKS_CHANGED_COMMAND+QString::number( getTricks() ) );
 }
 
-void Player::addScores( int scores )
+void Player::addScores( int newScores )
 {
-    setScores( getScores() + scores );
+    setScores( getScores() + newScores );
     sendCommand( PLAYER_SCORES_CHANGED_COMMAND+QString::number( getScores() ) );
 }
 

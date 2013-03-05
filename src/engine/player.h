@@ -1,3 +1,28 @@
+/*!
+ * @file
+ * @author  Zsuro Tibor <zsurotibor@gmail.com>
+ * @version 1.0
+ *
+ * @section LICENSE
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ *
+ * @section DESCRIPTION
+ *
+ * The Player class represents a base of player who has cards, scores, tricks, etc.
+ */
+
 #ifndef PLAYER_H
 #define PLAYER_H
 
@@ -5,37 +30,27 @@
 #include "card.h"
 #include "enums.h"
 
-//Names
+//Name
 static const QString NAME_COMMAND = ":NAME=";
-//
 static const QString NAME_IS_BUSY_COMMAND =":NAME_IS_BUSY";
-//
-//
+
+//Server
 static const QString SERVER_IS_FULL_COMMAND = ":SERVER_IS_FULL";
-//
 
 //Configs
 static const QString TYPE_OF_CARDS_GERMAN_SUITS_VALUE = "GERMAN_SUIT";
 static const QString TYPE_OF_CARDS_FRENCH_SUITS_VALUE = "FRENCH_SUIT";
 static const QString INITIALIZE_TABLE_COMMAND = ":INITIALIZE_TABLE=";
 
-//
+//Cards
 static const QString NEW_PLAYER_CARD_COMMAND = ":NEW_PLAYER_CARD=";
-//
 static const QString NEW_PLAYER_CARD_TRUMP_CARD_COMMAND = ":NEW_PLAYER_CARD_TRUMP_CARD";
-//
 static const QString NEW_OPPONENT_CARD_COMMAND = ":NEW_OPPONENT_CARD";
-//
 static const QString NEW_OPPONENT_CARD_TRUMP_CARD_COMMAND = ":NEW_OPPONENT_CARD_TRUMP_CARD";
-//
-
-//
 static const QString NEW_TRUMP_CARD_COMMAND = ":NEW_TRUMP_CARD=";
 static const QString TRUMP_CARD_SELECTABLE_COMMAND = ":TRUMP_CARD_SELECTABLE";
 static const QString CHANGE_TRUMP_CARD_COMMAND = ":CHANGE_TRUMP_CARD";
 static const QString OPPONENT_CHANGE_TRUMP_CARD_COMMAND = ":OPPONENT_CHANGE_TRUMP_CARD=";
-
-//static const QString CLEAR_TRUMP_CARD_COMMAND = ":CLEAR_TRUMP_CARD";
 
 //
 static const QString SELECTABLE_ALL_CARDS_COMMAND = ":SELECTABLE_ALL_CARDS";
@@ -96,7 +111,6 @@ static const QString START_NEXT_GAME_COMMAND = ":START_NEXT_GAME";
 //
 
 class CentralCards;
-
 class Trump;
 
 class Player : public QTcpSocket
@@ -171,33 +185,88 @@ protected:
     void sendCommand( QString command ){ write( command.toAscii() ); }
     
 public:
-    Player( QString );
+    /*!
+     * Constructor sets the name from a given value and sets the variables to the default value.
+     *
+     * @param name The player's name.
+     */
+    Player( QString name );
+    
+    /*!
+     * Destructor clear the class.
+     */
     ~Player();
     
-    //Get nickname
+    /*!
+     * Get the player's name.
+     * 
+     * @return The player's name.
+     */
     QString getName() const { return mName; }
     
-    //int getNumberOfCardsInHandNow();
-    int getNumberOfCardsInHand(){ return mCards.size(); }
+    /*!
+     * Get the number of cards.
+     * 
+     * @return Number of cards.
+     */
+    int getNumberOfCards(){ return mCards.size(); }
     
-    //Card* getCard( int );
-    Card* getCard( int id ){ return mCards[ id ]; }
+    /*!
+     * Get the card. This function isn't remove the card from the player.
+     * 
+     * @param id The id of card.
+     * @return The card.
+     */
+    Card* getCard( int id ){ return mCards.at( id ); }
+    
+    /*!
+     * Take the card. This function remove the card from the player.
+     * 
+     * @param id The id of card.
+     * @return The card.
+     */
     Card* takeCard( int id ){ return mCards.takeAt( id ); }
     
-    //If this card is king, then return equal suit of queen, 
-    //else this card is queen, then return equal suit of king
-    //int getPositionOfPairOfCard( Card );
-    //int getPositionOfPairOfCard( const Card* );
-    int getPositionOfPairOfCardId( int );
+    /*!
+     * Get position of pair of card. If the given card is King then return 
+     * position of equal suit Queen. Else the given card is Queen then return 
+     * position of equal suit King.  
+     * 
+     * @param id Position of card. The card must be Queen or King.
+     * @return Return position of pair of card. 
+     */
+    int getPositionOfPairOfCardId( int id );
     
+    /*!
+     * Add the new tricks to player and send the number of all tricks to client.
+     * 
+     * @param newTricks The new tricks.
+     */
+    void addTricks( int newTricks );
     
-    void addTricks( int );
+    /*!
+     * Get the number of tricks.
+     * 
+     * @return Number of tricks.
+     */
     int getTricks() const{ return mTricks; }
-    void addScores( int );
+    
+    /*!
+     * Add the new scores to player and send the number of all scores to client.
+     * 
+     * @param newScores The new scores.
+     */
+    void addScores( int newScores );
+    
+    /*!
+     * Get the number of scores.
+     * 
+     * @return Number of scores.
+     */
     int getScores() const{ return mScores; }
     
-    bool haveRegularMarriages( Trump* ) const;
-    bool haveTrumpMarriages( Trump* ) const;
+    bool haveRegularMarriages( const Trump* trump ) const;
+    bool haveTrumpMarriages( const Trump* trump ) const;
     
     bool canChangeTrumpCard( Trump* ) const;
     int changeTrumpCard( Trump* );
@@ -257,10 +326,8 @@ public:
     void sendOpponentSelectedCard( int, const Card* );
     //
     
-    //
     void sendOpponentTricksChanged( int value ){ sendCommand( OPPONENT_TRICKS_CHANGED_COMMAND+QString::number( value ) ); }
     void sendOpponentScoresChanged( int value ){ sendCommand( OPPONENT_SCORES_CHANGED_COMMAND+QString::number( value ) ); }
-    //
     
     void sendOpponentDisconnected(){ sendCommand( OPPONENT_DISCONNECTED_COMMAND ); }
     
