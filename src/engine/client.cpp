@@ -111,7 +111,7 @@ void Client::slotProcessCommands()
             
             newGame();
             
-            emit signalPlayerScoresChanged( getScores() );
+            //emit signalPlayerScoresChanged( getScores() );
             emit signalOpponentScoresChanged( 0 );
             emit signalNewGame();
             
@@ -385,7 +385,7 @@ void Client::slotProcessCommands()
             int ret = getValuePartOfCommand( command ).toInt( &ok );
             if( ok ){
                 setTricks( ret );
-                emit signalPlayerTricksChanged( getTricks() );
+                //emit signalPlayerTricksChanged( getTricks() );
             }else{
                 kDebug() << "ERROR! Cannot convert player tricks changed command value to int!";
             }
@@ -398,7 +398,7 @@ void Client::slotProcessCommands()
             int ret = getValuePartOfCommand( command ).toInt( &ok );
             if( ok ){
                 setScores( ret );
-                emit signalPlayerScoresChanged( ret );
+                //emit signalPlayerScoresChanged( ret );
             }else{
                 kDebug() << "ERROR! Cannot convert player scores changed command value to int!";
             }
@@ -600,11 +600,11 @@ void Client::slotSelectTrumpCard()
     //Change cards on the GUI
     emit signalPlayerChangeTrumpCard( id );
     
-    if( haveRegularMarriages( mTrump ) ){
+    if( haveRegularMarriage( mTrump ) ){
         setTwentyButtonVisible( true );
     }
     
-    if( haveTrumpMarriages( mTrump ) ){
+    if( haveTrumpMarriage( mTrump ) ){
         setFortyButtonVisible( true );
     }
     

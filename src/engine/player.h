@@ -178,8 +178,8 @@ protected:
     void setCloseButtonVisible( bool visible ){ mCloseButtonVisible = visible; emit signalCloseButtonVisible( visible ); }
     bool isCloseButtonVisible() const{ return mCloseButtonVisible; }
     
-    void setTricks( int tricks ){ mTricks = tricks; }
-    void setScores( int scores ){ mScores = scores; }
+    void setTricks( int tricks ){ mTricks = tricks; emit signalPlayerTricksChanged( mTricks ); }
+    void setScores( int scores ){ mScores = scores; emit signalPlayerScoresChanged( mScores ); }
     
     //Send command to socket
     void sendCommand( QString command ){ write( command.toAscii() ); }
@@ -265,10 +265,33 @@ public:
      */
     int getScores() const{ return mScores; }
     
-    bool haveRegularMarriages( const Trump* trump ) const;
-    bool haveTrumpMarriages( const Trump* trump ) const;
+    /*!
+     * If the player have regular marriage (Queen + King what 
+     * suits of cards aren't equal with suit of trump card) then return true else false.
+     * 
+     * @param trump The trump.
+     * @return True/False.
+     */
+    bool haveRegularMarriage( const Trump* trump ) const;
     
-    bool canChangeTrumpCard( Trump* ) const;
+    /*!
+     * If the player have trump marriage (Queen + King what
+     * suit of cards are equal with suit of trump card) then return true, else false.
+     * 
+     * @param trump The trump.
+     * @return True/False.
+     */
+    bool haveTrumpMarriage( const Trump* trump ) const;
+    
+    /*!
+     * If the player have smallest card (Jack or Nine) and
+     * suit of this card equal with suit of trump card then return true else false.
+     * 
+     * @param trump The trump.
+     * @return True/False.
+     */
+    bool canChangeTrumpCard( const Trump* trump ) const;
+    
     int changeTrumpCard( Trump* );
     
     void setTwentyButtonVisible( bool );
@@ -372,6 +395,9 @@ signals:
     void signalSchnapsenButtonClicked();
     void signalCloseButtonClicked();
     void signalChangeTrumpCard( Player* );
+    
+    void signalPlayerTricksChanged( int );
+    void signalPlayerScoresChanged( int );
     
     void signalStartNextRound( Player* );
     void signalStartNextGame( Player* );

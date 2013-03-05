@@ -333,7 +333,7 @@ int Player::getPositionOfPairOfCardId( int id )
     return -1;
 }
 
-bool Player::haveRegularMarriages( const Trump* trump ) const
+bool Player::haveRegularMarriage( const Trump* trump ) const
 {
     bool ret = false;
     
@@ -352,7 +352,7 @@ bool Player::haveRegularMarriages( const Trump* trump ) const
     return ret;
 }
 
-bool Player::haveTrumpMarriages( const Trump* trump ) const
+bool Player::haveTrumpMarriage( const Trump* trump ) const
 {
     bool ret = false;
     
@@ -371,7 +371,7 @@ bool Player::haveTrumpMarriages( const Trump* trump ) const
     return ret;
 }
 
-bool Player::canChangeTrumpCard( Trump* trump ) const
+bool Player::canChangeTrumpCard( const Trump* trump ) const
 {
     bool canChange = false;
     

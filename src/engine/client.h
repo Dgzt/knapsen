@@ -99,10 +99,6 @@ signals:
     
     void signalOpponentScoresChanged( int );
     
-    void signalPlayerTricksChanged( int );
-    
-    void signalPlayerScoresChanged( int );
-    
     //void signalHideDeck();
     
     void signalCloseDeck();
