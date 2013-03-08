@@ -612,7 +612,7 @@ void Server::slotPlayerSelectedCardId( int selectedCardId )
             
             kDebug() << "Position of card:" << selectedCardId << "position of pair of card:" << posOfPairOfCard;
             
-            getNextPlayer()->sendVisibleOpponentCards( selectedCardId, 
+            getNextPlayer()->sendShowOpponentCards( selectedCardId, 
                                                        getCurrentPlayer()->getCard( selectedCardId ),
                                                        posOfPairOfCard,
                                                        getCurrentPlayer()->getCard( posOfPairOfCard ) );

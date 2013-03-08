@@ -75,55 +75,8 @@ void Player::sendInitializeTable( QString opponentName, Knapsen::TypeOfCards typ
     sendCommand( INITIALIZE_TABLE_COMMAND+opponentName+","+typeOfCardsValue+","+QString::number( sizeOfDeck ) );
 }
 
-/*void Player::setNumberOfCardsInHand( int size )
-{
-    mNumberOfCardsInHand = size;
-    
-    mCards = new Card*[ mNumberOfCardsInHand ];
-    
-    for( int i = 0; i < size; ++i ){
-        mCards[ i ] = 0;
-    }
-}*/
-
-/*int Player::addNewCard( Card *card )
-{
-    int cardId = -1;
-    
-    for( int i = 0; i < mNumberOfCardsInHand; ++i ){
-        if( mCards[ i ] == 0 ){
-            mCards[ i ] = card;
-            cardId = i;
-            break;
-        }
-    }
-    return cardId;
-}*/
-
-/*void Player::removeCard( int id )
-{
-    //Why not delete? Becouse when call the removeCard(int) function when move the card to central cards 
-    //mCards[ id ] = 0;
-    
-    
-}*/
-
 int Player::changeTrumpCard( Trump *trump )
 {
-    /*for( int i = 0; i < mCards.size(); ++i ){
-        if( mCards.at( i )->getSuit() == trump->getCardSuit() && mCards.at( i )->getType() == mLowestCardType ){
-            kDebug() << i;
-            
-            Card* tmpCard = trump->getCard();
-            trump->addNewCard( mCards.at( i ) );
-            mCards[ i ] = tmpCard;
-            
-            return i;
-        }
-    }
-    
-    return -1; //If this function return this value, then this is a bug.*/
-    
     int ret = -1; //If this function return this value, then this is a bug.
     
     for( int i = 0; i < mCards.size(); ++i ){
@@ -238,22 +191,6 @@ void Player::setLowestCard( int sizeOfDeck )
         mLowestCardType = Card::Nine;
     }
 }
-
-/*int Player::getPositionOfPairOfCard( const Card* card )
-{
-    for( int i = 0; i < mCards.size(); ++i ){
-        if( card->getSuit() == mCards.at( i )->getSuit() &&
-            ( ( card->getType() == Card::King && mCards.at( i )->getType() == Card::Queen ) ||
-              ( card->getType() == Card::Queen && mCards.at( i )->getType() == Card::King ) )
-        ){
-            //return i;
-            return i+1;
-        }
-    }
-    
-    //Error
-    return -1;
-}*/
 
 int Player::getPositionOfPairOfCardId( int id )
 {
@@ -517,15 +454,6 @@ void Player::slotReadyRead()
     }
 }
 
-/*int Player::sendNewCard( Card *card )
-{
-    int id = addNewCard( card );
-    
-    sendCommand( NEW_PLAYER_CARD_COMMAND+QString::number( getCard( id )->getValue() ) );
-    
-    return id;
-}*/
-
 void Player::sendNewCard( Card* card )
 {
     addNewCard( card );
@@ -534,12 +462,12 @@ void Player::sendNewCard( Card* card )
 }
 
 
-void Player::sendNewTrumpCard( Trump* trump )
+void Player::sendNewTrumpCard( const Trump* trump )
 {
     sendCommand( NEW_TRUMP_CARD_COMMAND+QString::number( trump->getCard()->getValue() ) );
 }
 
-void Player::sendOpponentChangeTrumpCard( int id, Trump* trump )
+void Player::sendOpponentChangeTrumpCard( int id, const Trump* trump )
 {
     sendCommand( OPPONENT_CHANGE_TRUMP_CARD_COMMAND + QString::number( id ) + "," + QString::number( trump->getCard()->getValue() ) );
 }
@@ -555,12 +483,6 @@ void Player::sendSelectableCertainCards( CentralCards *centralCards, Trump* trum
     setSelectableCertainCards( centralCards, trump );
     sendCommand( SELECTABLE_CERTAIN_CARDS_COMMAND );
 }
-
-/*void Player::sendOpponentAddNewCentralCard( const Card *card )
-{
-    kDebug() << getName() << "Opponent add new central card.";
-    sendCommand( OPPONENT_ADD_NEW_CENTRAL_CARD_COMMAND+QString::number( card->getValue() ) );
-}*/
 
 void Player::sendOpponentSelectedCard( int id , const Card* card )
 {
@@ -581,7 +503,7 @@ void Player::addScores( int newScores )
     sendCommand( PLAYER_SCORES_CHANGED_COMMAND+QString::number( getScores() ) );
 }
 
-void Player::sendVisibleOpponentCards( int card1Pos, Card* card1, int card2Pos, Card* card2 )
+void Player::sendShowOpponentCards( int card1Pos, Card* card1, int card2Pos, Card* card2 )
 {
     sendCommand( VISIBLE_OPPONENT_CARDS_COMMAND+QString::number( card1Pos )+","+QString::number( card1->getValue() )+","+
                  QString::number( card2Pos )+","+QString::number( card2->getValue() )

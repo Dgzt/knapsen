@@ -13,7 +13,7 @@ public:
     Trump();
     
     void addNewCard( Card* );
-    Card* getCard(){ return mCard; }
+    Card* getCard() const{ return mCard; }
     
     Card::Suit getCardSuit() const{ return mCardSuit; }
     

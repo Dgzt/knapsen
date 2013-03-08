@@ -39,6 +39,8 @@ protected:
     
     Trump* getTrump(){ return mTrump; }
     
+    void sendChangeTrumpCard(){ sendCommand( CHANGE_TRUMP_CARD_COMMAND ); }
+    
 public:
     enum GameErrorType{ NameIsBusy, ServerIsFull, OpponentDisconnected };
     

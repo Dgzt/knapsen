@@ -379,93 +379,235 @@ public:
      * Send to the client the server is full.
      */
     void sendServerIsFull(){ sendCommand( SERVER_IS_FULL_COMMAND ); }
-
-    void sendInitializeTable( QString, Knapsen::TypeOfCards, int );
     
-    //Set and send the new card
-    void sendNewCard( Card* );
+    /*!
+     * Send to the client the command. This will initialize the game, setup 
+     * opponent's name, type of cards and size of deck. 
+     * 
+     * @param opponentName The opponent's name.
+     * @param typeOfCards The type of cards. German suit or French suit.
+     * @param sizeOfDeck Size of deck. 20 cards wihtout nines, 24 cards with nines. 
+     */
+    void sendInitializeTable( QString opponentName, Knapsen::TypeOfCards typeOfCards, int sizeOfDeck );
+    
+    /*!
+     * Add the card to the player and send to the client.
+     * 
+     * @param card The new card.
+     */
+    void sendNewCard( Card* card );
+    
     void sendNewCardTrumpCard(){ sendCommand( NEW_PLAYER_CARD_TRUMP_CARD_COMMAND ); }
     
-    //Send to player the new opponent card id
+    /*!
+     * Send to the client the opponent have a new card from deck.
+     */
     void sendNewOpponentCard(){ sendCommand( NEW_OPPONENT_CARD_COMMAND ); }
+    
+    /*!
+     * Send to the client the opponent get the trump card.
+     */
     void sendNewOpponentCardTrumpCard(){ sendCommand( NEW_OPPONENT_CARD_TRUMP_CARD_COMMAND ); }
     
-    //Set and send the new trump card
-    void sendNewTrumpCard( Trump* );
+    /*!
+     * Send to the client the new trump card.
+     * 
+     * @param trump The trump.
+     */
+    void sendNewTrumpCard( const Trump* trump );
     
-    //Send the opponent change trump card
-    void sendOpponentChangeTrumpCard( int, Trump* );
+    /*!
+     * Send to the client the opponent changed the trump card with their card.
+     * 
+     * @param id The position of opponent's card what changed.
+     * @param trump The new trump card.
+     */
+    void sendOpponentChangeTrumpCard( int id, const Trump* trump );
     
-    //void sendClearTrumpCard(){ sendCommand( CLEAR_TRUMP_CARD_COMMAND ); }
-    
-    //Set and send enabled all card
+    /*!
+     * Set true all cards' selectable and send to the client.
+     */
     void sendSelectableAllCards();
     
-    //void sendSelectableCertainCards();
     void sendSelectableCertainCards( CentralCards *, Trump* );
     
+    /*!
+     * Send to the client the opponent's in action.
+     */
     void sendOpponentInAction(){ sendCommand( OPPONENT_IN_ACTION_COMMAND ); }
     
-    //void sendOpponentSelectedCardId( int id ){ sendCommand( OPPONENT_SELECTED_CARD_ID_COMMAND+QString::number( id ) ); }
+    /*!
+     * Send to the client the opponent selected a card and its position.
+     * 
+     * @param id The position of card.
+     * @param card The selected card.
+     */
+    void sendOpponentSelectedCard( int id, const Card* card );
     
-    //void sendOpponentAddNewCentralCard( const Card* );
+    /*!
+     * Send the new number of opponent's tricks to the client.
+     * 
+     * @param tricks The number of tricks.
+     */
+    void sendOpponentTricksChanged( int tricks ){ sendCommand( OPPONENT_TRICKS_CHANGED_COMMAND+QString::number( tricks ) ); }
     
-    //
-    void sendOpponentSelectedCard( int, const Card* );
-    //
+    /*!
+     * Send the new number of opponent's scores to the client.
+     * 
+     * @param scores The number of scores.
+     */
+    void sendOpponentScoresChanged( int scores ){ sendCommand( OPPONENT_SCORES_CHANGED_COMMAND+QString::number( scores ) ); }
     
-    void sendOpponentTricksChanged( int value ){ sendCommand( OPPONENT_TRICKS_CHANGED_COMMAND+QString::number( value ) ); }
-    void sendOpponentScoresChanged( int value ){ sendCommand( OPPONENT_SCORES_CHANGED_COMMAND+QString::number( value ) ); }
-    
+    /*!
+     * Send to the client the opponent disconnected.
+     */
     void sendOpponentDisconnected(){ sendCommand( OPPONENT_DISCONNECTED_COMMAND ); }
     
-    //void sendClearCentralCards(){ sendCommand( CLEAR_CENTRAL_CARDS_COMMAND ); }
+    /*!
+     * Send to the client the player gets the central cards.
+     */
     void sendPlayerGetCentralCards(){ sendCommand( PLAYER_GET_CENTRAL_CARDS_COMMAND ); }
+    
+    /*!
+     * Send to the client the opponent gets the central cards.
+     */
     void sendOpponentGetCentralCards(){ sendCommand( OPPONENT_GET_CENTRAL_CARDS_COMMAND ); }
     
+    /*!
+     * Send to the client the twenty button is visible.
+     */
     void sendTwentyButtonVisible(){ sendCommand( TWENTY_BUTTON_VISIBLE_COMMAND ); }
-    void sendFortyButtonVisible(){ sendCommand( FORTY_BUTTON_VISIBLE_COMMAND ); }
-    //
-    void sendSchnapsenButtonVisible(){ sendCommand( SCHNAPSEN_BUTTON_VISIBLE_COMMAND ); }
-    //
     
+    /*!
+     * Send to the client the forty button is visible.
+     */
+    void sendFortyButtonVisible(){ sendCommand( FORTY_BUTTON_VISIBLE_COMMAND ); }
+    
+    /*!
+     * Send to the client the schnapsen button is visible.
+     */
+    void sendSchnapsenButtonVisible(){ sendCommand( SCHNAPSEN_BUTTON_VISIBLE_COMMAND ); }
+    
+    /*!
+     * Send to the client the close button is visible.
+     */
     void sendCloseButtonVisible();
     
+    /*!
+     * Send to the client the opponent clicked to the close button.
+     */
     void sendOpponentClickedToCloseButton(){ sendCommand( OPPONENT_CLICKED_TO_CLOSE_BUTTON_COMMAND ); }
     
+    /*!
+     * Send to the client the trump card is selectable.
+     */
     void sendSelectableTrumpCard(){ sendCommand( TRUMP_CARD_SELECTABLE_COMMAND ); }
-    void sendChangeTrumpCard(){ sendCommand( CHANGE_TRUMP_CARD_COMMAND ); }     
     
-    //If the opponent clicked to twenty or forty button, then show that cards
-    void sendVisibleOpponentCards( int, Card*, int, Card* );
+    /*!
+     * Send to the client show opponent's cards. If the opponent meld marriage ( twenty of forty ) 
+     * then show those cards. 
+     *
+     * @param card1Pos The position of first card.
+     * @param card1 The first card.
+     * @param card2Pos The position of second card.
+     * @param card2 The second card. 
+     */
+    void sendShowOpponentCards( int card1Pos, Card* card1, int card2Pos, Card* card2 );
     
+    /*!
+     * Send to the client start new round.
+     */
     void sendNewRound(){ newRound(); sendCommand( NEW_ROUND_COMMAND ); }
     
+    /*!
+     * Send to the client start new game.
+     */
     void sendNewGame(){ newGame(); sendCommand( NEW_GAME_COMMAND ); }
     
+    /*!
+     * Send to the client the current round has ended.
+     * 
+     * @param winnerName The name of the winner of round.
+     * @param winnerScores The scores of the round's winner.
+     */
     void sendEndRound( QString winnerName, int winnnerScores ){ sendCommand( END_ROUND_COMMAND+winnerName+","+QString::number( winnnerScores ) ); }
     
+    /*!
+     * Send to the client the current game has ended.
+     * 
+     * @param winnerName The name of the winner of game.
+     */
     void sendEndGame( QString winnerName ){ sendCommand( END_GAME_COMMAND+winnerName ); }
     
+    /*!
+     * Send to the client start process the sended commands.
+     */
     void sendCommandsEnd(){ sendCommand( COMMANDS_END_COMMAND ); }
     
 signals:
     //Signals to server
-    void signalNewPlayer( Player* );
-    void signalPlayerDisconnected( Player* );
-    //void signalSelectedCard( Card*, int );
-    void signalSelectedCardId( int );
+    
+    /*!
+     * The player sent their name and connected to the server.
+     * 
+     * @param player This player.
+     */
+    void signalNewPlayer( Player* player );
+    
+    /*!
+     * The player disconnected.
+     * 
+     * @param this player.
+     */
+    void signalPlayerDisconnected( Player* player );
+    
+    /*!
+     * The player selected a card.
+     * 
+     * @param id The position of selected card.
+     */
+    void signalSelectedCardId( int id );
+    
+    /*!
+     * The player clicked to the twenty button.
+     */
     void signalTwentyButtonClicked();
+    
+    /*!
+     * The player clicked to the forty button.
+     */
     void signalFortyButtonClicked();
+    
+    /*!
+     * The player clicked to the schnapsen button.
+     */
     void signalSchnapsenButtonClicked();
+    
+    /*!
+     * The player clicked to the close button.
+     */
     void signalCloseButtonClicked();
-    void signalChangeTrumpCard( Player* );
     
-    void signalPlayerTricksChanged( int );
-    void signalPlayerScoresChanged( int );
+    /*!
+     * The player change trump card.
+     * 
+     * @param player This player.
+     */
+    void signalChangeTrumpCard( Player* player );
     
-    void signalStartNextRound( Player* );
-    void signalStartNextGame( Player* );
+    /*!
+     * The player wants start next round.
+     * 
+     * @param player This player.
+     */
+    void signalStartNextRound( Player* player );
+    
+    /*!
+     * The player wants start next game.
+     * 
+     * @param player This player.
+     */
+    void signalStartNextGame( Player* player );
     
     
     //Signals to player
@@ -474,6 +616,8 @@ signals:
     void signalFortyButtonVisible( bool );
     void signalSchnapsenButtonVisible( bool );
     void signalCloseButtonVisible( bool );
+    void signalPlayerTricksChanged( int );
+    void signalPlayerScoresChanged( int );
     
 };
 
