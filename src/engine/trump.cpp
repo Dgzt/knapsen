@@ -5,7 +5,7 @@ Trump::Trump()
     mCard = 0;
 }
 
-void Trump::addNewCard( Card *card )
+void Trump::addNewCard( Card* card )
 {
     mCard = card;
     
