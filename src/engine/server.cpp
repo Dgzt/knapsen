@@ -71,7 +71,7 @@ void Server::newRound()
     kDebug() << "Start new round.";
     
     //Build deck
-    mDeck->buildDeck();
+    mDeck->build();
     
     //Clear central cards
     mCentralCards->clear();
@@ -96,13 +96,13 @@ void Server::newRound()
     for( int i = 0; i < mNumberOfCardsInHand; ++i ){
         
         for( int j = 0; j < mPlayerList.size(); ++j ){
-            addNewCard( mPlayerList.at( j ), mDeck->getCard() );
+            addNewCard( mPlayerList.at( j ), mDeck->takeCard() );
         }
         
         //Get trump card
         if( i == 2 ){
             //mTrumpCard = mDeck->getCard();
-            mTrump->addNewCard( mDeck->getCard() );
+            mTrump->addNewCard( mDeck->takeCard() );
             
             for( int j = 0; j < mPlayerList.size(); ++j ){
                 mPlayerList.at( j )->sendNewTrumpCard( mTrump );
@@ -864,10 +864,10 @@ void Server::slotCheckCentralCards()
         if( !mPlayerWhoClickedToCloseButtonThisRound ){
             //If the dech have card yet, then add new cards to players, first who won the last turn
             if( mDeck->getDeckSize() > 0 ){
-                addNewCard( getCurrentPlayer(), mDeck->getCard() );
+                addNewCard( getCurrentPlayer(), mDeck->takeCard() );
                 
                 if( mDeck->getDeckSize() > 0 ){
-                    addNewCard( getNextPlayer(), mDeck->getCard() );
+                    addNewCard( getNextPlayer(), mDeck->takeCard() );
                     
                 }else{
                     //addNewCard( getNextPlayer(), mTrump->getCard() );

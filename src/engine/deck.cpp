@@ -1,6 +1,6 @@
 #include <KDE/KDebug>
+#include "card.h"
 #include "deck.h"
-
 
 const int CARD_NUMBERS = 24;
 
@@ -11,7 +11,7 @@ Deck::Deck( int deckSize )
     mDeckSize = deckSize;
 }
 
-void Deck::buildDeck()
+void Deck::build()
 {
     kDebug() << "Build deck.";
     
