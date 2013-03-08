@@ -122,8 +122,6 @@ class Player : public QTcpSocket
     
     Card::Type mLowestCardType;
     
-    //int mNumberOfCardsInHand;
-    //Card** mCards;
     QList< Card* > mCards;
     
     //Player's tricks
@@ -152,36 +150,113 @@ private slots:
     void slotDisconnected(){ emit signalPlayerDisconnected( this ); }
     
 protected:
-    QString getCommandPartOfCommand( QString );
-    QString getValuePartOfCommand( QString );
+    /*!
+     * Return with the name part of command.
+     * 
+     * @param command The command.
+     * @return The name part of command.
+     */
+    QString getCommandName( QString command );
     
+    /*!
+     * Return with value part of command.
+     * 
+     * @param command The command.
+     * @return The value part of vommand.
+     */
+    QString getCommandValue( QString command );
+    
+    /*!
+     * Clear the player's scores.
+     */
     void newGame();
+    
+    /*!
+     * Remove the player's cards and clear the player's tricks.
+     */
     void newRound();
     
-    void setLowestCard( int );
+    /*!
+     * Set the lowest card. If the given value is 20 then the
+     * lowest card is Jack else the given value is 24 then the 
+     * the lowest card is Nine.
+     * 
+     * @param deckSize The size of deck.
+     */
+    void setLowestCard( int deckSize );
+    
+    /*!
+     * Return with the lowest card. This is Jack or Nine.
+     * 
+     * @return The lowest card.
+     */
     Card::Type getLowestCardType(){ return mLowestCardType; }
     
-    //int addNewCard( Card* );
+    /*!
+     * Add the new card to the cards. The new card will the last.
+     * 
+     * @param card The new card.
+     */
     void addNewCard( Card* card ){ mCards.append( card ); }
-    //void removeCard( int );
-
     
+    /*!
+     * If the given value is TRUE then the all cards are selectable
+     * else the given value is FALSE then the all cards aren't selectable.
+     * 
+     * @param selectable True/False.
+     */
+    void setSelectableAllCards( bool selectable );
     
-    //Set selectable OR not selectable all avalibe card
-    void setSelectableAllCards( bool );
-    //Set selectable cards, which suit of cards equal the suit of central card or suit of trump card
     void setSelectableCertainCards( CentralCards* , Trump* );
     
+    /*!
+     * The twenty button will hidden. If the forty button is visible then
+     * this button will hidden. The all cards won't selectable.
+     */
     void twentyButtonClicked();
+    
+    /*!
+     * The forty button will hidden. If the twenty button is visible then
+     * this button will hidden. The all cards won't selectable.
+     */
     void fortyButtonClicked();
     
+    /*!
+     * Set the close button visible. If the given value is TRUE then
+     * the button will visible. If the given value is FALSE then the 
+     * button will hidden.
+     * 
+     * @param visible True/False.
+     */
     void setCloseButtonVisible( bool visible ){ mCloseButtonVisible = visible; emit signalCloseButtonVisible( visible ); }
+    
+    /*!
+     * Return with state of close button. If the close button is visible then
+     * return with true else false.
+     * 
+     * @return True/False.
+     */
     bool isCloseButtonVisible() const{ return mCloseButtonVisible; }
     
+    /*!
+     * Set the player's tricks. 
+     * 
+     * @param tricks The player's tricks.
+     */
     void setTricks( int tricks ){ mTricks = tricks; emit signalPlayerTricksChanged( mTricks ); }
+    
+    /*!
+     * Set the player's scores.
+     * 
+     * @param scores The player's scores.
+     */
     void setScores( int scores ){ mScores = scores; emit signalPlayerScoresChanged( mScores ); }
     
-    //Send command to socket
+    /*!
+     * Send the command text to the socket.
+     * 
+     * @param command Command.
+     */
     void sendCommand( QString command ){ write( command.toAscii() ); }
     
 public:
@@ -530,7 +605,7 @@ public:
      * @param winnerName The name of the winner of round.
      * @param winnerScores The scores of the round's winner.
      */
-    void sendEndRound( QString winnerName, int winnnerScores ){ sendCommand( END_ROUND_COMMAND+winnerName+","+QString::number( winnnerScores ) ); }
+    void sendEndRound( QString winnerName, int winnerScores ){ sendCommand( END_ROUND_COMMAND+winnerName+","+QString::number( winnerScores ) ); }
     
     /*!
      * Send to the client the current game has ended.
@@ -557,7 +632,7 @@ signals:
     /*!
      * The player disconnected.
      * 
-     * @param this player.
+     * @param player This player.
      */
     void signalPlayerDisconnected( Player* player );
     
@@ -611,13 +686,56 @@ signals:
     
     
     //Signals to player
-    void signalPlayerCardSelectableChanged( int, bool );
-    void signalTwentyButtonVisible( bool );
-    void signalFortyButtonVisible( bool );
-    void signalSchnapsenButtonVisible( bool );
-    void signalCloseButtonVisible( bool );
-    void signalPlayerTricksChanged( int );
-    void signalPlayerScoresChanged( int );
+    
+    /*!
+     * Change the enabled of card. 
+     * 
+     * @param id The id of card.
+     * @param enabled The enabled of card.
+     */
+    void signalPlayerCardSelectableChanged( int id, bool enabled );
+    
+    /*!
+     * Change the visible of twenty button.
+     * 
+     * @param visible The visible of twenty button.
+     */
+    void signalTwentyButtonVisible( bool visible );
+    
+    /*!
+     * Change the visible of forty button.
+     * 
+     * @param visible The visible of forty button.
+     */
+    void signalFortyButtonVisible( bool visible );
+    
+    /*!
+     * Change the visible of schnapsen button.
+     * 
+     * @param visible The visible of schnapsen button.
+     */
+    void signalSchnapsenButtonVisible( bool visible );
+    
+    /*!
+     * Change the visible of close button.
+     * 
+     * @param visible The visible of close button.
+     */
+    void signalCloseButtonVisible( bool visible );
+    
+    /*!
+     * Change the player's tricks.
+     * 
+     * @param tricks The player's tricks.
+     */
+    void signalPlayerTricksChanged( int tricks );
+    
+    /*!
+     * Change the player's scores.
+     * 
+     * @param scores The player's scores.
+     */
+    void signalPlayerScoresChanged( int scores );
     
 };
 

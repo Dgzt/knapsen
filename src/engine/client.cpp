@@ -44,28 +44,28 @@ void Client::newCommand( QString command )
 {
     //kDebug() << command;
     
-    if( getCommandPartOfCommand( command ) == OPPONENT_DISCONNECTED_COMMAND ){
+    if( getCommandName( command ) == OPPONENT_DISCONNECTED_COMMAND ){
         kDebug() << getName() << "Opponent disconnected!";
         
         emit signalGameError( Client::OpponentDisconnected );
         return;
     }
     
-    if( getCommandPartOfCommand( command ) == NAME_IS_BUSY_COMMAND ){
+    if( getCommandName( command ) == NAME_IS_BUSY_COMMAND ){
         kDebug() << getName() << "Name is busy command.";
         
         emit signalGameError( Client::NameIsBusy );
         return;
     }
     
-    if( getCommandPartOfCommand( command ) == SERVER_IS_FULL_COMMAND ){
+    if( getCommandName( command ) == SERVER_IS_FULL_COMMAND ){
         kDebug() << getName() << "Server is full.";
         
         emit signalGameError( Client::ServerIsFull );
         return;
     }
     
-    if( getCommandPartOfCommand( command ) == COMMANDS_END_COMMAND ){
+    if( getCommandName( command ) == COMMANDS_END_COMMAND ){
         //slotProcessCommands();
         
         if( !mCommandsUnderProcessing ){
@@ -83,10 +83,10 @@ void Client::slotProcessCommands()
         QString command = mCommandList.takeFirst();
         kDebug() << mCommandList.size() << command;
         
-        if( getCommandPartOfCommand( command ) == INITIALIZE_TABLE_COMMAND ){
-            kDebug() << getName() << "Initialize table, value." << getValuePartOfCommand( command );
+        if( getCommandName( command ) == INITIALIZE_TABLE_COMMAND ){
+            kDebug() << getName() << "Initialize table, value." << getCommandValue( command );
             
-            QList< QString >* valuesArray = getValues( getValuePartOfCommand( command ) );
+            QList< QString >* valuesArray = getValues( getCommandValue( command ) );
             
             Knapsen::TypeOfCards typeOfCards;
             if( valuesArray->at( 1 ) == TYPE_OF_CARDS_GERMAN_SUITS_VALUE ){
@@ -106,7 +106,7 @@ void Client::slotProcessCommands()
             delete valuesArray;
         }
         
-        if( getCommandPartOfCommand( command ) == NEW_GAME_COMMAND ){
+        if( getCommandName( command ) == NEW_GAME_COMMAND ){
             kDebug() << getName() << "Start game.";
             
             newGame();
@@ -118,7 +118,7 @@ void Client::slotProcessCommands()
             return;
         }
         
-        if( getCommandPartOfCommand( command ) == NEW_ROUND_COMMAND ){
+        if( getCommandName( command ) == NEW_ROUND_COMMAND ){
             kDebug() << getName() << "New round.";
             newRound();
             
@@ -132,11 +132,11 @@ void Client::slotProcessCommands()
             return;
         }
         
-        if( getCommandPartOfCommand( command ) == NEW_PLAYER_CARD_COMMAND ){
-            kDebug() << getName() << "new card:" << getValuePartOfCommand( command );
+        if( getCommandName( command ) == NEW_PLAYER_CARD_COMMAND ){
+            kDebug() << getName() << "new card:" << getCommandValue( command );
             
             bool ok;
-            int ret = getValuePartOfCommand( command ).toInt( &ok );
+            int ret = getCommandValue( command ).toInt( &ok );
             if( ok ){
                 
                 bool lastCard = false;
@@ -156,7 +156,7 @@ void Client::slotProcessCommands()
             return;
         }
         
-        if( getCommandPartOfCommand( command ) == NEW_OPPONENT_CARD_COMMAND ){
+        if( getCommandName( command ) == NEW_OPPONENT_CARD_COMMAND ){
             kDebug() << getName() << "New opponent card.";
             
             bool lastCard = false;
@@ -170,7 +170,7 @@ void Client::slotProcessCommands()
             return;
         }
         
-        if( getCommandPartOfCommand( command ) == NEW_PLAYER_CARD_TRUMP_CARD_COMMAND ){
+        if( getCommandName( command ) == NEW_PLAYER_CARD_TRUMP_CARD_COMMAND ){
             kDebug() << "Add the trump card to player.";
             
             Card* newCard = mTrump->getCard();
@@ -182,7 +182,7 @@ void Client::slotProcessCommands()
             return;
         }
         
-        if( getCommandPartOfCommand( command ) == NEW_OPPONENT_CARD_TRUMP_CARD_COMMAND ){
+        if( getCommandName( command ) == NEW_OPPONENT_CARD_TRUMP_CARD_COMMAND ){
             kDebug() << "Add the trump card to the opponent.";
             
             mTrump->clearTrumpCard( true );
@@ -191,11 +191,11 @@ void Client::slotProcessCommands()
             return;
         }
         
-        if( getCommandPartOfCommand( command ) == NEW_TRUMP_CARD_COMMAND ){
-            kDebug() << getName() << "Trump card:" << getValuePartOfCommand( command );
+        if( getCommandName( command ) == NEW_TRUMP_CARD_COMMAND ){
+            kDebug() << getName() << "Trump card:" << getCommandValue( command );
             
             bool ok;
-            int ret = getValuePartOfCommand( command ).toInt( &ok );
+            int ret = getCommandValue( command ).toInt( &ok );
             if( ok ){
                 if( !mTrump->isEmpty() ){
                     mTrump->clearTrumpCard( true );
@@ -214,10 +214,10 @@ void Client::slotProcessCommands()
             return;
         }
         
-        if( getCommandPartOfCommand( command ) == OPPONENT_CHANGE_TRUMP_CARD_COMMAND ){
+        if( getCommandName( command ) == OPPONENT_CHANGE_TRUMP_CARD_COMMAND ){
             kDebug() << getName() << "Opponent changed trump card.";
             
-            QList< QString >* valueArray = getValues( getValuePartOfCommand( command ) );
+            QList< QString >* valueArray = getValues( getCommandValue( command ) );
             try{
                 if( valueArray->size() != 2 ){
                     throw WRONG_VALUE_ARRAY_SIZE;
@@ -248,45 +248,38 @@ void Client::slotProcessCommands()
             return;
         }
         
-        if( getCommandPartOfCommand( command ) == TWENTY_BUTTON_VISIBLE_COMMAND ){
+        if( getCommandName( command ) == TWENTY_BUTTON_VISIBLE_COMMAND ){
             kDebug() << getName() << "Twenty button visible.";
             
             setTwentyButtonVisible( true );
         }
         
-        if( getCommandPartOfCommand( command ) == FORTY_BUTTON_VISIBLE_COMMAND ){
+        if( getCommandName( command ) == FORTY_BUTTON_VISIBLE_COMMAND ){
             kDebug() << getName() << "Forty button visible.";
             
             setFortyButtonVisible( true );
         }
         
-        if( getCommandPartOfCommand( command ) == SCHNAPSEN_BUTTON_VISIBLE_COMMAND ){
+        if( getCommandName( command ) == SCHNAPSEN_BUTTON_VISIBLE_COMMAND ){
             kDebug() << getName() << "Schnapsen button visible";
             
             setSchnapsenButtonVisible( true );
         }
         
-        if( getCommandPartOfCommand( command ) == CLOSE_BUTTON_VISIBLE_COMMAND ){
+        if( getCommandName( command ) == CLOSE_BUTTON_VISIBLE_COMMAND ){
             kDebug() << getName() << "Close button visible.";
             
             setCloseButtonVisible( true );
         }
         
-        /*if( getCommandPartOfCommand( commandList.first() ) == CLEAR_TRUMP_CARD_COMMAND ){
-            kDebug() << getName() << "Clear trump card.";
-            
-            mTrump->clearTrumpCard( true );
-            emit signalHideTrumpCard();
-        }*/
-        
-        if( getCommandPartOfCommand( command ) == TRUMP_CARD_SELECTABLE_COMMAND ){
+        if( getCommandName( command ) == TRUMP_CARD_SELECTABLE_COMMAND ){
             kDebug() << getName() << "Selectable trump card.";
             
             mTrump->getCard()->setSelectable( true );
             emit signalTrumpCardSelectableChanged( true );
         }
         
-        if( getCommandPartOfCommand( command ) == SELECTABLE_ALL_CARDS_COMMAND ){
+        if( getCommandName( command ) == SELECTABLE_ALL_CARDS_COMMAND ){
             kDebug() << getName() << "Selectable all cards.";
             
             setSelectableAllCards( true );
@@ -295,7 +288,7 @@ void Client::slotProcessCommands()
             emit signalPlayerInAction();
         }
         
-        if( getCommandPartOfCommand( command ) == SELECTABLE_CERTAIN_CARDS_COMMAND ){
+        if( getCommandName( command ) == SELECTABLE_CERTAIN_CARDS_COMMAND ){
             kDebug() << getName() << "Selectable certan cards.";
             
             //setSelectableCertainCards();
@@ -303,16 +296,16 @@ void Client::slotProcessCommands()
             emit signalPlayerInAction();
         }
         
-        if( getCommandPartOfCommand( command ) == OPPONENT_IN_ACTION_COMMAND ){
+        if( getCommandName( command ) == OPPONENT_IN_ACTION_COMMAND ){
             kDebug() << getName() << "Opponent in action.";
             
             emit signalOpponentInAction();
         }
         
-        if( getCommandPartOfCommand( command ) == OPPONENT_SELECTED_CARD_COMMAND ){
+        if( getCommandName( command ) == OPPONENT_SELECTED_CARD_COMMAND ){
             kDebug() << getName() << "Opponent selected new card.";
             
-            QList< QString >* valuesArray = getValues( getValuePartOfCommand( command ) );
+            QList< QString >* valuesArray = getValues( getCommandValue( command ) );
             
             try{
                 if( valuesArray->size() != 2 ){
@@ -340,10 +333,10 @@ void Client::slotProcessCommands()
             return;
         }
         
-        if( getCommandPartOfCommand( command ) == VISIBLE_OPPONENT_CARDS_COMMAND ){
-            kDebug() << getName() << "Visible opponent cards:" << getValuePartOfCommand( command );
+        if( getCommandName( command ) == VISIBLE_OPPONENT_CARDS_COMMAND ){
+            kDebug() << getName() << "Visible opponent cards:" << getCommandValue( command );
             
-            QList< QString >* valuesArray = getValues( getValuePartOfCommand( command ) );
+            QList< QString >* valuesArray = getValues( getCommandValue( command ) );
             
             try{
                 if( valuesArray->size() != 4 ){
@@ -378,11 +371,11 @@ void Client::slotProcessCommands()
             return;
         }
         
-        if( getCommandPartOfCommand( command ) == PLAYER_TRICKS_CHANGED_COMMAND ){
-            kDebug() << getName() << "Player tricks changed:" << getValuePartOfCommand( command );
+        if( getCommandName( command ) == PLAYER_TRICKS_CHANGED_COMMAND ){
+            kDebug() << getName() << "Player tricks changed:" << getCommandValue( command );
             
             bool ok;
-            int ret = getValuePartOfCommand( command ).toInt( &ok );
+            int ret = getCommandValue( command ).toInt( &ok );
             if( ok ){
                 setTricks( ret );
                 //emit signalPlayerTricksChanged( getTricks() );
@@ -391,11 +384,11 @@ void Client::slotProcessCommands()
             }
         }
         
-        if( getCommandPartOfCommand( command ) == PLAYER_SCORES_CHANGED_COMMAND ){
-            kDebug() << getName() << "Player scores changed:" << getValuePartOfCommand( command );
+        if( getCommandName( command ) == PLAYER_SCORES_CHANGED_COMMAND ){
+            kDebug() << getName() << "Player scores changed:" << getCommandValue( command );
             
             bool ok;
-            int ret = getValuePartOfCommand( command ).toInt( &ok );
+            int ret = getCommandValue( command ).toInt( &ok );
             if( ok ){
                 setScores( ret );
                 //emit signalPlayerScoresChanged( ret );
@@ -404,11 +397,11 @@ void Client::slotProcessCommands()
             }
         }
         
-        if( getCommandPartOfCommand( command ) == OPPONENT_TRICKS_CHANGED_COMMAND ){
-            kDebug() << getName() << "Opponent tricks changed:" << getValuePartOfCommand( command );
+        if( getCommandName( command ) == OPPONENT_TRICKS_CHANGED_COMMAND ){
+            kDebug() << getName() << "Opponent tricks changed:" << getCommandValue( command );
             
             bool ok;
-            int ret = getValuePartOfCommand( command ).toInt( &ok );
+            int ret = getCommandValue( command ).toInt( &ok );
             if( ok ){
                 emit signalOpponentTricksChanged( ret );
             }else{
@@ -416,11 +409,11 @@ void Client::slotProcessCommands()
             }
         }
         
-        if( getCommandPartOfCommand( command ) == OPPONENT_SCORES_CHANGED_COMMAND ){
-            kDebug() << getName() << "Opponent scores changed:" << getValuePartOfCommand( command );
+        if( getCommandName( command ) == OPPONENT_SCORES_CHANGED_COMMAND ){
+            kDebug() << getName() << "Opponent scores changed:" << getCommandValue( command );
             
             bool ok;
-            int ret = getValuePartOfCommand( command ).toInt( &ok );
+            int ret = getCommandValue( command ).toInt( &ok );
             if( ok ){
                 emit signalOpponentScoresChanged( ret );
             }else{
@@ -428,12 +421,12 @@ void Client::slotProcessCommands()
             }
         }
         
-        if( getCommandPartOfCommand( command ) == OPPONENT_CLICKED_TO_CLOSE_BUTTON_COMMAND ){
+        if( getCommandName( command ) == OPPONENT_CLICKED_TO_CLOSE_BUTTON_COMMAND ){
             kDebug() << getName() << "Opponent clicked to close button.";
             emit signalCloseDeck();
         }
         
-        if( getCommandPartOfCommand( command ) == PLAYER_GET_CENTRAL_CARDS_COMMAND ){
+        if( getCommandName( command ) == PLAYER_GET_CENTRAL_CARDS_COMMAND ){
             kDebug() << getName() << "Player get central cards.";
             
             emit signalPlayerGetCentralCards();
@@ -441,7 +434,7 @@ void Client::slotProcessCommands()
             return;
         }
         
-        if( getCommandPartOfCommand( command ) == OPPONENT_GET_CENTRAL_CARDS_COMMAND ){
+        if( getCommandName( command ) == OPPONENT_GET_CENTRAL_CARDS_COMMAND ){
             kDebug() << getName() << "Opponent get central cards.";
             
             emit signalOpponentGetCentralCards();
@@ -449,10 +442,10 @@ void Client::slotProcessCommands()
             return;
         }
         
-        if( getCommandPartOfCommand( command ) == END_ROUND_COMMAND ){
+        if( getCommandName( command ) == END_ROUND_COMMAND ){
             kDebug() << getName() << "End round.";
             
-            QList< QString >* values = getValues( getValuePartOfCommand( command ) );
+            QList< QString >* values = getValues( getCommandValue( command ) );
             
             try{
                 if( values->size() != 2 ){
@@ -475,10 +468,10 @@ void Client::slotProcessCommands()
             delete values;
         }
         
-        if( getCommandPartOfCommand( command ) == END_GAME_COMMAND ){
+        if( getCommandName( command ) == END_GAME_COMMAND ){
             kDebug() << getName() << "End game.";
             
-            emit signalEndGame( getValuePartOfCommand( command ) );
+            emit signalEndGame( getCommandValue( command ) );
         }
         
     }

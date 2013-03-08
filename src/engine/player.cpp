@@ -29,35 +29,36 @@ Player::~Player()
     }
 }
 
-QString Player::getCommandPartOfCommand( QString text )
+/*QString Player::getCommandPartOfCommand( QString text )
 {
     if( text.indexOf('=') == -1 ){
         return text;
     }
     
     return text.mid( 0, text.indexOf( '=' )+1 ); //The '=' too.
-}
+}*/
 
-QString Player::getValuePartOfCommand( QString text )
+QString Player::getCommandName( QString command )
 {
-    return text.mid( text.indexOf( '=' )+1 );
-}
-
-/*void Player::sendInitializeTable( QString opponentName, Knapsen::TypeOfCards typeOfCards, int sizeOfDeck, int numberOfCardsInHand )
-{
-    QString typeOfCardsValue;
-    if( typeOfCards == Knapsen::GermanSuits ){
-        typeOfCardsValue = TYPE_OF_CARDS_GERMAN_SUITS_VALUE;
-    }else{ // typeOfCards == Knapsen::FrenchSuits
-        typeOfCardsValue = TYPE_OF_CARDS_FRENCH_SUITS_VALUE;
+    /*if( command.indexOf('=') == -1 ){
+        return command;
+    }*/
+    if( !command.contains( '=' ) ){
+        return command;
     }
     
-    setLowestCard( sizeOfDeck );
-    
-    //setNumberOfCardsInHand( numberOfCardsInHand );
-    
-    sendCommand( INITIALIZE_TABLE_COMMAND+opponentName+","+typeOfCardsValue+","+QString::number( sizeOfDeck )+","+QString::number( numberOfCardsInHand ) );
+    return command.mid( 0, command.indexOf( '=' )+1 ); //The '=' too.
+}
+
+/*QString Player::getValuePartOfCommand( QString text )
+{
+    return text.mid( text.indexOf( '=' )+1 );
 }*/
+
+QString Player::getCommandValue( QString command )
+{
+    return command.mid( command.indexOf( '=' )+1 );
+}
 
 void Player::sendInitializeTable( QString opponentName, Knapsen::TypeOfCards typeOfCards, int sizeOfDeck )
 {
@@ -69,8 +70,6 @@ void Player::sendInitializeTable( QString opponentName, Knapsen::TypeOfCards typ
     }
     
     setLowestCard( sizeOfDeck );
-    
-    //setNumberOfCardsInHand( numberOfCardsInHand );
     
     sendCommand( INITIALIZE_TABLE_COMMAND+opponentName+","+typeOfCardsValue+","+QString::number( sizeOfDeck ) );
 }
@@ -183,11 +182,11 @@ void Player::newRound()
     setTricks( 0 );
 }
 
-void Player::setLowestCard( int sizeOfDeck )
+void Player::setLowestCard( int deckSize )
 {
-    if( sizeOfDeck == 20 ){
+    if( deckSize == 20 ){
         mLowestCardType = Card::Jack;
-    }else{ // sizeOfDeck == 24
+    }else{
         mLowestCardType = Card::Nine;
     }
 }
@@ -305,19 +304,19 @@ void Player::newCommand( QString command )
 {
     //kDebug() << getName() << "command part of command:" << getCommandPartOfCommand( command );
     
-    if( getCommandPartOfCommand( command ) == NAME_COMMAND ){
-        kDebug() << getName() << "name:" << getValuePartOfCommand( command );
+    if( getCommandName( command ) == NAME_COMMAND ){
+        kDebug() << getName() << "name:" << getCommandValue( command );
         
-        mName = getValuePartOfCommand( command );
+        mName = getCommandValue( command );
         
         emit signalNewPlayer( this );
     }
     
-    if( getCommandPartOfCommand( command ) == SELECTED_CARD_ID_COMMAND ){
-        kDebug() << getName() << "Selected card id:" << getValuePartOfCommand( command );
+    if( getCommandName( command ) == SELECTED_CARD_ID_COMMAND ){
+        kDebug() << getName() << "Selected card id:" << getCommandValue( command );
         
         bool ok;
-        int ret = getValuePartOfCommand( command ).toInt( &ok );
+        int ret = getCommandValue( command ).toInt( &ok );
         
         if( ok ){
             
@@ -352,7 +351,7 @@ void Player::newCommand( QString command )
         }
     }
     
-    if( getCommandPartOfCommand( command ) == TWENTY_BUTTON_CLICKED_COMMAND ){
+    if( getCommandName( command ) == TWENTY_BUTTON_CLICKED_COMMAND ){
         kDebug() << getName() << "Twenty button clicked.";
         
         if( isTwentyButtonVisible() ){
@@ -363,7 +362,7 @@ void Player::newCommand( QString command )
         }
     }
     
-    if( getCommandPartOfCommand( command ) == FORTY_BUTTON_CLICKED_COMMAND ){
+    if( getCommandName( command ) == FORTY_BUTTON_CLICKED_COMMAND ){
         kDebug() << getName() << "Forty button clicked.";
         
         if( isFortyButtonVisible() ){
@@ -374,7 +373,7 @@ void Player::newCommand( QString command )
         }
     }
     
-    if( getCommandPartOfCommand( command ) == SCHNAPSEN_BUTTON_CLICKED_COMMAND ){
+    if( getCommandName( command ) == SCHNAPSEN_BUTTON_CLICKED_COMMAND ){
         kDebug() << getName() << "Schnapsen button clicked.";
         
         if( mSchnapsenButtonVisible ){
@@ -386,7 +385,7 @@ void Player::newCommand( QString command )
         
     }
     
-    if( getCommandPartOfCommand( command ) == CLOSE_BUTTON_CLICKED_COMMAND ){
+    if( getCommandName( command ) == CLOSE_BUTTON_CLICKED_COMMAND ){
         kDebug() << getName() << "Close button clicked.";
         
         if( isCloseButtonVisible() ){
@@ -398,19 +397,19 @@ void Player::newCommand( QString command )
     
     }
     
-    if( getCommandPartOfCommand( command ) == CHANGE_TRUMP_CARD_COMMAND ){
+    if( getCommandName( command ) == CHANGE_TRUMP_CARD_COMMAND ){
         kDebug() << getName() << "Change trump card.";
         
         emit signalChangeTrumpCard( this );
     }
     
-    if( getCommandPartOfCommand( command ) == START_NEXT_ROUND_COMMAND ){
+    if( getCommandName( command ) == START_NEXT_ROUND_COMMAND ){
         kDebug() << getName() << "Start next round.";
         
         emit signalStartNextRound( this );
     }
     
-    if( getCommandPartOfCommand( command ) == START_NEXT_GAME_COMMAND ){
+    if( getCommandName( command ) == START_NEXT_GAME_COMMAND ){
         kDebug() << getName() << "Start next game.";
         
         emit signalStartNextGame( this );
