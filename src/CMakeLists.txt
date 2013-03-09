@@ -17,7 +17,6 @@ set(knapsen_HDRS
     engine/client.h
     engine/player.h
     engine/server.h
-    engine/centralcards.h
     engine/trump.h
     dialogs/waitforserverdialog.h
     dialogs/waitforclientdialog.h
@@ -41,7 +40,6 @@ set(knapsen_SRCS
     engine/client.cpp
     engine/player.cpp
     engine/server.cpp
-    engine/centralcards.cpp
     engine/trump.cpp
     dialogs/waitforserverdialog.cpp
     dialogs/waitforclientdialog.cpp

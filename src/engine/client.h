@@ -3,7 +3,7 @@
 
 #include "player.h"
 
-class CentralCards;
+//class CentralCards;
 class Trump;
 
 class Client : public Player
@@ -13,7 +13,8 @@ class Client : public Player
     int mSizeOfDeck;
     int mSizeOfDeckNow;
     
-    CentralCards *mCentralCards;
+    //CentralCards *mCentralCards;
+    QList< Card* > mCentralCards;
     Trump *mTrump;
     
     QList<QString> mCommandList;
@@ -25,6 +26,11 @@ class Client : public Player
     QList<QString>* getValues( QString );
     //
     
+    /*!
+     * Clear the central cards. Delete all cards.
+     */
+    void clearCentralCards(){ while( !mCentralCards.empty() ) delete mCentralCards.takeFirst(); }
+    
     virtual void newCommand( QString );
     
 private slots:
@@ -35,7 +41,8 @@ protected:
     int getSizeOfDeckNow(){ return mSizeOfDeckNow; }
     //
     
-    CentralCards* getCentralCards(){ return mCentralCards; }
+    //CentralCards* getCentralCards(){ return mCentralCards; }
+    const QList< Card* >& getCentralCards(){ return mCentralCards; }
     
     Trump* getTrump(){ return mTrump; }
     

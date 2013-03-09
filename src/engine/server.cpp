@@ -2,7 +2,7 @@
 #include <KDE/KDebug>
 //#include "gamesequence.h"
 //#include "deck.h"
-#include "centralcards.h"
+//#include "centralcards.h"
 #include "trump.h"
 #include "bot.h"
 #include "player.h"
@@ -29,7 +29,7 @@ Server::Server( QObject* parent ) :
     kDebug() << "Initialize.";
 
     mBot = 0;
-    mCentralCards = 0;
+    //mCentralCards = 0;
     mTrump = 0;
     //mDeck = 0;
     mPlayerWhoClickedToCloseButtonThisRound = 0;
@@ -47,9 +47,9 @@ Server::~Server()
     /*if( mDeck ){
         delete mDeck;
     }*/
-    if( mCentralCards ){
+    /*if( mCentralCards ){
         delete mCentralCards;
-    }
+    }*/
     if( mTrump ){
         delete mTrump;
     }
@@ -119,7 +119,8 @@ void Server::newRound()
     buildDeck();
     
     //Clear central cards
-    mCentralCards->clear();
+    //mCentralCards->clear();
+    clearCentralCards();
     
     //Clear trump card
     mTrump->clearTrumpCard( true );
@@ -650,7 +651,8 @@ void Server::slotPlayerSelectedCardId( int selectedCardId )
 {
     kDebug() << "Selected card:" << getCurrentPlayer()->getCard( selectedCardId )->getCardText();
     
-    if( mCentralCards->isEmpty() ){
+    //if( mCentralCards->isEmpty() ){
+    if( mCentralCards.empty() ){
         kDebug() << "is empty";
         
         if( mTwentyButtonClickedThisTurn || mFortyButtonClickedThisTurn ){
@@ -707,7 +709,8 @@ void Server::slotPlayerSelectedCardId( int selectedCardId )
         
         //getNextPlayer()->sendOpponentAddNewCentralCard( mCentralCards->getCard( 0 ) );
         Card* selectedCard = getCurrentPlayer()->takeCard( selectedCardId );
-        mCentralCards->add( selectedCard );
+        //mCentralCards->add( selectedCard );
+        mCentralCards.append( selectedCard );
         getNextPlayer()->sendOpponentSelectedCard( selectedCardId, selectedCard );
         
         setCurrentPlayer( getNextPlayer() );
@@ -733,7 +736,8 @@ void Server::slotPlayerSelectedCardId( int selectedCardId )
         
         //getNextPlayer()->sendOpponentAddNewCentralCard( mCentralCards->getCard( 1 ) );
         Card* selectedCard = getCurrentPlayer()->takeCard( selectedCardId );
-        mCentralCards->add( selectedCard );
+        //mCentralCards->add( selectedCard );
+        mCentralCards.append( selectedCard );
         getNextPlayer()->sendOpponentSelectedCard( selectedCardId, selectedCard );
         
         QTimer::singleShot( 1000, this, SLOT( slotCheckCentralCards() ) );
@@ -839,14 +843,18 @@ void Server::slotCheckCentralCards()
 {
     kDebug() << "Check the central cards.";
     
-    const int centralCard0Point = mCentralCards->getCard( 0 )->getCardPoint();
-    const int centralCard1Point = mCentralCards->getCard( 1 )->getCardPoint();
+    //const int centralCard0Point = mCentralCards->getCard( 0 )->getCardPoint();
+    const int centralCard0Point = mCentralCards.first()->getCardPoint();    
+    //const int centralCard1Point = mCentralCards->getCard( 1 )->getCardPoint();
+    const int centralCard1Point = mCentralCards.last()->getCardPoint();
     
     kDebug() << "centralCard0Point" << centralCard0Point;
     kDebug() << "centralCard1Point" << centralCard1Point;
     
-    const Card::Suit centralCard0Suit = mCentralCards->getCard( 0 )->getSuit();
-    const Card::Suit centralCard1Suit = mCentralCards->getCard( 1 )->getSuit();
+    //const Card::Suit centralCard0Suit = mCentralCards->getCard( 0 )->getSuit();
+    const Card::Suit centralCard0Suit = mCentralCards.first()->getSuit();
+    //const Card::Suit centralCard1Suit = mCentralCards->getCard( 1 )->getSuit();
+    const Card::Suit centralCard1Suit = mCentralCards.last()->getSuit();
     
     bool currentPlayerStartNextTurn;
     
@@ -892,7 +900,8 @@ void Server::slotCheckCentralCards()
         kDebug() << "Start next turn";
         
         //Clear central cards
-        mCentralCards->clear();
+        //mCentralCards->clear();
+        clearCentralCards();
         
         /*for( int i = 0; i < mPlayerList.size(); ++i ){
             mPlayerList.at( i )->sendClearCentralCards();
@@ -1094,7 +1103,7 @@ void Server::startGame()
     //mDeck = new Deck( mSizeOfDeck );
     
     //Initialize central card
-    mCentralCards = new CentralCards;
+    //mCentralCards = new CentralCards;
     
     //Initialize trump
     mTrump = new Trump;

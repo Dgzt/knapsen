@@ -1,6 +1,5 @@
 #include <QtCore/QTimer>
 #include <KDE/KDebug>
-#include "centralcards.h"
 #include "trump.h"
 #include "bot.h"
 
@@ -92,7 +91,8 @@ void Bot::medium()
 {
     kDebug() << "Medium";
     
-    if( getCentralCards()->isEmpty() ){
+    //if( getCentralCards()->isEmpty() ){
+    if( getCentralCards().empty() ){
         tryChangeTrumpCard();
         
         bool meld = tryMeldMarriage();
@@ -152,7 +152,8 @@ void Bot::hard()
 {
     kDebug() << "Hard";
     
-    if( getCentralCards()->isEmpty() ){
+    //if( getCentralCards()->isEmpty() ){
+    if( getCentralCards().empty() ){
         tryChangeTrumpCard();
         
         bool meld = tryMeldMarriage();
@@ -329,8 +330,9 @@ bool Bot::trySelectEqualCentralMinPoints()
     
     Card* card;
     int selectCardId = INVALID_CARD_ID;
-    Card* centralCard0 = getCentralCards()->getCard(0);
-                
+    //Card* centralCard0 = getCentralCards()->getCard(0);
+    Card* centralCard0 = getCentralCards().first();
+    
     for( int i = 0; i < getNumberOfCards(); ++i ){
         
         card = getCard( i );
@@ -369,7 +371,8 @@ bool Bot::trySelectEqualTrumpMinPoints()
 {
     kDebug() << "Try select the smallest points card, what's suit is equal whith trump card's suit and the card's point is more then central card's point.";
     
-    if( getCentralCards()->getCard(0)->getSuit() != getTrump()->getCardSuit() ){ //If is equal, that was check the previous function
+    //if( getCentralCards()->getCard(0)->getSuit() != getTrump()->getCardSuit() ){ //If is equal, that was check the previous function
+    if( getCentralCards().first()->getSuit() != getTrump()->getCardSuit() ){ //If is equal, that was check the previous function
         Card* card;
         int selectCardId = INVALID_CARD_ID;
         

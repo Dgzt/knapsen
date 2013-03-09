@@ -1,5 +1,5 @@
 #include <KDE/KDebug>
-#include "centralcards.h"
+//#include "centralcards.h"
 #include "trump.h"
 #include "client.h"
 
@@ -12,7 +12,7 @@ Client::Client( QString name ):
     mSizeOfDeckNow( 0 ),
     mCommandsUnderProcessing( false )
 {
-    mCentralCards = new CentralCards;
+    //mCentralCards = new CentralCards;
     mTrump = new Trump;
     
     connect( this, SIGNAL( connected() ), this, SLOT( slotConnected() ) );
@@ -20,7 +20,7 @@ Client::Client( QString name ):
 
 Client::~Client()
 {
-    delete mCentralCards;
+    //delete mCentralCards;
     delete mTrump;
 }
 
@@ -122,8 +122,8 @@ void Client::slotProcessCommands()
             kDebug() << getName() << "New round.";
             newRound();
             
-            mCentralCards->clear();
-            //emit signalClearCentralCards();
+            //mCentralCards->clear();
+            clearCentralCards();
             
             mSizeOfDeckNow = mSizeOfDeck;
             
@@ -291,7 +291,6 @@ void Client::slotProcessCommands()
         if( getCommandName( command ) == SELECTABLE_CERTAIN_CARDS_COMMAND ){
             kDebug() << getName() << "Selectable certan cards.";
             
-            //setSelectableCertainCards();
             setSelectableCertainCards( mCentralCards , mTrump );
             emit signalPlayerInAction();
         }
@@ -321,7 +320,8 @@ void Client::slotProcessCommands()
                 if( !ok ) throw 2;
                 
                 Card* card = new Card( cardValue );
-                mCentralCards->add( card );
+                //mCentralCards->add( card );
+                mCentralCards.append( card );
                 
                 emit signalOpponentSelectedCard( cardId, card );
                 //break
@@ -429,6 +429,8 @@ void Client::slotProcessCommands()
         if( getCommandName( command ) == PLAYER_GET_CENTRAL_CARDS_COMMAND ){
             kDebug() << getName() << "Player get central cards.";
             
+            clearCentralCards();
+            
             emit signalPlayerGetCentralCards();
             //break;
             return;
@@ -436,6 +438,8 @@ void Client::slotProcessCommands()
         
         if( getCommandName( command ) == OPPONENT_GET_CENTRAL_CARDS_COMMAND ){
             kDebug() << getName() << "Opponent get central cards.";
+            
+            clearCentralCards();
             
             emit signalOpponentGetCentralCards();
             //break;
@@ -527,7 +531,8 @@ void Client::slotSelectCardId( int id )
     setSelectableAllCards( false );
     
     Card* card = takeCard( id );
-    mCentralCards->add( card );
+    //mCentralCards->add( card );
+    mCentralCards.append( card );
     
     if( isTwentyButtonVisible() ){
         setTwentyButtonVisible( false );

@@ -1,5 +1,4 @@
 #include <KDE/KDebug>
-#include "centralcards.h"
 #include "trump.h"
 #include "player.h"
 
@@ -104,10 +103,22 @@ void Player::setSelectableAllCards( bool enabled )
     }
 }
 
-void Player::setSelectableCertainCards( CentralCards *centralCards, Trump *trump )
+/*void Player::setSelectableCertainCards( CentralCards *centralCards, Trump *trump )
 {
     //Set true, which cards equal type whit central card
     if( setSelectableCardsWhatEqualSuit( centralCards->getCard( 0 )->getSuit() ) == false ){
+        //If have not cards which equal type whith central card, then set true, which equal type whith trump card 
+        if( setSelectableCardsWhatEqualSuit( trump->getCardSuit() ) == false ){
+            //If have not that cards, then equal all card
+            setSelectableAllCards( true );    
+        }
+    }
+}*/
+
+void Player::setSelectableCertainCards( const QList< Card* >& centralCards, const Trump *trump )
+{
+    //Set true, which cards equal type whit central card
+    if( setSelectableCardsWhatEqualSuit( centralCards.first()->getSuit() ) == false ){
         //If have not cards which equal type whith central card, then set true, which equal type whith trump card 
         if( setSelectableCardsWhatEqualSuit( trump->getCardSuit() ) == false ){
             //If have not that cards, then equal all card
@@ -477,7 +488,13 @@ void Player::sendSelectableAllCards()
     sendCommand( SELECTABLE_ALL_CARDS_COMMAND );
 }
 
-void Player::sendSelectableCertainCards( CentralCards *centralCards, Trump* trump )
+/*void Player::sendSelectableCertainCards( CentralCards *centralCards, Trump* trump )
+{
+    setSelectableCertainCards( centralCards, trump );
+    sendCommand( SELECTABLE_CERTAIN_CARDS_COMMAND );
+}*/
+
+void Player::sendSelectableCertainCards( const QList< Card* >& centralCards, const Trump* trump )
 {
     setSelectableCertainCards( centralCards, trump );
     sendCommand( SELECTABLE_CERTAIN_CARDS_COMMAND );

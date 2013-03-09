@@ -1,8 +1,7 @@
 /*!
  * @file
  * @author  Zsuro Tibor <zsurotibor@gmail.com>
- * @version 1.0
- *
+ * 
  * @section LICENSE
  *
  * This program is free software: you can redistribute it and/or modify
@@ -207,7 +206,8 @@ protected:
      */
     void setSelectableAllCards( bool selectable );
     
-    void setSelectableCertainCards( CentralCards* , Trump* );
+    //void setSelectableCertainCards( CentralCards* , Trump* );
+    void setSelectableCertainCards( const QList< Card* >& centralCards, const Trump* trump );
     
     /*!
      * The twenty button will hidden. If the forty button is visible then
@@ -504,7 +504,8 @@ public:
      */
     void sendSelectableAllCards();
     
-    void sendSelectableCertainCards( CentralCards *, Trump* );
+    //void sendSelectableCertainCards( CentralCards *, Trump* );
+    void sendSelectableCertainCards( const QList< Card* >& centralCards , const Trump* trump );
     
     /*!
      * Send to the client the opponent's in action.
