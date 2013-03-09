@@ -10,7 +10,6 @@ set(knapsen_HDRS
     table/centralwidget.h
     table/cardsgroup.h
     engine/card.h
-    engine/deck.h
     dialogs/waitingforopponent.h
     dialogs/endgamedialog.h
     dialogs/endrounddialog.h
@@ -35,7 +34,6 @@ set(knapsen_SRCS
     table/centralwidget.cpp
     table/cardsgroup.cpp
     engine/card.cpp
-    engine/deck.cpp
     dialogs/waitingforopponent.cpp
     dialogs/endgamedialog.cpp
     dialogs/endrounddialog.cpp

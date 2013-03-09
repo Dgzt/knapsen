@@ -1,7 +1,7 @@
 #include <QtCore/QTimer>
 #include <KDE/KDebug>
 //#include "gamesequence.h"
-#include "deck.h"
+//#include "deck.h"
 #include "centralcards.h"
 #include "trump.h"
 #include "bot.h"
@@ -31,7 +31,7 @@ Server::Server( QObject* parent ) :
     mBot = 0;
     mCentralCards = 0;
     mTrump = 0;
-    mDeck = 0;
+    //mDeck = 0;
     mPlayerWhoClickedToCloseButtonThisRound = 0;
     mWaitingMarriage = 0;
     mPlayerListWhoWantNewRound = 0;
@@ -44,14 +44,58 @@ Server::~Server()
     if( mBot ){
         delete mBot;
     }
-    if( mDeck ){
+    /*if( mDeck ){
         delete mDeck;
-    }
+    }*/
     if( mCentralCards ){
         delete mCentralCards;
     }
     if( mTrump ){
         delete mTrump;
+    }
+}
+
+void Server::buildDeck()
+{
+kDebug() << "Build deck.";
+    
+    while( mCardDeck.size() != mSizeOfDeck ){
+        Card *card;
+        
+        if( mSizeOfDeck == Card::CARD_NUMBERS_WITHOUT_9 ){
+            card = new Card( qrand()%Card::CARD_NUMBERS_WITHOUT_9 );
+        }else{ //mDeckSize == Card::CARD_NUMBERS_WITH_9
+            card = new Card( qrand()%Card::CARD_NUMBERS_WITH_9 );
+        }
+        
+        bool inList = false;
+        for( int i = 0; i < mCardDeck.size(); ++i ){
+            if( mCardDeck.at(i)->getValue() == card->getValue() ){
+                inList = true;
+            }
+        }
+        
+        if( !inList ){
+            mCardDeck.append( card );
+        }else{
+            delete card;
+        }
+        
+    }
+    
+    //Marriages
+    //mCards[ 11 ] = new Card( 17 );
+    //mCards[ 18 ] = new Card( 16 );
+    //
+    
+    //Can change trump card
+    //mCards[ 19 ] = new Card( 3 );
+    //mCards[ 18 ] = new Card( 3 );
+    //mCards[ 13 ] = new Card( 0 );
+    
+    kDebug() << "Generated deck:";
+    for( int i = 0; i < mCardDeck.size(); ++i ){
+        kDebug() << i << ":" << mCardDeck.at( i )->getValue();
     }
 }
 
@@ -71,7 +115,8 @@ void Server::newRound()
     kDebug() << "Start new round.";
     
     //Build deck
-    mDeck->build();
+    //mDeck->build();
+    buildDeck();
     
     //Clear central cards
     mCentralCards->clear();
@@ -96,13 +141,15 @@ void Server::newRound()
     for( int i = 0; i < mNumberOfCardsInHand; ++i ){
         
         for( int j = 0; j < mPlayerList.size(); ++j ){
-            addNewCard( mPlayerList.at( j ), mDeck->takeCard() );
+            //addNewCard( mPlayerList.at( j ), mDeck->takeCard() );
+            addNewCard( mPlayerList.at( j ), mCardDeck.takeLast() );
         }
         
         //Get trump card
         if( i == 2 ){
             //mTrumpCard = mDeck->getCard();
-            mTrump->addNewCard( mDeck->takeCard() );
+            //mTrump->addNewCard( mDeck->takeCard() );
+            mTrump->addNewCard( mCardDeck.takeLast() );
             
             for( int j = 0; j < mPlayerList.size(); ++j ){
                 mPlayerList.at( j )->sendNewTrumpCard( mTrump );
@@ -665,7 +712,8 @@ void Server::slotPlayerSelectedCardId( int selectedCardId )
         
         setCurrentPlayer( getNextPlayer() );
         
-        if( !mPlayerWhoClickedToCloseButtonThisRound && mDeck->getDeckSize() > 0 ){
+        //if( !mPlayerWhoClickedToCloseButtonThisRound && mDeck->getDeckSize() > 0 ){
+        if( !mPlayerWhoClickedToCloseButtonThisRound && !mCardDeck.empty() ){
             getCurrentPlayer()->sendSelectableAllCards();
             getNextPlayer()->sendOpponentInAction();
         }else{ // mDeck->getDeckSize() == 0
@@ -863,11 +911,15 @@ void Server::slotCheckCentralCards()
         //If player closed the deck
         if( !mPlayerWhoClickedToCloseButtonThisRound ){
             //If the dech have card yet, then add new cards to players, first who won the last turn
-            if( mDeck->getDeckSize() > 0 ){
-                addNewCard( getCurrentPlayer(), mDeck->takeCard() );
+            //if( mDeck->getDeckSize() > 0 ){
+            if( !mCardDeck.empty() ){
+                //addNewCard( getCurrentPlayer(), mDeck->takeCard() );
+                addNewCard( getCurrentPlayer(), mCardDeck.takeLast() );
                 
-                if( mDeck->getDeckSize() > 0 ){
-                    addNewCard( getNextPlayer(), mDeck->takeCard() );
+                //if( mDeck->getDeckSize() > 0 ){
+                if( !mCardDeck.empty() ){
+                    //addNewCard( getNextPlayer(), mDeck->takeCard() );
+                    addNewCard( getNextPlayer(), mCardDeck.takeLast() );
                     
                 }else{
                     //addNewCard( getNextPlayer(), mTrump->getCard() );
@@ -908,7 +960,8 @@ void Server::slotCheckCentralCards()
             getCurrentPlayer()->sendSelectableTrumpCard();
         }
         
-        if( !mPlayerWhoClickedToCloseButtonThisRound && mDeck->getDeckSize() > 3 ){
+        //if( !mPlayerWhoClickedToCloseButtonThisRound && mDeck->getDeckSize() > 3 ){
+        if( !mPlayerWhoClickedToCloseButtonThisRound && mCardDeck.size() > 3 ){
             getCurrentPlayer()->sendCloseButtonVisible();
         }
         
@@ -1038,7 +1091,7 @@ void Server::startGame()
     kDebug() << "Start game.";
     
     //Initialize deck
-    mDeck = new Deck( mSizeOfDeck );
+    //mDeck = new Deck( mSizeOfDeck );
     
     //Initialize central card
     mCentralCards = new CentralCards;

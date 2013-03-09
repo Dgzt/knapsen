@@ -8,7 +8,7 @@
 
 class Player;
 class Bot;
-class Deck;
+//class Deck;
 class CentralCards;
 class Trump;
 class Card;
@@ -24,6 +24,10 @@ class Server : public QTcpServer
     
     //Size of deck, 20 or 24
     int mSizeOfDeck;
+    
+    //
+    QList< Card* > mCardDeck;
+    //
     
     //Number of cards in hand, 5 or 6
     int mNumberOfCardsInHand;
@@ -44,7 +48,7 @@ class Server : public QTcpServer
     //
     
     //Deck
-    Deck* mDeck;
+    //Deck* mDeck;
     
     Trump* mTrump;
 
@@ -72,6 +76,10 @@ class Server : public QTcpServer
     
     QList< Player* > *mPlayerListWhoWantNewRound;
     QList< Player* > *mPlayerListWhoWantNewGame;
+    
+    //
+    void buildDeck();
+    //
     
     Player* getCurrentPlayer(){ return mPlayerList.at( mCurrentPlayerId ); }
     void setCurrentPlayer( Player* );
