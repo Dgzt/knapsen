@@ -14,7 +14,7 @@ Card::Card( int value ) :
     mSelectable( false )
 {}
 
-QString Card::getCardText(/* Knapsen::TypeOfCards typeOfCards */) const
+QString Card::getCardText() const
 {	
     return CARDS_NAME[ mValue ];
 }
