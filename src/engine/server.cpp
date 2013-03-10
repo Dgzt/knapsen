@@ -11,15 +11,19 @@
 //Only 2 players game, 4 players maybe in the future...
 const int MAX_PLAYERS = 2;
 
-Server::Server( QObject* parent ) :
-    QTcpServer( parent ),
-    mSizeOfDeck( 20 ),
-    mNumberOfCardsInHand( 5 ),
-    mTypeOfCards( Knapsen::GermanSuits ),
-    mSchnapsenButton( false ),
-    mCurrentPlayerId(0),
-    mGameStarterPlayerId(0),
-    mRoundStarterPlayerId(0),
+Server::Server(Knapsen::TypeOfCards typeOfCards, 
+               int sizeOfDeck, 
+               int numberOfCardsInHand, 
+               Knapsen::WhoStartGame whoStartGame,
+               bool schnapsenButton
+              ) :
+    mTypeOfCards( typeOfCards ),
+    mSizeOfDeck( sizeOfDeck ),
+    mNumberOfCardsInHand( numberOfCardsInHand ),
+    mSchnapsenButton( schnapsenButton ),
+    //mCurrentPlayerId( 0 ),
+    //mGameStarterPlayerId( 0 ),
+    //mRoundStarterPlayerId( 0 ),
     mTwentyButtonClickedThisTurn( false ),
     mFortyButtonClickedThisTurn( false ),
     mSchnapsenButtonClickedThisRound( false ),
@@ -27,15 +31,16 @@ Server::Server( QObject* parent ) :
     mOpponentHaveNotTricksBeforePlayerClickedToCloseButton( false )
 {
     kDebug() << "Initialize.";
-
+    
     mBot = 0;
-    //mCentralCards = 0;
-    mTrump = 0;
-    //mDeck = 0;
+    mTrump = new Trump();
+    
     mPlayerWhoClickedToCloseButtonThisRound = 0;
     mWaitingMarriage = 0;
     mPlayerListWhoWantNewRound = 0;
     mPlayerListWhoWantNewGame = 0;
+    
+    setWhoStartGame( whoStartGame );
 }
 
 Server::~Server()
@@ -50,9 +55,9 @@ Server::~Server()
     /*if( mCentralCards ){
         delete mCentralCards;
     }*/
-    if( mTrump ){
-        delete mTrump;
-    }
+    //if( mTrump ){
+    delete mTrump;
+    //}
 }
 
 void Server::buildDeck()
@@ -1088,9 +1093,9 @@ void Server::setWhoStartGame( Knapsen::WhoStartGame whoStartGame )
     mCurrentPlayerId = mRoundStarterPlayerId;
 }
 
-void Server::addBot( QString botName, Knapsen::GameDifficulty difficulty )
+void Server::addBot( QString name, Knapsen::GameDifficulty difficulty )
 {
-    mBot = new Bot( botName, difficulty );
+    mBot = new Bot( name, difficulty );
     
     mBot->connectToHost( "127.0.0.1", serverPort() );
 }
@@ -1098,15 +1103,6 @@ void Server::addBot( QString botName, Knapsen::GameDifficulty difficulty )
 void Server::startGame()
 {
     kDebug() << "Start game.";
-    
-    //Initialize deck
-    //mDeck = new Deck( mSizeOfDeck );
-    
-    //Initialize central card
-    //mCentralCards = new CentralCards;
-    
-    //Initialize trump
-    mTrump = new Trump;
     
     for( int i = 0; i < mPlayerList.size(); ++i ){
         for( int j = 0; j < mPlayerList.size(); ++j ){

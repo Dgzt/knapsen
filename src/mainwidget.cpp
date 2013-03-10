@@ -34,7 +34,7 @@ MainWindow::MainWindow( QWidget* parent ) :
     KXmlGuiWindow( parent ),
     mGameStatus( Knapsen::None )
 {
-    server = 0;
+    mServer = 0;
     client = 0;
     endRoundDialog = 0;
     endGameDialog = 0;
@@ -114,47 +114,41 @@ void MainWindow::setupActions()
     KStandardAction::preferences(this, SLOT(optionsPreferences()), actionCollection());
 }
 
-void MainWindow::setServerConfig()
+void MainWindow::createServer()
 {
-    //Set who start the game
-    if( Settings::localPlayer() ){
-        server->setWhoStartGame( Knapsen::AdminPlayer );
-    }else if( Settings::opponentPlayer() ){
-        server->setWhoStartGame( Knapsen::OpponentPlayer );
-    }else{ // if( Settings::randomPlayer() )
-        server->setWhoStartGame( Knapsen::RandomPlayer );
-    }
-    
-    //Set the size of deck
-    if( Settings::sizeOfDeck20() ){
-        //server->setSizeOfDeck( Server::Number20 );
-        server->setSizeOfDeck( 20 );
-    }else{ // if( Settings::sizeOfDeck24 )
-        //server->setSizeOfDeck( Server::Number24 );
-        server->setSizeOfDeck( 24 );
-    }
-    
-    //Set cards in hand
-    if( Settings::cardsInHand5() ){
-        //server->setCardsInHand( Server::Number5 );
-        server->setNumberOfCardsInHand( 5 );
-    }else{ // if( Settings::cardsInHand6 )
-        //server->setCardsInHand( Server::Number6 );
-        server->setNumberOfCardsInHand( 6 );
-    }
-    
-    //Set type of cards
+    Knapsen::TypeOfCards typeOfCards;
     if( Settings::germanSuits() ){
-        server->setTypeOfCards( Knapsen::GermanSuits );
-    }else{ // if( Settings::frenchSuits() )
-        server->setTypeOfCards( Knapsen::FrenchSuits );
+        typeOfCards = Knapsen::GermanSuits;
+    }else{ // else french suits
+        typeOfCards = Knapsen::FrenchSuits;
     }
     
-    //Set Schnapsen button
-    if( Settings::schnapsenButton() ){
-        server->setEnableSchnapsenButton( true );
+    int sizeOfDeck;
+    if( Settings::sizeOfDeck20() ){
+        sizeOfDeck = 20;
+    }else{ 
+        sizeOfDeck = 24;
     }
     
+    int numberOfCardsInHand;
+    if( Settings::cardsInHand5() ){
+        numberOfCardsInHand = 5;
+    }else{
+        numberOfCardsInHand = 6;
+    }
+    
+    Knapsen::WhoStartGame whoStartGame;
+    if( Settings::localPlayer() ){
+        whoStartGame = Knapsen::AdminPlayer;
+    }else if( Settings::opponentPlayer() ){
+        whoStartGame = Knapsen::OpponentPlayer;
+    }else{ // else random player
+        whoStartGame = Knapsen::RandomPlayer;
+    }
+    
+    bool enabledSchnapsenButton = Settings::schnapsenButton();
+    
+    mServer = new Server( typeOfCards, sizeOfDeck, numberOfCardsInHand, whoStartGame, enabledSchnapsenButton );
 }
 
 void MainWindow::setGameSignals()
@@ -198,24 +192,23 @@ void MainWindow::newGameSlot()
         if( newGameDialog.getGameMode() == Knapsen::LocalMode ){
             kDebug() << "Game mode: local";
             
-            server = new Server;
-            connect( server, SIGNAL( signalServerFull() ), this, SLOT( slotStartGame() ) );
-            connect( server, SIGNAL( signalServerEmpty() ), this, SLOT( slotServerEmpty() ) );
+            //server = new Server;
+            createServer();
+            connect( mServer, SIGNAL( signalServerFull() ), this, SLOT( slotStartGame() ) );
+            connect( mServer, SIGNAL( signalServerEmpty() ), this, SLOT( slotServerEmpty() ) );
             
-            if( server->listen( QHostAddress::LocalHost ) ){
+            if( mServer->listen( QHostAddress::LocalHost ) ){
                 
-                kDebug() << "Server port:" << server->serverPort();
-                
-                //server->setAdminName( client->getName() );
+                kDebug() << "Server port:" << mServer->serverPort();
                 
                 //
-                setServerConfig();
+                //setServerConfig();
                 //
                 
-                client->connectToHost( "127.0.0.1", server->serverPort() );
+                client->connectToHost( "127.0.0.1", mServer->serverPort() );
                 
                 //server->addBot( Settings::botName() );
-                server->addBot( Settings::botName(), newGameDialog.getGameDifficulty() );
+                mServer->addBot( Settings::botName(), newGameDialog.getGameDifficulty() );
                 
                 mGameStatus = Knapsen::LocalMode;
             }else{
@@ -254,26 +247,24 @@ void MainWindow::newGameSlot()
         }else{ //newGameDialog.getGameMode() == Knapsen::ServerMode
             kDebug() << "Game mode: server";
             
-            server = new Server;
+            createServer();
             
-            connect( server, SIGNAL( signalServerEmpty() ), this, SLOT( slotServerEmpty() ) );
+            connect( mServer, SIGNAL( signalServerEmpty() ), this, SLOT( slotServerEmpty() ) );
             
-            if( server->listen( QHostAddress::Any, newGameDialog.getServer_ServerPort() ) ){
+            if( mServer->listen( QHostAddress::Any, newGameDialog.getServer_ServerPort() ) ){
             
-                //server->setAdminName( client->getName() );
-                
                 //
-                setServerConfig();
+                //setServerConfig();
                 //
                 
-                client->connectToHost( "127.0.0.1", server->serverPort() );
+                client->connectToHost( "127.0.0.1", mServer->serverPort() );
                 
                 WaitForClientDialog waitForClientDialog;
                 waitForClientDialog.setAdminName( client->getName() );
                 
-                connect( server, SIGNAL( signalPlayerConnected( QString ) ), &waitForClientDialog, SLOT( slotPlayerConnected( QString ) ) );
-                connect( server, SIGNAL( signalPlayerDisconnected( QString ) ), &waitForClientDialog, SLOT( slotPlayerDisconnectedSlot( QString ) ) );
-                connect( server, SIGNAL( signalServerFull() ), &waitForClientDialog, SLOT( slotServerFull() ) );
+                connect( mServer, SIGNAL( signalPlayerConnected( QString ) ), &waitForClientDialog, SLOT( slotPlayerConnected( QString ) ) );
+                connect( mServer, SIGNAL( signalPlayerDisconnected( QString ) ), &waitForClientDialog, SLOT( slotPlayerDisconnectedSlot( QString ) ) );
+                connect( mServer, SIGNAL( signalServerFull() ), &waitForClientDialog, SLOT( slotServerFull() ) );
                 
                 if( waitForClientDialog.exec() ){
                     
@@ -349,7 +340,7 @@ void MainWindow::slotStartGame()
 {
     kDebug() << "Start game.";
     
-    server->startGame();
+    mServer->startGame();
     
     mCloseGameAction->setEnabled( true );
 }
@@ -358,9 +349,9 @@ void MainWindow::slotServerEmpty()
 {
     kDebug() << "Server is empty!";
     
-    server->close();
-    server->deleteLater();
-    server = 0;
+    mServer->close();
+    mServer->deleteLater();
+    mServer = 0;
 }
 
 void MainWindow::slotSocketError( QAbstractSocket::SocketError socketError )

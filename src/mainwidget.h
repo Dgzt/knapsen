@@ -25,7 +25,7 @@ class MainWindow : public KXmlGuiWindow
     
     CentralWidget* cWidget;
     
-    Server* server;
+    Server* mServer;
     
     Client* client;
     
@@ -40,7 +40,10 @@ class MainWindow : public KXmlGuiWindow
     //Setup the actions
     void setupActions();
     
-    void setServerConfig();
+    /*!
+     * Create the server and initialize the server parameters.
+     */
+    void createServer();
     
     void setGameSignals();
     

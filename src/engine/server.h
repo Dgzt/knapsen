@@ -32,8 +32,6 @@
 
 class Player;
 class Bot;
-//class Deck;
-//class CentralCards;
 class Trump;
 class Card;
 
@@ -46,18 +44,18 @@ class Server : public QTcpServer
     //If this is a multiplayer game, then this is an unused variable(pointer)
     Bot *mBot;
     
+    //Type of cards, German suits or french suits
+    Knapsen::TypeOfCards mTypeOfCards;
+    
     //Size of deck, 20 or 24
     int mSizeOfDeck;
-    
-    //
-    QList< Card* > mCardDeck;
-    //
     
     //Number of cards in hand, 5 or 6
     int mNumberOfCardsInHand;
     
-    //Type of cards, German suits or french suits
-    Knapsen::TypeOfCards mTypeOfCards;
+    //
+    QList< Card* > mCardDeck;
+    //
     
     //Enable Schnapsen button in the game
     bool mSchnapsenButton;
@@ -103,6 +101,13 @@ class Server : public QTcpServer
     QList< Player* > *mPlayerListWhoWantNewGame;
     
     /*!
+     * Set who start the game. Local player or opponent player or random.
+     * 
+     * @param whoStartGame Who start the game.
+     */
+    void setWhoStartGame( Knapsen::WhoStartGame whoStartGame );
+    
+    /*!
      * Build the deck of cards. Random generate cards.
      */
     void buildDeck();
@@ -133,72 +138,201 @@ class Server : public QTcpServer
      */
     void clearCentralCards(){ while( !mCentralCards.empty() ) delete mCentralCards.takeFirst(); }
     
+    /*!
+     * Return with true when a player have equal or more than 7 scores else false.
+     * 
+     * @return True/False.
+     */
     bool isGameOver();
+    
+    /*!
+     * Reutrn with true when a player have equal or more than 66 tricks else false.
+     * 
+     * @return True/False.
+     */
     bool isRoundOver();
     
+    /*!
+     * Clear scores at all players and start new game.
+     */
     void newGame();
+    
+    /*!
+     * Clear tricks at all players and start new round.
+     */
     void newRound();
+    
+    /*!
+     * Check who win the round and give the tricks to winner player.
+     */
     void roundOver();
     
+    /*!
+     * The next player will start the next round.
+     */
     void nextPlayerStartRound();
+    
+    /*!
+     * The next player will start the next game.
+     */
     void nextPlayerStartGame();
 
-    void addNewCard( Player*, Card* );
-    void addTricks( Player*, int );
-    void addScores( Player*, int );
-    //
-    void addTrumpCardToPlayer( Player* );
-    //
-
+    /*!
+     * Add the card to the player and send to the others the info.
+     */
+    void addNewCard( Player* player, Card* card );
+    
+    /*!
+     * Add the tricks to the player and send to the others the info.
+     */
+    void addTricks( Player* player, int tricks );
+    
+    /*!
+     * Add the scores to the player and send to the others the info.
+     */
+    void addScores( Player* player, int scores );
+    
+    /*!
+     * Add the trump card to the player and send to the other the info.
+     */
+    void addTrumpCardToPlayer( Player* player );
+    
 private slots:
-    void slotNewPlayer( Player* );
-    void slotPlayerDisconnected( Player* );
+    /*!
+     * A new player connected to the server.
+     * 
+     * @param player The new player.
+     */
+    void slotNewPlayer( Player* player );
     
-    //void slotPlayerSelectedCard( Card*, int );
-    void slotPlayerSelectedCardId( int );
+    /*!
+     * The player disconnected from the server.
+     * 
+     * @param player The player.
+     */
+    void slotPlayerDisconnected( Player* player );
     
+    /*!
+     * The current player send the selected card id.
+     * 
+     * @param selectedCardId The selected card id.
+     */
+    void slotPlayerSelectedCardId( int selectedCardId );
+    
+    /*!
+     * The current player clicked to the twenty button.
+     */
     void slotPlayerTwentyButtonClicked();
+    
+    /*!
+     * The current player clicked to the forty button.
+     */
     void slotPlayerFortyButtonClicked();
+    
+    /*!
+     * The current player clicked to the schnapsen button.
+     */
     void slotPlayerSchnapsenButtonClicked();
+    
+    /*!
+     * The current player clicked to the close button.
+     */
     void slotPlayerClickedToCloseButton();
     
-    void slotPlayerChangeTrumpCard( Player* );
+    /*!
+     * The player changed the trump card with their card.
+     * 
+     * @param player The player.
+     */
+    void slotPlayerChangeTrumpCard( Player* player );
     
+    /*!
+     * If two cards is in the central cards then check it who get the points, 
+     * who start next turn, etc.
+     */
     void slotCheckCentralCards();
     
-    void slotPlayerWantStartNextRound( Player* );
-    void slotPlayerWantStartNextGame( Player* );
+    /*!
+     * The player want start next round.
+     * 
+     * @param player The player.
+     */
+    void slotPlayerWantStartNextRound( Player* player );
+    
+    /*!
+     * The player want start next game.
+     * 
+     * @param player The player.
+     */
+    void slotPlayerWantStartNextGame( Player* player );
 
 protected:
-    void incomingConnection(int);
+    /*!
+     * A socket connected to server. The socket then connected
+     * finally to the server when send the player's name.
+     * 
+     * @param socketDescriptor The socket descriptor.
+     */
+    void incomingConnection( int socketDescriptor );
 
 public:
-    Server(QObject* parent = 0);
+    /*!
+     * The constructor set the values to the variables. 
+     * 
+     * @param typeOfCards The type of cards. German suit or French suit.
+     * @param sizeOfDeck The size of cards of deck. 20 or 24.
+     * @param numberOfCardsInHand The number of cards in hand. 5 or 6.
+     * @param whoStartGame Who start the game. Local or opponent or random player.
+     * @param schnapsenButton If this variable true, then enabled the schnapsen button.
+     */
+    Server( Knapsen::TypeOfCards typeOfCards, 
+            int sizeOfDeck, 
+            int numberOfCardsInHand, 
+            Knapsen::WhoStartGame whoStartGame,
+            bool schnapsenButton
+          );
+    
+    /*!
+     * The destructor. Remove variables.
+     */
     ~Server();
 
-    //Set who start the game, the first round
-    void setWhoStartGame( Knapsen::WhoStartGame whoStartGame );
+    /*!
+     * Add a bot to the server.
+     * 
+     * @param name The bot's name.
+     * @param difficulty The bot's difficulty.
+     */
+    void addBot( QString name, Knapsen::GameDifficulty difficulty );
     
-    //Set the cards in hand, 5 or 6
-    void setNumberOfCardsInHand( int numberOfCardsInHand ){ mNumberOfCardsInHand = numberOfCardsInHand; }
-    
-    //Set the size of deck, 20 or 24
-    void setSizeOfDeck( int sizeOfDeck ){ mSizeOfDeck = sizeOfDeck; }
-    
-    //Set type of cards, german suits or french suits
-    void setTypeOfCards( Knapsen::TypeOfCards typeOfCards ){ mTypeOfCards = typeOfCards; }
-    
-    //Set schnapsen button
-    void setEnableSchnapsenButton( bool enable ){ mSchnapsenButton = enable; }
-    
-    void addBot( QString, Knapsen::GameDifficulty );
-    
+    /*!
+     * Start the game. Send initialize to the players, send cards, etc.
+     */
     void startGame();
     
 signals:
-    void signalPlayerConnected( QString );
-    void signalPlayerDisconnected( QString );
+    /*!
+     * A new player connected.
+     * 
+     * @param name The player's name.
+     */
+    void signalPlayerConnected( QString name );
+    
+    /*!
+     * Player disconnected.
+     * 
+     * @param name The player's name.
+     */
+    void signalPlayerDisconnected( QString name );
+    
+    /*!
+     * The server is full.
+     */
     void signalServerFull();
+    
+    /*!
+     * The server is empty.
+     */
     void signalServerEmpty();
 };
 

@@ -1,7 +1,6 @@
 /*!
  * @file
  * @author  Zsuro Tibor <zsurotibor@gmail.com>
- * @version 1.0
  *
  * @section LICENSE
  *
@@ -72,7 +71,7 @@ public:
     
     /*!
      * Clear the trump card. If the given value is true then
-     * remove the data else not.
+     * delete the data else not.
      * 
      * @param removeData Clear data or not.
      */
