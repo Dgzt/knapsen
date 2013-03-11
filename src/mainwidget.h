@@ -41,9 +41,11 @@ class MainWindow : public KXmlGuiWindow
     void setupActions();
     
     /*!
-     * Create the server and initialize the server parameters.
+     * Create the server and initialize the server parameters from settings.
+     * 
+     * @return The server.
      */
-    void createServer();
+    Server* createServer();
     
     void setGameSignals();
     
