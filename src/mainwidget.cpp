@@ -373,8 +373,8 @@ void MainWindow::slotGameError( Client::GameErrorType gameErrorType )
         
         //if( mCloseGameAction->isEnabled() ){
         if( mGameStatus != Knapsen::None ){
-            KMessageBox::information( this, i18n( "The opponent disconnected!" ) );
             closeGameSlot();
+            KMessageBox::information( this, i18n( "The opponent disconnected!" ) );
         }
     }
 
