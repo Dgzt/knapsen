@@ -32,6 +32,8 @@ public:
     
     void setEndPosition( QPointF );
     
+    //QPointF getEndPosition(){ return posAt( 1.0 ); }
+    
     //
     //void setCard( Card* );
     void setNewCardText( QString cardText ){ mNewCardText = cardText; }

@@ -112,12 +112,27 @@ signals:
     
     void signalCloseDeck();
     
-    void signalHideTrumpCard();
+    //void signalHideTrumpCard();
     //
     void signalTrumpCardSelectableChanged( bool );
     //
     
     void signalShowOpponentCards( int, Card, int, Card );
+    
+    /*!
+     * The opponent clicked to the schnapsen button.
+     */
+    void signalOpponentSchnapsenButtonClicked();
+    
+    /*!
+     * The opponent clicked to the forty button.
+     */
+    void signalOpponentFortyButtonClicked();
+    
+    /*!
+     * The opponent clicked to the twenty button.
+     */
+    void signalOpponentTwentyButtonClicked();
     
     //
     void signalNewRound();

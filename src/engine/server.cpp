@@ -763,6 +763,13 @@ void Server::slotPlayerTwentyButtonClicked()
     getCurrentPlayer()->setSelectableRegularMarriageCards( mTrump );
     
     mTwentyButtonClickedThisTurn = true;
+    
+    //Send to the other(s) the player clicked to the twenty button
+    for( int i = 0; i < mPlayerList.size(); ++i ){
+        if( mPlayerList.at( i ) != getCurrentPlayer() ){
+            mPlayerList.at( i )->sendOpponentTwentyButtonClicked();
+        }
+    }
 }
 
 void Server::slotPlayerFortyButtonClicked()
@@ -771,6 +778,13 @@ void Server::slotPlayerFortyButtonClicked()
     getCurrentPlayer()->setSelectableTrumpMarriageCards( mTrump );
     
     mFortyButtonClickedThisTurn = true;
+    
+    //Send to the other(s) the player clicked to the forty button
+    for( int i = 0; i < mPlayerList.size(); ++i ){
+        if( mPlayerList.at( i ) != getCurrentPlayer() ){
+            mPlayerList.at( i )->sendOpponentFortyButtonClicked();
+        }
+    }
 }
 
 void Server::slotPlayerSchnapsenButtonClicked()
@@ -778,6 +792,13 @@ void Server::slotPlayerSchnapsenButtonClicked()
     kDebug() << getCurrentPlayer()->getName() << "Clicked to schnapsen button.";
     
     mSchnapsenButtonClickedThisRound = true;
+    
+    //Send to the other(s) the player clicked to the schnapsen button
+    for( int i = 0; i < mPlayerList.size(); ++i ){
+        if( mPlayerList.at( i ) != getCurrentPlayer() ){
+            mPlayerList.at( i )->sendOpponentSchnapsenButtonClicked();
+        }
+    }
 }
 
 void Server::slotPlayerClickedToCloseButton()

@@ -4,6 +4,7 @@
 #include <KDE/KLocalizedString>
 #include <QtSvg/QSvgRenderer>
 #include <QtCore/QPointF>
+#include <QtCore/QRectF>
 //
 #include <QtCore/QTimeLine>
 //
@@ -29,7 +30,7 @@ const int CARDS_SCORE_TABLE_DISTANCE = 10;
 
 const int DECK_TRUMPCARD_DISTANCE = 30;
 
-const int BUTTON_Y_DISTANCE = 2;
+const int BUTTON_Y_DISTANCE = 10;
 const int BUTTON_WIDTH = 100;
 const int BUTTON_HEIGHT = 30;
 
@@ -44,6 +45,12 @@ const int DECK_DELAY_TIME = 500; //500
 const int CARD_ANIMATION_TIME = 1000; //100
 //
 
+//
+const QString SCHNAPSEN_TEXT = "Schnapsen";
+const QString FORTY_TEXT = "Forty";
+const QString TWENTY_TEXT = "Twenty";
+//
+
 CentralWidget::CentralWidget( QWidget* parent ): 
     QGraphicsView( parent )
 {
@@ -51,6 +58,12 @@ CentralWidget::CentralWidget( QWidget* parent ):
     mTrumpCard = 0;
     
     mRemoveCards = 0;
+    //
+    
+    //
+    mOpponentSchnapsenText = 0;
+    mOpponentFortyText = 0;
+    mOpponentTwentyText = 0;
     //
     
     //Set graphics scene
@@ -125,17 +138,9 @@ void CentralWidget::slotInitialize( QString playerNameStr, QString opponentNameS
     scene()->addItem( mDeck );
     
     //Setup trump card
-    //mTrumpCard = new SvgCard( mRenderer, TRUMP_ANIMATION_TIME );
-    //mTrumpCard->setVisible( false );
-    
     connect( mClient, SIGNAL( signalNewTrumpCard( Card* ) ), this, SLOT( slotNewTrumpCard( Card* ) ) );
     connect( mClient, SIGNAL( signalTrumpCardSelectableChanged( bool ) ), this, SLOT( slotTrumpCardSelectableChanged( bool ) ) );
-    //connect( mTrumpCard, SIGNAL( signalClick() ), mClient, SLOT( slotSelectTrumpCard() ) );
     connect( mClient, SIGNAL( signalPlayerChangeTrumpCard( int ) ), this, SLOT( slotPlayerChangeTrumpCard( int ) ) );
-    
-    //scene()->addItem( mTrumpCard );
-    
-    //connect( mTrumpCard->getAnimation(), SIGNAL( signalAnimationEnd() ), mClient, SLOT( slotProcessCommands() ) );
     
     //Setup Opponent's cards
     mOpponentCards = new CardsGroup;
@@ -158,6 +163,7 @@ void CentralWidget::slotInitialize( QString playerNameStr, QString opponentNameS
     connect( mPlayerCards, SIGNAL( signalSizeChanged() ), this, SLOT( slotPlayerCardsSizeChanged() ) );
     connect( mPlayerCards, SIGNAL( signalCardArrived() ), mClient, SLOT( slotProcessCommands() ) );
     connect( mPlayerCards, SIGNAL( signalSelectedCardId( int ) ), mClient, SLOT( slotSelectCardId( int ) ) );
+    connect( mPlayerCards, SIGNAL( signalSelectedCardId( int ) ), this, SLOT( slotPlayerSelectedCard() ) );
     
     //Setup central cards
     mCentralCards = new CardsGroup;
@@ -219,6 +225,25 @@ void CentralWidget::slotInitialize( QString playerNameStr, QString opponentNameS
     connect( mClient, SIGNAL( signalOpponentInAction() ), this, SLOT( slotShowOpponentArrow() ) );
     connect( mOpponentCards, SIGNAL( signalSelectedCard( SvgCard* ) ), this, SLOT( slotHideOpponentArrow() ) );
     
+    //Opponent's texts
+    mOpponentSchnapsenText = new MyTextItem( SCHNAPSEN_TEXT );
+    mOpponentSchnapsenText->setVisible( false );
+    scene()->addItem( mOpponentSchnapsenText );
+    
+    connect( mClient, SIGNAL( signalOpponentSchnapsenButtonClicked() ), this, SLOT( slotOpponentSchnapsenButtonClicked() ) );
+
+    mOpponentFortyText = new MyTextItem( FORTY_TEXT );
+    mOpponentFortyText->setVisible( false );
+    scene()->addItem( mOpponentFortyText );
+    
+    connect( mClient, SIGNAL( signalOpponentFortyButtonClicked() ), this, SLOT( slotOpponentFortyButtonClicked() ) );
+    
+    mOpponentTwentyText = new MyTextItem( TWENTY_TEXT );
+    mOpponentTwentyText->setVisible( false );
+    scene()->addItem( mOpponentTwentyText );
+    
+    connect( mClient, SIGNAL( signalOpponentTwentyButtonClicked() ), this, SLOT( slotOpponentTwentyButtonClicked() ) );
+    
     //Set timer
     mTimer = new QTimer;
     mTimer->setSingleShot( true );
@@ -260,6 +285,7 @@ void CentralWidget::slotNewGame()
     mOpponentScoreTable->getAnimation()->setEndPosition( endOpponentScoreTablePos );
     mOpponentScoreTable->setVisible( true );
     mOpponentScoreTable->getAnimation()->startAnimation();
+    
     
     //Player's name
     mPlayerName->setPos( ( sceneRect().width() - mPlayerName->boundingRect().width() ) /2,
@@ -318,6 +344,10 @@ void CentralWidget::slotNewRound()
     if( mTrumpCard ){
         delete mTrumpCard;
         mTrumpCard = 0;
+    }
+    
+    if( mOpponentSchnapsenText->isVisible() ){
+        mOpponentSchnapsenText->hide();
     }
     
     QPointF startDeckPos( mapToScene( 0, 0 ).x() - mDeck->boundingRect().width(),
@@ -488,6 +518,11 @@ void CentralWidget::slotOpponentCardsSizeChanged()
     mOpponentArrow->setPos( scoreTableEndPos.x(), 
                             mOpponentCards->y() + mOpponentCards->boundingRect().height() - mOpponentArrow->boundingRect().height() );
     //mOpponentArrow->setVisible( true );
+    
+    //Set opponent's texts
+    setOpponentSchnapsenTextPos();
+    setOpponentFortyTextPos();
+    setOpponentTwentyTextPos();
 }
 
 void CentralWidget::slotPlayerCardsSizeChanged()
@@ -537,6 +572,17 @@ void CentralWidget::slotCentralCardsSizeChanged()
                               mCentralCards->y() );
     
     mCentralCards->setPos( cardsGroupEndPos );
+}
+
+void CentralWidget::slotPlayerSelectedCard()
+{
+    if( mOpponentFortyText->isVisible() ){
+        mOpponentFortyText->setVisible( false );
+    }
+    
+    if( mOpponentTwentyText->isVisible() ){
+        mOpponentTwentyText->setVisible( false );
+    }
 }
 
 void CentralWidget::slotCloseButtonVisible( bool visible )
@@ -647,11 +693,71 @@ void CentralWidget::slotRemoveCardArrived()
     }
 }
 
+void CentralWidget::slotOpponentSchnapsenButtonClicked()
+{
+    mOpponentSchnapsenText->setVisible( true );
+}
+
+void CentralWidget::slotOpponentFortyButtonClicked()
+{
+    mOpponentFortyText->setVisible( true );
+}
+
+void CentralWidget::slotOpponentTwentyButtonClicked()
+{
+    mOpponentTwentyText->setVisible( true );
+}
+
 void CentralWidget::setClient( Client* client )
 {
     mClient = client;
     
     connect( mClient, SIGNAL( signalInitialize( QString, QString, Knapsen::TypeOfCards ) ), this, SLOT( slotInitialize( QString, QString, Knapsen::TypeOfCards ) ) );
+}
+
+void CentralWidget::setOpponentSchnapsenTextPos()
+{
+    qreal x = mOpponentCards->x() + 
+              mOpponentCards->boundingRect().width() + 
+              CARDS_SCORE_TABLE_DISTANCE;
+    
+    qreal y = mOpponentCards->y() + 
+              mOpponentScoreTable->boundingRect().height() + 
+              BUTTON_Y_DISTANCE;
+              
+    mOpponentSchnapsenText->setPos( x, y );
+}
+
+void CentralWidget::setOpponentFortyTextPos()
+{
+    qreal x = mOpponentCards->x() +
+              mOpponentCards->boundingRect().width() + 
+              CARDS_SCORE_TABLE_DISTANCE;
+              
+    qreal y = mOpponentCards->y() +
+              mOpponentScoreTable->boundingRect().height() + 
+              BUTTON_Y_DISTANCE +
+              mOpponentSchnapsenText->boundingRect().height()+
+              BUTTON_Y_DISTANCE;
+    
+    mOpponentFortyText->setPos( x, y );
+}
+
+void CentralWidget::setOpponentTwentyTextPos()
+{
+    qreal x = mOpponentCards->x() +
+              mOpponentCards->boundingRect().width() + 
+              CARDS_SCORE_TABLE_DISTANCE;
+              
+    qreal y = mOpponentCards->y() +
+              mOpponentScoreTable->boundingRect().height() + 
+              BUTTON_Y_DISTANCE +
+              mOpponentSchnapsenText->boundingRect().height()+
+              BUTTON_Y_DISTANCE +
+              mOpponentFortyText->boundingRect().height() +
+              BUTTON_Y_DISTANCE;
+    
+    mOpponentTwentyText->setPos( x, y );
 }
 
 void CentralWidget::clearWidget()

@@ -15,7 +15,7 @@ protected:
     void paint( QPainter * , const QStyleOptionGraphicsItem * , QWidget * );
     
 public:
-    MyTextItem( QString, int );
+    MyTextItem( const QString& , int animationTime = 0 );
     ~MyTextItem();
     
     Animation* getAnimation(){ return mAnimation; }

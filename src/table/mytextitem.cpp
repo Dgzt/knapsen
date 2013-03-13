@@ -4,7 +4,7 @@
 #include "table/animation.h"
 #include "table/mytextitem.h"
 
-MyTextItem::MyTextItem( QString text, int animationTime ) :
+MyTextItem::MyTextItem( const QString& text, int animationTime ) :
     QGraphicsTextItem( text )
 {
     mAnimation = new Animation( this, animationTime );

@@ -295,6 +295,24 @@ void Client::slotProcessCommands()
             emit signalPlayerInAction();
         }
         
+        if( getCommandName( command ) == OPPONENT_SCHNAPSEN_BUTTON_CLICKED_COMMAND ){
+            kDebug() << getName() << "Opponent clicked to schnapsen button.";
+            
+            emit signalOpponentSchnapsenButtonClicked();
+        }
+        
+        if( getCommandName( command ) == OPPONENT_FORTY_BUTTON_CLICKED_COMMAND ){
+            kDebug() << getName() << "Opponent clicked to forty button.";
+            
+            emit signalOpponentFortyButtonClicked();
+        }
+        
+        if( getCommandName( command ) == OPPONENT_TWENTY_BUTTON_CLICKED_COMMAND ){
+            kDebug() << getName() << "Opponent clicked to twenty button.";
+            
+            emit signalOpponentTwentyButtonClicked();
+        }
+        
         if( getCommandName( command ) == OPPONENT_IN_ACTION_COMMAND ){
             kDebug() << getName() << "Opponent in action.";
             

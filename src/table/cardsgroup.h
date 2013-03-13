@@ -45,6 +45,7 @@ public:
     //
     qreal x(){ return mPos.x(); }
     qreal y(){ return mPos.y(); }
+    QPointF getPos(){ return QPointF( x(), y() ); }
     
     void setPos( qreal, qreal );
     void setPos( QPointF point ){ setPos( point.x(), point.y() ); }

@@ -76,10 +76,20 @@ class CentralWidget : public QGraphicsView
     //
     
     //
+    MyTextItem* mOpponentSchnapsenText;
+    MyTextItem* mOpponentFortyText;
+    MyTextItem* mOpponentTwentyText;
+    //
+    
+    //
     QList< SvgCard* >* mRemoveCards;
     
     void setRemoveCard( QPointF );
     //
+    
+    void setOpponentSchnapsenTextPos();
+    void setOpponentFortyTextPos();
+    void setOpponentTwentyTextPos();
     
     
 private slots:
@@ -90,6 +100,7 @@ private slots:
     
     void slotNewOpponentCard( bool );
     void slotNewOpponentCardTrumpCard();
+    
     void slotNewPlayerCard( bool, Card* );
     void slotNewPlayerCardTrumpCard();
     
@@ -107,6 +118,8 @@ private slots:
     //
     void slotCentralCardsSizeChanged();
     //
+    
+    void slotPlayerSelectedCard();
     
     //void slotPlayerSelectedCard( SvgCard* );
     void slotCloseButtonVisible( bool );
@@ -128,6 +141,12 @@ private slots:
     void slotOpponentGetCentralCards();
     
     void slotRemoveCardArrived();
+    //
+    
+    //
+    void slotOpponentSchnapsenButtonClicked();
+    void slotOpponentFortyButtonClicked();
+    void slotOpponentTwentyButtonClicked();
     //
     
     
