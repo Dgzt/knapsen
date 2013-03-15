@@ -55,15 +55,9 @@ CentralWidget::CentralWidget( QWidget* parent ):
     QGraphicsView( parent )
 {
     //
-    mTrumpCard = 0;
+    //mTrumpCard = 0;
     
     mRemoveCards = 0;
-    //
-    
-    //
-    mOpponentSchnapsenText = 0;
-    mOpponentFortyText = 0;
-    mOpponentTwentyText = 0;
     //
     
     //Set graphics scene

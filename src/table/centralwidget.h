@@ -39,8 +39,8 @@ class CentralWidget : public QGraphicsView
     SvgCard* mDeck;
     //QPointer< SvgCard > mDeck;
     
-    SvgCard* mTrumpCard;
-    //QPointer< SvgCard > mTrumpCard;
+    //SvgCard* mTrumpCard;
+    QPointer< SvgCard > mTrumpCard;
     
     CardsGroup* mOpponentCards;
     //QPointer< CardsGroup > mOpponentCards;
