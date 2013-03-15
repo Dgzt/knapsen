@@ -5,7 +5,7 @@
 #include "table/animation.h"
 #include "table/svgcard.h"
 
-SvgCard::SvgCard( QSvgRenderer* renderer, int animationTime/*, QString cardText */) :
+SvgCard::SvgCard( QSvgRenderer* renderer, int animationTime ) :
     mSelectable( false )
 {
     mAnimation = new Animation( this, animationTime );
@@ -13,7 +13,7 @@ SvgCard::SvgCard( QSvgRenderer* renderer, int animationTime/*, QString cardText 
     setSharedRenderer( renderer );
     
     //setElementId( cardText );
-    setElementId( SvgCard::EmptyCard() );
+    setElementId( SvgCard::backCardText() );
     
     setAcceptHoverEvents( true );
 }
@@ -26,7 +26,6 @@ SvgCard::~SvgCard()
 void SvgCard::mousePressEvent( QGraphicsSceneMouseEvent* )
 {
     if( mSelectable ){
-        emit signalClick();
         emit signalClick( this );
     }
 }

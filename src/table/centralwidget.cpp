@@ -396,7 +396,7 @@ void CentralWidget::slotNewOpponentCardTrumpCard()
     
     //mTrumpCard->disconnect();
     
-    mTrumpCard->setElementId( SvgCard::EmptyCard() );
+    mTrumpCard->setElementId( SvgCard::backCardText() );
     mOpponentCards->slotAddNewCard( mTrumpCard );
     
     mTrumpCard = 0;
@@ -436,7 +436,7 @@ void CentralWidget::slotNewTrumpCard( Card* card )
     
     mTrumpCard = new SvgCard( mRenderer, CARD_ANIMATION_TIME );
 
-    connect( mTrumpCard, SIGNAL( signalClick() ), mClient, SLOT( slotSelectTrumpCard() ) );
+    connect( mTrumpCard, SIGNAL( signalClick( SvgCard* ) ), mClient, SLOT( slotSelectTrumpCard() ) );
     
     mTrumpCard->setPos( mDeck->pos() );
     
@@ -473,7 +473,7 @@ void CentralWidget::slotOpponentChangeTrumpCard( int cardId, Card* newTrumpCard 
     newSvgTrumpCard->getAnimation()->setNewCardText( newTrumpCard->getCardText() );
     newSvgTrumpCard->getAnimation()->startAnimation();
     
-    mTrumpCard->setElementId( SvgCard::EmptyCard() );
+    mTrumpCard->setElementId( SvgCard::backCardText() );
     mOpponentCards->slotAddNewCard( mTrumpCard );
     
     mTrumpCard = newSvgTrumpCard;
