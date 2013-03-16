@@ -2,6 +2,7 @@
 #define mytextitem_h
 
 #include <QtGui/QGraphicsTextItem>
+#include <QtCore/QPointer>
 
 class Animation;
 
@@ -10,6 +11,7 @@ class MyTextItem : public QGraphicsTextItem
     Q_OBJECT
     
     Animation* mAnimation;
+    //QPointer< Animation > mAnimation;
     
 protected:
     void paint( QPainter * , const QStyleOptionGraphicsItem * , QWidget * );
@@ -20,11 +22,15 @@ public:
     
     Animation* getAnimation(){ return mAnimation; }
     
-private slots:
-    void slotAnimationEnd();
+    //Reimplemented
+    //QPointF pos();
+    //
     
-signals:
-    void signalMyTextItemAnimationEnd();
+/*private slots:
+    void slotAnimationEnd();*/
+    
+//signals:
+//    void signalMyTextItemAnimationEnd();
     
 };
 

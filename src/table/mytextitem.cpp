@@ -4,6 +4,8 @@
 #include "table/animation.h"
 #include "table/mytextitem.h"
 
+#include <iostream>
+
 MyTextItem::MyTextItem( const QString& text, int animationTime ) :
     QGraphicsTextItem( text )
 {
@@ -14,10 +16,21 @@ MyTextItem::MyTextItem( const QString& text, int animationTime ) :
 
 MyTextItem::~MyTextItem()
 {
-    if( mAnimation ){
-        delete mAnimation;
-    }
+    //if( mAnimation ){
+    delete mAnimation;
+    //}
 }
+
+/*QPointF MyTextItem::pos()
+{
+    if( mAnimation ){
+        kDebug() << "Animation is running";
+        return getAnimation()->getEndPosition();
+    }
+    
+    kDebug() << "Animation isn't running.";
+    return QGraphicsTextItem::pos();
+}*/
 
 void MyTextItem::paint(QPainter * painter, const QStyleOptionGraphicsItem * option, QWidget * widget  )
 {
@@ -26,14 +39,13 @@ void MyTextItem::paint(QPainter * painter, const QStyleOptionGraphicsItem * opti
     QGraphicsTextItem::paint( painter, option, widget);
 }
 
-void MyTextItem::slotAnimationEnd()
+/*void MyTextItem::slotAnimationEnd()
 {
     kDebug();
     
     emit signalMyTextItemAnimationEnd();
     
     delete mAnimation;
-    mAnimation = 0;
     
     kDebug();
-}
+}*/

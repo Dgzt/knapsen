@@ -34,13 +34,14 @@ class SvgCard : public QGraphicsSvgItem
 {
     Q_OBJECT
     
+    //The animation of card
     Animation* mAnimation;
     
+    //The selection of card
     bool mSelectable;
     
-    //
+    //The size of card.
     QSizeF mSize;
-    //
     
 private:
     /*!
@@ -63,6 +64,7 @@ public:
      * The constructor. Setup the card with back of card.
      * 
      * @param renderer The SVG renderer.
+     * @param height The height of card.
      * @param animationTime The time of animation.
      */
     SvgCard( QSvgRenderer* renderer, qreal height, int animationTime );
@@ -100,11 +102,19 @@ public:
      */
     static QString backCardText(){ return "back"; }
     
-    //void setWidth( qreal width );
-    //virtual QRectF boundingRect() const{ return QRectF( QPointF( .0, .0 ), mSize ); }
+    /*!
+     * Reimplement function. Return with the bounding rect of card.
+     * 
+     * @return The bounding rect of card.
+     */
     virtual QRectF boundingRect() const;
     
-    virtual void paint(QPainter* painter, const QStyleOptionGraphicsItem* option, QWidget* widget);
+    /*!
+     * Reimplement function. Paint the card to the view.
+     * 
+     * @param painter The painter.
+     */
+    virtual void paint(QPainter* painter, const QStyleOptionGraphicsItem*, QWidget*);
     
 signals:
     /*!

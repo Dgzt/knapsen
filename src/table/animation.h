@@ -31,8 +31,9 @@ public:
     ~Animation();
     
     void setEndPosition( QPointF );
+    void setEndPosition( qreal x, qreal y ){ setEndPosition( QPointF( x, y ) ); }
     
-    //QPointF getEndPosition(){ return posAt( 1.0 ); }
+    QPointF getEndPosition(){ return posAt( 1.0 ); }
     
     //
     //void setCard( Card* );

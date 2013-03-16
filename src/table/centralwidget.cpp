@@ -1,15 +1,14 @@
+#include <QtCore/QPointF>
+#include <QtCore/QRectF>
+#include <QtCore/QTimeLine>
+#include <QtCore/QTimer>
+#include <QtSvg/QSvgRenderer>
+#include <QtGui/QPushButton>
+#include <QtGui/QGraphicsProxyWidget>
 #include <KDE/KGlobal>
 #include <KDE/KStandardDirs>
 #include <KDE/KDebug>
 #include <KDE/KLocalizedString>
-#include <QtSvg/QSvgRenderer>
-#include <QtCore/QPointF>
-#include <QtCore/QRectF>
-//
-#include <QtCore/QTimeLine>
-//
-#include <QtGui/QPushButton>
-#include <QtGui/QGraphicsProxyWidget>
 #include "engine/client.h"
 #include "table/mytextitem.h"
 #include "table/scoretable.h"
@@ -18,19 +17,20 @@
 #include "table/cardsgroup.h"
 #include "table/centralwidget.h"
 
-//
-#include <QtCore/QTimer>
-//
+//The rect of scene
+const QRectF SCENE_RECT = QRectF( 0.0, 0.0, 900.0, 700.0 ); // 0.0, 0.0, 1000.0, 850.0
 
-const int SCENE_WIDTH = 1000; //1000
-const int SCENE_HEIGHT = 850; //1000
+//The distance of deck from left border
+const int DECK_DISTANCE = 20; //20
 
-const int NAME_DISTANCE = 10;
+//The distance of name from border and cards group
+const int NAME_DISTANCE = 5; //5
+
 const int CARDS_SCORE_TABLE_DISTANCE = 10;
 
-const int DECK_TRUMPCARD_DISTANCE = 30;
+const int DECK_TRUMPCARD_DISTANCE = 10;
 
-const int BUTTON_Y_DISTANCE = 10;
+const int BUTTON_Y_DISTANCE = 5;//
 const int BUTTON_WIDTH = 100;
 const int BUTTON_HEIGHT = 30;
 
@@ -45,34 +45,25 @@ const int DECK_DELAY_TIME = 500; //500
 const int CARD_ANIMATION_TIME = 1000; //100
 //
 
-//
-//const int CARD_WIDTH = 130; //150
-const int CARD_HEIGHT = 200; //200
-//
+//The height of card
+const int CARD_HEIGHT = 180; //180
 
 //
-const QString SCHNAPSEN_TEXT = "Schnapsen";
-const QString FORTY_TEXT = "Forty";
-const QString TWENTY_TEXT = "Twenty";
+const QString SCHNAPSEN_TEXT = i18n( "Schnapsen" );
+const QString FORTY_TEXT = i18n( "Forty" );
+const QString TWENTY_TEXT = i18n( "Twenty" );
 //
 
 CentralWidget::CentralWidget( QWidget* parent ): 
     QGraphicsView( parent )
 {
-    //
-    //mTrumpCard = 0;
-    
     mRemoveCards = 0;
-    //
     
     //Set graphics scene
-    QGraphicsScene* gScene = new QGraphicsScene( 0, 0, SCENE_WIDTH, SCENE_HEIGHT );
-    setScene( gScene );
+    setScene( new QGraphicsScene( SCENE_RECT ) );
     
-    QImage backgroundImage( KGlobal::dirs()->findResource( "appdata", "pics/background.png" ) );
-    
-    gScene->setBackgroundBrush( QBrush( backgroundImage ) );
-    
+    //Set background
+    scene()->setBackgroundBrush( QBrush( QImage( KGlobal::dirs()->findResource( "appdata", "pics/background.png" ) ) ) );
     
     //Set View's stuff
     setFrameStyle( QFrame::NoFrame );
@@ -259,67 +250,43 @@ void CentralWidget::slotNewGame()
     kDebug();
     
     //Opponent's name
-    mOpponentName->setPos( ( sceneRect().width() - mOpponentName->boundingRect().width() ) / 2,
-                             mapToScene( 0, 0 ).y() - mOpponentName->boundingRect().height() );
-    
-    QPointF endOpponentNamePos( mOpponentName->x(), 
-                                NAME_DISTANCE );
-    
-    mOpponentName->getAnimation()->setEndPosition( endOpponentNamePos );
+    setOpponentNameStartPos();
+    setOpponentNameEndPos();
     
     mOpponentName->setVisible( true );
     mOpponentName->getAnimation()->startAnimation();
     
-    //Setup opponent's cards pos
-    mOpponentCards->setPos( sceneRect().width() / 2,
-                            endOpponentNamePos.y() + mOpponentName->boundingRect().height() + NAME_DISTANCE );
+    //Opponent's cards
+    setOpponentCardsPos();
     
     //Opponent's score table
-    mOpponentScoreTable->setPos( mapToScene( width(), height() ).x(),
-                                 mOpponentCards->y() );
+    setOpponentScoreTableStartPos();
+    setOpponentScoreTableEndPos();
     
-    QPointF endOpponentScoreTablePos( mOpponentCards->x() + CARDS_SCORE_TABLE_DISTANCE,
-                                      mOpponentScoreTable->y() );
-    
-    mOpponentScoreTable->getAnimation()->setEndPosition( endOpponentScoreTablePos );
     mOpponentScoreTable->setVisible( true );
     mOpponentScoreTable->getAnimation()->startAnimation();
     
     
     //Player's name
-    mPlayerName->setPos( ( sceneRect().width() - mPlayerName->boundingRect().width() ) /2,
-                         mapToScene( width(), height() ).y() + mPlayerName->boundingRect().height() );
+    setPlayerNameStartPos();
+    setPlayerNameEndPos();
     
-    QPointF endPlayerNamePos( mPlayerName->x(),
-                              sceneRect().height() - NAME_DISTANCE - mPlayerName->boundingRect().height()  );
-    
-    mPlayerName->getAnimation()->setEndPosition( endPlayerNamePos );
     mPlayerName->setVisible( true );
-    
-    //connect( mPlayerName, SIGNAL( signalMyTextItemAnimationEnd() ), this, SLOT( slotNewRound() ) );
-    
     mPlayerName->getAnimation()->startAnimation();
     
-    //Setup player's cards pos
-    mPlayerCards->setPos( sceneRect().width() / 2,
-                          endPlayerNamePos.y() - NAME_DISTANCE - mDeck->boundingRect().height() );
+    //Player's cards
+    setPlayerCardsPos();
     
     //Player's score table
-    mPlayerScoreTable->setPos( mOpponentScoreTable->x(),
-                               endPlayerNamePos.y() - NAME_DISTANCE - mPlayerScoreTable->boundingRect().height() );
+    setPlayerScoreTableStartPos();
+    setPlayerScoreTableEndPos();
     
-    QPointF endPlayerScoreTablePos( mPlayerCards->x() + CARDS_SCORE_TABLE_DISTANCE,
-                                    mPlayerScoreTable->y() );
-    
-    mPlayerScoreTable->getAnimation()->setEndPosition( endPlayerScoreTablePos );
     mPlayerScoreTable->setVisible( true );
     mPlayerScoreTable->getAnimation()->startAnimation();
     
-    //
-    mCentralCards->setPos( sceneRect().width() / 2,
-                           ( sceneRect().height() - mDeck->boundingRect().height() ) / 2 );
+    //Central cards
+    setCentralCardsPos();
     
-    //QTimer::singleShot( mPlayerName->getAnimation()->timeLine()->duration(), mClient, SLOT( slotProcessCommands() ) );
     mTimer->start( NAME_ANIMATION_TIME );
 }
 
@@ -349,26 +316,15 @@ void CentralWidget::slotNewRound()
         mOpponentSchnapsenText->hide();
     }
     
-    QPointF startDeckPos( mapToScene( 0, 0 ).x() - mDeck->boundingRect().width(),
-                          ( sceneRect().height() - mDeck->boundingRect().height() ) / 2 );
-    
-    QPointF endDeckPos( 50 , 
-                        ( sceneRect().height() - mDeck->boundingRect().height() ) / 2 );
-    
-    mDeck->setPos( startDeckPos );
-    mDeck->getAnimation()->setEndPosition( endDeckPos );
-    
-    //connect( mDeck->getAnimation(), SIGNAL( signalAnimationEnd() ), mClient, SLOT( slotProcessCommands() ) );
+    setDeckStartPos();
+    setDeckEndPos();
     
     mDeck->setVisible( true );
-    
     mDeck->getAnimation()->startAnimation();
     
     //Set close button position
-    mCloseButton->setGeometry( QRectF( QPointF( endDeckPos.x(), endDeckPos.y() + mDeck->boundingRect().height() + BUTTON_Y_DISTANCE ), 
-                                       QSizeF( mDeck->boundingRect().width(), BUTTON_HEIGHT ) ) );
-
-    //QTimer::singleShot( mDeck->getAnimation()->timeLine()->duration() + DECK_DELAY_TIME, mClient, SLOT( slotProcessCommands() ) );
+    setCloseButtonGeometry();
+    
     mTimer->start( DECK_ANIMATION_TIME + DECK_DELAY_TIME );
 }
 
@@ -439,11 +395,13 @@ void CentralWidget::slotNewTrumpCard( Card* card )
 
     connect( mTrumpCard, SIGNAL( signalClick( SvgCard* ) ), mClient, SLOT( slotSelectTrumpCard() ) );
     
-    mTrumpCard->setPos( mDeck->pos() );
+    //mTrumpCard->setPos( mDeck->pos() );
+    setTrumpCardStartPos();
     
-    QPointF endTrumpCardPos( mDeck->pos().x() + mDeck->boundingRect().width() + DECK_TRUMPCARD_DISTANCE, mDeck->pos().y() );
+    /*QPointF endTrumpCardPos( mDeck->pos().x() + mDeck->boundingRect().width() + DECK_TRUMPCARD_DISTANCE, mDeck->pos().y() );
+    mTrumpCard->getAnimation()->setEndPosition( endTrumpCardPos );*/
+    setTrumpCardEndPos();
     
-    mTrumpCard->getAnimation()->setEndPosition( endTrumpCardPos );
     //mTrumpCard->getAnimation()->setCard( card );
     mTrumpCard->getAnimation()->setNewCardText( card->getCardText() );
     
@@ -501,24 +459,14 @@ void CentralWidget::slotOpponentCardsSizeChanged()
     kDebug();
     
     //Set player's cards new position
-    QPointF cardsGroupEndPos( ( sceneRect().width() - mOpponentCards->boundingRect().width() ) / 2,
-                              mOpponentCards->y() );
-    
-    //mOpponentCards->getAnimation()->setEndPosition( cardsGroupEndPos );
-    //mOpponentCards->getAnimation()->startAnimation();
-    mOpponentCards->setPos( cardsGroupEndPos );
+    setOpponentCardsPos();
     
     //Set player's score table new position
-    QPointF scoreTableEndPos( cardsGroupEndPos.x() + mOpponentCards->boundingRect().width() + CARDS_SCORE_TABLE_DISTANCE,
-                              mOpponentScoreTable->y() );
-    
-    mOpponentScoreTable->getAnimation()->setEndPosition( scoreTableEndPos );
+    setOpponentScoreTableEndPos();
     mOpponentScoreTable->getAnimation()->startAnimation();
     
     //Set position of arrow
-    mOpponentArrow->setPos( scoreTableEndPos.x(), 
-                            mOpponentCards->y() + mOpponentCards->boundingRect().height() - mOpponentArrow->boundingRect().height() );
-    //mOpponentArrow->setVisible( true );
+    setOpponentArrowPos();
     
     //Set opponent's texts
     setOpponentSchnapsenTextPos();
@@ -531,38 +479,23 @@ void CentralWidget::slotPlayerCardsSizeChanged()
     kDebug();
     
     //Set player's cards new position
-    QPointF cardsGroupEndPos( ( sceneRect().width() - mPlayerCards->boundingRect().width() ) / 2,
-                              mPlayerCards->y() );
-    
-    //mPlayerCards->getAnimation()->setEndPosition( cardsGroupEndPos );
-    //mPlayerCards->getAnimation()->startAnimation();
-    mPlayerCards->setPos( cardsGroupEndPos );
+    setPlayerCardsPos();
     
     //Set player's score table new position
-    QPointF scoreTableEndPos( cardsGroupEndPos.x() + mPlayerCards->boundingRect().width() + CARDS_SCORE_TABLE_DISTANCE,
-                              mPlayerScoreTable->y() );
-    
-    mPlayerScoreTable->getAnimation()->setEndPosition( scoreTableEndPos );
+    setPlayerScoreTableEndPos();
     mPlayerScoreTable->getAnimation()->startAnimation();
     
     //Set forty button geometry
-    mFortyButton->setGeometry( QRectF( QPointF( scoreTableEndPos.x(), scoreTableEndPos.y() - BUTTON_Y_DISTANCE - BUTTON_HEIGHT ),
-                                       QSizeF( BUTTON_WIDTH, BUTTON_HEIGHT ) ) );
-    //mFortyButton->setVisible( true );
+    setPlayerFortyButtonGeometry();
     
     //Set twenty button geometry
-    mTwentyButton->setGeometry( QRectF( QPointF( mFortyButton->x(), mFortyButton->y() - BUTTON_Y_DISTANCE - BUTTON_HEIGHT ),
-                                       QSizeF( BUTTON_WIDTH, BUTTON_HEIGHT ) ) );
-    //mTwentyButton->setVisible( true );
+    setPlayerTwentyButtonGeometry();
     
     //Set schnapsen button geometry
-    mSchnapsenButton->setGeometry( QRectF( QPointF( mTwentyButton->x(), mTwentyButton->y() - BUTTON_Y_DISTANCE - BUTTON_HEIGHT ),
-                                       QSizeF( BUTTON_WIDTH, BUTTON_HEIGHT ) ) );
-    //mSchnapsenButton->setVisible( true );
+    setPlayerSchnapsenButtonGeometry();
     
     //Set position of arrow
-    mPlayerArrow->setPos( mSchnapsenButton->x(), mPlayerCards->y() );
-    //mPlayerArrow->setVisible( true );
+    setPlayerArrowPos();
 }
 
 void CentralWidget::slotCentralCardsSizeChanged()
@@ -716,6 +649,99 @@ void CentralWidget::setClient( Client* client )
     connect( mClient, SIGNAL( signalInitialize( QString, QString, Knapsen::TypeOfCards ) ), this, SLOT( slotInitialize( QString, QString, Knapsen::TypeOfCards ) ) );
 }
 
+void CentralWidget::setDeckStartPos()
+{
+    QPointF startDeckPos( mapToScene( 0, 0 ).x() - mDeck->boundingRect().width(),
+                          ( sceneRect().height() - mDeck->boundingRect().height() ) / 2 );
+    
+    mDeck->setPos( startDeckPos );
+}
+
+void CentralWidget::setDeckEndPos()
+{
+    QPointF endDeckPos( DECK_DISTANCE , 
+                        ( sceneRect().height() - mDeck->boundingRect().height() ) / 2 );
+    
+    mDeck->getAnimation()->setEndPosition( endDeckPos );
+}
+
+void CentralWidget::setCloseButtonGeometry()
+{
+    qreal x = mDeck->getAnimation()->getEndPosition().x();
+    qreal y = mDeck->getAnimation()->getEndPosition().y() +
+              mDeck->boundingRect().height() +
+              BUTTON_Y_DISTANCE;
+    
+    qreal width = mDeck->boundingRect().width();
+              
+    mCloseButton->setGeometry( QRectF( QPointF( x, y ), QSizeF( width, BUTTON_HEIGHT ) ) );
+}
+
+void CentralWidget::setTrumpCardStartPos()
+{
+    mTrumpCard->setPos( mDeck->pos() );
+}
+
+void CentralWidget::setTrumpCardEndPos()
+{
+    qreal x = mDeck->pos().x() + 
+              mDeck->boundingRect().width() + 
+              DECK_TRUMPCARD_DISTANCE;
+    
+    qreal y = mDeck->pos().y();
+    
+    mTrumpCard->getAnimation()->setEndPosition( x, y );
+}
+
+void CentralWidget::setOpponentNameStartPos()
+{
+    qreal x = ( sceneRect().width() - mOpponentName->boundingRect().width() ) / 2;
+    qreal y = mapToScene( 0, 0 ).y() - mOpponentName->boundingRect().height();
+    
+    mOpponentName->setPos( x, y );
+}
+
+void CentralWidget::setOpponentNameEndPos()
+{
+    qreal x = ( sceneRect().width() - mOpponentName->boundingRect().width() ) / 2;
+    
+    mOpponentName->getAnimation()->setEndPosition( x, NAME_DISTANCE );
+}
+
+void CentralWidget::setOpponentCardsPos()
+{
+    /*mOpponentCards->setPos( sceneRect().width() / 2,
+                            endOpponentNamePos.y() + mOpponentName->boundingRect().height() + NAME_DISTANCE );*/
+    
+    qreal x = ( sceneRect().width() - mOpponentCards->boundingRect().width() ) /2;
+    qreal y = mOpponentName->getAnimation()->getEndPosition().y() +
+              mOpponentName->boundingRect().height() + 
+              NAME_DISTANCE;
+    
+    mOpponentCards->setPos( x, y );
+}
+
+void CentralWidget::setOpponentScoreTableStartPos()
+{
+    qreal x = mapToScene( width(), height() ).x();
+    qreal y = mOpponentName->getAnimation()->getEndPosition().y() +
+              mOpponentName->boundingRect().height() +
+              NAME_DISTANCE;
+    
+    mOpponentScoreTable->setPos( x, y );
+}
+
+void CentralWidget::setOpponentScoreTableEndPos()
+{
+    qreal x = mOpponentCards->x() + 
+              mOpponentCards->boundingRect().width() + 
+              CARDS_SCORE_TABLE_DISTANCE;
+              
+    qreal y = mOpponentCards->y();
+    
+    mOpponentScoreTable->getAnimation()->setEndPosition( x, y );
+}
+
 void CentralWidget::setOpponentSchnapsenTextPos()
 {
     qreal x = mOpponentCards->x() + 
@@ -759,6 +785,104 @@ void CentralWidget::setOpponentTwentyTextPos()
               BUTTON_Y_DISTANCE;
     
     mOpponentTwentyText->setPos( x, y );
+}
+
+void CentralWidget::setOpponentArrowPos()
+{
+    qreal x = mOpponentScoreTable->getAnimation()->getEndPosition().x();
+    qreal y = mOpponentCards->y() + 
+              mOpponentCards->boundingRect().height() - 
+              mOpponentArrow->boundingRect().height();
+    
+    mOpponentArrow->setPos( x, y );
+}
+
+void CentralWidget::setPlayerNameStartPos()
+{
+    qreal x = ( sceneRect().width() - mPlayerName->boundingRect().width() ) /2;
+    qreal y = mapToScene( width(), height() ).y() + mPlayerName->boundingRect().height();
+    
+    mPlayerName->setPos( x, y );
+}
+
+void CentralWidget::setPlayerNameEndPos()
+{
+    qreal x = ( sceneRect().width() - mPlayerName->boundingRect().width() ) /2;
+    qreal y = sceneRect().height() - NAME_DISTANCE - mPlayerName->boundingRect().height();
+    
+    mPlayerName->getAnimation()->setEndPosition( x, y );
+}
+
+void CentralWidget::setPlayerCardsPos()
+{
+    qreal x = ( sceneRect().width() - mPlayerCards->boundingRect().width() ) / 2;
+    qreal y = mPlayerName->pos().y() - 
+              NAME_DISTANCE -
+              mPlayerCards->boundingRect().height();
+    
+    mPlayerCards->setPos( x, y );
+}
+
+void CentralWidget::setPlayerScoreTableStartPos()
+{
+    qreal x = mapToScene( width(), height() ).x();
+    qreal y = mPlayerName->getAnimation()->getEndPosition().y() - 
+              NAME_DISTANCE - 
+              mPlayerScoreTable->boundingRect().height();
+    
+    mPlayerScoreTable->setPos( x, y );
+}
+
+void CentralWidget::setPlayerScoreTableEndPos()
+{
+    qreal x = mPlayerCards->x() + 
+              mPlayerCards->boundingRect().width() + 
+              CARDS_SCORE_TABLE_DISTANCE;
+              
+    qreal y = mPlayerScoreTable->y();
+    
+    mPlayerScoreTable->getAnimation()->setEndPosition( x, y );
+}
+
+void CentralWidget::setPlayerFortyButtonGeometry()
+{
+    qreal x = mPlayerScoreTable->getAnimation()->getEndPosition().x();
+    qreal y = mPlayerScoreTable->getAnimation()->getEndPosition().y() -
+              BUTTON_Y_DISTANCE - 
+              BUTTON_HEIGHT;
+    
+    mFortyButton->setGeometry( QRectF( QPointF( x, y ), QSizeF( BUTTON_WIDTH, BUTTON_HEIGHT ) ) );
+}
+
+void CentralWidget::setPlayerTwentyButtonGeometry()
+{
+    qreal x = mFortyButton->x();
+    qreal y = mFortyButton->y() -
+              BUTTON_Y_DISTANCE -
+              BUTTON_HEIGHT;
+    
+    mTwentyButton->setGeometry( QRectF( x, y, BUTTON_WIDTH, BUTTON_HEIGHT ) );
+}
+
+void CentralWidget::setPlayerSchnapsenButtonGeometry()
+{
+    qreal x = mTwentyButton->x();
+    qreal y = mTwentyButton->y() -
+              BUTTON_Y_DISTANCE - 
+              BUTTON_HEIGHT;
+    
+    mSchnapsenButton->setGeometry( QRectF( x, y, BUTTON_WIDTH, BUTTON_HEIGHT ) );
+}
+
+void CentralWidget::setPlayerArrowPos()
+{
+    mPlayerArrow->setPos( mSchnapsenButton->x(), mPlayerCards->y() );
+}
+
+void CentralWidget::setCentralCardsPos()
+{
+    mCentralCards->setPos( sceneRect().width() / 2,
+                           ( sceneRect().height() - mDeck->boundingRect().height() ) / 2 );
 }
 
 void CentralWidget::clearWidget()

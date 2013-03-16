@@ -6,6 +6,7 @@
 #include "table/svgcard.h"
 
 SvgCard::SvgCard( QSvgRenderer* renderer, qreal height, int animationTime ) :
+    QGraphicsSvgItem(),
     mSelectable( false )
 {
     mAnimation = new Animation( this, animationTime );
