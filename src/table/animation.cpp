@@ -29,6 +29,11 @@ void Animation::setupTimeLine( int time )
     connect( timeLine, SIGNAL( finished() ), this, SLOT( slotTimeLineTimeOut() ) );
 }
 
+void Animation::setAnimationTime( int animationTime )
+{
+    timeLine()->setDuration( animationTime );
+}
+
 void Animation::setEndPosition( QPointF endPos )
 {
     //The start position is the actual position

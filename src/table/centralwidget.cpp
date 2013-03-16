@@ -316,6 +316,11 @@ void CentralWidget::slotNewRound()
         mOpponentSchnapsenText->hide();
     }
     
+    //Set the score tables' final animation time
+    mOpponentScoreTable->getAnimation()->setAnimationTime( CARD_ANIMATION_TIME );
+    mPlayerScoreTable->getAnimation()->setAnimationTime( CARD_ANIMATION_TIME );
+    
+    //Set the deck's positions
     setDeckStartPos();
     setDeckEndPos();
     

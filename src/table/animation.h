@@ -7,9 +7,6 @@ class MyTextItem;
 class ScoreTable;
 class SvgCard;
 class CardsGroup;
-//
-//class Card;
-//
 
 class Animation : public QGraphicsItemAnimation
 {
@@ -24,11 +21,12 @@ private slots:
     void slotTimeLineTimeOut();
     
 public:
-    /*Animation( MyTextItem* );
-    Animation( ScoreTable* );
-    Animation( SvgCard* );*/
-    Animation( QGraphicsItem*, int );
+    Animation( QGraphicsItem* graphicsItem, int animationTime );
     ~Animation();
+    
+    //
+    void setAnimationTime( int animationTime );
+    //
     
     void setEndPosition( QPointF );
     void setEndPosition( qreal x, qreal y ){ setEndPosition( QPointF( x, y ) ); }
