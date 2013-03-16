@@ -316,9 +316,6 @@ void CentralWidget::slotNewRound()
     if( mOpponentSchnapsenText->isVisible() ){
         mOpponentSchnapsenText->hide();
     }
-    //
-    mOpponentSchnapsenText->show();
-    //
     
     //Set the score tables' final animation time
     mOpponentScoreTable->getAnimation()->setAnimationTime( CARD_ANIMATION_TIME );
