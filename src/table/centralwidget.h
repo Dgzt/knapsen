@@ -34,7 +34,7 @@ class QSvgRenderer;
 class SvgCard;
 class Card;
 class CardsGroup;
-class MyTextItem;
+class Text;
 class ScoreTable;
 
 class CentralWidget : public QGraphicsView
@@ -47,10 +47,10 @@ class CentralWidget : public QGraphicsView
     //QPointer< QSvgRenderer > mRenderer;
     
     //
-    MyTextItem* mOpponentName;
+    Text* mOpponentName;
     //QPointer< MyTextItem > mOpponentName;
     
-    MyTextItem* mPlayerName;
+    Text* mPlayerName;
     //QPointer< MyTextItem > mPlayerName;
     //
     
@@ -94,9 +94,9 @@ class CentralWidget : public QGraphicsView
     //
     
     //
-    MyTextItem* mOpponentSchnapsenText;
-    MyTextItem* mOpponentFortyText;
-    MyTextItem* mOpponentTwentyText;
+    Text* mOpponentSchnapsenText;
+    Text* mOpponentFortyText;
+    Text* mOpponentTwentyText;
     //
     
     //
@@ -157,9 +157,21 @@ protected:
     void setOpponentScoreTableEndPos();
     
     /*!
-     * Set the position of the opponent's schnapsen text.
+     * Get the position of the opponent's schnapsen text.
+     * 
+     * @return The position.
      */
-    void setOpponentSchnapsenTextPos();
+    QPointF getOpponentSchnapsenTextPos();
+    
+    /*!
+     * Set the start position of the opponent's schnapsen text.
+     */
+    void setOpponentSchnapsenTextStartPos();
+    
+    /*!
+     * Set the end position of the opponent's schnapsen text.
+     */
+    void setOpponentSchnapsenTextEndPos();
     
     /*!
      * Set the position of the opponent's forty text.

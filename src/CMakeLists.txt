@@ -1,11 +1,9 @@
 
 set(knapsen_HDRS
     enums.h
-    
     table/animation.h
-    
     table/scoretable.h
-    table/mytextitem.h
+    table/text.h
     table/svgcard.h
     table/centralwidget.h
     table/cardsgroup.h
@@ -26,9 +24,8 @@ set(knapsen_HDRS
 
 set(knapsen_SRCS
     table/animation.cpp
-
     table/scoretable.cpp
-    table/mytextitem.cpp
+    table/text.cpp
     table/svgcard.cpp
     table/centralwidget.cpp
     table/cardsgroup.cpp

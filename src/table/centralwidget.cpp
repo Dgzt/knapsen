@@ -10,7 +10,7 @@
 #include <KDE/KDebug>
 #include <KDE/KLocalizedString>
 #include "engine/client.h"
-#include "table/mytextitem.h"
+#include "table/text.h"
 #include "table/scoretable.h"
 #include "table/svgcard.h"
 #include "table/animation.h"
@@ -41,7 +41,6 @@ const int DECK_ANIMATION_TIME = 2000; //2000
 //
 const int DECK_DELAY_TIME = 500; //500
 //
-//const int TRUMP_ANIMATION_TIME = 1000; //2000
 const int CARD_ANIMATION_TIME = 1000; //100
 //
 
@@ -83,7 +82,7 @@ void CentralWidget::slotInitialize( QString playerName, QString opponentName, Kn
     kDebug() << "Initialize.";
     
     //Setup opponent's name
-    mOpponentName = new MyTextItem( opponentName, NAME_ANIMATION_TIME );
+    mOpponentName = new Text( opponentName, NAME_ANIMATION_TIME );
     mOpponentName->setVisible( false );
     
     scene()->addItem( mOpponentName );
@@ -95,7 +94,7 @@ void CentralWidget::slotInitialize( QString playerName, QString opponentName, Kn
     scene()->addItem( mOpponentScoreTable );
     
     //Setup player's name
-    mPlayerName = new MyTextItem( playerName, NAME_ANIMATION_TIME );
+    mPlayerName = new Text( playerName, NAME_ANIMATION_TIME );
     mPlayerName->setVisible( false );
     
     connect( mClient, SIGNAL( signalOpponentTricksChanged( int ) ), mOpponentScoreTable, SLOT( slotTricksChanged( int ) ) );
@@ -216,19 +215,19 @@ void CentralWidget::slotInitialize( QString playerName, QString opponentName, Kn
     connect( mOpponentCards, SIGNAL( signalSelectedCard( SvgCard* ) ), this, SLOT( slotHideOpponentArrow() ) );
     
     //Opponent's texts
-    mOpponentSchnapsenText = new MyTextItem( SCHNAPSEN_TEXT );
+    mOpponentSchnapsenText = new Text( SCHNAPSEN_TEXT, CARD_ANIMATION_TIME );
     mOpponentSchnapsenText->setVisible( false );
     scene()->addItem( mOpponentSchnapsenText );
     
     connect( mClient, SIGNAL( signalOpponentSchnapsenButtonClicked() ), this, SLOT( slotOpponentSchnapsenButtonClicked() ) );
 
-    mOpponentFortyText = new MyTextItem( FORTY_TEXT );
+    mOpponentFortyText = new Text( FORTY_TEXT );
     mOpponentFortyText->setVisible( false );
     scene()->addItem( mOpponentFortyText );
     
     connect( mClient, SIGNAL( signalOpponentFortyButtonClicked() ), this, SLOT( slotOpponentFortyButtonClicked() ) );
     
-    mOpponentTwentyText = new MyTextItem( TWENTY_TEXT );
+    mOpponentTwentyText = new Text( TWENTY_TEXT );
     mOpponentTwentyText->setVisible( false );
     scene()->addItem( mOpponentTwentyText );
     
@@ -266,6 +265,8 @@ void CentralWidget::slotNewGame()
     mOpponentScoreTable->setVisible( true );
     mOpponentScoreTable->getAnimation()->startAnimation();
     
+    //Opponent's schnapsen text
+    setOpponentSchnapsenTextStartPos();
     
     //Player's name
     setPlayerNameStartPos();
@@ -315,6 +316,9 @@ void CentralWidget::slotNewRound()
     if( mOpponentSchnapsenText->isVisible() ){
         mOpponentSchnapsenText->hide();
     }
+    //
+    mOpponentSchnapsenText->show();
+    //
     
     //Set the score tables' final animation time
     mOpponentScoreTable->getAnimation()->setAnimationTime( CARD_ANIMATION_TIME );
@@ -474,7 +478,10 @@ void CentralWidget::slotOpponentCardsSizeChanged()
     setOpponentArrowPos();
     
     //Set opponent's texts
-    setOpponentSchnapsenTextPos();
+    //setOpponentSchnapsenTextPos();
+    setOpponentSchnapsenTextEndPos();
+    mOpponentSchnapsenText->getAnimation()->startAnimation();
+    
     setOpponentFortyTextPos();
     setOpponentTwentyTextPos();
 }
@@ -747,7 +754,7 @@ void CentralWidget::setOpponentScoreTableEndPos()
     mOpponentScoreTable->getAnimation()->setEndPosition( x, y );
 }
 
-void CentralWidget::setOpponentSchnapsenTextPos()
+/*void CentralWidget::setOpponentSchnapsenTextPos()
 {
     qreal x = mOpponentCards->x() + 
               mOpponentCards->boundingRect().width() + 
@@ -758,6 +765,29 @@ void CentralWidget::setOpponentSchnapsenTextPos()
               BUTTON_Y_DISTANCE;
               
     mOpponentSchnapsenText->setPos( x, y );
+}*/
+
+QPointF CentralWidget::getOpponentSchnapsenTextPos()
+{
+    qreal x = mOpponentCards->x() + 
+              mOpponentCards->boundingRect().width() + 
+              CARDS_SCORE_TABLE_DISTANCE;
+    
+    qreal y = mOpponentCards->y() + 
+              mOpponentScoreTable->boundingRect().height() + 
+              BUTTON_Y_DISTANCE;
+    
+    return QPointF( x, y );
+}
+
+void CentralWidget::setOpponentSchnapsenTextStartPos()
+{
+    mOpponentSchnapsenText->setPos( getOpponentSchnapsenTextPos() );
+}
+
+void CentralWidget::setOpponentSchnapsenTextEndPos()
+{
+    mOpponentSchnapsenText->getAnimation()->setEndPosition( getOpponentSchnapsenTextPos() );
 }
 
 void CentralWidget::setOpponentFortyTextPos()

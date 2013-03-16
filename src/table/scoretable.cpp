@@ -11,14 +11,14 @@ const QString SCORE_TEXT = i18n( "Score:" );
 
 ScoreTable::ScoreTable( int animationTime )
 {
-    tricksItem = new QGraphicsTextItem( this );
-    scoreItem = new QGraphicsTextItem( this );
+    mTricksItem = new QGraphicsTextItem( this );
+    mScoresItem = new QGraphicsTextItem( this );
     
     slotTricksChanged( 0 );
     slotScoresChanged( 0 );
     
-    tricksItem->setPos( 0, 0 );
-    scoreItem->setPos( 0, tricksItem->boundingRect().height() );
+    mTricksItem->setPos( 0, 0 );
+    mScoresItem->setPos( 0, mTricksItem->boundingRect().height() );
     
     mAnimation = new Animation( this, animationTime ); 
 }
@@ -33,13 +33,13 @@ QRectF ScoreTable::boundingRect() const
     int width = 0;
     int height = 0;
     
-    if( tricksItem->boundingRect().width() > scoreItem->boundingRect().width() ){
-        width = tricksItem->boundingRect().width();
+    if( mTricksItem->boundingRect().width() > mScoresItem->boundingRect().width() ){
+        width = mTricksItem->boundingRect().width();
     }else{
-        width = scoreItem->boundingRect().width();
+        width = mScoresItem->boundingRect().width();
     }
     
-    height = tricksItem->boundingRect().height() + scoreItem->boundingRect().height();
+    height = mTricksItem->boundingRect().height() + mScoresItem->boundingRect().height();
     
     QRectF ret( QPointF( 0, 0 ), QSize( width, height ) );
     
@@ -49,7 +49,8 @@ QRectF ScoreTable::boundingRect() const
 //void ScoreTable::setTricks( int tricks )
 void ScoreTable::slotTricksChanged( int tricks )
 {
-    tricksItem->setPlainText( TRICKS_TEXT+" "+QString::number( tricks ) );
+    //tricksItem->setPlainText( TRICKS_TEXT+" "+QString::number( tricks ) );
+    mTricksItem->setPlainText( TRICKS_TEXT+" "+QString::number( tricks ) );
     
     update();
 }
@@ -57,7 +58,8 @@ void ScoreTable::slotTricksChanged( int tricks )
 //void ScoreTable::setScores( int scores )
 void ScoreTable::slotScoresChanged( int scores )
 {
-    scoreItem->setPlainText( SCORE_TEXT+" "+QString::number( scores ) );
+    //scoreItem->setPlainText( SCORE_TEXT+" "+QString::number( scores ) );
+    mScoresItem->setPlainText( SCORE_TEXT+" "+QString::number( scores ) );
     
     update();
 }

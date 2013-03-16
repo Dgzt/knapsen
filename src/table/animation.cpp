@@ -1,7 +1,7 @@
 #include <KDE/KDebug>
 #include <QtCore/QTimeLine>
 #include <engine/card.h>
-#include "table/mytextitem.h"
+#include "table/text.h"
 #include "table/scoretable.h"
 #include "table/svgcard.h"
 #include "table/cardsgroup.h"
