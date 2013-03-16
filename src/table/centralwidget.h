@@ -1,3 +1,27 @@
+/*!
+ * @file
+ * @author  Zsuro Tibor <zsurotibor@gmail.com>
+ * 
+ * @section LICENSE
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ *
+ * @section DESCRIPTION
+ *
+ * The CentralWidget class is the wiget where show the items of game.
+ */
+
 #ifndef centralwidget_h
 #define centralwidget_h
 
@@ -10,12 +34,8 @@ class QSvgRenderer;
 class SvgCard;
 class Card;
 class CardsGroup;
-//
 class MyTextItem;
 class ScoreTable;
-//
-
-//
 
 class CentralWidget : public QGraphicsView
 {
@@ -212,15 +232,40 @@ protected:
     virtual void resizeEvent( QResizeEvent* );
     
 protected slots:
-    void slotInitialize( QString, QString, Knapsen::TypeOfCards );
+    /*!
+     * Initialize the items on the widget. Setup connections to signals.
+     * 
+     * @param playerName The player's name.
+     * @param opponentName The opponent's name.
+     * @param typeOfCards The type of cards.
+     */
+    void slotInitialize( QString playerName, QString opponentName, Knapsen::TypeOfCards typeOfCards );
     
+    /*!
+     * Start the game. Show the player's and opponent's name and score table.
+     */
     void slotNewGame(); 
+    
+    /*!
+     * Start the round. Show the deck .
+     */
     void slotNewRound();
     
-    void slotNewOpponentCard( bool );
+    /*!
+     * Move new card to the opponent's cards group. If this card is the 
+     * last in the deck then hide the deck.
+     * 
+     * @param lastCard The card is the last card in the deck.
+     */
+    void slotNewOpponentCard( bool lastCard );
+    
+    /*!
+     * Move the trump card to the opponent's cards group.
+     */
     void slotNewOpponentCardTrumpCard();
     
-    void slotNewPlayerCard( bool, Card* );
+    void slotNewPlayerCard( bool lastCard, Card* card );
+    
     void slotNewPlayerCardTrumpCard();
     
     void slotNewTrumpCard( Card* );

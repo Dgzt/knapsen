@@ -78,12 +78,12 @@ void CentralWidget::resizeEvent( QResizeEvent* ){
     fitInView( sceneRect(), Qt::KeepAspectRatio );
 }
 
-void CentralWidget::slotInitialize( QString playerNameStr, QString opponentNameStr, Knapsen::TypeOfCards typeOfCards )
+void CentralWidget::slotInitialize( QString playerName, QString opponentName, Knapsen::TypeOfCards typeOfCards )
 {
     kDebug() << "Initialize.";
     
     //Setup opponent's name
-    mOpponentName = new MyTextItem( opponentNameStr, NAME_ANIMATION_TIME );
+    mOpponentName = new MyTextItem( opponentName, NAME_ANIMATION_TIME );
     mOpponentName->setVisible( false );
     
     scene()->addItem( mOpponentName );
@@ -95,7 +95,7 @@ void CentralWidget::slotInitialize( QString playerNameStr, QString opponentNameS
     scene()->addItem( mOpponentScoreTable );
     
     //Setup player's name
-    mPlayerName = new MyTextItem( playerNameStr, NAME_ANIMATION_TIME );
+    mPlayerName = new MyTextItem( playerName, NAME_ANIMATION_TIME );
     mPlayerName->setVisible( false );
     
     connect( mClient, SIGNAL( signalOpponentTricksChanged( int ) ), mOpponentScoreTable, SLOT( slotTricksChanged( int ) ) );
