@@ -5,17 +5,29 @@
 #include "table/animation.h"
 #include "table/svgcard.h"
 
-SvgCard::SvgCard( QSvgRenderer* renderer, int animationTime ) :
+SvgCard::SvgCard( QSvgRenderer* renderer, qreal height, int animationTime ) :
     mSelectable( false )
 {
     mAnimation = new Animation( this, animationTime );
     
     setSharedRenderer( renderer );
     
-    //setElementId( cardText );
     setElementId( SvgCard::backCardText() );
     
     setAcceptHoverEvents( true );
+    
+    //
+    kDebug() << boundingRect();
+    qreal scale = height / boundingRect().height();
+    kDebug() << height << "/" << boundingRect().height()<< "=" << scale;
+    
+    //mSize = QSizeF( width, boundingRect().height() * scale );
+    mSize = QSizeF( boundingRect().width() * scale, height );
+    
+    kDebug() << mSize;
+    
+    update();
+    kDebug() << boundingRect();
 }
 
 SvgCard::~SvgCard()
@@ -59,4 +71,20 @@ void SvgCard::setSelectable( bool selectable )
     }else{
         setCursor( QCursor( Qt::ArrowCursor ) );
     }
+}
+
+QRectF SvgCard::boundingRect() const
+{   
+    if( mSize != QSizeF() ){
+        return QRectF( QPointF( .0, .0 ), mSize );
+    }
+    
+    return QGraphicsSvgItem::boundingRect();
+}
+
+void SvgCard::paint(QPainter* painter, const QStyleOptionGraphicsItem* , QWidget* )
+{
+    //QGraphicsSvgItem::paint(painter, option, widget);
+    
+    renderer()->render(painter, elementId(), boundingRect());
 }

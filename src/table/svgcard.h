@@ -38,6 +38,10 @@ class SvgCard : public QGraphicsSvgItem
     
     bool mSelectable;
     
+    //
+    QSizeF mSize;
+    //
+    
 private:
     /*!
      * The mouse press event.
@@ -61,7 +65,7 @@ public:
      * @param renderer The SVG renderer.
      * @param animationTime The time of animation.
      */
-    SvgCard( QSvgRenderer* renderer, int animationTime );
+    SvgCard( QSvgRenderer* renderer, qreal height, int animationTime );
     
     /*!
      * Delete variables.
@@ -87,7 +91,7 @@ public:
      * 
      * @return True/False.
      */
-    bool isSelectable(){ return mSelectable; }
+    bool isSelectable() const{ return mSelectable; }
     
     /*!
      * The text of back of card.
@@ -95,6 +99,12 @@ public:
      * @return The text of back of card.
      */
     static QString backCardText(){ return "back"; }
+    
+    //void setWidth( qreal width );
+    //virtual QRectF boundingRect() const{ return QRectF( QPointF( .0, .0 ), mSize ); }
+    virtual QRectF boundingRect() const;
+    
+    virtual void paint(QPainter* painter, const QStyleOptionGraphicsItem* option, QWidget* widget);
     
 signals:
     /*!

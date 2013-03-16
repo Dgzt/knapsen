@@ -46,6 +46,11 @@ const int CARD_ANIMATION_TIME = 1000; //100
 //
 
 //
+//const int CARD_WIDTH = 130; //150
+const int CARD_HEIGHT = 200; //200
+//
+
+//
 const QString SCHNAPSEN_TEXT = "Schnapsen";
 const QString FORTY_TEXT = "Forty";
 const QString TWENTY_TEXT = "Twenty";
@@ -126,7 +131,7 @@ void CentralWidget::slotInitialize( QString playerNameStr, QString opponentNameS
     }
     
     //Setup Deck
-    mDeck = new SvgCard( mRenderer, DECK_ANIMATION_TIME );
+    mDeck = new SvgCard( mRenderer, CARD_HEIGHT, DECK_ANIMATION_TIME );
     mDeck->setVisible( false );
     
     scene()->addItem( mDeck );
@@ -371,7 +376,7 @@ void CentralWidget::slotNewOpponentCard( bool lastCard )
 {
     kDebug();
     
-    SvgCard* svgCard = new SvgCard( mRenderer, CARD_ANIMATION_TIME );
+    SvgCard* svgCard = new SvgCard( mRenderer, CARD_HEIGHT, CARD_ANIMATION_TIME );
     svgCard->setPos( mDeck->pos() );
     scene()->addItem( svgCard );
     
@@ -388,7 +393,8 @@ void CentralWidget::slotNewOpponentCardTrumpCard()
 {
     kDebug();
     
-    //mTrumpCard->disconnect();
+    //Disconnect from signals of trump card.
+    mTrumpCard->disconnect();
     
     mTrumpCard->setElementId( SvgCard::backCardText() );
     mOpponentCards->slotAddNewCard( mTrumpCard );
@@ -400,7 +406,8 @@ void CentralWidget::slotNewPlayerCardTrumpCard()
 {
     kDebug();
     
-    //mTrumpCard->disconnect();
+    //Disconnect from signals of trump card.
+    mTrumpCard->disconnect();
     
     mPlayerCards->slotAddNewCard( mTrumpCard );
     
@@ -411,7 +418,7 @@ void CentralWidget::slotNewPlayerCard( bool lastCard, Card* card )
 {
     kDebug();
     
-    SvgCard* svgCard = new SvgCard( mRenderer, CARD_ANIMATION_TIME );
+    SvgCard* svgCard = new SvgCard( mRenderer, CARD_HEIGHT, CARD_ANIMATION_TIME );
     //svgCard->getAnimation()->setCard( card );
     svgCard->getAnimation()->setNewCardText( card->getCardText() );
     svgCard->setPos( mDeck->pos() );
@@ -428,7 +435,7 @@ void CentralWidget::slotNewTrumpCard( Card* card )
 {
     kDebug();
     
-    mTrumpCard = new SvgCard( mRenderer, CARD_ANIMATION_TIME );
+    mTrumpCard = new SvgCard( mRenderer, CARD_HEIGHT, CARD_ANIMATION_TIME );
 
     connect( mTrumpCard, SIGNAL( signalClick( SvgCard* ) ), mClient, SLOT( slotSelectTrumpCard() ) );
     

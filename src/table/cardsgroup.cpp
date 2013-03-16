@@ -61,14 +61,17 @@ void CardsGroup::setCardsPosition()
     if( mCards->size() >= 1 ){
         halfCardWidth = mCards->first()->boundingRect().width() / 2;
     }
+    kDebug() << "halfCardWidth:" << halfCardWidth;
     
+    kDebug() << "mCards->size():" << mCards->size();
     for( int i = 0; i < mCards->size(); ++i ){
         QPointF distance( i * halfCardWidth, 0 );
         
-        if( mCards->at( i )->pos().x() != /*pos().x()*/ mPos.x() + distance.x() ){
-            mCards->at( i )->getAnimation()->setEndPosition( /*pos()*/ mPos + distance );
-            mCards->at( i )->getAnimation()->startAnimation();
-        }
+        //if( mCards->at( i )->pos().x() != mPos.x() + distance.x() ){
+        //kDebug() << "mPos:" << mPos << "distance:" << distance << "mPos + distance:" << mPos + distance;
+        mCards->at( i )->getAnimation()->setEndPosition( mPos + distance );
+        mCards->at( i )->getAnimation()->startAnimation();
+        //}
     }
 }
 
@@ -191,6 +194,7 @@ void CardsGroup::slotAddNewCard( SvgCard* svgCard )
     emit signalSizeChanged();
     
     //When end of the animation then continue the processing commands in client
+    kDebug() << "New card duration:" << svgCard->getAnimation()->timeLine()->duration();
     QTimer::singleShot( svgCard->getAnimation()->timeLine()->duration(), this, SLOT( slotCardAnimatedEnd() ) );
 }
 
@@ -213,14 +217,14 @@ void CardsGroup::slotSelectableChanged( int id, bool enabled )
 
 void CardsGroup::slotSelectedCard( int id, Card* card )
 {
-    SvgCard* svgCard1 = mCards->takeAt( id );
+    SvgCard* svgCard = mCards->takeAt( id );
     
     //
     //svgCard1->getAnimation()->setCard( card );
-    svgCard1->getAnimation()->setNewCardText( card->getCardText() );
+    svgCard->getAnimation()->setNewCardText( card->getCardText() );
     //
     
-    emit signalSelectedCard( svgCard1 );
+    emit signalSelectedCard( svgCard );
     
     //
     emit signalSizeChanged();
