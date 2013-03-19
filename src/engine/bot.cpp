@@ -280,7 +280,8 @@ bool Bot::trySelectPairWasNotInCentral( Card::Type cardType )
     for( int i = 0; i < getNumberOfCards(); ++i ){
         card = getCard( i );
         
-        if( /*card != 0 &&*/ card->isSelectable() && ( card->getType() == cardType ) && ( mDeckIsClosed || getSizeOfDeckNow() == 0 || ( getPairOfCardWasInCentral( pairCardType, card->getSuit() ) ) ) ){
+        //if( card->isSelectable() && ( card->getType() == cardType ) && ( mDeckIsClosed || getSizeOfDeckNow() == 0 || ( getPairOfCardWasInCentral( pairCardType, card->getSuit() ) ) ) ){
+        if( card->isSelectable() && ( card->getType() == cardType ) && ( mDeckIsClosed || getDeckSize() == 0 || ( getPairOfCardWasInCentral( pairCardType, card->getSuit() ) ) ) ){
             slotSelectCardId( i );
             return true;
         }
@@ -342,7 +343,8 @@ bool Bot::trySelectEqualCentralMinPoints()
             card->getSuit() == centralCard0->getSuit() &&
             card->getCardPoint() > centralCard0->getCardPoint() )
         {
-            if( ( getSizeOfDeckNow() == 0 || mDeckIsClosed ) ||
+            //if( ( getSizeOfDeckNow() == 0 || mDeckIsClosed ) ||
+            if( ( getDeckSize() == 0 || mDeckIsClosed ) ||
                 ( ( card->getType() == Card::King && getPairOfCardWasInCentral( Card::King, card->getSuit() ) ) ||
                   ( card->getType() == Card::Queen && getPairOfCardWasInCentral( Card::Queen, card->getSuit() ) ) ||
                   ( card->getType() != Card::King && card->getType() != Card::Queen ) )   
@@ -384,7 +386,7 @@ bool Bot::trySelectEqualTrumpMinPoints()
                 card->isSelectable() &&
                 card->getSuit() == getTrump()->getCardSuit() )
             {
-                if( ( getSizeOfDeckNow() == 0 || mDeckIsClosed ) ||
+                if( ( getDeckSize() == 0 || mDeckIsClosed ) ||
                     ( ( card->getType() == Card::King && getPairOfCardWasInCentral( Card::King, card->getSuit() ) ) ||
                     ( card->getType() == Card::Queen && getPairOfCardWasInCentral( Card::Queen, card->getSuit() ) ) ||
                     ( card->getType() != Card::King && card->getType() != Card::Queen ) )   

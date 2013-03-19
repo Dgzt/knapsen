@@ -55,6 +55,13 @@ public:
     Card* getCard() const{ return mCard; }
     
     /*!
+     * Take the trump card. Remove the card from trump.
+     * 
+     * @return The trump card.
+     */
+    Card* takeCard();
+    
+    /*!
      * Return with the suit of trump card.
      * 
      * @return The suit of trump card.
@@ -75,7 +82,8 @@ public:
      * 
      * @param removeData Clear data or not.
      */
-    void clearTrumpCard( bool removeData );
+    //void clearTrumpCard( bool removeData );
+    void clearTrumpCard(){ delete mCard; mCard = 0; }
     
 };
 

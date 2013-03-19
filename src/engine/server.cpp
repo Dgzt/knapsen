@@ -128,7 +128,8 @@ void Server::newRound()
     clearCentralCards();
     
     //Clear trump card
-    mTrump->clearTrumpCard( true );
+    //mTrump->clearTrumpCard( true );
+    mTrump->clearTrumpCard();
     
     //Clear variables
     mOpponentHaveNotTricksBeforePlayerClickedToCloseButton = false;
@@ -558,7 +559,8 @@ void Server::addTrumpCardToPlayer( Player* player )
         }
     }
     
-    mTrump->clearTrumpCard( true );
+    //mTrump->clearTrumpCard( true );
+    mTrump->clearTrumpCard();
 }
 
 void Server::slotNewPlayer( Player* player )

@@ -46,19 +46,15 @@ QRectF ScoreTable::boundingRect() const
     return ret;
 }
 
-//void ScoreTable::setTricks( int tricks )
 void ScoreTable::slotTricksChanged( int tricks )
 {
-    //tricksItem->setPlainText( TRICKS_TEXT+" "+QString::number( tricks ) );
     mTricksItem->setPlainText( TRICKS_TEXT+" "+QString::number( tricks ) );
     
     update();
 }
 
-//void ScoreTable::setScores( int scores )
 void ScoreTable::slotScoresChanged( int scores )
 {
-    //scoreItem->setPlainText( SCORE_TEXT+" "+QString::number( scores ) );
     mScoresItem->setPlainText( SCORE_TEXT+" "+QString::number( scores ) );
     
     update();

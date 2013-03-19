@@ -310,7 +310,6 @@ void CentralWidget::slotNewRound()
     
     if( mTrumpCard ){
         delete mTrumpCard;
-        mTrumpCard = 0;
     }
     
     if( mOpponentSchnapsenText->isVisible() ){

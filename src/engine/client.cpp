@@ -1,18 +1,25 @@
+#include <QtCore/QStringList>
 #include <KDE/KDebug>
 //#include "centralcards.h"
 #include "trump.h"
 #include "client.h"
 
-const int WRONG_VALUE_ARRAY_SIZE = 1;
-const int WRONG_VALUE = 2;
+const int WRONG_VALUE_ARRAY_SIZE = -1;
+const int WRONG_VALUE = -2;
+
+const int INITIALIZE_TABLE_VALUES_SIZE = 3;
+const int NEW_PLAYER_CARD_VALUES_SIZE = 1;
+const int NEW_TRUMP_CARD_VALUES_SIZE = 1;
+const int OPPONENT_CHANGE_TRUMP_CARD_VALUES_SIZE = 2;
+const int VISIBLE_OPPONENT_CARDS_VALUES_SIZE = 4;
+const int END_ROUND_VALUES_SIZE = 2;
 
 Client::Client( QString name ): 
     Player( name ),
-    mSizeOfDeck( 0 ),
-    mSizeOfDeckNow( 0 ),
+    //mStartDeckSize( 0 ),
+    //mDeckSize( 0 ),
     mCommandsUnderProcessing( false )
 {
-    //mCentralCards = new CentralCards;
     mTrump = new Trump;
     
     connect( this, SIGNAL( connected() ), this, SLOT( slotConnected() ) );
@@ -20,11 +27,10 @@ Client::Client( QString name ):
 
 Client::~Client()
 {
-    //delete mCentralCards;
     delete mTrump;
 }
 
-QList< QString >* Client::getValues( QString valuesStr )
+/*QList< QString >* Client::getValues( QString valuesStr )
 {
     QList< QString >* valuesArray = new QList< QString >;
     
@@ -36,6 +42,22 @@ QList< QString >* Client::getValues( QString valuesStr )
         }
     }
     valuesArray->append( valuesStr.mid( last, valuesStr.length()-last ) );
+    
+    return valuesArray;
+}*/
+
+QStringList Client::getValues( const QString& valuesStr )
+{
+    QStringList valuesArray;
+    
+    int last = 0;
+    for( int i = 0; i < valuesStr.length(); ++i ){
+        if( valuesStr[i] == ',' ){
+            valuesArray.append( valuesStr.mid( last, i-last ) );
+            last = i+1;
+        }
+    }
+    valuesArray.append( valuesStr.mid( last, valuesStr.length()-last ) );
     
     return valuesArray;
 }
@@ -84,416 +106,151 @@ void Client::slotProcessCommands()
         kDebug() << mCommandList.size() << command;
         
         if( getCommandName( command ) == INITIALIZE_TABLE_COMMAND ){
-            kDebug() << getName() << "Initialize table, value." << getCommandValue( command );
-            
-            QList< QString >* valuesArray = getValues( getCommandValue( command ) );
-            
-            Knapsen::TypeOfCards typeOfCards;
-            if( valuesArray->at( 1 ) == TYPE_OF_CARDS_GERMAN_SUITS_VALUE ){
-                typeOfCards = Knapsen::GermanSuits;
-            }else{ //valuesArray->at( 1 ) == TYPE_OF_CARDS_GERMAN_SUITS_VALUE
-                typeOfCards = Knapsen::FrenchSuits;
-            }
-            
-            bool ok;
-            mSizeOfDeck = valuesArray->at( 2 ).toInt( &ok );
-            mSizeOfDeckNow = mSizeOfDeck;
-            
-            setLowestCard( mSizeOfDeck );
-            
-            emit signalInitialize( getName(), valuesArray->at( 0 ), typeOfCards );
-            
-            delete valuesArray;
+            commandInitializeTable( getCommandValue( command ) );
         }
         
         if( getCommandName( command ) == NEW_GAME_COMMAND ){
-            kDebug() << getName() << "Start game.";
-            
-            newGame();
-            
-            //emit signalPlayerScoresChanged( getScores() );
-            emit signalOpponentScoresChanged( 0 );
-            emit signalNewGame();
+            commandNewGame();
             
             return;
         }
         
         if( getCommandName( command ) == NEW_ROUND_COMMAND ){
-            kDebug() << getName() << "New round.";
-            newRound();
+            commandNewRound();
             
-            //mCentralCards->clear();
-            clearCentralCards();
-            
-            mSizeOfDeckNow = mSizeOfDeck;
-            
-            emit signalNewRound();
-            //break;
             return;
         }
         
         if( getCommandName( command ) == NEW_PLAYER_CARD_COMMAND ){
-            kDebug() << getName() << "new card:" << getCommandValue( command );
+            commandNewPlayerCard( getCommandValue( command ) );
             
-            bool ok;
-            int ret = getCommandValue( command ).toInt( &ok );
-            if( ok ){
-                
-                bool lastCard = false;
-                --mSizeOfDeckNow;
-                if( mSizeOfDeckNow == 0 ){
-                    lastCard = true;
-                }
-                
-                Card* card = new Card( ret );
-                addNewCard( card );
-                
-                emit signalNewPlayerCard( lastCard, card );
-                
-            }else{
-                kDebug() << "ERROR! Cannot convert new player card value to int!";
-            }
             return;
         }
         
         if( getCommandName( command ) == NEW_OPPONENT_CARD_COMMAND ){
-            kDebug() << getName() << "New opponent card.";
+            commandNewOpponentCard();
             
-            bool lastCard = false;
-
-            --mSizeOfDeckNow;
-            if( mSizeOfDeckNow == 0 ){
-                lastCard = true;
-            }
-            
-            emit signalNewOpponentCard( lastCard );
             return;
         }
         
         if( getCommandName( command ) == NEW_PLAYER_CARD_TRUMP_CARD_COMMAND ){
-            kDebug() << "Add the trump card to player.";
+            commandNewPlayerTrumpCard();
             
-            Card* newCard = mTrump->getCard();
-            mTrump->clearTrumpCard( false );
-            
-            addNewCard( newCard );
-            
-            emit signalNewPlayerCardTrumpCard();
             return;
         }
         
         if( getCommandName( command ) == NEW_OPPONENT_CARD_TRUMP_CARD_COMMAND ){
-            kDebug() << "Add the trump card to the opponent.";
+            commandNewOpponentTrumpCard();
             
-            mTrump->clearTrumpCard( true );
-            
-            emit signalNewOpponentCardTrumpCard();
             return;
         }
         
         if( getCommandName( command ) == NEW_TRUMP_CARD_COMMAND ){
-            kDebug() << getName() << "Trump card:" << getCommandValue( command );
+            commandNewTrumpCard( getCommandValue( command ) );
             
-            bool ok;
-            int ret = getCommandValue( command ).toInt( &ok );
-            if( ok ){
-                if( !mTrump->isEmpty() ){
-                    mTrump->clearTrumpCard( true );
-                }
-                
-                mTrump->addNewCard( new Card( ret ) );
-                
-                --mSizeOfDeckNow;
-                
-                emit signalNewTrumpCard( mTrump->getCard() );
-                //break;
-                
-            }else{
-                kDebug() << "ERROR! Cannot convert new trump card command value to int!";
-            }
             return;
         }
         
         if( getCommandName( command ) == OPPONENT_CHANGE_TRUMP_CARD_COMMAND ){
-            kDebug() << getName() << "Opponent changed trump card.";
+            commandOpponentChangeTrumpCard( getCommandValue( command ) );
             
-            QList< QString >* valueArray = getValues( getCommandValue( command ) );
-            try{
-                if( valueArray->size() != 2 ){
-                    throw WRONG_VALUE_ARRAY_SIZE;
-                }
-                
-                bool ok;
-                int cardId = valueArray->at( 0 ).toInt( &ok );
-                if( !ok ) throw WRONG_VALUE;
-                
-                int trumpCardValue = valueArray->at( 1 ).toInt( &ok );
-                if( !ok ) throw WRONG_VALUE;
-                
-                mTrump->clearTrumpCard( true );
-                mTrump->addNewCard( new Card( trumpCardValue ) );
-                
-                emit signalOpponentChangeTrumpCard( cardId, mTrump->getCard() );
-                
-            }catch( int error ){
-                if( error == WRONG_VALUE_ARRAY_SIZE ){
-                    kDebug() << "ERROR! Wrong size of values in opponent change trump card command!";
-                }
-                if( error == WRONG_VALUE ){
-                    kDebug() << "ERROR! Wrong value in opponent change trump card command!";
-                }
-            }
-            
-            delete valueArray;
             return;
         }
         
         if( getCommandName( command ) == TWENTY_BUTTON_VISIBLE_COMMAND ){
-            kDebug() << getName() << "Twenty button visible.";
-            
-            setTwentyButtonVisible( true );
+            commandTwentyButtonVisible();
         }
         
         if( getCommandName( command ) == FORTY_BUTTON_VISIBLE_COMMAND ){
-            kDebug() << getName() << "Forty button visible.";
-            
-            setFortyButtonVisible( true );
+            commandFortyButtonVisible();
         }
         
         if( getCommandName( command ) == SCHNAPSEN_BUTTON_VISIBLE_COMMAND ){
-            kDebug() << getName() << "Schnapsen button visible";
-            
-            setSchnapsenButtonVisible( true );
+            commandSchnapsenButtonVisible();
         }
         
         if( getCommandName( command ) == CLOSE_BUTTON_VISIBLE_COMMAND ){
-            kDebug() << getName() << "Close button visible.";
-            
-            setCloseButtonVisible( true );
+            commandCloseButtonVisible();
         }
         
         if( getCommandName( command ) == TRUMP_CARD_SELECTABLE_COMMAND ){
-            kDebug() << getName() << "Selectable trump card.";
-            
-            mTrump->getCard()->setSelectable( true );
-            emit signalTrumpCardSelectableChanged( true );
+            commandTrumpCardSelectable();
         }
         
         if( getCommandName( command ) == SELECTABLE_ALL_CARDS_COMMAND ){
-            kDebug() << getName() << "Selectable all cards.";
-            
-            setSelectableAllCards( true );
-            
-            //Emit for bot, it in action
-            emit signalPlayerInAction();
+            commandSelectableAllCards();
         }
         
         if( getCommandName( command ) == SELECTABLE_CERTAIN_CARDS_COMMAND ){
-            kDebug() << getName() << "Selectable certan cards.";
-            
-            setSelectableCertainCards( mCentralCards , mTrump );
-            emit signalPlayerInAction();
+            commandSelectableCertainCards();
         }
         
         if( getCommandName( command ) == OPPONENT_SCHNAPSEN_BUTTON_CLICKED_COMMAND ){
-            kDebug() << getName() << "Opponent clicked to schnapsen button.";
-            
-            emit signalOpponentSchnapsenButtonClicked();
+            commandOpponentSchnapsenButtonClicked();
         }
         
         if( getCommandName( command ) == OPPONENT_FORTY_BUTTON_CLICKED_COMMAND ){
-            kDebug() << getName() << "Opponent clicked to forty button.";
-            
-            emit signalOpponentFortyButtonClicked();
+            commandOpponentFortyButtonClicked();
         }
         
         if( getCommandName( command ) == OPPONENT_TWENTY_BUTTON_CLICKED_COMMAND ){
-            kDebug() << getName() << "Opponent clicked to twenty button.";
-            
-            emit signalOpponentTwentyButtonClicked();
+            commandOpponentTwentyButtonClicked();
         }
         
         if( getCommandName( command ) == OPPONENT_IN_ACTION_COMMAND ){
-            kDebug() << getName() << "Opponent in action.";
-            
-            emit signalOpponentInAction();
+            commandOpponentInAction();
         }
         
         if( getCommandName( command ) == OPPONENT_SELECTED_CARD_COMMAND ){
-            kDebug() << getName() << "Opponent selected new card.";
+            commandOpponentSelectedCard( getCommandValue( command ) );
             
-            QList< QString >* valuesArray = getValues( getCommandValue( command ) );
-            
-            try{
-                if( valuesArray->size() != 2 ){
-                    throw 1;
-                }
-                
-                bool ok;
-                
-                int cardId = valuesArray->at( 0 ).toInt( &ok );
-                if( !ok ) throw 2;
-                
-                int cardValue = valuesArray->at( 1 ).toInt( &ok );
-                if( !ok ) throw 2;
-                
-                Card* card = new Card( cardValue );
-                //mCentralCards->add( card );
-                mCentralCards.append( card );
-                
-                emit signalOpponentSelectedCard( cardId, card );
-                //break
-            }catch( int error ){
-                
-            }
-            
-            delete valuesArray;
             return;
         }
         
         if( getCommandName( command ) == VISIBLE_OPPONENT_CARDS_COMMAND ){
-            kDebug() << getName() << "Visible opponent cards:" << getCommandValue( command );
+            commandVisibleOpponentCards( getCommandValue( command ) );
             
-            QList< QString >* valuesArray = getValues( getCommandValue( command ) );
-            
-            try{
-                if( valuesArray->size() != 4 ){
-                    throw 1;
-                }
-                
-                bool ok;
-                
-                int card1Pos = valuesArray->at( 0 ).toInt( &ok );
-                if( !ok ) throw 2;
-                
-                int card1Value = valuesArray->at( 1 ).toInt( &ok );
-                if( !ok ) throw 2;
-                
-                int card2Pos = valuesArray->at( 2 ).toInt( &ok );
-                if( !ok ) throw 2;
-                
-                int card2Value = valuesArray->at( 3 ).toInt( &ok );
-                if( !ok ) throw 2;
-                
-                emit signalShowOpponentCards( card1Pos, Card(card1Value), card2Pos, Card(card2Value) );
-            }catch( int error ){
-                if( error == 1 ){
-                    kDebug() << "ERROR! Wrong size of values in visible opponent cards command!";
-                }
-                if( error == 2 ){
-                    kDebug() << "ERROR! Wrong value in visible cards command!";
-                }
-            }
-            
-            delete valuesArray;
             return;
         }
         
         if( getCommandName( command ) == PLAYER_TRICKS_CHANGED_COMMAND ){
-            kDebug() << getName() << "Player tricks changed:" << getCommandValue( command );
-            
-            bool ok;
-            int ret = getCommandValue( command ).toInt( &ok );
-            if( ok ){
-                setTricks( ret );
-                //emit signalPlayerTricksChanged( getTricks() );
-            }else{
-                kDebug() << "ERROR! Cannot convert player tricks changed command value to int!";
-            }
+            commandPlayerTricksChanged( getCommandValue( command ) );
         }
         
         if( getCommandName( command ) == PLAYER_SCORES_CHANGED_COMMAND ){
-            kDebug() << getName() << "Player scores changed:" << getCommandValue( command );
-            
-            bool ok;
-            int ret = getCommandValue( command ).toInt( &ok );
-            if( ok ){
-                setScores( ret );
-                //emit signalPlayerScoresChanged( ret );
-            }else{
-                kDebug() << "ERROR! Cannot convert player scores changed command value to int!";
-            }
+            commandPlayerScoresChanged( getCommandValue( command ) );
         }
         
         if( getCommandName( command ) == OPPONENT_TRICKS_CHANGED_COMMAND ){
-            kDebug() << getName() << "Opponent tricks changed:" << getCommandValue( command );
-            
-            bool ok;
-            int ret = getCommandValue( command ).toInt( &ok );
-            if( ok ){
-                emit signalOpponentTricksChanged( ret );
-            }else{
-                kDebug() << "ERROR! Cannot convert opponent tricks changed command value to int!";
-            }
+            commandOpponentTricksChanged( getCommandValue( command ) );
         }
         
         if( getCommandName( command ) == OPPONENT_SCORES_CHANGED_COMMAND ){
-            kDebug() << getName() << "Opponent scores changed:" << getCommandValue( command );
-            
-            bool ok;
-            int ret = getCommandValue( command ).toInt( &ok );
-            if( ok ){
-                emit signalOpponentScoresChanged( ret );
-            }else{
-                kDebug() << "ERROR! Cannot convert opponent scores changed command value to int!";
-            }
+            commandOpponentScoresChanged( getCommandValue( command ) );
         }
         
         if( getCommandName( command ) == OPPONENT_CLICKED_TO_CLOSE_BUTTON_COMMAND ){
-            kDebug() << getName() << "Opponent clicked to close button.";
-            emit signalCloseDeck();
+            commandOpponentCloseButtonClicked();
         }
         
         if( getCommandName( command ) == PLAYER_GET_CENTRAL_CARDS_COMMAND ){
-            kDebug() << getName() << "Player get central cards.";
+            commandPlayerGetCentralCards();
             
-            clearCentralCards();
-            
-            emit signalPlayerGetCentralCards();
-            //break;
             return;
         }
         
         if( getCommandName( command ) == OPPONENT_GET_CENTRAL_CARDS_COMMAND ){
-            kDebug() << getName() << "Opponent get central cards.";
+            commandOpponentGetCentralCards();
             
-            clearCentralCards();
-            
-            emit signalOpponentGetCentralCards();
-            //break;
             return;
         }
         
         if( getCommandName( command ) == END_ROUND_COMMAND ){
-            kDebug() << getName() << "End round.";
-            
-            QList< QString >* values = getValues( getCommandValue( command ) );
-            
-            try{
-                if( values->size() != 2 ){
-                    throw "ERROR! Wrong size of values in end round command!";
-                }
-                
-                QString winnerName = values->at( 0 );
-                
-                bool ok;
-                int winnerScore = values->at( 1 ).toInt( &ok );
-                if( !ok ){ 
-                    throw "ERROR! Cannot convert winner scores command value to int!";
-                }
-                
-                emit signalEndRound( winnerName, winnerScore );
-            }catch( QString error ){
-                kDebug() << error;
-            }
-            
-            delete values;
+            commandEndRound( getCommandValue( command ) );
         }
         
         if( getCommandName( command ) == END_GAME_COMMAND ){
-            kDebug() << getName() << "End game.";
-            
-            emit signalEndGame( getCommandValue( command ) );
+            commandEndGame( getCommandValue( command ) );
         }
         
     }
@@ -507,6 +264,443 @@ void Client::slotConnected()
     kDebug() << getName() << "connected.";
     
     sendCommand( NAME_COMMAND+getName() );
+}
+
+void Client::commandInitializeTable( const QString& commandValue )
+{
+    kDebug() << getName() << "Initialize table, value." << commandValue;
+    
+    //QList< QString >* valuesArray = getValues( commandValue );
+    QStringList valuesArray = getValues( commandValue );
+    
+    try{
+        if( valuesArray.size() != INITIALIZE_TABLE_VALUES_SIZE ) throw WRONG_VALUE_ARRAY_SIZE;
+        
+        QString opponentName = valuesArray.at( 0 );
+        
+        Knapsen::TypeOfCards typeOfCards;
+        if( valuesArray.at( 1 ) == TYPE_OF_CARDS_GERMAN_SUITS_VALUE ){
+            typeOfCards = Knapsen::GermanSuits;
+        }else if(valuesArray.at( 1 ) == TYPE_OF_CARDS_FRENCH_SUITS_VALUE ){
+            typeOfCards = Knapsen::FrenchSuits;
+        }else{
+            throw WRONG_VALUE;
+        }
+        
+        bool ok;
+        mStartDeckSize = valuesArray.at( 2 ).toInt( &ok );
+        if( !ok ) throw WRONG_VALUE;
+        
+        mDeckSize = mStartDeckSize;
+        
+        setLowestCard( mStartDeckSize );
+        
+        emit signalInitialize( getName(), opponentName, typeOfCards );
+    }catch( int error ){
+        if( error == WRONG_VALUE_ARRAY_SIZE ) kDebug() << "ERROR! Wrong size of value array!";
+        if( error == WRONG_VALUE ) kDebug() << "ERROR! Wrong value!";
+    }
+        
+    //delete valuesArray;
+}
+
+void Client::commandNewGame()
+{
+    kDebug() << getName() << "Start game.";
+    
+    newGame();
+    
+    emit signalOpponentScoresChanged( 0 );
+    emit signalNewGame();
+}
+
+void Client::commandNewRound()
+{
+    kDebug() << getName() << "New round.";
+    newRound();
+    
+    clearCentralCards();
+    
+    mDeckSize = mStartDeckSize;
+    
+    emit signalNewRound();        
+}
+
+void Client::commandNewPlayerCard( const QString& commandValue )
+{
+    kDebug() << getName() << "new card:" << getCommandValue( commandValue );
+    
+    //QList< QString >* values = getValues( commandValue );
+    QStringList values = getValues( commandValue );
+    
+    try{
+        if( values.size() != NEW_PLAYER_CARD_VALUES_SIZE ) throw WRONG_VALUE_ARRAY_SIZE;
+        
+        bool ok;
+        int ret = getCommandValue( values.at( 0 ) ).toInt( &ok );
+        if( !ok ) throw WRONG_VALUE;
+        
+        bool lastCard = false;
+        --mDeckSize;
+        if( mDeckSize == 0 ){
+            lastCard = true;
+        }
+        
+        Card* card = new Card( ret );
+        addNewCard( card );
+    
+        emit signalNewPlayerCard( lastCard, card );
+    }catch( int error ){
+        if( error == WRONG_VALUE_ARRAY_SIZE ) kDebug() << "ERROR! Wrong new player card values size!";
+        if( error == WRONG_VALUE ) kDebug() << "ERROR! Cannot convert new player card value to int!";
+    }
+    
+    //delete values;
+}
+
+void Client::commandNewOpponentCard()
+{
+    kDebug() << getName() << "New opponent card.";
+    
+    bool lastCard = false;
+    
+    --mDeckSize;
+    if( mDeckSize == 0 ){
+        lastCard = true;
+    }
+    
+    emit signalNewOpponentCard( lastCard );
+}
+
+void Client::commandNewPlayerTrumpCard()
+{
+    kDebug() << "Add the trump card to player.";
+    
+    //Card* newCard = mTrump->takeCard();
+    //addNewCard( newCard );
+    addNewCard( mTrump->takeCard() );
+    
+    emit signalNewPlayerCardTrumpCard();
+}
+
+void Client::commandNewOpponentTrumpCard()
+{
+    kDebug() << "Add the trump card to the opponent.";
+    
+    mTrump->clearTrumpCard();
+    
+    emit signalNewOpponentCardTrumpCard();
+}
+
+void Client::commandNewTrumpCard( const QString& commandValue )
+{
+    kDebug() << getName() << "Trump card:" << getCommandValue( commandValue );
+    
+    //QList< QString >* values = getValues( commandValue );
+    QStringList values = getValues( commandValue );
+    
+    try{
+        if( values.size() != NEW_TRUMP_CARD_VALUES_SIZE ) throw WRONG_VALUE_ARRAY_SIZE;
+        
+        bool ok;
+        int ret = getCommandValue( values.at( 0 ) ).toInt( &ok );
+        if( !ok ) throw WRONG_VALUE;
+        
+        if( !mTrump->isEmpty() ){
+            //mTrump->clearTrumpCard( true );
+            mTrump->clearTrumpCard();
+        }
+        
+        mTrump->addNewCard( new Card( ret ) );
+        
+        --mDeckSize;
+        
+        emit signalNewTrumpCard( mTrump->getCard() );
+        //break;
+        
+    }catch( int error ){
+        if( error == WRONG_VALUE_ARRAY_SIZE ) kDebug() << "ERROR! Wrong new trump card values size";
+        if( error == WRONG_VALUE ) kDebug() << "ERROR! Cannot convert new trump card command value to int!";
+    }
+    
+    //delete values;
+}
+
+void Client::commandOpponentChangeTrumpCard( const QString& commandValue )
+{
+    kDebug() << getName() << "Opponent changed trump card.";
+    
+    //QList< QString >* valueArray = getValues( getCommandValue( commandValue ) );
+    QStringList values = getValues( commandValue );
+    
+    try{
+        if( values.size() != OPPONENT_CHANGE_TRUMP_CARD_VALUES_SIZE ) throw WRONG_VALUE_ARRAY_SIZE;
+        
+        bool ok;
+        int cardId = values.at( 0 ).toInt( &ok );
+        if( !ok ) throw WRONG_VALUE;
+        
+        int trumpCardValue = values.at( 1 ).toInt( &ok );
+        if( !ok ) throw WRONG_VALUE;
+        
+        mTrump->clearTrumpCard();
+        mTrump->addNewCard( new Card( trumpCardValue ) );
+        
+        emit signalOpponentChangeTrumpCard( cardId, mTrump->getCard() );
+        
+    }catch( int error ){
+        if( error == WRONG_VALUE_ARRAY_SIZE ) kDebug() << "ERROR! Wrong size of values in opponent change trump card command!";
+        if( error == WRONG_VALUE ) kDebug() << "ERROR! Wrong value in opponent change trump card command!";
+    }
+    
+    //delete valueArray;
+}
+
+void Client::commandTwentyButtonVisible()
+{
+    kDebug() << getName() << "Twenty button visible.";
+    
+    setTwentyButtonVisible( true );
+}
+
+void Client::commandFortyButtonVisible()
+{
+    kDebug() << getName() << "Forty button visible.";
+    
+    setFortyButtonVisible( true );
+}
+
+void Client::commandSchnapsenButtonVisible()
+{
+    kDebug() << getName() << "Schnapsen button visible";
+    
+    setSchnapsenButtonVisible( true );
+}
+
+void Client::commandCloseButtonVisible()
+{
+    kDebug() << getName() << "Close button visible.";
+    
+    setCloseButtonVisible( true );
+}
+
+void Client::commandTrumpCardSelectable()
+{
+    kDebug() << getName() << "Selectable trump card.";
+    
+    mTrump->getCard()->setSelectable( true );
+    emit signalTrumpCardSelectableChanged( true );
+}
+
+void Client::commandSelectableAllCards()
+{
+    kDebug() << getName() << "Selectable all cards.";
+    
+    setSelectableAllCards( true );
+    
+    //Emit for bot, it in action
+    emit signalPlayerInAction();
+}
+
+void Client::commandSelectableCertainCards()
+{
+    kDebug() << getName() << "Selectable certan cards.";
+    
+    setSelectableCertainCards( mCentralCards , mTrump );
+    emit signalPlayerInAction();
+}
+
+void Client::commandOpponentSchnapsenButtonClicked()
+{
+    kDebug() << getName() << "Opponent clicked to schnapsen button.";
+    
+    emit signalOpponentSchnapsenButtonClicked();
+}
+
+void Client::commandOpponentFortyButtonClicked()
+{
+    kDebug() << getName() << "Opponent clicked to forty button.";
+    
+    emit signalOpponentFortyButtonClicked();
+}
+
+void Client::commandOpponentTwentyButtonClicked()
+{
+    kDebug() << getName() << "Opponent clicked to twenty button.";
+    
+    emit signalOpponentTwentyButtonClicked();
+}
+
+void Client::commandOpponentInAction()
+{
+    kDebug() << getName() << "Opponent in action.";
+    
+    emit signalOpponentInAction();
+}
+
+void Client::commandOpponentSelectedCard( const QString& commandValue )
+{
+    kDebug() << getName() << "Opponent selected new card.";
+    
+    //QList< QString >* valuesArray = getValues( getCommandValue( commandValue ) );
+    QStringList values = getValues( commandValue );
+    
+    try{
+        if( values.size() != 2 ) throw WRONG_VALUE_ARRAY_SIZE;
+                
+        bool ok;
+        
+        int cardId = values.at( 0 ).toInt( &ok );
+        if( !ok ) throw WRONG_VALUE;
+        
+        int cardValue = values.at( 1 ).toInt( &ok );
+        if( !ok ) throw WRONG_VALUE;
+        
+        Card* card = new Card( cardValue );
+        mCentralCards.append( card );
+        
+        emit signalOpponentSelectedCard( cardId, card );
+    }catch( int error ){
+        if( error == WRONG_VALUE_ARRAY_SIZE ) kDebug() << "ERROR! Wrong values size!";
+        if( error == WRONG_VALUE ) kDebug() << "ERROR! Wrong value!";
+    }
+            
+    //delete valuesArray;
+}
+
+void Client::commandVisibleOpponentCards( const QString& commandValue )
+{
+    kDebug() << getName() << "Visible opponent cards:" << getCommandValue( commandValue );
+    
+    //QList< QString >* valuesArray = getValues( getCommandValue( commandValue ) );
+    QStringList values = getValues( commandValue );
+    
+    try{
+        if( values.size() != VISIBLE_OPPONENT_CARDS_VALUES_SIZE ) throw WRONG_VALUE_ARRAY_SIZE;
+
+        bool ok;
+        
+        int card1Pos = values.at( 0 ).toInt( &ok );
+        if( !ok ) throw WRONG_VALUE;
+        
+        int card1Value = values.at( 1 ).toInt( &ok );
+        if( !ok ) throw WRONG_VALUE;
+        
+        int card2Pos = values.at( 2 ).toInt( &ok );
+        if( !ok ) throw WRONG_VALUE;
+        
+        int card2Value = values.at( 3 ).toInt( &ok );
+        if( !ok ) throw WRONG_VALUE;
+        
+        emit signalShowOpponentCards( card1Pos, Card(card1Value), card2Pos, Card(card2Value) );
+    }catch( int error ){
+        if( error == WRONG_VALUE_ARRAY_SIZE ) kDebug() << "ERROR! Wrong size of values in visible opponent cards command!";
+        if( error == WRONG_VALUE ) kDebug() << "ERROR! Wrong value in visible cards command!";
+    }
+    
+    //delete valuesArray;
+}
+
+void Client::commandPlayerTricksChanged( const QString& commandValue )
+{
+    kDebug() << getName() << "Player tricks changed:" << getCommandValue( commandValue );
+    
+    bool ok;
+    int ret = getCommandValue( commandValue ).toInt( &ok );
+    if( ok ){
+        setTricks( ret );
+    }else{
+        kDebug() << "ERROR! Cannot convert player tricks changed command value to int!";
+    }
+}
+
+void Client::commandPlayerScoresChanged( const QString& commandValue )
+{
+    kDebug() << getName() << "Player scores changed:" << getCommandValue( commandValue );
+    
+    bool ok;
+    int ret = getCommandValue( commandValue ).toInt( &ok );
+    if( ok ){
+        setScores( ret );
+    }else{
+        kDebug() << "ERROR! Cannot convert player scores changed command value to int!";
+    }
+}
+
+void Client::commandOpponentTricksChanged( const QString& commandValue )
+{
+    kDebug() << getName() << "Opponent tricks changed:" << getCommandValue( commandValue );
+    
+    bool ok;
+    int ret = getCommandValue( commandValue ).toInt( &ok );
+    if( ok ){
+        emit signalOpponentTricksChanged( ret );
+    }else{
+        kDebug() << "ERROR! Cannot convert opponent tricks changed command value to int!";
+    }
+}
+
+void Client::commandOpponentScoresChanged( const QString& commandValue )
+{
+    kDebug() << getName() << "Opponent scores changed:" << getCommandValue( commandValue );
+    
+    bool ok;
+    int ret = getCommandValue( commandValue ).toInt( &ok );
+    if( ok ){
+        emit signalOpponentScoresChanged( ret );
+    }else{
+        kDebug() << "ERROR! Cannot convert opponent scores changed command value to int!";
+    }
+}
+
+void Client::commandPlayerGetCentralCards()
+{
+    kDebug() << getName() << "Player get central cards.";
+    
+    clearCentralCards();
+    
+    emit signalPlayerGetCentralCards();
+}
+
+void Client::commandOpponentGetCentralCards()
+{
+    kDebug() << getName() << "Opponent get central cards.";
+    
+    clearCentralCards();
+    
+    emit signalOpponentGetCentralCards();
+}
+
+void Client::commandEndRound( const QString& commandValue )
+{
+    kDebug() << getName() << "End round.";
+    
+    //QList< QString >* values = getValues( getCommandValue( commandValue ) );
+    QStringList values = getValues( commandValue );
+    
+    try{
+        if( values.size() != END_ROUND_VALUES_SIZE ) throw WRONG_VALUE_ARRAY_SIZE;
+        
+        QString winnerName = values.at( 0 );
+        
+        bool ok;
+        int winnerScore = values.at( 1 ).toInt( &ok );
+        if( !ok ) throw WRONG_VALUE;
+        
+        emit signalEndRound( winnerName, winnerScore );
+    }catch( int error ){
+        if( error == WRONG_VALUE_ARRAY_SIZE ) kDebug() << "ERROR! Wrong size of values in end round command!";
+        if( error == WRONG_VALUE ) kDebug() << "ERROR! Cannot convert winner scores command value to int!";
+    }
+            
+    //delete values;
+}
+
+void Client::commandEndGame(const QString& commandValue)
+{
+    kDebug() << getName() << "End game.";
+    
+    emit signalEndGame( getCommandValue( commandValue ) );
 }
 
 /*void Client::slotSelectCardId( int id )
@@ -543,12 +737,12 @@ void Client::slotConnected()
     sendCommand( SELECTED_CARD_ID_COMMAND+QString::number( id ) );
 }*/
 
-void Client::slotSelectCardId( int id )
+void Client::slotSelectCardId( int cardId )
 {
-    kDebug() << "Select card:" << id;
+    kDebug() << "Select card:" << cardId;
     setSelectableAllCards( false );
     
-    Card* card = takeCard( id );
+    Card* card = takeCard( cardId );
     //mCentralCards->add( card );
     mCentralCards.append( card );
     
@@ -573,7 +767,7 @@ void Client::slotSelectCardId( int id )
         emit signalTrumpCardSelectableChanged( false );
     }
     
-    sendCommand( SELECTED_CARD_ID_COMMAND+QString::number( id ) );
+    sendCommand( SELECTED_CARD_ID_COMMAND+QString::number( cardId ) );
 }
 
 /*void Client::slotSelectTrumpCard()

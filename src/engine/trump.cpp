@@ -12,6 +12,14 @@ void Trump::addNewCard( Card* card )
     mCardSuit = mCard->getSuit();
 }
 
+Card* Trump::takeCard()
+{
+    Card* ret = mCard;
+    mCard = 0;
+    
+    return ret;
+}
+
 bool Trump::isEmpty()
 {
     if( mCard == 0 ){
@@ -20,11 +28,11 @@ bool Trump::isEmpty()
     return false;
 }
 
-void Trump::clearTrumpCard( bool removeData )
+/*void Trump::clearTrumpCard( bool removeData )
 {
     if( removeData ){
         delete mCard;
     }
     
     mCard = 0;
-}
+}*/
