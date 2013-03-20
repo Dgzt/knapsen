@@ -506,15 +506,6 @@ bool Server::isRoundOver()
 
 void Server::addNewCard( Player* player, Card* card )
 {
-    /*int cardId = player->sendNewCard( card );
-    
-    //Send player's card id to other players
-    for( int i = 0; i < mPlayerList.size(); ++i ){
-        if( mPlayerList.at( i ) != player ){
-            mPlayerList.at( i )->sendNewOpponentCard( cardId );
-        }
-    }*/
-    
     player->sendNewCard( card );
     
     //Send other players
@@ -551,7 +542,8 @@ void Server::addScores( Player* player, int newScores )
 
 void Server::addTrumpCardToPlayer( Player* player )
 {
-    player->sendNewCardTrumpCard();
+    //player->sendNewCardTrumpCard();
+    player->sendNewCardTrumpCard( mTrump->takeCard() );
     
     for( int i = 0; i < mPlayerList.size(); ++i ){
         if( mPlayerList.at( i ) != player ){
@@ -559,8 +551,7 @@ void Server::addTrumpCardToPlayer( Player* player )
         }
     }
     
-    //mTrump->clearTrumpCard( true );
-    mTrump->clearTrumpCard();
+    //mTrump->clearTrumpCard();
 }
 
 void Server::slotNewPlayer( Player* player )
@@ -657,6 +648,11 @@ void Server::slotPlayerDisconnected( Player* player )
 void Server::slotPlayerSelectedCardId( int selectedCardId )
 {
     kDebug() << "Selected card:" << getCurrentPlayer()->getCard( selectedCardId )->getCardText();
+    
+    //If the trump card is selectable then wont selectable.
+    if( !mTrump->isEmpty() && mTrump->getCard()->isSelectable() ){
+        mTrump->getCard()->setSelectable( false );
+    }
     
     //if( mCentralCards->isEmpty() ){
     if( mCentralCards.empty() ){
@@ -928,12 +924,7 @@ void Server::slotCheckCentralCards()
         kDebug() << "Start next turn";
         
         //Clear central cards
-        //mCentralCards->clear();
         clearCentralCards();
-        
-        /*for( int i = 0; i < mPlayerList.size(); ++i ){
-            mPlayerList.at( i )->sendClearCentralCards();
-        }*/
         
         for( int i = 0; i < mPlayerList.size(); ++i ){
             

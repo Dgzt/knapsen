@@ -338,8 +338,7 @@ bool Bot::trySelectEqualCentralMinPoints()
         
         card = getCard( i );
         
-        if( /*card != 0 &&*/
-            card->isSelectable() &&
+        if( card->isSelectable() &&
             card->getSuit() == centralCard0->getSuit() &&
             card->getCardPoint() > centralCard0->getCardPoint() )
         {

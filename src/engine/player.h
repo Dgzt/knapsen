@@ -476,7 +476,8 @@ public:
      */
     void sendNewCard( Card* card );
     
-    void sendNewCardTrumpCard(){ sendCommand( NEW_PLAYER_CARD_TRUMP_CARD_COMMAND ); }
+    //void sendNewCardTrumpCard(){ sendCommand( NEW_PLAYER_CARD_TRUMP_CARD_COMMAND ); }
+    void sendNewCardTrumpCard( Card* card );
     
     /*!
      * Send to the client the opponent have a new card from deck.

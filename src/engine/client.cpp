@@ -376,7 +376,7 @@ void Client::commandNewOpponentCard()
 
 void Client::commandNewPlayerTrumpCard()
 {
-    kDebug() << "Add the trump card to player.";
+    kDebug() << getName() << "Add the trump card to player.";
     
     //Card* newCard = mTrump->takeCard();
     //addNewCard( newCard );
@@ -387,7 +387,7 @@ void Client::commandNewPlayerTrumpCard()
 
 void Client::commandNewOpponentTrumpCard()
 {
-    kDebug() << "Add the trump card to the opponent.";
+    kDebug() << getName() << "Add the trump card to the opponent.";
     
     mTrump->clearTrumpCard();
     

@@ -471,6 +471,12 @@ void Player::sendNewCard( Card* card )
     sendCommand( NEW_PLAYER_CARD_COMMAND+QString::number( card->getValue() ) );
 }
 
+void Player::sendNewCardTrumpCard( Card* card )
+{
+    addNewCard( card );
+    
+    sendCommand( NEW_PLAYER_CARD_TRUMP_CARD_COMMAND );
+}
 
 void Player::sendNewTrumpCard( const Trump* trump )
 {
