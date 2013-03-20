@@ -316,6 +316,14 @@ void CentralWidget::slotNewRound()
         mOpponentSchnapsenText->hide();
     }
     
+    if( mOpponentFortyText->isVisible() ){
+        mOpponentFortyText->hide();
+    }
+    
+    if( mOpponentTwentyText->isVisible() ){
+        mOpponentTwentyText->hide();
+    }
+    
     //Set the score tables' final animation time
     mOpponentScoreTable->getAnimation()->setAnimationTime( CARD_ANIMATION_TIME );
     mPlayerScoreTable->getAnimation()->setAnimationTime( CARD_ANIMATION_TIME );
