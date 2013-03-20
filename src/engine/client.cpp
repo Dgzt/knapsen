@@ -323,6 +323,8 @@ void Client::commandNewRound()
     
     mDeckSize = mStartDeckSize;
     
+    emit signalOpponentTricksChanged( 0 );
+    
     emit signalNewRound();        
 }
 
