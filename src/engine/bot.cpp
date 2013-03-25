@@ -249,7 +249,8 @@ bool Bot::trySelectNotEqualTrump( Card::Type cardType )
 {
     kDebug() << "If have" << cardType << "and the type of card is not equal with type of trump card then select card.";
     Card* card;
-    Card::Suit trumpCardSuit = getTrump()->getCard()->getSuit();
+    //Card::Suit trumpCardSuit = getTrump()->getCard()->getSuit();
+    Card::Suit trumpCardSuit = getTrump()->getCardSuit();
     
     for( int i = 0; i < getNumberOfCards(); ++i ){
         card = getCard( i );
@@ -296,7 +297,8 @@ bool Bot::trySelectEqualTrump( Card::Type cardType )
     kDebug() << "If have card, what the type of card is equal with the type of trump card, then select card.";
     
     Card* card;
-    Card::Suit trumpCardSuit = getTrump()->getCard()->getSuit();
+    //Card::Suit trumpCardSuit = getTrump()->getCard()->getSuit();
+    Card::Suit trumpCardSuit = getTrump()->getCardSuit();
     
     for( int i = 0; i < getNumberOfCards(); ++i ){
         card = getCard( i );
