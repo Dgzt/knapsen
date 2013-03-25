@@ -1,8 +1,5 @@
 #include <QtCore/QTimer>
 #include <KDE/KDebug>
-//#include "gamesequence.h"
-//#include "deck.h"
-//#include "centralcards.h"
 #include "trump.h"
 #include "bot.h"
 #include "player.h"
@@ -10,6 +7,11 @@
 
 //Only 2 players game, 4 players maybe in the future...
 const int MAX_PLAYERS = 2;
+
+const int HALF_WIN_POINTS = 33; //33
+const int WIN_TRICKS = 66; //66
+
+const int WIN_SCORES = 7; //7
 
 Server::Server(Knapsen::TypeOfCards typeOfCards, 
                int sizeOfDeck, 
@@ -120,16 +122,15 @@ void Server::newRound()
     kDebug() << "Start new round.";
     
     //Build deck
-    //mDeck->build();
     buildDeck();
     
     //Clear central cards
-    //mCentralCards->clear();
     clearCentralCards();
     
     //Clear trump card
-    //mTrump->clearTrumpCard( true );
-    mTrump->clearTrumpCard();
+    if( !mTrump->isEmpty() ){
+        mTrump->clearTrumpCard();
+    }
     
     //Clear variables
     mOpponentHaveNotTricksBeforePlayerClickedToCloseButton = false;
@@ -330,10 +331,10 @@ void Server::roundOver()
     }else{
         if( mPlayerWhoClickedToCloseButtonThisRound ){
             
-            if( mPlayerWhoClickedToCloseButtonThisRound == currentPlayer && currentPlayer->getTricks() >= 66 ){
+            if( mPlayerWhoClickedToCloseButtonThisRound == currentPlayer && currentPlayer->getTricks() >= WIN_TRICKS ){
                 winnerPlayer = currentPlayer;
                 looserPlayer = nextPlayer;
-            }else if( mPlayerWhoClickedToCloseButtonThisRound == nextPlayer && nextPlayer->getTricks() >= 66 ){
+            }else if( mPlayerWhoClickedToCloseButtonThisRound == nextPlayer && nextPlayer->getTricks() >= WIN_TRICKS ){
                 winnerPlayer = nextPlayer;
                 looserPlayer = currentPlayer;
             }else if( mPlayerWhoClickedToCloseButtonThisRound == currentPlayer ){
@@ -346,10 +347,10 @@ void Server::roundOver()
 
         }else{
             
-            if( currentPlayer->getTricks() >= 66 ){
+            if( currentPlayer->getTricks() >= WIN_TRICKS ){
                 winnerPlayer = currentPlayer;
                 looserPlayer = nextPlayer;
-            }else if( nextPlayer->getTricks() >= 66 ){
+            }else if( nextPlayer->getTricks() >= WIN_TRICKS ){
                 winnerPlayer = nextPlayer;
                 looserPlayer = currentPlayer;
             //}else if( currentPlayer->getNumberOfCardsInHandNow() == 0 ){
@@ -374,7 +375,7 @@ void Server::roundOver()
             
             if( looserPlayer->getTricks() == 0 ){
                 scores = 3;
-            }else if( looserPlayer->getTricks() < 33 ){
+            }else if( looserPlayer->getTricks() < HALF_WIN_POINTS ){
                 scores = 2;
             }else{ //  33 <= looserPlayer->getTricks() && looserPlayer->getTricks() < 66
                 scores = 1;
@@ -393,7 +394,7 @@ void Server::roundOver()
             
             if( looserPlayer->getTricks() == 0 ){
                 scores = 3;
-            }else if( looserPlayer->getTricks() < 33 ){
+            }else if( looserPlayer->getTricks() < HALF_WIN_POINTS ){
                 scores = 2;
             }else{ //  33 <= looserPlayer->getTricks() && looserPlayer->getTricks() < 66
                 scores = 1;
@@ -470,7 +471,7 @@ Player* Server::getNextPlayer()
 bool Server::isGameOver()
 {
     for( int i = 0; i < mPlayerList.size(); ++i ){
-        if( mPlayerList.at( i )->getScores() >= 7 ){ // mPlayers->at( i )->getScores() >= 7
+        if( mPlayerList.at( i )->getScores() >= WIN_SCORES ){
             return true;
         }
     }
@@ -482,7 +483,7 @@ bool Server::isRoundOver()
 {
     //If a player have equal or more then 66 tricks, will have win the round
     for( int i = 0; i < mPlayerList.size(); ++i ){
-        if( mPlayerList.at( i )->getTricks() >= 66 ){
+        if( mPlayerList.at( i )->getTricks() >= WIN_TRICKS ){ 
             return true;
         }
     }
@@ -570,7 +571,6 @@ void Server::slotNewPlayer( Player* player )
         
         mPlayerList.append( player );
         
-        //connect( player, SIGNAL( signalSelectedCard( Card*, int ) ),    this, SLOT( slotPlayerSelectedCard( Card*, int ) ) ); 
         connect( player, SIGNAL( signalSelectedCardId( int ) ),         this, SLOT( slotPlayerSelectedCardId( int ) ) );
         connect( player, SIGNAL( signalTwentyButtonClicked() ),         this, SLOT( slotPlayerTwentyButtonClicked() ) );
         connect( player, SIGNAL( signalFortyButtonClicked() ),          this, SLOT( slotPlayerFortyButtonClicked() ) );
@@ -665,9 +665,9 @@ void Server::slotPlayerSelectedCardId( int selectedCardId )
             kDebug() << "Position of card:" << selectedCardId << "position of pair of card:" << posOfPairOfCard;
             
             getNextPlayer()->sendShowOpponentCards( selectedCardId, 
-                                                       getCurrentPlayer()->getCard( selectedCardId ),
-                                                       posOfPairOfCard,
-                                                       getCurrentPlayer()->getCard( posOfPairOfCard ) );
+                                                    getCurrentPlayer()->getCard( selectedCardId ),
+                                                    posOfPairOfCard,
+                                                    getCurrentPlayer()->getCard( posOfPairOfCard ) );
             
             if( getCurrentPlayer()->getTricks() > 0 ){
                 
@@ -1001,6 +1001,40 @@ void Server::slotCheckCentralCards()
     
 }
 
+/*void Server::slotPlayerWantStartNextRound( Player *player )
+{
+    if( mPlayerListWhoWantNewRound != 0 ){
+        
+        for( int i = 0; i < mPlayerListWhoWantNewRound->size(); ++i ){
+            if( player == mPlayerListWhoWantNewRound->at( i ) ){
+                kDebug() << "ERROR!" << player->getName() << "want again start next round!";
+                return;
+            }
+        }
+        
+        mPlayerListWhoWantNewRound->append( player );
+        
+        if( mPlayerListWhoWantNewRound->size() == mPlayerList.size() ){
+            mPlayerListWhoWantNewRound->clear();
+            delete mPlayerListWhoWantNewRound;
+            mPlayerListWhoWantNewRound = 0;
+            
+            kDebug() << "Start next round.";
+            
+            nextPlayerStartRound();
+            
+            newRound();
+            
+            for( int i = 0; i < mPlayerList.size(); ++i ){
+                mPlayerList.at( i )->sendCommandsEnd();
+            }
+        }
+        
+    }else{ //mPlayerListWhoWantNewRound != 0
+        kDebug() << "ERROR!" << player->getName() << "want start next round, but this isn't possible!";
+    }
+}*/
+
 void Server::slotPlayerWantStartNextRound( Player *player )
 {
     if( mPlayerListWhoWantNewRound != 0 ){
@@ -1111,7 +1145,7 @@ void Server::addBot( QString name, Knapsen::GameDifficulty difficulty )
 {
     mBot = new Bot( name, difficulty );
     
-    mBot->connectToHost( "127.0.0.1", serverPort() );
+    mBot->connectToHost( QHostAddress::LocalHost , serverPort() );
 }
 
 void Server::startGame()

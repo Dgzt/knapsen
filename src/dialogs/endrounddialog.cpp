@@ -2,7 +2,8 @@
 
 #include "endrounddialog.h"
 
-EndRoundDialog::EndRoundDialog( QWidget* parent, QString winnerName, int winnerAcquiredScores ): KDialog(parent)
+EndRoundDialog::EndRoundDialog( QWidget* parent, QString winnerName, int winnerAcquiredScores ) : 
+    KDialog(parent)
 {
     QWidget* mainWidget = new QWidget( this );
     

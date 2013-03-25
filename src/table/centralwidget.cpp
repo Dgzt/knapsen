@@ -248,47 +248,54 @@ void CentralWidget::slotNewGame()
 {
     kDebug();
     
-    //Opponent's name
-    setOpponentNameStartPos();
-    setOpponentNameEndPos();
     
-    mOpponentName->setVisible( true );
-    mOpponentName->getAnimation()->startAnimation();
+    if( !mOpponentName->isVisible() ){ //If the first game
     
-    //Opponent's cards
-    setOpponentCardsPos();
-    
-    //Opponent's score table
-    setOpponentScoreTableStartPos();
-    setOpponentScoreTableEndPos();
-    
-    mOpponentScoreTable->setVisible( true );
-    mOpponentScoreTable->getAnimation()->startAnimation();
-    
-    //Opponent's schnapsen text
-    setOpponentSchnapsenTextStartPos();
-    
-    //Player's name
-    setPlayerNameStartPos();
-    setPlayerNameEndPos();
-    
-    mPlayerName->setVisible( true );
-    mPlayerName->getAnimation()->startAnimation();
-    
-    //Player's cards
-    setPlayerCardsPos();
-    
-    //Player's score table
-    setPlayerScoreTableStartPos();
-    setPlayerScoreTableEndPos();
-    
-    mPlayerScoreTable->setVisible( true );
-    mPlayerScoreTable->getAnimation()->startAnimation();
-    
-    //Central cards
-    setCentralCardsPos();
-    
-    mTimer->start( NAME_ANIMATION_TIME );
+        //Opponent's name
+        setOpponentNameStartPos();
+        setOpponentNameEndPos();
+        
+        mOpponentName->setVisible( true );
+        mOpponentName->getAnimation()->startAnimation();
+        
+        //Opponent's cards
+        setOpponentCardsPos();
+        
+        //Opponent's score table
+        setOpponentScoreTableStartPos();
+        setOpponentScoreTableEndPos();
+        
+        mOpponentScoreTable->setVisible( true );
+        mOpponentScoreTable->getAnimation()->startAnimation();
+        
+        //Opponent's schnapsen text
+        setOpponentSchnapsenTextStartPos();
+        
+        //Player's name
+        setPlayerNameStartPos();
+        setPlayerNameEndPos();
+        
+        mPlayerName->setVisible( true );
+        mPlayerName->getAnimation()->startAnimation();
+        
+        //Player's cards
+        setPlayerCardsPos();
+        
+        //Player's score table
+        setPlayerScoreTableStartPos();
+        setPlayerScoreTableEndPos();
+        
+        mPlayerScoreTable->setVisible( true );
+        mPlayerScoreTable->getAnimation()->startAnimation();
+        
+        //Central cards
+        setCentralCardsPos();
+        
+        mTimer->start( NAME_ANIMATION_TIME );
+    }else{ 
+        //Not frist game, then skip the name and score table animation
+        mTimer->start( 0 );
+    }
 }
 
 void CentralWidget::slotNewRound()

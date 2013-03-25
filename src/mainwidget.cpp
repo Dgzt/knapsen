@@ -387,6 +387,7 @@ void MainWindow::slotGameError( Client::GameErrorType gameErrorType )
 void MainWindow::slotEndRound( QString roundWinnerName, int scores )
 {
     endRoundDialog = new EndRoundDialog( this, roundWinnerName, scores );
+    
     QTimer::singleShot( 0, this, SLOT( slotEndRoundExec() ) );
 }
 
@@ -442,7 +443,7 @@ void MainWindow::slotEndGameExec()
         connect( client, SIGNAL( signalGameError( Client::GameErrorType ) ), &waitingForOpponentDialog, SLOT( accept() ) );
         connect( client, SIGNAL( error( QAbstractSocket::SocketError ) ), &waitingForOpponentDialog, SLOT( accept() ) );
         
-        connect( client, SIGNAL( signalStartGame() ), &waitingForOpponentDialog, SLOT( accept() ) );
+        connect( client, SIGNAL( signalNewGame() ), &waitingForOpponentDialog, SLOT( accept() ) );
         
         client->startNextGame();
         
