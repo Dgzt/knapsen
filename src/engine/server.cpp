@@ -984,7 +984,7 @@ void Server::slotCheckCentralCards()
             getCurrentPlayer()->sendFortyButtonVisible();
         }
         
-        if( getCurrentPlayer()->canChangeTrumpCard( mTrump ) ){
+        if( !mTrump->isEmpty() && getCurrentPlayer()->canChangeTrumpCard( mTrump ) ){
             kDebug() << getCurrentPlayer()->getName() << "can change trump card.";
             getCurrentPlayer()->sendSelectableTrumpCard();
         }
