@@ -19,6 +19,7 @@ Server::Server(Knapsen::TypeOfCards typeOfCards,
                Knapsen::WhoStartGame whoStartGame,
                bool schnapsenButton
               ) :
+    QTcpServer(),
     mTypeOfCards( typeOfCards ),
     mSizeOfDeck( sizeOfDeck ),
     mNumberOfCardsInHand( numberOfCardsInHand ),
