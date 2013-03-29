@@ -2,6 +2,8 @@
 #include <KDE/KLocalizedString>
 #include "dialogs/newgamedialog.h"
 
+#include "settings.h"
+
 #include "ui_newgamewidget_local.h"
 #include "ui_newgamewidget_client.h"
 #include "ui_newgamewidget_server.h"
@@ -20,6 +22,10 @@ NewGameDialog::NewGameDialog( QWidget* parent, Qt::WFlags flags ): KPageDialog( 
     
     QWidget *localWidget = new QWidget;
     mLocalWidgetUi->setupUi( localWidget );
+    
+    //
+    setDifficulty();
+    //
     
     KPageWidgetItem *localPageWidgetItem = new KPageWidgetItem( localWidget, LOCAL_STRING );
     localPageWidgetItem->setIcon( KIcon( "localmode.png" ) );
@@ -47,8 +53,38 @@ NewGameDialog::NewGameDialog( QWidget* parent, Qt::WFlags flags ): KPageDialog( 
     serverPageWidgetItem->setIcon( KIcon( "servermode.png" ) );
     
     addPage( serverPageWidgetItem );
+    
+    connect( this, SIGNAL( accepted() ), this, SLOT( slotAccepted() ) );
 }
 
+void NewGameDialog::setDifficulty()
+{   
+    switch( Settings::difficulty() ){
+        case 0 : mLocalWidgetUi->easyRadioButton->setChecked( true ); break;
+        case 1 : mLocalWidgetUi->normalRadioButton->setChecked( true ); break;
+        case 2 : mLocalWidgetUi->hardRadioButton->setChecked( true ); break;
+    }
+}
+
+void NewGameDialog::slotAccepted()
+{
+    if( getGameMode() == Knapsen::LocalMode ){
+        
+        if( mLocalWidgetUi->easyRadioButton->isChecked() ){
+            Settings::setDifficulty( 0 );
+        }
+        
+        if( mLocalWidgetUi->normalRadioButton->isChecked() ){
+            Settings::setDifficulty( 1 );
+        }
+        
+        if( mLocalWidgetUi->hardRadioButton->isChecked() ){
+            Settings::setDifficulty( 2 );
+        }
+        
+        Settings::self()->writeConfig();
+    }
+}
 
 Knapsen::GameStatus NewGameDialog::getGameMode() const
 {
@@ -64,7 +100,7 @@ Knapsen::GameDifficulty NewGameDialog::getGameDifficulty()
 {
     if( mLocalWidgetUi->easyRadioButton->isChecked() ){
         return Knapsen::Easy;
-    }else if( mLocalWidgetUi->mediumRadioButton->isChecked() ){
+    }else if( mLocalWidgetUi->normalRadioButton->isChecked() ){
         return Knapsen::Medium;
     } //else mLocalWidgetUi->hardRadioButton->isChecked()
     
