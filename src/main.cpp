@@ -3,7 +3,7 @@
 #include <KDE/KAboutData>
 #include <KDE/KCmdLineArgs>
 #include <KDE/KLocale>
-#include "mainwidget.h"
+#include "mainwindow.h"
 
 static const char description[] =
     I18N_NOOP("Knapsen is a Sixty-six card game for KDE.");

@@ -62,23 +62,6 @@
         </entry>
         
     </group>
-<!--    
-    <group name="Difficulty">
-        
-        <entry name="Easy" type="Bool">
-            <default>false</default>
-        </entry>
-        
-        <entry name="Normal" type="Bool">
-            <default>true</default>
-        </entry>
-        
-        <entry name="Hard" type="Bool">
-            <default>false</default>
-        </entry>
-        
-    </group>
-    -->
     
     <group name="LocalGame">
     

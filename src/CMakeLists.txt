@@ -19,7 +19,7 @@ set(knapsen_HDRS
     dialogs/waitforserverdialog.h
     dialogs/waitforclientdialog.h
     dialogs/newgamedialog.h
-    mainwidget.h
+    mainwindow.h
 )
 
 set(knapsen_SRCS
@@ -41,7 +41,7 @@ set(knapsen_SRCS
     dialogs/waitforserverdialog.cpp
     dialogs/waitforclientdialog.cpp
     dialogs/newgamedialog.cpp
-    mainwidget.cpp
+    mainwindow.cpp
     main.cpp
 )
 
