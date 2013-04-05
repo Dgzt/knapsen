@@ -3,6 +3,7 @@
 #include "player.h"
 
 Player::Player( QString name ): 
+    QTcpSocket(),
     mName( name ),
     mLowestCardType( Card::Jack ),
     //mNumberOfCardsInHand( 0 ),

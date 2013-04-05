@@ -744,7 +744,7 @@ void Server::slotPlayerSelectedCardId( int selectedCardId )
         mCentralCards.append( selectedCard );
         getNextPlayer()->sendOpponentSelectedCard( selectedCardId, selectedCard );
         
-        QTimer::singleShot( 1000, this, SLOT( slotCheckCentralCards() ) );
+        QTimer::singleShot( /*1000*/ 0, this, SLOT( slotCheckCentralCards() ) );
         
         //
         getNextPlayer()->sendCommandsEnd();

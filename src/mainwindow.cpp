@@ -35,7 +35,7 @@ MainWindow::MainWindow( QWidget* parent ) :
     mGameStatus( Knapsen::None )
 {
     mServer = 0;
-    client = 0;
+    mClient = 0;
     endRoundDialog = 0;
     endGameDialog = 0;
     
@@ -43,8 +43,8 @@ MainWindow::MainWindow( QWidget* parent ) :
     initializePaths();
     
     //Setup the central widget
-    cWidget = new CentralWidget( this );
-    setCentralWidget( cWidget );
+    mCWidget = new CentralWidget( this );
+    setCentralWidget( mCWidget );
 
     setupActions();
 
@@ -153,10 +153,10 @@ Server* MainWindow::createServer()
 
 void MainWindow::setGameSignals()
 {
-    connect( client, SIGNAL( error( QAbstractSocket::SocketError ) ),    this,   SLOT( slotSocketError( QAbstractSocket::SocketError ) ) );
-    connect( client, SIGNAL( signalGameError( Client::GameErrorType ) ), this,   SLOT( slotGameError( Client::GameErrorType ) ) );
-    connect( client, SIGNAL( signalEndRound( QString, int ) ),           this,   SLOT( slotEndRound( QString, int ) ) );
-    connect( client, SIGNAL( signalEndGame( QString ) ),                 this,   SLOT( slotEndGame( QString ) ) );
+    connect( mClient, SIGNAL( error( QAbstractSocket::SocketError ) ),    this,   SLOT( slotSocketError( QAbstractSocket::SocketError ) ) );
+    connect( mClient, SIGNAL( signalGameError( Client::GameErrorType ) ), this,   SLOT( slotGameError( Client::GameErrorType ) ) );
+    connect( mClient, SIGNAL( signalEndRound( QString, int ) ),           this,   SLOT( slotEndRound( QString, int ) ) );
+    connect( mClient, SIGNAL( signalEndGame( QString ) ),                 this,   SLOT( slotEndGame( QString ) ) );
 }
 
 void MainWindow::newGameSlot()
@@ -182,9 +182,9 @@ void MainWindow::newGameSlot()
     if( ret ){
         kDebug() << "KDialog button: Ok";
         
-        client = new Client( Settings::playerName() );
+        mClient = new Client( Settings::playerName() );
         //
-        cWidget->setClient( client );
+        mCWidget->setClient( mClient );
         //
         
         setGameSignals();
@@ -200,7 +200,8 @@ void MainWindow::newGameSlot()
             if( mServer->listen( QHostAddress::LocalHost ) ){
                 kDebug() << "Server port:" << mServer->serverPort();
                 
-                client->connectToHost( "127.0.0.1", mServer->serverPort() );
+                //mClient->connectToHost( "127.0.0.1", mServer->serverPort() );
+                mClient->connectToHost( QHostAddress::LocalHost, mServer->serverPort() );
                 
                 mServer->addBot( Settings::botName(), newGameDialog.getGameDifficulty() );
                 
@@ -208,8 +209,8 @@ void MainWindow::newGameSlot()
             }else{
                 kDebug() << "Server listen error!";
                 
-                delete client;
-                client = 0;
+                delete mClient;
+                mClient = 0;
             }
             
         }else if( newGameDialog.getGameMode() == Knapsen::ClientMode ){
@@ -217,20 +218,20 @@ void MainWindow::newGameSlot()
             
             WaitForServerDialog waitForServerDialog;
             
-            connect( client, SIGNAL( error( QAbstractSocket::SocketError ) ), &waitForServerDialog, SLOT( reject() ) );
-            connect( client, SIGNAL( signalGameError( Client::GameErrorType ) ), &waitForServerDialog, SLOT( reject() ) );
-            connect( client, SIGNAL( signalNewGame() ), &waitForServerDialog, SLOT( accept() ) );
+            connect( mClient, SIGNAL( error( QAbstractSocket::SocketError ) ), &waitForServerDialog, SLOT( reject() ) );
+            connect( mClient, SIGNAL( signalGameError( Client::GameErrorType ) ), &waitForServerDialog, SLOT( reject() ) );
+            connect( mClient, SIGNAL( signalNewGame() ), &waitForServerDialog, SLOT( accept() ) );
             
-            client->connectToHost( newGameDialog.getClient_ServerAddress(), newGameDialog.getClient_ServerPort() );
+            mClient->connectToHost( newGameDialog.getClient_ServerAddress(), newGameDialog.getClient_ServerPort() );
             
             if( waitForServerDialog.exec() ){
                 mCloseGameAction->setEnabled( true );
                 mGameStatus = Knapsen::ClientMode;
             }else{
                 kDebug() << "WaitForServerDialog - Cancel button.";
-                client->disconnectFromHost();
-                delete client;
-                client = 0;
+                mClient->disconnectFromHost();
+                delete mClient;
+                mClient = 0;
                 
             }
             
@@ -243,10 +244,10 @@ void MainWindow::newGameSlot()
             
             if( mServer->listen( QHostAddress::Any, newGameDialog.getServer_ServerPort() ) ){
             
-                client->connectToHost( QHostAddress::LocalHost , mServer->serverPort() );
+                mClient->connectToHost( QHostAddress::LocalHost , mServer->serverPort() );
                 
                 WaitForClientDialog waitForClientDialog;
-                waitForClientDialog.setAdminName( client->getName() );
+                waitForClientDialog.setAdminName( mClient->getName() );
                 
                 connect( mServer, SIGNAL( signalPlayerConnected( QString ) ), &waitForClientDialog, SLOT( slotPlayerConnected( QString ) ) );
                 connect( mServer, SIGNAL( signalPlayerDisconnected( QString ) ), &waitForClientDialog, SLOT( slotPlayerDisconnectedSlot( QString ) ) );
@@ -260,16 +261,16 @@ void MainWindow::newGameSlot()
                 }else{
                     kDebug() << "WaitForClientDialog - Cancel button";
                     
-                    client->disconnectFromHost();
-                    delete client;
-                    client = 0;
+                    mClient->disconnectFromHost();
+                    delete mClient;
+                    mClient = 0;
                 }
                 
             }else{
                 kDebug() << "The port is busy!";
                 
-                delete client;
-                client = 0;
+                delete mClient;
+                mClient = 0;
             }
             
         }
@@ -282,14 +283,14 @@ void MainWindow::closeGameSlot()
 {
     kDebug() << "Close game.";
     
-    cWidget->clearWidget();
+    mCWidget->clearWidget();
     
-    client->disconnectFromHost();
+    mClient->disconnectFromHost();
     
     //delete client;
     //client = 0;
-    client->deleteLater();
-    client = 0;
+    mClient->deleteLater();
+    mClient = 0;
     
     mCloseGameAction->setEnabled( false );
         
@@ -393,8 +394,8 @@ void MainWindow::slotEndRound( QString roundWinnerName, int scores )
 
 void MainWindow::slotEndRoundExec()
 {
-    connect( client, SIGNAL( signalGameError( Client::GameErrorType ) ), endRoundDialog, SLOT( reject() ) );
-    connect( client, SIGNAL( error( QAbstractSocket::SocketError ) ), endRoundDialog, SLOT( reject() ) );
+    connect( mClient, SIGNAL( signalGameError( Client::GameErrorType ) ), endRoundDialog, SLOT( reject() ) );
+    connect( mClient, SIGNAL( error( QAbstractSocket::SocketError ) ), endRoundDialog, SLOT( reject() ) );
     
     int ret = endRoundDialog->exec();
     
@@ -404,12 +405,12 @@ void MainWindow::slotEndRoundExec()
     if( ret ){
         WaitingForOpponentDialog waitingForOpponentDialog( this );
         
-        connect( client, SIGNAL( signalGameError( Client::GameErrorType ) ), &waitingForOpponentDialog, SLOT( accept() ) );
-        connect( client, SIGNAL( error( QAbstractSocket::SocketError ) ), &waitingForOpponentDialog, SLOT( accept() ) );
+        connect( mClient, SIGNAL( signalGameError( Client::GameErrorType ) ), &waitingForOpponentDialog, SLOT( accept() ) );
+        connect( mClient, SIGNAL( error( QAbstractSocket::SocketError ) ), &waitingForOpponentDialog, SLOT( accept() ) );
         
-        connect( client, SIGNAL( signalNewRound() ), &waitingForOpponentDialog, SLOT( accept() ) );
+        connect( mClient, SIGNAL( signalNewRound() ), &waitingForOpponentDialog, SLOT( accept() ) );
         
-        client->startNextRound();
+        mClient->startNextRound();
         
         waitingForOpponentDialog.exec();
     }else{
@@ -429,8 +430,8 @@ void MainWindow::slotEndGame( QString gameWinnerName )
 
 void MainWindow::slotEndGameExec()
 {
-    connect( client, SIGNAL( signalGameError( Client::GameErrorType ) ), endGameDialog, SLOT( reject() ) );
-    connect( client, SIGNAL( error( QAbstractSocket::SocketError ) ), endGameDialog, SLOT( reject() ) );
+    connect( mClient, SIGNAL( signalGameError( Client::GameErrorType ) ), endGameDialog, SLOT( reject() ) );
+    connect( mClient, SIGNAL( error( QAbstractSocket::SocketError ) ), endGameDialog, SLOT( reject() ) );
     
     int ret = endGameDialog->exec();
     
@@ -440,12 +441,12 @@ void MainWindow::slotEndGameExec()
         
         WaitingForOpponentDialog waitingForOpponentDialog( this );
         
-        connect( client, SIGNAL( signalGameError( Client::GameErrorType ) ), &waitingForOpponentDialog, SLOT( accept() ) );
-        connect( client, SIGNAL( error( QAbstractSocket::SocketError ) ), &waitingForOpponentDialog, SLOT( accept() ) );
+        connect( mClient, SIGNAL( signalGameError( Client::GameErrorType ) ), &waitingForOpponentDialog, SLOT( accept() ) );
+        connect( mClient, SIGNAL( error( QAbstractSocket::SocketError ) ), &waitingForOpponentDialog, SLOT( accept() ) );
         
-        connect( client, SIGNAL( signalNewGame() ), &waitingForOpponentDialog, SLOT( accept() ) );
+        connect( mClient, SIGNAL( signalNewGame() ), &waitingForOpponentDialog, SLOT( accept() ) );
         
-        client->startNextGame();
+        mClient->startNextGame();
         
         waitingForOpponentDialog.exec();
         

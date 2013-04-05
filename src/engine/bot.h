@@ -35,8 +35,6 @@ class Bot : public Client
     bool trySelectEqualTrumpMinPoints();
 
 private slots:
-    void slotPlayerInAction();
-    
     void slotSelectCard();
     
     void slotNewRound();

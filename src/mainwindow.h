@@ -23,11 +23,11 @@ class MainWindow : public KXmlGuiWindow
     
     KAction* mCloseGameAction;
     
-    CentralWidget* cWidget;
+    CentralWidget* mCWidget;
     
     Server* mServer;
     
-    Client* client;
+    Client* mClient;
     
     //
     EndRoundDialog *endRoundDialog;

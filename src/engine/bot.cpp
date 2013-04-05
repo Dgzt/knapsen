@@ -12,7 +12,8 @@ Bot::Bot( QString name, Knapsen::GameDifficulty difficulty ):
 {
     kDebug() << "Initialize.";
     
-    connect( this, SIGNAL( signalPlayerInAction() ),                            this, SLOT( slotPlayerInAction() ) );
+    //connect( this, SIGNAL( signalPlayerInAction() ),                            this, SLOT( slotPlayerInAction() ) );
+    connect( this, SIGNAL( signalPlayerInAction() ),                            this, SLOT( slotSelectCard() ) );
     connect( this, SIGNAL( signalNewRound() ),                                  this, SLOT( slotNewRound() ) );
     connect( this, SIGNAL( signalCloseDeck() ),                                 this, SLOT( slotCloseDeck() ) );
     //connect( this, SIGNAL( signalNewCentralCard( const Card* ) ),               this, SLOT( slotNewCentralCard( const Card* ) ) );
@@ -52,11 +53,6 @@ bool Bot::getPairOfCardWasInCentral( Card::Type cardType, Card::Suit cardSuit )
     }
     
     return false;
-}
-
-void Bot::slotPlayerInAction()
-{
-    QTimer::singleShot( 1000, this, SLOT( slotSelectCard() ) );
 }
 
 void Bot::slotSelectCard()
