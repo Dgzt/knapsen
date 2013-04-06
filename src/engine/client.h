@@ -50,9 +50,8 @@ class Client : public Player
     bool mCommandsUnderProcessing;
     //
     
-    //
-    int mSelectedCardId;
-    //
+    //The id of the last selected player card
+    int mLastSelectedCardId;
     
     //
     //QList<QString>* getValues( QString );
@@ -292,7 +291,7 @@ protected slots:
     /*!
      * Send to the server the last selected card ID. 
      */
-    void slotSendSelectedCardId(){ sendCommand( SELECTED_CARD_ID_COMMAND+QString::number( mSelectedCardId ) ); }
+    void slotSendSelectedCardId(){ sendCommand( SELECTED_CARD_ID_COMMAND+QString::number( mLastSelectedCardId ) ); }
     
     /*!
      * Emit the signalPlayerGetCentralCard signal.

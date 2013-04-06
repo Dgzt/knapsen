@@ -15,6 +15,7 @@ const int OPPONENT_CHANGE_TRUMP_CARD_VALUES_SIZE = 2;
 const int VISIBLE_OPPONENT_CARDS_VALUES_SIZE = 4;
 const int END_ROUND_VALUES_SIZE = 2;
 
+const int OPPONENT_DELAY = 1000;
 const int GET_CENTRAL_CARDS_DELAY = 1000;
 
 Client::Client( QString name ): 
@@ -774,7 +775,7 @@ void Client::slotSelectCardId( int cardId, int delay )
     }
 
     //sendCommand( SELECTED_CARD_ID_COMMAND+QString::number( cardId ) );
-    mSelectedCardId = cardId;
+    mLastSelectedCardId = cardId;
     QTimer::singleShot( delay, this, SLOT( slotSendSelectedCardId() ) );
 }
 
