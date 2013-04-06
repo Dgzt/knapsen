@@ -94,7 +94,7 @@ signals:
     //
     void signalSelectedCard( SvgCard* );
     //
-    void signalSelectedCardId( int );
+    void signalSelectedCardId( int, int );
     
     //
     void signalHideCards();

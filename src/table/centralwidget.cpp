@@ -151,8 +151,8 @@ void CentralWidget::slotInitialize( QString playerName, QString opponentName, Kn
     connect( mClient, SIGNAL( signalPlayerCardSelectableChanged( int , bool ) ), mPlayerCards, SLOT( slotSelectableChanged( int , bool ) ) );
     connect( mPlayerCards, SIGNAL( signalSizeChanged() ), this, SLOT( slotPlayerCardsSizeChanged() ) );
     connect( mPlayerCards, SIGNAL( signalCardArrived() ), mClient, SLOT( slotProcessCommands() ) );
-    //connect( mPlayerCards, SIGNAL( signalSelectedCardId( int ) ), mClient, SLOT( slotSelectCardId( int ) ) );
-    connect( mPlayerCards, SIGNAL( signalSelectedCardId( int ) ), this, SLOT( slotPlayerSelectedCard() ) );
+    connect( mPlayerCards, SIGNAL( signalSelectedCardId( int, int ) ), mClient, SLOT( slotSelectCardId( int, int ) ) );
+    connect( mPlayerCards, SIGNAL( signalSelectedCardId( int, int ) ), this, SLOT( slotPlayerSelectedCard() ) );
     
     //Setup central cards
     mCentralCards = new CardsGroup;
@@ -210,7 +210,7 @@ void CentralWidget::slotInitialize( QString playerName, QString opponentName, Kn
     mOpponentArrow->setVisible( false );
     
     connect( mClient, SIGNAL( signalPlayerInAction() ), this, SLOT( slotShowPlayerArrow() ) );
-    connect( mPlayerCards, SIGNAL( signalSelectedCardId(int) ), this, SLOT( slotHidePlayerArrow() ) );
+    connect( mPlayerCards, SIGNAL( signalSelectedCardId( int, int ) ), this, SLOT( slotHidePlayerArrow() ) );
     connect( mClient, SIGNAL( signalOpponentInAction() ), this, SLOT( slotShowOpponentArrow() ) );
     connect( mOpponentCards, SIGNAL( signalSelectedCard( SvgCard* ) ), this, SLOT( slotHideOpponentArrow() ) );
     

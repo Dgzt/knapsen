@@ -51,6 +51,10 @@ class Client : public Player
     //
     
     //
+    int mSelectedCardId;
+    //
+    
+    //
     //QList<QString>* getValues( QString );
     QStringList getValues( const QString& );
     //
@@ -284,6 +288,22 @@ protected:
      */
     void commandEndGame( const QString& commandValue );
     
+protected slots:
+    /*!
+     * Send to the server the last selected card ID. 
+     */
+    void slotSendSelectedCardId(){ sendCommand( SELECTED_CARD_ID_COMMAND+QString::number( mSelectedCardId ) ); }
+    
+    /*!
+     * Emit the signalPlayerGetCentralCard signal.
+     */
+    void slotPlayerGetCentralCards(){ emit signalPlayerGetCentralCards(); }
+    
+    /*!
+     * Emit the signalOpponentGetCentralCard signal.
+     */
+    void slotOpponentGetCentralCards(){ emit signalOpponentGetCentralCards(); }
+    
 public:
     enum GameErrorType{ NameIsBusy, ServerIsFull, OpponentDisconnected };
     
@@ -310,7 +330,9 @@ public slots:
      * 
      * @param cardId Selected id of card.
      */
-    void slotSelectCardId( int cardId );
+    //void slotSelectCardId( int cardId );
+    void slotSelectCardId( int cardId, int delay );
+    
     
     /*!
      * Change trump card with a card. The trump card

@@ -5,6 +5,8 @@
 
 const int INVALID_CARD_ID = -1;
 
+const int CARD_SELECT_DELAY = 0;
+
 Bot::Bot( QString name, Knapsen::GameDifficulty difficulty ):
     Client( name ),
     mDifficulty( difficulty ),
@@ -80,7 +82,7 @@ void Bot::easy()
 {
     kDebug() << "Easy";
     
-    slotSelectCardId( getRandomCardId() );
+    slotSelectCardId( getRandomCardId(), CARD_SELECT_DELAY );
 }
 
 void Bot::medium()
@@ -109,7 +111,7 @@ void Bot::medium()
                 case 5 : if( trySelectEqualTrump( Card::Ten ) ) break;
                 case 6 : if( trySelect( Card::Jack ) ) break;
                 case 7 : if( trySelect( Card::Nine ) ) break;
-                case 8 : slotSelectCardId( getRandomCardId() );
+                case 8 : slotSelectCardId( getRandomCardId(), CARD_SELECT_DELAY );
             }
            
         }
@@ -138,7 +140,7 @@ void Bot::medium()
             case 7 : if( trySelect( Card::Ace ) ) break;
             case 8 : if( trySelect( Card::Queen ) ) break;
             case 9 : if( trySelect( Card::King ) ) break;
-            case 10 : slotSelectCardId( getRandomCardId() );
+            case 10 : slotSelectCardId( getRandomCardId(), CARD_SELECT_DELAY );
         }
     }
     
@@ -252,7 +254,7 @@ bool Bot::trySelectNotEqualTrump( Card::Type cardType )
         card = getCard( i );
         
         if( /*card != 0 && */card->isSelectable() && ( card->getSuit() != trumpCardSuit ) && ( card->getType() == cardType ) ){
-            slotSelectCardId( i );
+            slotSelectCardId( i, CARD_SELECT_DELAY );
             return true;
         }
                                 
@@ -279,7 +281,7 @@ bool Bot::trySelectPairWasNotInCentral( Card::Type cardType )
         
         //if( card->isSelectable() && ( card->getType() == cardType ) && ( mDeckIsClosed || getSizeOfDeckNow() == 0 || ( getPairOfCardWasInCentral( pairCardType, card->getSuit() ) ) ) ){
         if( card->isSelectable() && ( card->getType() == cardType ) && ( mDeckIsClosed || getDeckSize() == 0 || ( getPairOfCardWasInCentral( pairCardType, card->getSuit() ) ) ) ){
-            slotSelectCardId( i );
+            slotSelectCardId( i, CARD_SELECT_DELAY );
             return true;
         }
         
@@ -300,7 +302,7 @@ bool Bot::trySelectEqualTrump( Card::Type cardType )
         card = getCard( i );
         
         if( /*card != 0 && */card->isSelectable() && ( card->getSuit() == trumpCardSuit ) && ( card->getType() == cardType ) ){
-            slotSelectCardId( i );
+            slotSelectCardId( i, CARD_SELECT_DELAY );
             return true;
         }
                                 
@@ -315,7 +317,7 @@ bool Bot::trySelect( Card::Type cardType )
     
     for( int i = 0; i < getNumberOfCards(); ++i ){
         if( /*getCard( i ) != 0 && */getCard( i )->isSelectable() && getCard( i )->getType() == cardType ){
-            slotSelectCardId( i );
+            slotSelectCardId( i, CARD_SELECT_DELAY );
             return true;
         }
     }
@@ -359,7 +361,7 @@ bool Bot::trySelectEqualCentralMinPoints()
     }
     
     if( selectCardId != INVALID_CARD_ID ){
-       slotSelectCardId( selectCardId );
+       slotSelectCardId( selectCardId, CARD_SELECT_DELAY );
        return true;
     }
     
@@ -398,7 +400,7 @@ bool Bot::trySelectEqualTrumpMinPoints()
         }
     
         if( selectCardId != INVALID_CARD_ID ){
-            slotSelectCardId( selectCardId );
+            slotSelectCardId( selectCardId, CARD_SELECT_DELAY );
             return true;
         }
     }

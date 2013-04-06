@@ -1,4 +1,5 @@
 #include <QtCore/QStringList>
+#include <QtCore/QTimer>
 #include <KDE/KDebug>
 //#include "centralcards.h"
 #include "trump.h"
@@ -13,6 +14,8 @@ const int NEW_TRUMP_CARD_VALUES_SIZE = 1;
 const int OPPONENT_CHANGE_TRUMP_CARD_VALUES_SIZE = 2;
 const int VISIBLE_OPPONENT_CARDS_VALUES_SIZE = 4;
 const int END_ROUND_VALUES_SIZE = 2;
+
+const int GET_CENTRAL_CARDS_DELAY = 1000;
 
 Client::Client( QString name ): 
     Player( name ),
@@ -661,7 +664,8 @@ void Client::commandPlayerGetCentralCards()
     
     clearCentralCards();
     
-    emit signalPlayerGetCentralCards();
+    //emit signalPlayerGetCentralCards();
+    QTimer::singleShot( GET_CENTRAL_CARDS_DELAY, this, SLOT( slotPlayerGetCentralCards() ) );
 }
 
 void Client::commandOpponentGetCentralCards()
@@ -670,7 +674,8 @@ void Client::commandOpponentGetCentralCards()
     
     clearCentralCards();
     
-    emit signalOpponentGetCentralCards();
+    //emit signalOpponentGetCentralCards();
+    QTimer::singleShot( GET_CENTRAL_CARDS_DELAY, this, SLOT( slotOpponentGetCentralCards() ) );
 }
 
 void Client::commandEndRound( const QString& commandValue )
@@ -705,41 +710,7 @@ void Client::commandEndGame(const QString& commandValue)
     emit signalEndGame( getCommandValue( commandValue ) );
 }
 
-/*void Client::slotSelectCardId( int id )
-{
-    kDebug() << "Select card:" << id;
-    setSelectableAllCards( false );
-    
-    Card* card = takeCard( id );
-    mCentralCards->add( card );
-    
-    emit signalNewCentralCard( card );
-    
-    if( isTwentyButtonVisible() ){
-        setTwentyButtonVisible( false );
-    }
-    
-    if( isFortyButtonVisible() ){
-        setFortyButtonVisible( false );
-    }
-    
-    if( isSchnapsenButtonVisible() ){
-        setSchnapsenButtonVisible( false );
-    }
-    
-    if( isCloseButtonVisible() ){
-        setCloseButtonVisible( false );
-    }
-    
-    if( !mTrump->isEmpty() && mTrump->getCard()->isSelectable() ){
-        mTrump->getCard()->setSelectable( false );
-        emit signalTrumpCardSelectableChanged( false );
-    }
-    
-    sendCommand( SELECTED_CARD_ID_COMMAND+QString::number( id ) );
-}*/
-
-void Client::slotSelectCardId( int cardId )
+/*void Client::slotSelectCardId( int cardId )
 {
     kDebug() << "Select card:" << cardId;
     setSelectableAllCards( false );
@@ -768,8 +739,43 @@ void Client::slotSelectCardId( int cardId )
         mTrump->getCard()->setSelectable( false );
         emit signalTrumpCardSelectableChanged( false );
     }
-    
+
     sendCommand( SELECTED_CARD_ID_COMMAND+QString::number( cardId ) );
+}*/
+
+void Client::slotSelectCardId( int cardId, int delay )
+{
+    kDebug() << "Select card:" << cardId;
+    setSelectableAllCards( false );
+    
+    Card* card = takeCard( cardId );
+    //mCentralCards->add( card );
+    mCentralCards.append( card );
+    
+    if( isTwentyButtonVisible() ){
+        setTwentyButtonVisible( false );
+    }
+    
+    if( isFortyButtonVisible() ){
+        setFortyButtonVisible( false );
+    }
+    
+    if( isSchnapsenButtonVisible() ){
+        setSchnapsenButtonVisible( false );
+    }
+    
+    if( isCloseButtonVisible() ){
+        setCloseButtonVisible( false );
+    }
+    
+    if( !mTrump->isEmpty() && mTrump->getCard()->isSelectable() ){
+        mTrump->getCard()->setSelectable( false );
+        emit signalTrumpCardSelectableChanged( false );
+    }
+
+    //sendCommand( SELECTED_CARD_ID_COMMAND+QString::number( cardId ) );
+    mSelectedCardId = cardId;
+    QTimer::singleShot( delay, this, SLOT( slotSendSelectedCardId() ) );
 }
 
 /*void Client::slotSelectTrumpCard()

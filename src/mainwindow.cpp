@@ -104,9 +104,9 @@ void MainWindow::initializePaths()
 void MainWindow::setupActions()
 {
     //Game menu
-    KStandardGameAction::gameNew(                       this, SLOT( newGameSlot()  ), actionCollection() );
-    mCloseGameAction = KStandardGameAction::end(        this, SLOT(closeGameSlot() ), actionCollection() );
-    KStandardGameAction::quit(                          this, SLOT( close()        ), actionCollection() );
+    KStandardGameAction::gameNew( this, SLOT( newGameSlot() ), actionCollection() );
+    mCloseGameAction = KStandardGameAction::end( this, SLOT( closeGameSlot() ), actionCollection() );
+    KStandardGameAction::quit( this, SLOT( close() ), actionCollection() );
     
     mCloseGameAction->setEnabled( false );
     

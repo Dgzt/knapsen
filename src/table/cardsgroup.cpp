@@ -142,7 +142,7 @@ void CardsGroup::slotCardClicked( SvgCard* svgCard )
     mHighlightCardId = INVALID_CARD_ID;
     //
     
-    emit signalSelectedCardId( id );
+    emit signalSelectedCardId( id, svgCard->getAnimation()->timeLine()->duration() );
     
     SvgCard* svgCard1 = mCards->takeAt( id );
     
