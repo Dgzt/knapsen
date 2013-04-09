@@ -47,10 +47,10 @@ class MainWindow : public KXmlGuiWindow
      */
     Server* createServer();
     
-    void setGameSignals();
+    //void setGameSignals();
     
 private slots:
-    void newGameSlot();
+    void slotNewGame();
     void closeGameSlot();
     void optionsPreferences();
     

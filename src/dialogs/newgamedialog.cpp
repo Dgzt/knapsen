@@ -12,9 +12,10 @@ const QString LOCAL_STRING = i18n( "Local" );
 const QString CLIENT_STRING = i18n( "Client" );
 const QString SERVER_STRING = i18n( "Server" );
 
-NewGameDialog::NewGameDialog( QWidget* parent, Qt::WFlags flags ): KPageDialog( parent, flags )
+NewGameDialog::NewGameDialog() : 
+    KPageDialog()
 {
-    setWindowTitle( i18n( "New game dialog" ) );
+    setWindowTitle( i18n( "New Game" ) );
     resize( 400, 300 );
     
     //Local
@@ -23,9 +24,7 @@ NewGameDialog::NewGameDialog( QWidget* parent, Qt::WFlags flags ): KPageDialog( 
     QWidget *localWidget = new QWidget;
     mLocalWidgetUi->setupUi( localWidget );
     
-    //
     setDifficulty();
-    //
     
     KPageWidgetItem *localPageWidgetItem = new KPageWidgetItem( localWidget, LOCAL_STRING );
     localPageWidgetItem->setIcon( KIcon( "localmode.png" ) );

@@ -19,17 +19,18 @@ class NewGameDialog : public KPageDialog
 protected:
     /*!
      * Get the actual difficulty from settings
-     * and set the dialog.
+     * and set the local dialog.
      */
     void setDifficulty();
     
 protected slots:
+    /*!
+     * Save the difficulty when accept the dialog at local mode.
+     */
     void slotAccepted();
 
 public:
-    //enum GameMode { LocalMode, ClientMode, ServerMode };
-    
-    explicit NewGameDialog(QWidget* parent = 0, Qt::WFlags flags = 0);
+    NewGameDialog();
     
     //GameMode getGameMode() const;
     Knapsen::GameStatus getGameMode() const;

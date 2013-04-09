@@ -104,7 +104,7 @@ void MainWindow::initializePaths()
 void MainWindow::setupActions()
 {
     //Game menu
-    KStandardGameAction::gameNew( this, SLOT( newGameSlot() ), actionCollection() );
+    KStandardGameAction::gameNew( this, SLOT( slotNewGame() ), actionCollection() );
     mCloseGameAction = KStandardGameAction::end( this, SLOT( closeGameSlot() ), actionCollection() );
     KStandardGameAction::quit( this, SLOT( close() ), actionCollection() );
     
@@ -151,15 +151,15 @@ Server* MainWindow::createServer()
     return new Server( typeOfCards, sizeOfDeck, numberOfCardsInHand, whoStartGame, enabledSchnapsenButton );
 }
 
-void MainWindow::setGameSignals()
+/*void MainWindow::setGameSignals()
 {
     connect( mClient, SIGNAL( error( QAbstractSocket::SocketError ) ),    this,   SLOT( slotSocketError( QAbstractSocket::SocketError ) ) );
     connect( mClient, SIGNAL( signalGameError( Client::GameErrorType ) ), this,   SLOT( slotGameError( Client::GameErrorType ) ) );
     connect( mClient, SIGNAL( signalEndRound( QString, int ) ),           this,   SLOT( slotEndRound( QString, int ) ) );
     connect( mClient, SIGNAL( signalEndGame( QString ) ),                 this,   SLOT( slotEndGame( QString ) ) );
-}
+}*/
 
-void MainWindow::newGameSlot()
+void MainWindow::slotNewGame()
 {
     kDebug() << "New game.";
     
@@ -175,7 +175,7 @@ void MainWindow::newGameSlot()
         
     }
     
-    NewGameDialog newGameDialog( this );
+    NewGameDialog newGameDialog;
     
     int ret = newGameDialog.exec();
     
@@ -183,11 +183,13 @@ void MainWindow::newGameSlot()
         kDebug() << "KDialog button: Ok";
         
         mClient = new Client( Settings::playerName() );
-        //
         mCWidget->setClient( mClient );
-        //
         
-        setGameSignals();
+        //setGameSignals();
+        connect( mClient, SIGNAL( error( QAbstractSocket::SocketError ) ),    this,   SLOT( slotSocketError( QAbstractSocket::SocketError ) ) );
+        connect( mClient, SIGNAL( signalGameError( Client::GameErrorType ) ), this,   SLOT( slotGameError( Client::GameErrorType ) ) );
+        connect( mClient, SIGNAL( signalEndRound( QString, int ) ),           this,   SLOT( slotEndRound( QString, int ) ) );
+        connect( mClient, SIGNAL( signalEndGame( QString ) ),                 this,   SLOT( slotEndGame( QString ) ) );
         
         if( newGameDialog.getGameMode() == Knapsen::LocalMode ){
             kDebug() << "Game mode: local";
@@ -200,7 +202,6 @@ void MainWindow::newGameSlot()
             if( mServer->listen( QHostAddress::LocalHost ) ){
                 kDebug() << "Server port:" << mServer->serverPort();
                 
-                //mClient->connectToHost( "127.0.0.1", mServer->serverPort() );
                 mClient->connectToHost( QHostAddress::LocalHost, mServer->serverPort() );
                 
                 mServer->addBot( Settings::botName(), newGameDialog.getGameDifficulty() );
