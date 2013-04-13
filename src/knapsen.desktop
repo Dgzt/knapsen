@@ -1,9 +1,10 @@
 [Desktop Entry]
 Name=Knapsen
+Name[hu]=Knapsen
+GenericName=Sixty-six card game.
+GenericName[hu]=Hatvanhat kártyajáték.
 Exec=knapsen
 Icon=knapsen
 Type=Application
-X-DocPath=knapsen/index.html
 Terminal=false
 Categories=Qt;KDE;Game;CardGame
-Comment=Sixty-six card game.
