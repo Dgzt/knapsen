@@ -91,14 +91,15 @@ void CentralWidget::slotInitialize( QString playerName, QString opponentName, Kn
     mOpponentScoreTable = new ScoreTable( SCORE_TABLE_ANIMATION_TIME );
     mOpponentScoreTable->setVisible( false );
     
+    connect( mClient, SIGNAL( signalOpponentTricksChanged( int ) ), mOpponentScoreTable, SLOT( slotTricksChanged( int ) ) );
+    connect( mClient, SIGNAL( signalOpponentScoresChanged( int ) ), mOpponentScoreTable, SLOT( slotScoresChanged( int ) ) );
+    
     scene()->addItem( mOpponentScoreTable );
     
     //Setup player's name
     mPlayerName = new Text( playerName, NAME_ANIMATION_TIME );
     mPlayerName->setVisible( false );
     
-    connect( mClient, SIGNAL( signalOpponentTricksChanged( int ) ), mOpponentScoreTable, SLOT( slotTricksChanged( int ) ) );
-    connect( mClient, SIGNAL( signalOpponentScoresChanged( int ) ), mOpponentScoreTable, SLOT( slotScoresChanged( int ) ) );
     
     scene()->addItem( mPlayerName );
     

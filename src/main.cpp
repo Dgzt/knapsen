@@ -5,8 +5,7 @@
 #include <KDE/KLocale>
 #include "mainwindow.h"
 
-static const char description[] =
-    I18N_NOOP("Knapsen is a Sixty-six card game for KDE.");
+static const char description[] = I18N_NOOP("Knapsen is a Sixty-six card game for KDE.");
 
 static const char version[] = "1.0.0";
 
@@ -24,8 +23,6 @@ int main(int argc, char **argv)
                         ki18n("(C) 2012 Zsuró Tibor")
                         
     );
-    
-    //about.addAuthor( ki18n("Zsuró Tibor"), KLocalizedString(), "zsurotibor" "@" "gmail" "." "com" );
     
     KCmdLineArgs::init(argc, argv, &about);
 
