@@ -7,7 +7,7 @@
 #include "table/scoretable.h"
 
 const QString TRICKS_TEXT = i18n( "Tricks:" );
-const QString SCORE_TEXT = i18n( "Score:" );
+const QString SCORE_TEXT = i18n( "Scores:" );
 
 ScoreTable::ScoreTable( int animationTime )
 {
