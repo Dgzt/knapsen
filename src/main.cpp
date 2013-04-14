@@ -15,7 +15,7 @@ int main(int argc, char **argv)
     qsrand(QTime(0,0,0).secsTo(QTime::currentTime()));
     
     KAboutData about( "knapsen", 
-                      0,
+                      "knapsen",
                       ki18n("Knapsen"), 
                       version, 
                       ki18n(description),
@@ -24,7 +24,7 @@ int main(int argc, char **argv)
     );
     
     KCmdLineArgs::init(argc, argv, &about);
-
+    
     KApplication app;
     
     MainWindow *mainWindow = new MainWindow;
