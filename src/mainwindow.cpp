@@ -354,7 +354,7 @@ void MainWindow::slotSocketError( QAbstractSocket::SocketError socketError )
              KMessageBox::error( this, i18n( "The host not found!" ) ); 
              break;
         case QAbstractSocket::RemoteHostClosedError : 
-             KMessageBox::error( this, i18n( "The remote host closed the connection." ) ); 
+             KMessageBox::error( this, i18n( "The remote host closed the connection!" ) ); 
              closeGameSlot();
              break;
         default: 

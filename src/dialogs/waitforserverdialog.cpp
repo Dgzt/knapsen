@@ -6,7 +6,7 @@
 
 WaitForServerDialog::WaitForServerDialog(): KDialog()
 {
-    setWindowTitle( i18n( "Wait for server" ) );
+    setWindowTitle( i18n( "Waiting for server" ) );
     
     connectionError = false;
     

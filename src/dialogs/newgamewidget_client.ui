@@ -10,9 +10,6 @@
     <height>107</height>
    </rect>
   </property>
-  <property name="windowTitle">
-   <string>Form</string>
-  </property>
   <layout class="QFormLayout" name="formLayout">
    <item row="0" column="0">
     <widget class="QLabel" name="client_ipAddressLabel">
@@ -24,7 +21,7 @@
    <item row="0" column="1">
     <widget class="QLineEdit" name="client_ipAddressLineEdit">
      <property name="text">
-      <string>127.0.0.1</string>
+      <string notr="true"/>
      </property>
     </widget>
    </item>

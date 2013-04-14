@@ -1,7 +1,8 @@
 #include "ui_endgamewidget.h"
 #include "endgamedialog.h"
 
-EndGameDialog::EndGameDialog( QWidget* parent, QString winnerName ): KDialog( parent )
+EndGameDialog::EndGameDialog( QWidget* parent, QString winnerName ) : 
+    KDialog( parent )
 {
     QWidget* mainWidget = new QWidget( this );
     
@@ -14,8 +15,8 @@ EndGameDialog::EndGameDialog( QWidget* parent, QString winnerName ): KDialog( pa
     setMainWidget( mainWidget );
     
     setButtons( KDialog::Ok | KDialog::Cancel );
-    setButtonText( KDialog::Ok, i18n( "New game" ) );
-    setButtonText( KDialog::Cancel, i18n( "Close" ) );
+    setButtonText( KDialog::Ok, i18n( "New Game" ) );
+    setButtonText( KDialog::Cancel, i18n( "Exit" ) );
     
     setWindowTitle( i18n( "Gane end" ) );
 }

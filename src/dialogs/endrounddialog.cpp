@@ -17,7 +17,7 @@ EndRoundDialog::EndRoundDialog( QWidget* parent, QString winnerName, int winnerA
     setMainWidget( mainWidget );
     
     setButtons( KDialog::Ok );
-    setButtonText( KDialog::Ok, i18n( "Start next round" ) );
+    setButtonText( KDialog::Ok, i18n( "Next round" ) );
     
     setWindowTitle( i18n( "Round end" ) );
 }

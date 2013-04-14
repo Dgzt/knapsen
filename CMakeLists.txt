@@ -84,5 +84,6 @@ CONFIGURE_FILE( ${CMAKE_CURRENT_SOURCE_DIR}/cmake/config-knapsen.h.in ${CMAKE_CU
 MESSAGE(STATUS "${PROJECT_NAME} will be built to install into ${CMAKE_INSTALL_PREFIX}")
 
 #add_subdirectory( doc )
+add_subdirectory( po )
 add_subdirectory( pics )
 add_subdirectory( src )

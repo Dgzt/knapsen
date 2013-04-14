@@ -1,0 +1,304 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# Zsuró Tibor zsurotibor@gmail.com, 2013.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"Report-Msgid-Bugs-To: http://sourceforge.net/tracker/?"
+"group_id=50231&atid=459007\n"
+"POT-Creation-Date: 2013-04-14 09:57+0200\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"Language: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+#. i18n: file: src/dialogs/endgamewidget.ui:21
+#. i18n: ectx: property (text), widget (QLabel, label)
+#: rc.cpp:3 rc.cpp:3
+msgid "Won the game"
+msgstr "A játékot nyerte"
+
+#. i18n: file: src/dialogs/endroundwidget.ui:21
+#. i18n: ectx: property (text), widget (QLabel, label)
+#: rc.cpp:6 rc.cpp:6
+msgid "Won the round"
+msgstr "A kört nyerte"
+
+#. i18n: file: src/dialogs/endroundwidget.ui:89
+#. i18n: ectx: property (text), widget (QLabel, label_3)
+#: rc.cpp:9 rc.cpp:9
+msgid "with"
+msgstr ""
+
+#. i18n: file: src/dialogs/endroundwidget.ui:157
+#. i18n: ectx: property (text), widget (QLabel, label_5)
+#: rc.cpp:12 rc.cpp:12
+msgid "scores."
+msgstr "ponttal."
+
+#. i18n: file: src/dialogs/newgamewidget_client.ui:17
+#. i18n: ectx: property (text), widget (QLabel, client_ipAddressLabel)
+#: rc.cpp:15 rc.cpp:15
+msgid "Ip address:"
+msgstr "Ip cím:"
+
+#. i18n: file: src/dialogs/newgamewidget_client.ui:31
+#. i18n: ectx: property (text), widget (QLabel, client_PortLabel)
+#: rc.cpp:18 rc.cpp:18
+msgid "Port:"
+msgstr "Port:"
+
+#. i18n: file: src/dialogs/newgamewidget_local.ui:17
+#. i18n: ectx: property (title), widget (QGroupBox, difficultyGroupBox)
+#: rc.cpp:21 rc.cpp:21
+msgid "Difficulty"
+msgstr "Nehézség"
+
+#. i18n: file: src/dialogs/newgamewidget_local.ui:23
+#. i18n: ectx: property (text), widget (QRadioButton, easyRadioButton)
+#: rc.cpp:24 rc.cpp:24
+msgid "Easy"
+msgstr "Könnyű"
+
+#. i18n: file: src/dialogs/newgamewidget_local.ui:30
+#. i18n: ectx: property (text), widget (QRadioButton, normalRadioButton)
+#: rc.cpp:27 rc.cpp:27
+msgid "Normal"
+msgstr "Normál"
+
+#. i18n: file: src/dialogs/newgamewidget_local.ui:37
+#. i18n: ectx: property (text), widget (QRadioButton, hardRadioButton)
+#: rc.cpp:30 rc.cpp:30
+msgid "Hard"
+msgstr "Nehéz"
+
+#. i18n: file: src/dialogs/newgamewidget_server.ui:17
+#. i18n: ectx: property (text), widget (QLabel, server_portLabel)
+#: rc.cpp:33 rc.cpp:33
+msgid "Server port:"
+msgstr "Szerver port:"
+
+#. i18n: file: src/dialogs/waitforclientwidget.ui:19
+#. i18n: ectx: property (text), widget (QLabel, opponentNameLabel)
+#: rc.cpp:36 rc.cpp:36
+msgid "The Opponent:"
+msgstr "Az ellenfél:"
+
+#. i18n: file: src/gamesettingswidget.ui:17
+#. i18n: ectx: property (title), widget (QGroupBox, WhoStartGameBox)
+#: rc.cpp:39 rc.cpp:39
+msgid "Start the game"
+msgstr "A játékot kezdje"
+
+#. i18n: file: src/gamesettingswidget.ui:23
+#. i18n: ectx: property (text), widget (QRadioButton, kcfg_LocalPlayer)
+#: rc.cpp:42 rc.cpp:42
+msgid "Local player"
+msgstr "Helyi játékos"
+
+#. i18n: file: src/gamesettingswidget.ui:30
+#. i18n: ectx: property (text), widget (QRadioButton, kcfg_OpponentPlayer)
+#: rc.cpp:45 rc.cpp:45
+msgid "Opponent player"
+msgstr "Ellenfél játékot"
+
+#. i18n: file: src/gamesettingswidget.ui:37
+#. i18n: ectx: property (text), widget (QRadioButton, kcfg_RandomPlayer)
+#: rc.cpp:48 rc.cpp:48
+msgid "Random player"
+msgstr "Véletlen játékos"
+
+#. i18n: file: src/gamesettingswidget.ui:49
+#. i18n: ectx: property (title), widget (QGroupBox, groupBox)
+#: rc.cpp:51 rc.cpp:51
+msgid "Cards in hand"
+msgstr "Kártya a kézben"
+
+#. i18n: file: src/gamesettingswidget.ui:72
+#. i18n: ectx: property (title), widget (QGroupBox, groupBox_3)
+#: rc.cpp:54 rc.cpp:54
+msgid "Size of cards of deck"
+msgstr "Kártyapakli mérete"
+
+#. i18n: file: src/gamesettingswidget.ui:107
+#. i18n: ectx: property (title), widget (QGroupBox, groupBox_2)
+#: rc.cpp:57 rc.cpp:57
+msgid "Type of Cards"
+msgstr "Kártya típusa"
+
+#. i18n: file: src/gamesettingswidget.ui:113
+#. i18n: ectx: property (text), widget (QRadioButton, kcfg_GermanSuits)
+#: rc.cpp:60 rc.cpp:60
+msgid "German suits"
+msgstr "Magyar kártya"
+
+#. i18n: file: src/gamesettingswidget.ui:120
+#. i18n: ectx: property (text), widget (QRadioButton, kcfg_FrenchSuits)
+#: rc.cpp:63 rc.cpp:63
+msgid "French suits"
+msgstr "Francia kártya"
+
+#. i18n: file: src/gamesettingswidget.ui:130
+#. i18n: ectx: property (text), widget (QCheckBox, kcfg_SchnapsenButton)
+#: rc.cpp:66 rc.cpp:66
+msgid "Enabble Schnapsen button"
+msgstr "Snapszer gomb engedélyezése"
+
+#. i18n: file: src/knapsen.kcfg:11
+#. i18n: ectx: label, entry (PlayerName), group (General)
+#: rc.cpp:69 rc.cpp:69
+msgid "Player name"
+msgstr "Játékos neve"
+
+#. i18n: file: src/knapsen.kcfg:16
+#. i18n: ectx: label, entry (BotName), group (General)
+#: rc.cpp:72 rc.cpp:72
+msgid "Bot name"
+msgstr "Bot neve"
+
+#. i18n: file: src/playersettingswidget.ui:21
+#. i18n: ectx: property (text), widget (QLabel, label)
+#: rc.cpp:75 rc.cpp:75
+msgid "Player name:"
+msgstr "Játékos neve:"
+
+#: rc.cpp:76 rc.cpp:76
+msgctxt "NAME OF TRANSLATORS"
+msgid "Your names"
+msgstr "Zsuró Tibor"
+
+#: rc.cpp:77 rc.cpp:77
+msgctxt "EMAIL OF TRANSLATORS"
+msgid "Your emails"
+msgstr "zsurotibor@gmail.com"
+
+#: src/dialogs/endgamedialog.cpp:18 src/dialogs/newgamedialog.cpp:18
+msgid "New Game"
+msgstr "Új játék"
+
+#: src/dialogs/endgamedialog.cpp:19
+msgid "Exit"
+msgstr "Kilépés"
+
+#: src/dialogs/endgamedialog.cpp:21
+msgid "Gane end"
+msgstr "Játék vége"
+
+#: src/dialogs/endrounddialog.cpp:20
+msgid "Next round"
+msgstr "Következő kör"
+
+#: src/dialogs/endrounddialog.cpp:22
+msgid "Round end"
+msgstr "Kör vége"
+
+#: src/dialogs/newgamedialog.cpp:11
+msgid "Local"
+msgstr "Helyi"
+
+#: src/dialogs/newgamedialog.cpp:12
+msgid "Client"
+msgstr "Kliens"
+
+#: src/dialogs/newgamedialog.cpp:13
+msgid "Server"
+msgstr "Szerver"
+
+#: src/dialogs/waitforclientdialog.cpp:9
+msgid "Waiting for client"
+msgstr "Kliensre várás"
+
+#: src/dialogs/waitforserverdialog.cpp:9
+msgid "Waiting for server"
+msgstr "Szerverre várás"
+
+#: src/dialogs/waitingforopponent.cpp:8
+msgid "Waiting for opponent"
+msgstr "Ellenfélre várás"
+
+#: src/main.cpp:8
+msgid "Knapsen is a Sixty-six card game for KDE."
+msgstr "Knapsen egy hatvanhat kártya játék KDE-hez."
+
+#: src/main.cpp:19
+msgid "Knapsen"
+msgstr ""
+
+#: src/main.cpp:23
+msgid "(C) 2012 Zsuró Tibor"
+msgstr ""
+
+#: src/mainwindow.cpp:67 src/mainwindow.cpp:77 src/mainwindow.cpp:87
+#: src/mainwindow.cpp:98
+msgid "Knapsen not found the \"%1\"!"
+msgstr "Knapsen nem találja a \"%1\"!"
+
+#: src/mainwindow.cpp:168
+msgid "Really want to start a new game?"
+msgstr "Biztos új játékot akarsz kezdeni?"
+
+#: src/mainwindow.cpp:314
+msgid "Player"
+msgstr "Játékos"
+
+#: src/mainwindow.cpp:320
+msgid "Game"
+msgstr "Játék"
+
+#: src/mainwindow.cpp:351
+msgid "The connection was refused!"
+msgstr "A csatlakozás megtagadva!"
+
+#: src/mainwindow.cpp:354
+msgid "The host not found!"
+msgstr "A kiszolgáló nem található!"
+
+#: src/mainwindow.cpp:357
+msgid "The remote host closed the connection!"
+msgstr "A kiszolgáló megszakította a kapcsolatot!"
+
+#: src/mainwindow.cpp:361
+msgid "Undefined error!"
+msgstr "Azonosítatlan hiba!"
+
+#: src/mainwindow.cpp:370
+msgid "The name is busy!"
+msgstr "A név foglalt!"
+
+#: src/mainwindow.cpp:379
+msgid "The opponent disconnected!"
+msgstr "Az ellenfél kilépett!"
+
+#: src/mainwindow.cpp:385
+msgid "The server is full!"
+msgstr "A szerver tele van!"
+
+#: src/table/centralwidget.cpp:51 src/table/centralwidget.cpp:179
+msgid "Schnapsen"
+msgstr "Snapszer"
+
+#: src/table/centralwidget.cpp:52 src/table/centralwidget.cpp:197
+msgid "Forty"
+msgstr "Negyven"
+
+#: src/table/centralwidget.cpp:53 src/table/centralwidget.cpp:188
+msgid "Twenty"
+msgstr "Húsz"
+
+#: src/table/centralwidget.cpp:169
+msgid "Close"
+msgstr "Takar"
+
+#: src/table/scoretable.cpp:9
+msgid "Tricks:"
+msgstr "Kis pontok:"
+
+#: src/table/scoretable.cpp:10
+msgid "Scores:"
+msgstr "Nagy pontok:"

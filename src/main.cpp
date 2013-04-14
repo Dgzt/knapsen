@@ -14,14 +14,13 @@ int main(int argc, char **argv)
     //To the random number generator
     qsrand(QTime(0,0,0).secsTo(QTime::currentTime()));
     
-    KAboutData about(   "knapsen", 
-                        0,
-                        ki18n("Knapsen"), 
-                        version, 
-                        ki18n(description),
-                        KAboutData::License_GPL_V3, 
-                        ki18n("(C) 2012 Zsuró Tibor")
-                        
+    KAboutData about( "knapsen", 
+                      0,
+                      ki18n("Knapsen"), 
+                      version, 
+                      ki18n(description),
+                      KAboutData::License_GPL_V3, 
+                      ki18n("(C) 2012 Zsuró Tibor")  
     );
     
     KCmdLineArgs::init(argc, argv, &about);
