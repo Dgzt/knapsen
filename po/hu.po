@@ -3,10 +3,9 @@
 # This file is distributed under the same license as the PACKAGE package.
 # Zsuró Tibor zsurotibor@gmail.com, 2013.
 #
-#, fuzzy
 msgid ""
 msgstr ""
-"Project-Id-Version: PACKAGE VERSION\n"
+"Project-Id-Version: 1.0.0\n"
 "Report-Msgid-Bugs-To: http://sourceforge.net/tracker/?"
 "group_id=50231&atid=459007\n"
 "POT-Creation-Date: 2013-04-14 09:57+0200\n"
