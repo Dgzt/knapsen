@@ -19,7 +19,7 @@ Bot::Bot( QString name, Knapsen::GameDifficulty difficulty ):
     connect( this, SIGNAL( signalNewRound() ),                                  this, SLOT( slotNewRound() ) );
     connect( this, SIGNAL( signalCloseDeck() ),                                 this, SLOT( slotCloseDeck() ) );
     //connect( this, SIGNAL( signalNewCentralCard( const Card* ) ),               this, SLOT( slotNewCentralCard( const Card* ) ) );
-    connect( this, SIGNAL( signalShowOpponentCards( int, Card, int, Card ) ),   this, SLOT( slotShowOpponentCards( int, Card, int, Card ) ) );
+    //connect( this, SIGNAL( signalShowOpponentCards( int, Card, int, Card ) ),   this, SLOT( slotShowOpponentCards( int, Card, int, Card ) ) );
     connect( this, SIGNAL( signalEndRound( QString, int ) ),                    this, SLOT( slotEndRound( QString, int ) ) );
     connect( this, SIGNAL( signalEndGame( QString ) ),                          this, SLOT( slotendGame( QString ) ) );
     
@@ -34,6 +34,7 @@ Bot::Bot( QString name, Knapsen::GameDifficulty difficulty ):
     connect( this, SIGNAL( signalOpponentChangeTrumpCard( int, Card* ) ),       this, SLOT( slotProcessCommands() ) );
     connect( this, SIGNAL( signalNewPlayerCardTrumpCard() ),                    this, SLOT( slotProcessCommands() ) );
     connect( this, SIGNAL( signalNewOpponentCardTrumpCard() ),                  this, SLOT( slotProcessCommands() ) );
+    connect( this, SIGNAL( signalShowOpponentCards( int, Card, int, Card ) ),   this, SLOT( slotProcessCommands() ) );
     //
     
     pairOfQueenWasInCentralCards[0].first = pairOfKingWasInCentralCards[0].first = Card::Heart;
@@ -42,7 +43,7 @@ Bot::Bot( QString name, Knapsen::GameDifficulty difficulty ):
     pairOfQueenWasInCentralCards[3].first = pairOfKingWasInCentralCards[3].first = Card::Club;
 }
 
-bool Bot::getPairOfCardWasInCentral( Card::Type cardType, Card::Suit cardSuit )
+bool Bot::isPairOfCardWasInCentral( Card::Type cardType, Card::Suit cardSuit )
 {
     for( int i = 0; i < 4; ++i ){
         if( cardType == Card::King && pairOfKingWasInCentralCards[i].first == cardSuit ){
@@ -280,7 +281,7 @@ bool Bot::trySelectPairWasNotInCentral( Card::Type cardType )
         card = getCard( i );
         
         //if( card->isSelectable() && ( card->getType() == cardType ) && ( mDeckIsClosed || getSizeOfDeckNow() == 0 || ( getPairOfCardWasInCentral( pairCardType, card->getSuit() ) ) ) ){
-        if( card->isSelectable() && ( card->getType() == cardType ) && ( mDeckIsClosed || getDeckSize() == 0 || ( getPairOfCardWasInCentral( pairCardType, card->getSuit() ) ) ) ){
+        if( card->isSelectable() && ( card->getType() == cardType ) && ( mDeckIsClosed || getDeckSize() == 0 || ( isPairOfCardWasInCentral( pairCardType, card->getSuit() ) ) ) ){
             slotSelectCardId( i, CARD_SELECT_DELAY );
             return true;
         }
@@ -344,8 +345,8 @@ bool Bot::trySelectEqualCentralMinPoints()
         {
             //if( ( getSizeOfDeckNow() == 0 || mDeckIsClosed ) ||
             if( ( getDeckSize() == 0 || mDeckIsClosed ) ||
-                ( ( card->getType() == Card::King && getPairOfCardWasInCentral( Card::King, card->getSuit() ) ) ||
-                  ( card->getType() == Card::Queen && getPairOfCardWasInCentral( Card::Queen, card->getSuit() ) ) ||
+                ( ( card->getType() == Card::King && isPairOfCardWasInCentral( Card::King, card->getSuit() ) ) ||
+                  ( card->getType() == Card::Queen && isPairOfCardWasInCentral( Card::Queen, card->getSuit() ) ) ||
                   ( card->getType() != Card::King && card->getType() != Card::Queen ) )   
             ){
                 if( ( selectCardId == INVALID_CARD_ID ) ||
@@ -386,8 +387,8 @@ bool Bot::trySelectEqualTrumpMinPoints()
                 card->getSuit() == getTrump()->getCardSuit() )
             {
                 if( ( getDeckSize() == 0 || mDeckIsClosed ) ||
-                    ( ( card->getType() == Card::King && getPairOfCardWasInCentral( Card::King, card->getSuit() ) ) ||
-                    ( card->getType() == Card::Queen && getPairOfCardWasInCentral( Card::Queen, card->getSuit() ) ) ||
+                    ( ( card->getType() == Card::King && isPairOfCardWasInCentral( Card::King, card->getSuit() ) ) ||
+                    ( card->getType() == Card::Queen && isPairOfCardWasInCentral( Card::Queen, card->getSuit() ) ) ||
                     ( card->getType() != Card::King && card->getType() != Card::Queen ) )   
                 ){
                     if( ( selectCardId == INVALID_CARD_ID ) ||
@@ -408,10 +409,10 @@ bool Bot::trySelectEqualTrumpMinPoints()
     return false;
 }
 
-void Bot::slotShowOpponentCards(int , Card , int , Card )
+/*void Bot::slotShowOpponentCards(int , Card , int , Card )
 {
     slotProcessCommands();
-}
+}*/
 
 void Bot::slotNewRound()
 {
