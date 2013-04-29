@@ -39,8 +39,3 @@ void WaitForServerDialog::waitingProgressBarTimeoutSlot()
     num++;
     waitingWidgetUi->waitintProgressBar->setValue( num );
 }
-
-bool WaitForServerDialog::haveConnectionError() const
-{
-    return connectionError;
-}

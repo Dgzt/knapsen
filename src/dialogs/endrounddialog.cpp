@@ -2,7 +2,7 @@
 
 #include "endrounddialog.h"
 
-EndRoundDialog::EndRoundDialog( QWidget* parent, QString winnerName, int winnerAcquiredScores ) : 
+EndRoundDialog::EndRoundDialog( QWidget* parent, QString winnerName, int winnerScores ) : 
     KDialog(parent)
 {
     QWidget* mainWidget = new QWidget( this );
@@ -12,7 +12,7 @@ EndRoundDialog::EndRoundDialog( QWidget* parent, QString winnerName, int winnerA
     ui->setupUi( mainWidget );
     
     ui->wonRoundNameLabel->setText( winnerName );
-    ui->wonRoundScoresLabel->setText( QString::number( winnerAcquiredScores ) );
+    ui->wonRoundScoresLabel->setText( QString::number( winnerScores ) );
     
     setMainWidget( mainWidget );
     

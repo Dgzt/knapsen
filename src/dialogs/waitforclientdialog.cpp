@@ -18,17 +18,17 @@ WaitForClientDialog::WaitForClientDialog(): KDialog()
     button( KDialog::Ok )->setEnabled( false );
 }
 
-void WaitForClientDialog::slotPlayerConnected( QString playerName )
+void WaitForClientDialog::slotPlayerConnected( QString name )
 {
-    if( playerName != mAdminName ){
-        waitForClientWidgetUi->opponentNameLineEdit->setText( playerName );
+    if( name != mAdminName ){
+        waitForClientWidgetUi->opponentNameLineEdit->setText( name );
         //button( KDialog::Ok )->setEnabled( true );
     }
 }
 
-void WaitForClientDialog::slotPlayerDisconnectedSlot( QString playerName )
+void WaitForClientDialog::slotPlayerDisconnectedSlot( QString name )
 {
-    Q_UNUSED( playerName );
+    Q_UNUSED( name );
     
     waitForClientWidgetUi->opponentNameLineEdit->clear();
     button( KDialog::Ok )->setEnabled( false );
