@@ -151,7 +151,14 @@ class Player : public QTcpSocket
     bool setSelectableCardsWhatEqualSuit( Card::Suit );
     
 private slots:
+    /*!
+     * Ready process the command.
+     */
     void slotReadyRead();
+    
+    /*!
+     * The socket disconnected.
+     */
     void slotDisconnected(){ emit signalPlayerDisconnected( this ); }
     
 protected:
@@ -212,7 +219,12 @@ protected:
      */
     void setSelectableAllCards( bool selectable );
     
-    //void setSelectableCertainCards( CentralCards* , Trump* );
+    /*!
+     * Set true selectable certain cards. 
+     * 
+     * @param centralCards The central cards.
+     * @param trump The trump.
+     */
     void setSelectableCertainCards( const QList< Card* >& centralCards, const Trump* trump );
     
     /*!
@@ -507,11 +519,16 @@ public:
     void sendOpponentChangeTrumpCard( int id, const Trump* trump );
     
     /*!
-     * Set true all cards' selectable and send to the client.
+     * Set true all cards's selectable and send to the client.
      */
     void sendSelectableAllCards();
     
-    //void sendSelectableCertainCards( CentralCards *, Trump* );
+    /*!
+     * Set true certain cards's selectable and send to the client. 
+     * 
+     * @param centralCards The central cards.
+     * @param trump The trump.
+     */
     void sendSelectableCertainCards( const QList< Card* >& centralCards , const Trump* trump );
     
     /*!
@@ -581,10 +598,19 @@ public:
      */
     void sendOpponentClickedToCloseButton(){ sendCommand( OPPONENT_CLICKED_TO_CLOSE_BUTTON_COMMAND ); }
     
+    /*!
+     * Send to the client the opponent clicked to the schnapsen button.
+     */
     void sendOpponentSchnapsenButtonClicked(){ sendCommand( OPPONENT_SCHNAPSEN_BUTTON_CLICKED_COMMAND ); }
     
+    /*!
+     * Send to the client the opponent clicked to the forty button.
+     */
     void sendOpponentFortyButtonClicked(){ sendCommand( OPPONENT_FORTY_BUTTON_CLICKED_COMMAND ); }
     
+    /*!
+     * Send to the client the opponent clicked to the twenty button.
+     */
     void sendOpponentTwentyButtonClicked(){ sendCommand( OPPONENT_TWENTY_BUTTON_CLICKED_COMMAND ); }
     
     /*!

@@ -100,6 +100,85 @@ class Server : public QTcpServer
     QList< Player* > *mPlayerListWhoWantNewRound;
     QList< Player* > *mPlayerListWhoWantNewGame;
     
+    
+private slots:
+    /*!
+     * A new player connected to the server.
+     * 
+     * @param player The new player.
+     */
+    void slotNewPlayer( Player* player );
+    
+    /*!
+     * The player disconnected from the server.
+     * 
+     * @param player The player.
+     */
+    void slotPlayerDisconnected( Player* player );
+    
+    /*!
+     * The current player send the selected card id.
+     * 
+     * @param selectedCardId The selected card id.
+     */
+    void slotPlayerSelectedCardId( int selectedCardId );
+    
+    /*!
+     * The current player clicked to the twenty button.
+     */
+    void slotPlayerTwentyButtonClicked();
+    
+    /*!
+     * The current player clicked to the forty button.
+     */
+    void slotPlayerFortyButtonClicked();
+    
+    /*!
+     * The current player clicked to the schnapsen button.
+     */
+    void slotPlayerSchnapsenButtonClicked();
+    
+    /*!
+     * The current player clicked to the close button.
+     */
+    void slotPlayerClickedToCloseButton();
+    
+    /*!
+     * The player changed the trump card with their card.
+     * 
+     * @param player The player.
+     */
+    void slotPlayerChangeTrumpCard( Player* player );
+    
+    /*!
+     * If two cards is in the central cards then check it who get the points, 
+     * who start next turn, etc.
+     */
+    void slotCheckCentralCards();
+    
+    /*!
+     * The player want start next round.
+     * 
+     * @param player The player.
+     */
+    void slotPlayerWantStartNextRound( Player* player );
+    
+    /*!
+     * The player want start next game.
+     * 
+     * @param player The player.
+     */
+    void slotPlayerWantStartNextGame( Player* player );
+
+protected:
+    /*!
+     * A socket connected to server. The socket then connected
+     * finally to the server when send the player's name.
+     * 
+     * @param socketDescriptor The socket descriptor.
+     */
+    void incomingConnection( int socketDescriptor );
+    
     /*!
      * Set who start the game. Local player or opponent player or random.
      * 
@@ -197,83 +276,6 @@ class Server : public QTcpServer
      */
     void addTrumpCardToPlayer( Player* player );
     
-private slots:
-    /*!
-     * A new player connected to the server.
-     * 
-     * @param player The new player.
-     */
-    void slotNewPlayer( Player* player );
-    
-    /*!
-     * The player disconnected from the server.
-     * 
-     * @param player The player.
-     */
-    void slotPlayerDisconnected( Player* player );
-    
-    /*!
-     * The current player send the selected card id.
-     * 
-     * @param selectedCardId The selected card id.
-     */
-    void slotPlayerSelectedCardId( int selectedCardId );
-    
-    /*!
-     * The current player clicked to the twenty button.
-     */
-    void slotPlayerTwentyButtonClicked();
-    
-    /*!
-     * The current player clicked to the forty button.
-     */
-    void slotPlayerFortyButtonClicked();
-    
-    /*!
-     * The current player clicked to the schnapsen button.
-     */
-    void slotPlayerSchnapsenButtonClicked();
-    
-    /*!
-     * The current player clicked to the close button.
-     */
-    void slotPlayerClickedToCloseButton();
-    
-    /*!
-     * The player changed the trump card with their card.
-     * 
-     * @param player The player.
-     */
-    void slotPlayerChangeTrumpCard( Player* player );
-    
-    /*!
-     * If two cards is in the central cards then check it who get the points, 
-     * who start next turn, etc.
-     */
-    void slotCheckCentralCards();
-    
-    /*!
-     * The player want start next round.
-     * 
-     * @param player The player.
-     */
-    void slotPlayerWantStartNextRound( Player* player );
-    
-    /*!
-     * The player want start next game.
-     * 
-     * @param player The player.
-     */
-    void slotPlayerWantStartNextGame( Player* player );
-
-protected:
-    /*!
-     * A socket connected to server. The socket then connected
-     * finally to the server when send the player's name.
-     * 
-     * @param socketDescriptor The socket descriptor.
-     */
-    void incomingConnection( int socketDescriptor );
 
 public:
     /*!
