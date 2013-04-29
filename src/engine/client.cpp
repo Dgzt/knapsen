@@ -692,10 +692,10 @@ void Client::commandEndRound( const QString& commandValue )
         QString winnerName = values.at( 0 );
         
         bool ok;
-        int winnerScore = values.at( 1 ).toInt( &ok );
+        int winnerScores = values.at( 1 ).toInt( &ok );
         if( !ok ) throw WRONG_VALUE;
         
-        emit signalEndRound( winnerName, winnerScore );
+        emit signalEndRound( winnerName, winnerScores );
     }catch( int error ){
         if( error == WRONG_VALUE_ARRAY_SIZE ) kDebug() << "ERROR! Wrong size of values in end round command!";
         if( error == WRONG_VALUE ) kDebug() << "ERROR! Cannot convert winner scores command value to int!";

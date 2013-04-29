@@ -45,20 +45,18 @@ class Client : public Player
     //Trump
     Trump *mTrump;
     
+    //The list of commands
     QList<QString> mCommandList;
-    //
+    
+    //The commands under processing
     bool mCommandsUnderProcessing;
-    //
     
     //The id of the last selected player card
     int mLastSelectedCardId;
     
-    //
-    //QList<QString>* getValues( QString );
+    //Get the values
     QStringList getValues( const QString& );
-    //
     
-    virtual void newCommand( QString );
     
 private slots:
     /*!
@@ -67,6 +65,13 @@ private slots:
     void slotConnected();
     
 protected:
+    /*!
+     * New command.
+     * 
+     * @param command The new command.
+     */
+    virtual void newCommand( QString command );
+    
     /*!
      * Clear the central cards. Delete all cards.
      */
@@ -93,12 +98,13 @@ protected:
      */
     Trump* getTrump(){ return mTrump; }
     
+    /*!
+     * Send to the server the player changed the trump card.
+     */
     void sendChangeTrumpCard(){ sendCommand( CHANGE_TRUMP_CARD_COMMAND ); }
     
-    ///////////////////////////////
-    
     /*!
-     * Initialize table. Set suit of cards, set size of cards of deck,
+     * Initialize the table. Set suit of cards, set size of cards of deck,
      * set opponent's name. This is a command function.
      * 
      * @param commandValue Command values.
@@ -188,6 +194,10 @@ protected:
      */
     void commandSelectableAllCards();
     
+    /*!
+     * Set the the certain player's cards.
+     * This is a command function.
+     */
     void commandSelectableCertainCards();
     
     /*!
@@ -318,7 +328,14 @@ public:
      */
     ~Client();
     
+    /*!
+     * Send to the server start the next round.
+     */
     void startNextRound(){ sendCommand( START_NEXT_ROUND_COMMAND ); }
+    
+    /*!
+     * Send to the server start the next game.
+     */
     void startNextGame(){ sendCommand( START_NEXT_GAME_COMMAND ); }
     
 public slots:
@@ -374,48 +391,115 @@ signals:
      */
     void signalGameError( Client::GameErrorType gameErrorType );
     
-    void signalInitialize( QString, QString, Knapsen::TypeOfCards );
+    /*!
+     * Initialize the game.
+     * 
+     * @param playerName The player's name.
+     * @param opponentName The opponent's name.
+     * @param typeOfCards The type of cards.
+     */
+    void signalInitialize( QString playerName, QString opponentName, Knapsen::TypeOfCards typeOfCards );
     
-    //void signalNewOpponentCard();
-    void signalNewOpponentCard( bool );
+    /*!
+     * The opponent has a new card.
+     * 
+     * @param lastCard Was the last card in the cards of deck.
+     */
+    void signalNewOpponentCard( bool lastCard );
+    
+    /*!
+     * The opponent gets the trump card.
+     */
     void signalNewOpponentCardTrumpCard();
     
-    //void signalNewPlayerCard( /*const*/ Card* );
-    void signalNewPlayerCard( bool, Card* );
+    /*!
+     * The player has a new card.
+     * 
+     * @param lastCard Was the last card in the cards of deck.
+     * @param card The new card.
+     */
+    void signalNewPlayerCard( bool lastCard, Card* card );
+    
+    /*!
+     * The player gets the trump card.
+     */
     void signalNewPlayerCardTrumpCard();
     
-    void signalChangePlayerCard( int, const Card* );
+    /*!
+     * New trump card.
+     * 
+     * @param card The new trump card.
+     */
+    void signalNewTrumpCard( Card* card );
     
-    void signalNewTrumpCard( /*const*/ Card* );
-    void signalOpponentChangeTrumpCard( int, Card* );
-    void signalPlayerChangeTrumpCard( int );
+    /*!
+     * The opponent changed the trump card.
+     * 
+     * @param cardId The position of the new trump card.
+     * @param newTrumpCard The new trump card.
+     */
+    void signalOpponentChangeTrumpCard( int cardId, Card* newTrumpCard );
     
-    //void signalNewCentralCard( int, const Card* );
-    //void signalNewCentralCard( const Card* );
+    /*!
+     * The player changed trump card.
+     * 
+     * @param cardId The position of the new trump card.
+     */
+    void signalPlayerChangeTrumpCard( int cardId );
     
-    //void signalClearCentralCards();
+    /*!
+     * The opponent gets the central cards.
+     */
     void signalOpponentGetCentralCards();
+    
+    /*!
+     * The player gets the central cards
+     */
     void signalPlayerGetCentralCards();
     
-    //void signalOpponentSelectedCardId( int );
-    void signalOpponentSelectedCard( int, Card* );
+    /*!
+     * The opponent selected card.
+     * 
+     * @param cardId The position of the selected card.
+     * @param card The selected card.
+     */
+    void signalOpponentSelectedCard( int cardId, Card* card );
     
-    //void signalOpponentDisconnected();
+    /*!
+     * Changed the opponent's tricks.
+     * 
+     * @param tricks The new opponent's tricks.
+     */
+    void signalOpponentTricksChanged( int tricks );
     
-    void signalOpponentTricksChanged( int );
+    /*!
+     * Changed the opponent's scores.
+     * 
+     * @param scores The new opponent's scores.
+     */
+    void signalOpponentScoresChanged( int scores );
     
-    void signalOpponentScoresChanged( int );
-    
-    //void signalHideDeck();
-    
+    /*!
+     * Close deck.
+     */
     void signalCloseDeck();
     
-    //void signalHideTrumpCard();
-    //
-    void signalTrumpCardSelectableChanged( bool );
-    //
+    /*!
+     * Changed the selectable of the trump card.
+     * 
+     * @param selectable The selectable of the trump card.
+     */
+    void signalTrumpCardSelectableChanged( bool selectable );
     
-    void signalShowOpponentCards( int, Card, int, Card );
+    /*!
+     * The opponent shows their cards after meld marriages.
+     * 
+     * @param card1Id The position of the first card.
+     * @param card1 The first card.
+     * @param card2id The position of the second card.
+     * @param card2 The second card.
+     */
+    void signalShowOpponentCards( int card1Id, Card card1, int card2Id, Card card2 );
     
     /*!
      * The opponent clicked to the schnapsen button.
@@ -432,25 +516,40 @@ signals:
      */
     void signalOpponentTwentyButtonClicked();
     
-    //
+    /*!
+     * New round.
+     */
     void signalNewRound();
-    //
     
+    /*!
+     * The player is in action.
+     */
     void signalPlayerInAction();
-    //
-    void signalOpponentInAction();
-    //
     
-    //void signalStartGame();
+    /*!
+     * The opponent is in action.
+     */
+    void signalOpponentInAction();
+    
+    /*!
+     * New game.
+     */
     void signalNewGame();
     
-    //
-    void signalEndRound( QString, int );
-    //
+    /*!
+     * End of the current round.
+     * 
+     * @param name The name of the round winner.
+     * @param scores The scores of the round winner.
+     */
+    void signalEndRound( QString name, int scores );
     
-    //
-    void signalEndGame( QString );
-    //
+    /*!
+     * End of the current game.
+     * 
+     * @param name The name of the game winner.
+     */
+    void signalEndGame( QString name );
     
 };      
     
