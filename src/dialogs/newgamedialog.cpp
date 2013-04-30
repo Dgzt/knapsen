@@ -87,9 +87,9 @@ void NewGameDialog::slotAccepted()
 
 Knapsen::GameStatus NewGameDialog::getGameMode() const
 {
-    if( currentPage()->name() == LOCAL_STRING ){
+    if( currentPage()->name() == ki18n( LOCAL_STRING ).toString() ){
         return Knapsen::LocalMode;
-    }else if( currentPage()->name() == CLIENT_STRING ){
+    }else if( currentPage()->name() == ki18n( CLIENT_STRING ).toString() ){
         return Knapsen::ClientMode;
     }//else
     return Knapsen::ServerMode;
