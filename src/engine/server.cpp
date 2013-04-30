@@ -469,6 +469,13 @@ Player* Server::getNextPlayer()
     return mPlayerList.at( 0 );
 }
 
+void Server::clearCentralCards()
+{ 
+    while( !mCentralCards.empty() ){
+        delete mCentralCards.takeFirst(); 
+    }
+}
+
 bool Server::isGameOver()
 {
     for( int i = 0; i < mPlayerList.size(); ++i ){

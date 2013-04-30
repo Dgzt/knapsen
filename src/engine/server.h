@@ -215,7 +215,7 @@ protected:
     /*!
      * Clear the central cards. Delete all cards.
      */
-    void clearCentralCards(){ while( !mCentralCards.empty() ) delete mCentralCards.takeFirst(); }
+    void clearCentralCards();
     
     /*!
      * Return with true when a player have equal or more than 7 scores else false.

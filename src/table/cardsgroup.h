@@ -5,10 +5,10 @@
 #include <QtCore/QObject>
 #include <QtCore/QPointF>
 #include <QtCore/QPair>
+#include "engine/card.h"
 
 class SvgCard;
 class Animation;
-class Card;
 
 //class CardsGroup : public QGraphicsObject
 class CardsGroup : public QObject
