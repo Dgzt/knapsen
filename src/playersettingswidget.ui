@@ -18,7 +18,7 @@
        <item>
         <widget class="QLabel" name="label">
          <property name="text">
-          <string>Player name:</string>
+          <string>Player name</string>
          </property>
         </widget>
        </item>

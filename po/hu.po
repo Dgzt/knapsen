@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: 1.0.0\n"
 "Report-Msgid-Bugs-To: http://sourceforge.net/tracker/?"
 "group_id=50231&atid=459007\n"
-"POT-Creation-Date: 2013-04-30 19:53+0200\n"
+"POT-Creation-Date: 2013-04-30 20:26+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -151,7 +151,13 @@ msgstr "Snapszer gomb engedélyezése"
 
 #. i18n: file: src/knapsen.kcfg:11
 #. i18n: ectx: label, entry (PlayerName), group (General)
-#: rc.cpp:69 rc.cpp:69
+#. i18n: file: src/playersettingswidget.ui:21
+#. i18n: ectx: property (text), widget (QLabel, label)
+#. i18n: file: src/knapsen.kcfg:11
+#. i18n: ectx: label, entry (PlayerName), group (General)
+#. i18n: file: src/playersettingswidget.ui:21
+#. i18n: ectx: property (text), widget (QLabel, label)
+#: rc.cpp:69 rc.cpp:75 rc.cpp:69 rc.cpp:75
 msgid "Player name"
 msgstr "Játékos neve"
 
@@ -160,12 +166,6 @@ msgstr "Játékos neve"
 #: rc.cpp:72 rc.cpp:72
 msgid "Bot name"
 msgstr "Bot neve"
-
-#. i18n: file: src/playersettingswidget.ui:21
-#. i18n: ectx: property (text), widget (QLabel, label)
-#: rc.cpp:75 rc.cpp:75
-msgid "Player name:"
-msgstr "Játékos neve:"
 
 #: rc.cpp:76 rc.cpp:76
 msgctxt "NAME OF TRANSLATORS"
@@ -246,9 +246,17 @@ msgstr "Biztos új játékot akarsz kezdeni?"
 msgid "Player"
 msgstr "Játékos"
 
+#: src/mainwindow.cpp:314
+msgid "Player settings"
+msgstr "Játékos beállítások"
+
 #: src/mainwindow.cpp:320
 msgid "Game"
 msgstr "Játék"
+
+#: src/mainwindow.cpp:320
+msgid "Game settings"
+msgstr "Játék beállítások"
 
 #: src/mainwindow.cpp:351
 msgid "The connection was refused!"

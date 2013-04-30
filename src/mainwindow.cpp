@@ -311,13 +311,13 @@ void MainWindow::optionsPreferences()
     Ui::PlayerSettingsWidgetUi pswu;
     pswu.setupUi( playerSettingsWidget );
     
-    settingsDialog->addPage( playerSettingsWidget, i18n( "Player" ), "playersettings.png", "player_settings" );
+    settingsDialog->addPage( playerSettingsWidget, i18n( "Player" ), "playersettings.png", i18n( "Player settings" ) );
     
     QWidget *gameSettingsWidget = new QWidget;
     Ui::GameSettingsUi gsu;
     gsu.setupUi( gameSettingsWidget );
     
-    settingsDialog->addPage( gameSettingsWidget, i18n( "Game" ), "gamesettings.png", "game_settings" );
+    settingsDialog->addPage( gameSettingsWidget, i18n( "Game" ), "gamesettings.png", i18n( "Game settings" ) );
     
     settingsDialog->setAttribute( Qt::WA_DeleteOnClose );
     
