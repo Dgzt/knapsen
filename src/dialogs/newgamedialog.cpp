@@ -8,9 +8,9 @@
 #include "ui_newgamewidget_client.h"
 #include "ui_newgamewidget_server.h"
 
-QString LOCAL_STRING = i18n( "Local" );
-QString CLIENT_STRING = i18n( "Client" );
-QString SERVER_STRING = i18n( "Server" );
+const char LOCAL_STRING[] = I18N_NOOP( "Local" );
+const char CLIENT_STRING[] = I18N_NOOP( "Client" );
+const char SERVER_STRING[] = I18N_NOOP( "Server" );
 
 NewGameDialog::NewGameDialog() : 
     KPageDialog()
@@ -26,7 +26,7 @@ NewGameDialog::NewGameDialog() :
     
     setDifficulty();
     
-    KPageWidgetItem *localPageWidgetItem = new KPageWidgetItem( localWidget, LOCAL_STRING );
+    KPageWidgetItem *localPageWidgetItem = new KPageWidgetItem( localWidget, ki18n( LOCAL_STRING ).toString() );
     localPageWidgetItem->setIcon( KIcon( "localmode.png" ) );
     
     addPage( localPageWidgetItem );
@@ -37,7 +37,7 @@ NewGameDialog::NewGameDialog() :
     QWidget *clientWidget = new QWidget;
     mClientWidgetUi->setupUi( clientWidget );
     
-    KPageWidgetItem *clientPageWidgetItem = new KPageWidgetItem( clientWidget, CLIENT_STRING );
+    KPageWidgetItem *clientPageWidgetItem = new KPageWidgetItem( clientWidget, ki18n( CLIENT_STRING ).toString() );
     clientPageWidgetItem->setIcon( KIcon( "clientmode.png" ) );
     
     addPage( clientPageWidgetItem );
@@ -48,7 +48,7 @@ NewGameDialog::NewGameDialog() :
     QWidget *serverWidget = new QWidget;
     mServerWidgetUi->setupUi( serverWidget );
     
-    KPageWidgetItem *serverPageWidgetItem = new KPageWidgetItem( serverWidget, SERVER_STRING );
+    KPageWidgetItem *serverPageWidgetItem = new KPageWidgetItem( serverWidget, ki18n( SERVER_STRING ).toString() );
     serverPageWidgetItem->setIcon( KIcon( "servermode.png" ) );
     
     addPage( serverPageWidgetItem );

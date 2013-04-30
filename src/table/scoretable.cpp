@@ -6,8 +6,8 @@
 #include "table/animation.h"
 #include "table/scoretable.h"
 
-QString TRICKS_TEXT = i18n( "Tricks:" );
-QString SCORE_TEXT = i18n( "Scores:" );
+const char TRICKS_TEXT[] = I18N_NOOP( "Tricks:" );
+const char SCORE_TEXT[] = I18N_NOOP( "Scores:" );
 
 ScoreTable::ScoreTable( int animationTime )
 {
@@ -48,14 +48,14 @@ QRectF ScoreTable::boundingRect() const
 
 void ScoreTable::slotTricksChanged( int tricks )
 {
-    mTricksItem->setPlainText( TRICKS_TEXT+" "+QString::number( tricks ) );
+    mTricksItem->setPlainText( ki18n( TRICKS_TEXT ).toString()  + QString( " " ) + QString::number( tricks ) );
     
     update();
 }
 
 void ScoreTable::slotScoresChanged( int scores )
 {
-    mScoresItem->setPlainText( SCORE_TEXT+" "+QString::number( scores ) );
+    mScoresItem->setPlainText( ki18n( SCORE_TEXT ).toString() + QString( " " ) + QString::number( scores ) );
     
     update();
 }
