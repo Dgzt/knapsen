@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: 1.0.0\n"
 "Report-Msgid-Bugs-To: http://sourceforge.net/tracker/?"
 "group_id=50231&atid=459007\n"
-"POT-Creation-Date: 2013-04-14 09:57+0200\n"
+"POT-Creation-Date: 2013-04-30 19:53+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -33,7 +33,7 @@ msgstr "A kört nyerte"
 #. i18n: ectx: property (text), widget (QLabel, label_3)
 #: rc.cpp:9 rc.cpp:9
 msgid "with"
-msgstr ""
+msgstr " "
 
 #. i18n: file: src/dialogs/endroundwidget.ui:157
 #. i18n: ectx: property (text), widget (QLabel, label_5)
@@ -105,7 +105,7 @@ msgstr "Helyi játékos"
 #. i18n: ectx: property (text), widget (QRadioButton, kcfg_OpponentPlayer)
 #: rc.cpp:45 rc.cpp:45
 msgid "Opponent player"
-msgstr "Ellenfél játékot"
+msgstr "Ellenfél játékos"
 
 #. i18n: file: src/gamesettingswidget.ui:37
 #. i18n: ectx: property (text), widget (QRadioButton, kcfg_RandomPlayer)
@@ -186,7 +186,7 @@ msgid "Exit"
 msgstr "Kilépés"
 
 #: src/dialogs/endgamedialog.cpp:21
-msgid "Gane end"
+msgid "Game end"
 msgstr "Játék vége"
 
 #: src/dialogs/endrounddialog.cpp:20
@@ -223,7 +223,7 @@ msgstr "Ellenfélre várás"
 
 #: src/main.cpp:8
 msgid "Knapsen is a Sixty-six card game for KDE."
-msgstr "Knapsen egy hatvanhat kártya játék KDE-hez."
+msgstr "Knapsen egy hatvanhat kártyajáték KDE-hez."
 
 #: src/main.cpp:19
 msgid "Knapsen"
@@ -296,8 +296,8 @@ msgstr "Takar"
 
 #: src/table/scoretable.cpp:9
 msgid "Tricks:"
-msgstr "Kis pontok:"
+msgstr "Pontok:"
 
 #: src/table/scoretable.cpp:10
 msgid "Scores:"
-msgstr "Nagy pontok:"
+msgstr "Egységek:"

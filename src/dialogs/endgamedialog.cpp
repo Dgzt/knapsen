@@ -18,5 +18,5 @@ EndGameDialog::EndGameDialog( QWidget* parent, QString winnerName ) :
     setButtonText( KDialog::Ok, i18n( "New Game" ) );
     setButtonText( KDialog::Cancel, i18n( "Exit" ) );
     
-    setWindowTitle( i18n( "Gane end" ) );
+    setWindowTitle( i18n( "Game end" ) );
 }
