@@ -8,9 +8,9 @@
 #include "ui_newgamewidget_client.h"
 #include "ui_newgamewidget_server.h"
 
-const QString LOCAL_STRING = i18n( "Local" );
-const QString CLIENT_STRING = i18n( "Client" );
-const QString SERVER_STRING = i18n( "Server" );
+QString LOCAL_STRING = i18n( "Local" );
+QString CLIENT_STRING = i18n( "Client" );
+QString SERVER_STRING = i18n( "Server" );
 
 NewGameDialog::NewGameDialog() : 
     KPageDialog()

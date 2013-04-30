@@ -6,8 +6,8 @@
 #include "table/animation.h"
 #include "table/scoretable.h"
 
-const QString TRICKS_TEXT = i18n( "Tricks:" );
-const QString SCORE_TEXT = i18n( "Scores:" );
+QString TRICKS_TEXT = i18n( "Tricks:" );
+QString SCORE_TEXT = i18n( "Scores:" );
 
 ScoreTable::ScoreTable( int animationTime )
 {
