@@ -15,11 +15,6 @@ Animation::Animation( QGraphicsItem* graphicsItem, int animationTime ) :
     setupTimeLine( animationTime );
 }
 
-Animation::~Animation()
-{
-    kDebug() << "Deleting.";
-}
-
 void Animation::setupTimeLine( int time )
 {
     QTimeLine* timeLine = new QTimeLine( time );
