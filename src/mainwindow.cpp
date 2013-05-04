@@ -386,9 +386,9 @@ void MainWindow::slotGameError( Client::GameErrorType gameErrorType )
     }
 }
 
-void MainWindow::slotEndRound( QString roundWinnerName, int scores )
+void MainWindow::slotEndRound( QString name, int scores )
 {
-    endRoundDialog = new EndRoundDialog( this, roundWinnerName, scores );
+    endRoundDialog = new EndRoundDialog( this, name, scores );
     
     QTimer::singleShot( 0, this, SLOT( slotEndRoundExec() ) );
 }
@@ -423,9 +423,9 @@ void MainWindow::slotEndRoundExec()
     }
 }
 
-void MainWindow::slotEndGame( QString gameWinnerName )
+void MainWindow::slotEndGame( QString name )
 {
-    endGameDialog = new EndGameDialog( this, gameWinnerName );
+    endGameDialog = new EndGameDialog( this, name );
     QTimer::singleShot( 0, this, SLOT( slotEndGameExec() ) );
 }
 
