@@ -444,15 +444,15 @@ void CentralWidget::slotTrumpCardSelectableChanged( bool selectable )
     mTrumpCard->setSelectable( selectable );
 }
 
-void CentralWidget::slotOpponentChangeTrumpCard( int cardId, Card* newTrumpCard )
+void CentralWidget::slotOpponentChangeTrumpCard( int id, Card* newTrumpCard )
 {
     kDebug();
-    kDebug() << cardId << newTrumpCard->getCardText();
+    kDebug() << id << newTrumpCard->getCardText();
     
     //Disconnect from signal of animation
     mTrumpCard->disconnect();
     
-    SvgCard* newSvgTrumpCard = mOpponentCards->takeCard( cardId );
+    SvgCard* newSvgTrumpCard = mOpponentCards->takeCard( id );
     newSvgTrumpCard->getAnimation()->setEndPosition( mTrumpCard->pos() );
     newSvgTrumpCard->getAnimation()->setNewCardText( newTrumpCard->getCardText() );
     newSvgTrumpCard->getAnimation()->startAnimation();
@@ -463,14 +463,14 @@ void CentralWidget::slotOpponentChangeTrumpCard( int cardId, Card* newTrumpCard 
     mTrumpCard = newSvgTrumpCard;
 }
 
-void CentralWidget::slotPlayerChangeTrumpCard( int playerCardId )
+void CentralWidget::slotPlayerChangeTrumpCard( int id )
 {
-    kDebug() << playerCardId;
+    kDebug() << id;
     
     //Disconnect from signal of animation
     mTrumpCard->disconnect();
     
-    SvgCard* newSvgTrumpCard = mPlayerCards->takeCard( playerCardId );
+    SvgCard* newSvgTrumpCard = mPlayerCards->takeCard( id );
     newSvgTrumpCard->getAnimation()->setEndPosition( mTrumpCard->pos() );
     newSvgTrumpCard->getAnimation()->startAnimation();
     

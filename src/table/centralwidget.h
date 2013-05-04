@@ -276,63 +276,172 @@ protected slots:
      */
     void slotNewOpponentCardTrumpCard();
     
+    /*!
+     * Add the new card to the player's cards group.
+     * If this is the last card then the cards of deck will be unvisible.
+     * 
+     * @param lastCard True/False.
+     * @param card The new card.
+     */
     void slotNewPlayerCard( bool lastCard, Card* card );
     
+    /*!
+     * The player gets the trump card.
+     */
     void slotNewPlayerCardTrumpCard();
     
-    void slotNewTrumpCard( Card* );
-    //
-    void slotTrumpCardSelectableChanged( bool );
-    //
-    //
-    void slotOpponentChangeTrumpCard( int, Card* );
-    void slotPlayerChangeTrumpCard( int );
-    //
+    /*!
+     * Add new trump card from cards of deck.
+     * 
+     * @param card The new trump card.
+     */
+    void slotNewTrumpCard( Card* card );
     
+    /*!
+     * Change the enabled of trump card.
+     * 
+     * @param enabled True/False.
+     */
+    void slotTrumpCardSelectableChanged( bool enabled );
+    
+    /*!
+     * Change opponent's card with the trump card.
+     * 
+     * @param cardId The id of card in opponent's cards group.
+     * @param newTrumpCard The new trump card from opponent's cards group.
+     */
+    void slotOpponentChangeTrumpCard( int id, Card* newTrumpCard );
+    
+    /*!
+     * Change player's card with the trump card.
+     * 
+     * @param id The id of card in player's cards group.
+     */
+    void slotPlayerChangeTrumpCard( int id );
+    
+    /*!
+     * Change the opponent's cards group position.
+     */
     void slotOpponentCardsSizeChanged();
-    void slotPlayerCardsSizeChanged();
-    //
-    void slotCentralCardsSizeChanged();
-    //
     
+    /*!
+     * Change the player's cards group position.
+     */
+    void slotPlayerCardsSizeChanged();
+    
+    /*!
+     * Change the central cards group position.
+     */
+    void slotCentralCardsSizeChanged();
+    
+    /*!
+     * The opponent's forty and twenty text will be unvisible.
+     */
     void slotPlayerSelectedCard();
     
-    //void slotPlayerSelectedCard( SvgCard* );
-    void slotCloseButtonVisible( bool );
-    void slotSchnapsenButtonVisible( bool );
-    void slotTwentyButtonVisible( bool );
-    void slotFortyButtonVisible( bool );
+    /*!
+     * Change the visible of close button.
+     * 
+     * @param visible True/False.
+     */
+    void slotCloseButtonVisible( bool visible );
     
+    /*!
+     * Change the visible of schnapsen button.
+     * 
+     * @param visible True/False.
+     */
+    void slotSchnapsenButtonVisible( bool visible );
+    
+    /*!
+     * Change the visible of twenty button.
+     * 
+     * @param visible True/False
+     */
+    void slotTwentyButtonVisible( bool visible );
+    
+    /*!
+     * Change the visible of forty button.
+     * 
+     * @param visible True/False.
+     */
+    void slotFortyButtonVisible( bool visible );
+    
+    /*!
+     * The trump card will be unvisible.
+     */
     void slotCloseDeck();
     
-    //
+    /*!
+     * Show the player's arrow.
+     */
     void slotShowPlayerArrow();
-    void slotHidePlayerArrow();
-    void slotShowOpponentArrow();
-    void slotHideOpponentArrow();
-    //
     
-    //
+    /*!
+     * Hide the player's arrow.
+     */
+    void slotHidePlayerArrow();
+    
+    /*!
+     * Show the opponent's arrow.
+     */
+    void slotShowOpponentArrow();
+    
+    /*!
+     * Hide the opponent's arrow.
+     */
+    void slotHideOpponentArrow();
+    
+    /*!
+     * Move the central cards to the bottom right corner.
+     */
     void slotPlayerGetCentralCards();
+    
+    /*!
+     * Move the central cards to the top right corner.
+     */
     void slotOpponentGetCentralCards();
     
+    /*!
+     * Delete the arrived central cards.
+     */
     void slotRemoveCardArrived();
-    //
     
-    //
+    /*!
+     * Show opponent's schnapsen text.
+     */
     void slotOpponentSchnapsenButtonClicked();
+    
+    /*!
+     * Show opponent's forty text.
+     */
     void slotOpponentFortyButtonClicked();
+    
+    /*!
+     * Show opponent's twenty text.
+     */
     void slotOpponentTwentyButtonClicked();
-    //
     
 public:
+    /*!
+     * The constructor.
+     * 
+     * @param parent The parent widget.
+     */
     CentralWidget( QWidget* parent = 0 );
     
-    void setClient( Client* );
+    /*!
+     * Set the client and connect to the signalInitialize signal.
+     * 
+     * @param client The client.
+     */
+    void setClient( Client* client );
     
+    /*!
+     * Clear the widget. Delete all items.
+     */
     void clearWidget();
     
 };
-
 
 #endif //centralwidget_h
