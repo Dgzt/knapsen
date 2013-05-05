@@ -1,1 +1,12 @@
 Knapsen is a schnapsen card game for KDE.
+
+Requirements:
+        - Qt 4.6
+        - KDE 4.9
+        
+Install:
+        - mkdir build && cd build
+        - cmake ..
+        - make
+        - make install
+        
