@@ -345,8 +345,8 @@ public slots:
      * If the trump card is selectable then set to false.
      * 
      * @param cardId Selected id of card.
+     * @param delay Delay to send to the server.
      */
-    //void slotSelectCardId( int cardId );
     void slotSelectCardId( int cardId, int delay );
     
     
@@ -496,7 +496,7 @@ signals:
      * 
      * @param card1Id The position of the first card.
      * @param card1 The first card.
-     * @param card2id The position of the second card.
+     * @param card2Id The position of the second card.
      * @param card2 The second card.
      */
     void signalShowOpponentCards( int card1Id, Card card1, int card2Id, Card card2 );

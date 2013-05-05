@@ -77,12 +77,8 @@ public:
     bool isEmpty();
     
     /*!
-     * Clear the trump card. If the given value is true then
-     * delete the data else not.
-     * 
-     * @param removeData Clear data or not.
+     * Clear the trump card. Remove the data.
      */
-    //void clearTrumpCard( bool removeData );
     void clearTrumpCard(){ delete mCard; mCard = 0; }
     
 };

@@ -307,7 +307,7 @@ protected slots:
     /*!
      * Change opponent's card with the trump card.
      * 
-     * @param cardId The id of card in opponent's cards group.
+     * @param id The id of card in opponent's cards group.
      * @param newTrumpCard The new trump card from opponent's cards group.
      */
     void slotOpponentChangeTrumpCard( int id, Card* newTrumpCard );

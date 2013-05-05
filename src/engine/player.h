@@ -490,7 +490,11 @@ public:
      */
     void sendNewCard( Card* card );
     
-    //void sendNewCardTrumpCard(){ sendCommand( NEW_PLAYER_CARD_TRUMP_CARD_COMMAND ); }
+    /*!
+     * Add the card to the player and send to the client.
+     * 
+     * @param card The new card.
+     */
     void sendNewCardTrumpCard( Card* card );
     
     /*!
