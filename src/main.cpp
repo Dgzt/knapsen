@@ -23,6 +23,8 @@ int main(int argc, char **argv)
                       ki18n("(C) 2012 Zsuró Tibor")  
     );
     
+    about.setHomepage( "http://kde-apps.org/content/show.php/Knapsen?content=158488" );
+    
     KCmdLineArgs::init(argc, argv, &about);
     
     KApplication app;
