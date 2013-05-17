@@ -65,6 +65,10 @@ protected:
      */
     void setupActions();
     
+    //
+    void setupConnects();
+    //
+    
     /*!
      * Create the server and initialize the server parameters from settings.
      * 

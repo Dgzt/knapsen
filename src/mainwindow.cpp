@@ -114,6 +114,11 @@ void MainWindow::setupActions()
     KStandardAction::preferences(this, SLOT(optionsPreferences()), actionCollection());
 }
 
+void MainWindow::setupConnects()
+{
+    connect( mClient, SIGNAL(signalInitialize(QString,QString,Knapsen::TypeOfCards) ), mCWidget, SLOT( slotInitialize(QString,QString,Knapsen::TypeOfCards ) ) );
+}
+
 Server* MainWindow::createServer()
 {
     Knapsen::TypeOfCards typeOfCards;
@@ -151,14 +156,6 @@ Server* MainWindow::createServer()
     return new Server( typeOfCards, sizeOfDeck, numberOfCardsInHand, whoStartGame, enabledSchnapsenButton );
 }
 
-/*void MainWindow::setGameSignals()
-{
-    connect( mClient, SIGNAL( error( QAbstractSocket::SocketError ) ),    this,   SLOT( slotSocketError( QAbstractSocket::SocketError ) ) );
-    connect( mClient, SIGNAL( signalGameError( Client::GameErrorType ) ), this,   SLOT( slotGameError( Client::GameErrorType ) ) );
-    connect( mClient, SIGNAL( signalEndRound( QString, int ) ),           this,   SLOT( slotEndRound( QString, int ) ) );
-    connect( mClient, SIGNAL( signalEndGame( QString ) ),                 this,   SLOT( slotEndGame( QString ) ) );
-}*/
-
 void MainWindow::slotNewGame()
 {
     kDebug() << "New game.";
@@ -183,9 +180,9 @@ void MainWindow::slotNewGame()
         kDebug() << "KDialog button: Ok";
         
         mClient = new Client( Settings::playerName() );
-        //mCWidget->setClient( mClient );
         
-        //setGameSignals();
+        setupConnects();
+        
         connect( mClient, SIGNAL( error( QAbstractSocket::SocketError ) ),    this,   SLOT( slotSocketError( QAbstractSocket::SocketError ) ) );
         connect( mClient, SIGNAL( signalGameError( Client::GameErrorType ) ), this,   SLOT( slotGameError( Client::GameErrorType ) ) );
         connect( mClient, SIGNAL( signalEndRound( QString, int ) ),           this,   SLOT( slotEndRound( QString, int ) ) );

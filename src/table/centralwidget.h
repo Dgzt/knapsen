@@ -26,10 +26,11 @@
 #define centralwidget_h
 
 #include <QDeclarativeView>
+#include "enums.h"
 
 class CentralWidget : public QDeclarativeView
 {
-    //Q_OBJECT
+    Q_OBJECT
 
 public:
     /*!
@@ -40,6 +41,9 @@ public:
     CentralWidget( QWidget* parent = 0 );
     
     
+public slots:
+    void slotInitialize( QString, QString, Knapsen::TypeOfCards );
+     
 };
 
 #endif //centralwidget_h
