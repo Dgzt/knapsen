@@ -40,6 +40,12 @@ public:
      */
     CentralWidget( QWidget* parent = 0 );
     
+protected:
+    /*!
+     * Call this function when the windows was resized.
+     */
+    virtual void resizeEvent( QResizeEvent* );
+    
     
 public slots:
     void slotInitialize( QString, QString, Knapsen::TypeOfCards );

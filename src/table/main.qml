@@ -1,18 +1,11 @@
 import QtQuick 1.0
 
 Item{
-    id: window
-    width: 1000
-    height: 1000
+    id: main
+    width: 600
+    height: 600
+    //anchors.fill: parent
 
-    //Background
-    Image{
-        id: backgroundImage
-        anchors.fill: parent
-        source: "../pics/background.png"
-        fillMode: Image.Tile
-    }
-    
     //Opponent's name
     Rectangle{
         id: opponentNameRect
@@ -45,6 +38,10 @@ Item{
             text: "Player name"
             anchors.centerIn: parent
         }
+    }
+    
+    function resize(){
+        console.log( main.width + "x" + main.height );
     }
     
     function initialize( playerName, opponentName ){

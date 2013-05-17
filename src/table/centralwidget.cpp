@@ -9,10 +9,19 @@
 CentralWidget::CentralWidget( QWidget* parent ): 
     QDeclarativeView( parent )
 {
-  setResizeMode( QDeclarativeView::SizeRootObjectToView );
+    //Set background
+    scene()->setBackgroundBrush( QBrush( QImage( KGlobal::dirs()->findResource( "appdata", "pics/background.png" ) ) ) );
+    
+    QString path = KStandardDirs::locate( "appdata", "qml/main.qml" );
+    setSource( QUrl::fromLocalFile( path ) );
   
-  QString path = KStandardDirs::locate("appdata", "qml/main.qml");
-  setSource(QUrl::fromLocalFile(path));
+    setResizeMode( QDeclarativeView::SizeRootObjectToView );
+    setAlignment( Qt::AlignCenter | Qt::AlignCenter );
+}
+
+void CentralWidget::resizeEvent( QResizeEvent* ){
+    fitInView( sceneRect(), Qt::KeepAspectRatio );
+    QMetaObject::invokeMethod( rootObject(), "resize" );
 }
 
 void CentralWidget::slotInitialize( QString playerName, QString opponentName, Knapsen::TypeOfCards typeOfCards )
