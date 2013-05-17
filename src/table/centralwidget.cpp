@@ -21,7 +21,7 @@ CentralWidget::CentralWidget( QWidget* parent ):
 
 void CentralWidget::resizeEvent( QResizeEvent* ){
     fitInView( sceneRect(), Qt::KeepAspectRatio );
-    QMetaObject::invokeMethod( rootObject(), "resize" );
+    //QMetaObject::invokeMethod( rootObject(), "resize" );
 }
 
 void CentralWidget::slotInitialize( QString playerName, QString opponentName, Knapsen::TypeOfCards typeOfCards )
