@@ -11,7 +11,6 @@ Rectangle{
     }
     
     function setText( text ){
-        console.log( "Meg" );
         name.text = text;
     }
     

@@ -45,9 +45,19 @@ Item{
     }*/
     
     function initialize( playerNameStr, opponentNameStr ){
-        console.log( "initialize, player:\""+playerName+"\", opponent:\""+opponentName+"\"" );
+        console.log( "initialize, player:\""+playerNameStr+"\", opponent:\""+opponentNameStr+"\"" );
+        
+        //Set player's name
         playerName.setText( playerNameStr );
+        
+        //Set opponent's name
         opponentName.setText( opponentNameStr );
+        
+        //Clear variables
+        opponentScoreTable.setTricks( 0 );
+        opponentScoreTable.setScores( 0 );
+        playerScoreTable.setTricks( 0 );
+        playerScoreTable.setScores( 0 );
     }
     
     
