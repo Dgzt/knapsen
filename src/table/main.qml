@@ -44,9 +44,10 @@ Item{
         console.log( main.width + "x" + main.height );
     }*/
     
-    function initialize( playerName, opponentName ){
+    function initialize( playerNameStr, opponentNameStr ){
         console.log( "initialize, player:\""+playerName+"\", opponent:\""+opponentName+"\"" );
-        
+        playerName.setText( playerNameStr );
+        opponentName.setText( opponentNameStr );
     }
     
     

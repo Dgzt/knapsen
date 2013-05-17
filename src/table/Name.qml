@@ -1,7 +1,7 @@
 import QtQuick 1.1
 
 Rectangle{
-    id: textRect
+    //id: textRect
     color: "white"
         
     Text{
@@ -10,7 +10,7 @@ Rectangle{
         anchors.centerIn: parent
     }
     
-    function setText(/* text */){
+    function setText( text ){
         console.log( "Meg" );
         name.text = text;
     }
