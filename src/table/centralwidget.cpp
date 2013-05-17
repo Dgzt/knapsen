@@ -19,5 +19,5 @@ void CentralWidget::slotInitialize( QString playerName, QString opponentName, Kn
 {
     kDebug() << playerName << opponentName;
     
-    QMetaObject::invokeMethod(rootObject(), "initialize"/*, Q_ARG(QVariant, playerName), Q_ARG(QVariant, opponentName)*/);
+    QMetaObject::invokeMethod( rootObject(), "initialize", Q_ARG(QVariant, playerName), Q_ARG(QVariant, opponentName) );
 }
