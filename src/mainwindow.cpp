@@ -183,7 +183,7 @@ void MainWindow::slotNewGame()
         kDebug() << "KDialog button: Ok";
         
         mClient = new Client( Settings::playerName() );
-        mCWidget->setClient( mClient );
+        //mCWidget->setClient( mClient );
         
         //setGameSignals();
         connect( mClient, SIGNAL( error( QAbstractSocket::SocketError ) ),    this,   SLOT( slotSocketError( QAbstractSocket::SocketError ) ) );
@@ -284,7 +284,7 @@ void MainWindow::closeGameSlot()
 {
     kDebug() << "Close game.";
     
-    mCWidget->clearWidget();
+    //mCWidget->clearWidget();
     
     mClient->disconnectFromHost();
     

@@ -1,12 +1,7 @@
 
 set(knapsen_HDRS
     enums.h
-    table/animation.h
-    table/scoretable.h
-    table/text.h
-    table/svgcard.h
     table/centralwidget.h
-    table/cardsgroup.h
     engine/card.h
     dialogs/waitingforopponent.h
     dialogs/endgamedialog.h
@@ -23,12 +18,7 @@ set(knapsen_HDRS
 )
 
 set(knapsen_SRCS
-    table/animation.cpp
-    table/scoretable.cpp
-    table/text.cpp
-    table/svgcard.cpp
     table/centralwidget.cpp
-    table/cardsgroup.cpp
     engine/card.cpp
     dialogs/waitingforopponent.cpp
     dialogs/endgamedialog.cpp
@@ -46,7 +36,6 @@ set(knapsen_SRCS
 )
 
 set(knapsen_UIS
-    #dialogs/newgamewidget.ui
     dialogs/newgamewidget_local.ui
     dialogs/newgamewidget_client.ui
     dialogs/newgamewidget_server.ui
@@ -66,8 +55,8 @@ kde4_add_ui_files(knapsen_SRCS ${knapsen_UIS} )
 
 kde4_add_executable(knapsen ${knapsen_SRCS} )
 
-#target_link_libraries(knapsen ${QT_QTSVG_LIBRARY} ${QT_QTNETWORK_LIBRARY} ${KDE4_KDEUI_LIBS} kdegames )
-target_link_libraries(knapsen ${QT_QTSVG_LIBRARY} ${QT_QTNETWORK_LIBRARY} ${KDE4_KDEUI_LIBS} ${KDEGAMES_LIBRARY} )
+#target_link_libraries(knapsen ${QT_QTSVG_LIBRARY} ${QT_QTNETWORK_LIBRARY} ${KDE4_KDEUI_LIBS} ${KDEGAMES_LIBRARY} )
+target_link_libraries(knapsen ${QT_QTDECLARATIVE_LIBRARY} ${QT_QTSVG_LIBRARY} ${QT_QTNETWORK_LIBRARY} ${KDE4_KDEUI_LIBS} ${KDEGAMES_LIBRARY} )
 
 ########### install files ###############
 

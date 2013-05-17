@@ -3,8 +3,8 @@ import Qt 4.7
 Item{
   
   id: window
-  width: 600
-  height: 400
+  //width: 600
+  //height: 400
   
   //Background
   Image{
