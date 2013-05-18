@@ -116,7 +116,8 @@ void MainWindow::setupActions()
 
 void MainWindow::setupConnects()
 {
-    connect( mClient, SIGNAL(signalInitialize(QString,QString,Knapsen::TypeOfCards) ), mCWidget, SLOT( slotInitialize(QString,QString,Knapsen::TypeOfCards ) ) );
+    connect( mClient, SIGNAL( signalInitialize( QString, QString, Knapsen::TypeOfCards ) ), mCWidget, SLOT( slotInitialize( QString, QString, Knapsen::TypeOfCards ) ) );
+    connect( mClient, SIGNAL(signalNewGame() ), mCWidget, SLOT(slotStartGame() ) );
 }
 
 Server* MainWindow::createServer()

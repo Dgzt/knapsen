@@ -5,16 +5,13 @@ Item{
     id: main
     width: 600
     height: 600
-    //anchors.fill: parent
     
     //Opponent's name
     Name{
         id: opponentName
-        color: "white"
         width: 100
         height: Globals.NAME_HEIGHT
         x: ( parent.width - width ) / 2
-        y: Globals.NAME_DISTANCE
     }
     
     //Player's name
@@ -23,20 +20,20 @@ Item{
         width: 100
         height: Globals.NAME_HEIGHT
         x: ( parent.width - width ) / 2
-        y: parent.height - Globals.NAME_DISTANCE - height
+        y: parent.height - height
     }
     
     //Opponent's scoretable
     ScoreTable{
         id: opponentScoreTable
-        x: ( parent.width / 2 ) + Globals.SCORE_TABLE_DISTANCE
+        x: main.width - opponentScoreTable.getWidth()
         y: opponentName.y + opponentName.height + Globals.SCORE_TABLE_DISTANCE
     }
     
     //Player's scoretable
     ScoreTable{
         id: playerScoreTable
-        x: ( parent.width / 2 ) + Globals.SCORE_TABLE_DISTANCE
+        x: main.width - playerScoreTable.getWidth()
         y: playerName.y - Globals.SCORE_TABLE_DISTANCE - 50
     }
     
@@ -52,13 +49,19 @@ Item{
         
         //Set opponent's name
         opponentName.setText( opponentNameStr );
-        
-        //Clear variables
-        opponentScoreTable.setTricks( 0 );
-        opponentScoreTable.setScores( 0 );
-        playerScoreTable.setTricks( 0 );
-        playerScoreTable.setScores( 0 );
     }
     
+    function startGame(){
+        console.log( "Start game." );
+        opponentName.setAnimationEnd( opponentName.y + Globals.NAME_DISTANCE );
+        playerName.setAnimationEnd( playerName.y - Globals.NAME_DISTANCE );
+        opponentScoreTable.setAnimationEnd( ( main.width / 2 ) + Globals.SCORE_TABLE_DISTANCE );
+        playerScoreTable.setAnimationEnd( ( main.width / 2 ) + Globals.SCORE_TABLE_DISTANCE );
+        
+        opponentName.startAnimation();
+        playerName.startAnimation();
+        opponentScoreTable.startAnimation();
+        playerScoreTable.startAnimation();
+    }
     
 }

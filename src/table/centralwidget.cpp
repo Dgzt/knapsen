@@ -30,3 +30,10 @@ void CentralWidget::slotInitialize( QString playerName, QString opponentName, Kn
     
     QMetaObject::invokeMethod( rootObject(), "initialize", Q_ARG(QVariant, playerName), Q_ARG(QVariant, opponentName) );
 }
+
+void CentralWidget::slotStartGame()
+{
+    kDebug() << "Start game.";
+    
+    QMetaObject::invokeMethod( rootObject(), "startGame" );
+}
