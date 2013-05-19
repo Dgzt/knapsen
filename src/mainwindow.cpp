@@ -30,6 +30,10 @@
 #include "ui_playersettingswidget.h"
 #include "ui_gamesettingswidget.h"
 
+//
+#include "table/svgimage.h"
+//
+
 MainWindow::MainWindow( QWidget* parent ) : 
     KXmlGuiWindow( parent ),
     mGameStatus( Knapsen::None )
@@ -41,6 +45,10 @@ MainWindow::MainWindow( QWidget* parent ) :
     
     //Initialize the data path (example pictures, icons, etc)
     initializePaths();
+    
+    //
+    qmlRegisterType<SvgImage>("CustomComponents", 1, 0, "SvgImage");
+    //
     
     //Setup the central widget
     mCWidget = new CentralWidget( this );
@@ -117,7 +125,10 @@ void MainWindow::setupActions()
 void MainWindow::setupConnects()
 {
     connect( mClient, SIGNAL( signalInitialize( QString, QString, Knapsen::TypeOfCards ) ), mCWidget, SLOT( slotInitialize( QString, QString, Knapsen::TypeOfCards ) ) );
-    connect( mClient, SIGNAL(signalNewGame() ), mCWidget, SLOT(slotStartGame() ) );
+    connect( mClient, SIGNAL( signalNewGame() ), mCWidget, SLOT( slotStartGame() ) );
+    connect( mClient, SIGNAL(signalNewRound() ), mCWidget, SLOT(slotNewRound() ) );
+    
+    connect( mCWidget, SIGNAL(signalAnimationEnd() ), mClient, SLOT( slotProcessCommands() ) );
 }
 
 Server* MainWindow::createServer()
@@ -283,6 +294,7 @@ void MainWindow::closeGameSlot()
     kDebug() << "Close game.";
     
     //mCWidget->clearWidget();
+    mCWidget->clear();
     
     mClient->disconnectFromHost();
     

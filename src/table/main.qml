@@ -1,3 +1,4 @@
+import CustomComponents 1.0
 import QtQuick 1.1
 import "globals.js" as Globals
 
@@ -5,6 +6,10 @@ Item{
     id: main
     width: 600
     height: 600
+    
+    //
+    signal signalAnimationEnd()
+    //
     
     //Opponent's name
     Name{
@@ -37,9 +42,31 @@ Item{
         y: playerName.y - Globals.SCORE_TABLE_DISTANCE - 50
     }
     
+    //Timer emit signalAnimationEnd signal
+    Timer{
+        id: timer
+        running: false
+        onTriggered: signalAnimationEnd()
+        interval: Globals.ANIMATION_TIME
+    }
+    
     /*function resize(){
         console.log( main.width + "x" + main.height );
     }*/
+    
+    SvgImage{
+        id: deck
+        source: "/usr/local/share/apps/knapsen/pics/william-tell.svgz"
+        elementId: "back"
+    }
+    
+    function clear(){
+        console.log( "Clear." );
+        /*opponentName.visible = false;
+        playerName.visible = false;
+        opponentScoreTable.visible = false;
+        playerScoreTable.visible = false;*/
+    }
     
     function initialize( playerNameStr, opponentNameStr ){
         console.log( "initialize, player:\""+playerNameStr+"\", opponent:\""+opponentNameStr+"\"" );
@@ -62,6 +89,12 @@ Item{
         playerName.startAnimation();
         opponentScoreTable.startAnimation();
         playerScoreTable.startAnimation();
+        
+        timer.start();
+    }
+    
+    function newRound(){
+        console.log( "New round." );
     }
     
 }

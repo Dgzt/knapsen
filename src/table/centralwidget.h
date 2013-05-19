@@ -40,6 +40,8 @@ public:
      */
     CentralWidget( QWidget* parent = 0 );
     
+    void clear();
+    
 protected:
     /*!
      * Call this function when the windows was resized.
@@ -51,7 +53,12 @@ public slots:
     void slotInitialize( QString, QString, Knapsen::TypeOfCards );
     
     void slotStartGame();
+    
+    void slotNewRound();
      
+signals:
+    void signalAnimationEnd();
+    
 };
 
 #endif //centralwidget_h
