@@ -11,6 +11,16 @@ SvgImage::SvgImage( QDeclarativeItem *parent ) :
     mSvgItem = new QGraphicsSvgItem( this );
 }
 
+int SvgImage::width()
+{
+    return mSvgItem->boundingRect().width();
+}
+
+int SvgImage::height()
+{
+    return mSvgItem->boundingRect().height();
+}
+
 void SvgImage::setX( int x )
 {
     mX = x;

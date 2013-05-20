@@ -11,6 +11,8 @@ class SvgImage : public QDeclarativeItem
     
     Q_PROPERTY( int x READ x WRITE setX NOTIFY xChanged );
     Q_PROPERTY( int y READ y WRITE setY NOTIFY yChanged );
+    Q_PROPERTY( int width READ width /*NOTIFY widthChanged*/ );
+    Q_PROPERTY( int height READ height /*NOTIFY heightChanged*/ );
     Q_PROPERTY( QString source READ source WRITE setSource NOTIFY sourceChanged );
     Q_PROPERTY( QString elementId READ elementId WRITE setElementId NOTIFY elementIdChanged );
     
@@ -26,6 +28,8 @@ public:
 
     int x(){ return mX; }
     int y(){ return mY; }
+    int width();
+    int height();
     QString source(){ return mSource; }
     QString elementId(){ return mElementId; }
     
