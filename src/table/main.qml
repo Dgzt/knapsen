@@ -56,6 +56,8 @@ Item{
     
     SvgImage{
         id: deck
+        //x: main.width / 2
+        y: ( main.height - deck.height ) / 2
         source: "/usr/local/share/apps/knapsen/pics/william-tell.svgz"
         elementId: "back"
     }
@@ -76,6 +78,8 @@ Item{
         
         //Set opponent's name
         opponentName.setText( opponentNameStr );
+        
+        console.log( "deck.height: "+deck.height );
     }
     
     function startGame(){
