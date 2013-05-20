@@ -4,8 +4,8 @@ import "globals.js" as Globals
 
 Item{
     id: main
-    width: 600
-    height: 600
+    width: 900
+    height: 700
     
     //
     signal signalAnimationEnd()
@@ -60,6 +60,29 @@ Item{
         y: ( main.height - deck.height ) / 2
         source: "/usr/local/share/apps/knapsen/pics/william-tell.svgz"
         elementId: "back"
+        
+        opacity: 0
+        
+        NumberAnimation on x { 
+            id: xAnimation
+            running: false
+            from: 0
+            to: 50
+            duration: Globals.ANIMATION_TIME
+        }
+        
+        NumberAnimation on opacity {
+            id: opacityAnimation
+            running: false
+            from: 0
+            to: 1
+            duration: Globals.ANIMATION_TIME
+        }
+        
+        function startAnimation(){
+            xAnimation.start();
+            opacityAnimation.start();
+        }
     }
     
     function clear(){
@@ -99,6 +122,8 @@ Item{
     
     function newRound(){
         console.log( "New round." );
+        
+        deck.startAnimation();
     }
     
 }
