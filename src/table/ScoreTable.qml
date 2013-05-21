@@ -1,46 +1,24 @@
 import QtQuick 1.1
 import "globals.js" as Globals
 
-Item{
+Rectangle{
     id: scoreTable
+    color: "white"
+    width: text.width + Globals.TEXT_RECT_DISTANCE_WIDTH;
+    height: text.height + Globals.TEXT_RECT_DISTANCE_HEIGHT;
     
-    property int rectWidth: 100
-    property int rectHeight: 50
+    property int tricks: 0
+    property int scores: 0
     
-    property string tricksStr: "Tricks: "
-    property string scoresStr: "Scores: "
-    
-    Rectangle{
-        id: tricksRect
-        color: "white"
-        width: rectWidth
-        height: rectHeight / 2
-    
-        Text{
-            id: tricks
-            text: tricksStr + 0
-            anchors.centerIn: parent
-        }
-    }
-    
-    Rectangle{
-        id: scoresRect
-        color: "white"
-        width: rectWidth
-        height: rectHeight / 2
-        y: rectHeight / 2 
-    
-        Text{
-            id: scores
-            text: scoresStr + 0
-            anchors.centerIn: parent
-        }
+    Text{
+        id: text
+        anchors.centerIn: parent
+        text: "Tricks: " + tricks + "\nScores: " + scores;
     }
     
     NumberAnimation on x {  
         id: moveAnimation
         running: false
-        from: scoreTable.x
         duration: Globals.ANIMATION_TIME
     }
     
@@ -52,26 +30,6 @@ Item{
         duration: Globals.ANIMATION_TIME
     }
     
-    /*function setTricks( tricksNum ){
-        tricks.text = tricksStr + tricksNum;
-    }
-    
-    function setScores( scoresNum ){
-        scores.text = scoresStr + scoresNum;
-    }*/
-    
-    function getWidth(){
-        return tricksRect.width;
-    }
-    
-    function getHeight(){
-        return rectHeight;
-    }
-    
-    /*function setAnimationEnd( end ){
-        moveAnimation.to = end;
-    }*/
-    
     function setAnimationPosX( start, end ){
         moveAnimation.from = start;
         moveAnimation.to = end;
@@ -81,5 +39,4 @@ Item{
         moveAnimation.start();
         opacityAnimation.start();
     }
-    
 }

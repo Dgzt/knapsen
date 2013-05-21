@@ -12,8 +12,6 @@ Item{
     Name{
         id: opponentName
         visible: false
-        width: 100
-        height: Globals.NAME_HEIGHT
         x: ( parent.width - width ) / 2
     }
     
@@ -21,8 +19,6 @@ Item{
     Name{
         id: playerName
         visible: false
-        width: 100
-        height: Globals.NAME_HEIGHT
         x: ( parent.width - width ) / 2
     }
     
@@ -87,10 +83,10 @@ Item{
         playerName.setAnimationPosY( main.height - playerName.height, -Globals.NAME_DISTANCE );
         
         opponentScoreTable.y = opponentName.animationPosYEnd() + opponentName.height + Globals.SCORE_TABLE_DISTANCE;
-        opponentScoreTable.setAnimationPosX( main.width - opponentScoreTable.getWidth(), main.width / 2 + Globals.SCORE_TABLE_DISTANCE );
+        opponentScoreTable.setAnimationPosX( main.width - opponentScoreTable.width, main.width / 2 + Globals.SCORE_TABLE_DISTANCE );
         
-        playerScoreTable.y = playerName.animationPosYEnd() - Globals.SCORE_TABLE_DISTANCE - playerScoreTable.getHeight();
-        playerScoreTable.setAnimationPosX( main.width - playerScoreTable.getWidth(), main.width / 2 + Globals.SCORE_TABLE_DISTANCE );
+        playerScoreTable.y = playerName.animationPosYEnd() - Globals.SCORE_TABLE_DISTANCE - playerScoreTable.height;
+        playerScoreTable.setAnimationPosX( main.width - playerScoreTable.width, main.width / 2 + Globals.SCORE_TABLE_DISTANCE );
         
         
         opponentName.startAnimation();

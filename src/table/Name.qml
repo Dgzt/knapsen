@@ -4,6 +4,8 @@ import "globals.js" as Globals
 Rectangle{
     id: frame
     color: "white"
+    width: name.width + Globals.TEXT_RECT_DISTANCE_WIDTH;
+    height: name.height + Globals.TEXT_RECT_DISTANCE_HEIGHT;
     
     Text{
         id: name
@@ -13,7 +15,6 @@ Rectangle{
     NumberAnimation on y { 
         id: moveAnimation
         running: false
-        //from: frame.y
         duration: Globals.ANIMATION_TIME 
     }
     
