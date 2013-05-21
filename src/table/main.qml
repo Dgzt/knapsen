@@ -1,4 +1,3 @@
-import CustomComponents 1.0
 import QtQuick 1.1
 import "globals.js" as Globals
 
@@ -7,13 +6,12 @@ Item{
     width: 900
     height: 700
     
-    //
     signal signalAnimationEnd()
-    //
     
     //Opponent's name
     Name{
         id: opponentName
+        visible: false
         width: 100
         height: Globals.NAME_HEIGHT
         x: ( parent.width - width ) / 2
@@ -22,24 +20,22 @@ Item{
     //Player's name
     Name{
         id: playerName
+        visible: false
         width: 100
         height: Globals.NAME_HEIGHT
         x: ( parent.width - width ) / 2
-        y: parent.height - height
     }
     
     //Opponent's scoretable
     ScoreTable{
         id: opponentScoreTable
-        x: main.width - opponentScoreTable.getWidth()
-        y: opponentName.y + opponentName.height + Globals.SCORE_TABLE_DISTANCE
+        visible: false
     }
     
     //Player's scoretable
     ScoreTable{
         id: playerScoreTable
-        x: main.width - playerScoreTable.getWidth()
-        y: playerName.y - Globals.SCORE_TABLE_DISTANCE - 50
+        visible: false
     }
     
     //Timer emit signalAnimationEnd signal
@@ -49,48 +45,27 @@ Item{
         onTriggered: signalAnimationEnd()
         interval: Globals.ANIMATION_TIME
     }
-    
+
+    Card{
+        id: deck
+        visible: false
+        y: ( main.height - deck.height ) / 2
+        source: "/usr/local/share/apps/knapsen/pics/william-tell.svgz"
+        elementId: "back"
+    }
+     
     /*function resize(){
         console.log( main.width + "x" + main.height );
     }*/
     
-    SvgImage{
-        id: deck
-        //x: main.width / 2
-        y: ( main.height - deck.height ) / 2
-        source: "/usr/local/share/apps/knapsen/pics/william-tell.svgz"
-        elementId: "back"
-        
-        opacity: 0
-        
-        NumberAnimation on x { 
-            id: xAnimation
-            running: false
-            from: 0
-            to: 50
-            duration: Globals.ANIMATION_TIME
-        }
-        
-        NumberAnimation on opacity {
-            id: opacityAnimation
-            running: false
-            from: 0
-            to: 1
-            duration: Globals.ANIMATION_TIME
-        }
-        
-        function startAnimation(){
-            xAnimation.start();
-            opacityAnimation.start();
-        }
-    }
-    
     function clear(){
         console.log( "Clear." );
-        /*opponentName.visible = false;
+        opponentName.visible = false;
         playerName.visible = false;
         opponentScoreTable.visible = false;
-        playerScoreTable.visible = false;*/
+        playerScoreTable.visible = false;
+        
+        deck.visible = false;
     }
     
     function initialize( playerNameStr, opponentNameStr ){
@@ -107,15 +82,28 @@ Item{
     
     function startGame(){
         console.log( "Start game." );
-        opponentName.setAnimationEnd( opponentName.y + Globals.NAME_DISTANCE );
-        playerName.setAnimationEnd( playerName.y - Globals.NAME_DISTANCE );
-        opponentScoreTable.setAnimationEnd( ( main.width / 2 ) + Globals.SCORE_TABLE_DISTANCE );
-        playerScoreTable.setAnimationEnd( ( main.width / 2 ) + Globals.SCORE_TABLE_DISTANCE );
+        
+        opponentName.setAnimationPosY( 0, Globals.NAME_DISTANCE );
+        playerName.setAnimationPosY( main.height - playerName.height, -Globals.NAME_DISTANCE );
+        
+        opponentScoreTable.y = opponentName.animationPosYEnd() + opponentName.height + Globals.SCORE_TABLE_DISTANCE;
+        opponentScoreTable.setAnimationPosX( main.width - opponentScoreTable.getWidth(), main.width / 2 + Globals.SCORE_TABLE_DISTANCE );
+        
+        playerScoreTable.y = playerName.animationPosYEnd() - Globals.SCORE_TABLE_DISTANCE - playerScoreTable.getHeight();
+        playerScoreTable.setAnimationPosX( main.width - playerScoreTable.getWidth(), main.width / 2 + Globals.SCORE_TABLE_DISTANCE );
+        
         
         opponentName.startAnimation();
+        opponentName.visible = true;
+        
         playerName.startAnimation();
+        playerName.visible = true;
+        
         opponentScoreTable.startAnimation();
+        opponentScoreTable.visible = true;
+        
         playerScoreTable.startAnimation();
+        playerScoreTable.visible = true;
         
         timer.start();
     }
@@ -124,6 +112,7 @@ Item{
         console.log( "New round." );
         
         deck.startAnimation();
+        deck.visible = true;
     }
     
 }

@@ -4,7 +4,6 @@ import "globals.js" as Globals
 Rectangle{
     id: frame
     color: "white"
-    opacity: 0
     
     Text{
         id: name
@@ -14,7 +13,7 @@ Rectangle{
     NumberAnimation on y { 
         id: moveAnimation
         running: false
-        from: frame.y
+        //from: frame.y
         duration: Globals.ANIMATION_TIME 
     }
     
@@ -30,8 +29,13 @@ Rectangle{
         name.text = text;
     }
     
-    function setAnimationEnd( end ){
-        moveAnimation.to = end;
+    function setAnimationPosY( start, distance ){
+        moveAnimation.from = start;
+        moveAnimation.to = start + distance;
+    }
+    
+    function animationPosYEnd(){
+        return moveAnimation.to;
     }
     
     function startAnimation(){

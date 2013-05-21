@@ -3,7 +3,6 @@ import "globals.js" as Globals
 
 Item{
     id: scoreTable
-    opacity: 0
     
     property int rectWidth: 100
     property int rectHeight: 50
@@ -65,7 +64,16 @@ Item{
         return tricksRect.width;
     }
     
-    function setAnimationEnd( end ){
+    function getHeight(){
+        return rectHeight;
+    }
+    
+    /*function setAnimationEnd( end ){
+        moveAnimation.to = end;
+    }*/
+    
+    function setAnimationPosX( start, end ){
+        moveAnimation.from = start;
         moveAnimation.to = end;
     }
     
