@@ -176,6 +176,8 @@ Item{
         });
         
         Logic.addOpponentCard( card );
+        
+        timer2.start();
     }
     
 }
