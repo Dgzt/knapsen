@@ -59,6 +59,8 @@ public slots:
     void slotNewRound();
     
     void slotNewPlayerCard( bool lastCard, Card* card );
+    
+    void slotNewOpponentCard( bool lastCard );
      
 signals:
     void signalAnimationEnd();

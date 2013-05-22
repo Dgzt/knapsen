@@ -127,7 +127,8 @@ void MainWindow::setupConnects()
     connect( mClient, SIGNAL( signalInitialize( QString, QString, Knapsen::TypeOfCards ) ), mCWidget, SLOT( slotInitialize( QString, QString, Knapsen::TypeOfCards ) ) );
     connect( mClient, SIGNAL( signalNewGame() ), mCWidget, SLOT( slotStartGame() ) );
     connect( mClient, SIGNAL( signalNewRound() ), mCWidget, SLOT( slotNewRound() ) );
-    connect( mClient, SIGNAL(signalNewPlayerCard( bool, Card* ) ), mCWidget, SLOT(slotNewPlayerCard( bool, Card* ) ) );
+    connect( mClient, SIGNAL( signalNewPlayerCard( bool, Card* ) ), mCWidget, SLOT( slotNewPlayerCard( bool, Card* ) ) );
+    connect( mClient, SIGNAL( signalNewOpponentCard( bool ) ), mCWidget, SLOT( slotNewOpponentCard( bool ) ) );
     
     connect( mCWidget, SIGNAL(signalAnimationEnd() ), mClient, SLOT( slotProcessCommands() ) );
 }

@@ -110,6 +110,8 @@ Item{
         opponentScoreTable.y = opponentName.animationPosYEnd() + opponentName.height + Globals.SCORE_TABLE_DISTANCE;
         opponentScoreTable.setXAnimation( main.width / 2 + Globals.SCORE_TABLE_DISTANCE );
         
+        Logic.setOpponentCardsPosY( opponentName.animationPosYEnd() + opponentName.height + Globals.NAME_DISTANCE );
+        
         playerScoreTable.x = main.width - playerScoreTable.width;
         playerScoreTable.y = playerName.animationPosYEnd() - Globals.SCORE_TABLE_DISTANCE - playerScoreTable.height;
         playerScoreTable.setXAnimation( main.width / 2 + Globals.SCORE_TABLE_DISTANCE );
@@ -158,6 +160,22 @@ Item{
         });
         
         Logic.addPlayerCard( card );
+        
+        timer1.start();
+    }
+    
+    function newOpponentCard( lastCard ){
+        console.log( lastCard );
+        
+        var component = Qt.createComponent("Card.qml");
+        var card = component.createObject( main, {
+            "x": deck.x, 
+            "y": deck.y,
+            "source": "/usr/local/share/apps/knapsen/pics/william-tell.svgz",
+            "elementId": "back"
+        });
+        
+        Logic.addOpponentCard( card );
     }
     
 }
