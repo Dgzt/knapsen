@@ -3,6 +3,7 @@
 #include <KDE/KStandardDirs>
 #include <KDE/KDebug>
 //#include <KDE/KLocalizedString>
+#include "engine/card.h"
 #include "table/centralwidget.h"
 
 CentralWidget::CentralWidget( QWidget* parent ): 
@@ -49,4 +50,11 @@ void CentralWidget::slotNewRound()
     kDebug() << "New round.";
     
     QMetaObject::invokeMethod( rootObject(), "newRound" );
+}
+
+void CentralWidget::slotNewPlayerCard( bool lastCard, Card* card )
+{
+    kDebug() << "New player card.";
+    
+    QMetaObject::invokeMethod( rootObject(), "newPlayerCard", Q_ARG( QVariant, lastCard ), Q_ARG( QVariant, card->getCardText() ) );
 }

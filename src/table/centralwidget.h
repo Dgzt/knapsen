@@ -28,6 +28,8 @@
 #include <QDeclarativeView>
 #include "enums.h"
 
+class Card;
+
 class CentralWidget : public QDeclarativeView
 {
     Q_OBJECT
@@ -55,6 +57,8 @@ public slots:
     void slotStartGame();
     
     void slotNewRound();
+    
+    void slotNewPlayerCard( bool lastCard, Card* card );
      
 signals:
     void signalAnimationEnd();

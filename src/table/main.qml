@@ -1,10 +1,12 @@
 import QtQuick 1.1
 import "globals.js" as Globals
 
+import "logic.js" as Logic
+
 Item{
     id: main
-    width: 900
-    height: 700
+    width: Globals.MAIN_WIDTH
+    height: Globals.MAIN_HEIGHT
     
     signal signalAnimationEnd()
     
@@ -36,7 +38,15 @@ Item{
     
     //Timer emit signalAnimationEnd signal
     Timer{
-        id: timer
+        id: timer1
+        running: false
+        onTriggered: signalAnimationEnd()
+        interval: Globals.ANIMATION_TIME
+    }
+    
+    //Timer emit signalAnimationEnd signal
+    Timer{
+        id: timer2
         running: false
         onTriggered: signalAnimationEnd()
         interval: Globals.ANIMATION_TIME
@@ -48,6 +58,18 @@ Item{
         y: ( main.height - deck.height ) / 2
         source: "/usr/local/share/apps/knapsen/pics/william-tell.svgz"
         elementId: "back"
+        
+        NumberAnimation on opacity {
+            id: opacityAnimation
+            running: false
+            from: 0
+            to: 1
+            duration: Globals.ANIMATION_TIME
+        }
+        
+        function startOpacityAnimation(){
+            opacityAnimation.start();
+        }
     }
      
     /*function resize(){
@@ -62,6 +84,8 @@ Item{
         playerScoreTable.visible = false;
         
         deck.visible = false;
+        
+        Logic.clear();
     }
     
     function initialize( playerNameStr, opponentNameStr ){
@@ -82,12 +106,15 @@ Item{
         opponentName.setAnimationPosY( 0, Globals.NAME_DISTANCE );
         playerName.setAnimationPosY( main.height - playerName.height, -Globals.NAME_DISTANCE );
         
+        opponentScoreTable.x = main.width - opponentScoreTable.width;
         opponentScoreTable.y = opponentName.animationPosYEnd() + opponentName.height + Globals.SCORE_TABLE_DISTANCE;
-        opponentScoreTable.setAnimationPosX( main.width - opponentScoreTable.width, main.width / 2 + Globals.SCORE_TABLE_DISTANCE );
+        opponentScoreTable.setXAnimation( main.width / 2 + Globals.SCORE_TABLE_DISTANCE );
         
+        playerScoreTable.x = main.width - playerScoreTable.width;
         playerScoreTable.y = playerName.animationPosYEnd() - Globals.SCORE_TABLE_DISTANCE - playerScoreTable.height;
-        playerScoreTable.setAnimationPosX( main.width - playerScoreTable.width, main.width / 2 + Globals.SCORE_TABLE_DISTANCE );
+        playerScoreTable.setXAnimation( main.width / 2 + Globals.SCORE_TABLE_DISTANCE );
         
+        Logic.setPlayerCardsPosY( playerName.animationPosYEnd() - Globals.NAME_DISTANCE );
         
         opponentName.startAnimation();
         opponentName.visible = true;
@@ -95,20 +122,42 @@ Item{
         playerName.startAnimation();
         playerName.visible = true;
         
-        opponentScoreTable.startAnimation();
+        opponentScoreTable.startXAnimation();
+        opponentScoreTable.startOpacityAnimation();
         opponentScoreTable.visible = true;
         
-        playerScoreTable.startAnimation();
+        playerScoreTable.startXAnimation();
+        playerScoreTable.startOpacityAnimation();
         playerScoreTable.visible = true;
         
-        timer.start();
+        timer1.start();
     }
     
     function newRound(){
         console.log( "New round." );
         
-        deck.startAnimation();
+        deck.x = 0;
+        deck.setXAnimation( Globals.DECK_DISTANCE );
+        
+        deck.startXAnimation();
+        deck.startOpacityAnimation();
         deck.visible = true;
+        
+        timer2.start();
+    }
+    
+    function newPlayerCard( lastCard, cardText ){
+        console.log( lastCard+" "+cardText );
+        
+        var component = Qt.createComponent("Card.qml");
+        var card = component.createObject( main, {
+            "x": deck.x, 
+            "y": deck.y,
+            "source": "/usr/local/share/apps/knapsen/pics/william-tell.svgz",
+            "elementId": cardText
+        });
+        
+        Logic.addPlayerCard( card );
     }
     
 }

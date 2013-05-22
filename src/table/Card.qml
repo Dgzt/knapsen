@@ -8,21 +8,28 @@ SvgImage{
     NumberAnimation on x { 
         id: xAnimation
         running: false
-        from: 0
-        to: 50
-        duration: Globals.ANIMATION_TIME
-    }
-        
-    NumberAnimation on opacity {
-        id: opacityAnimation
-        running: false
-        from: 0
-        to: 1
         duration: Globals.ANIMATION_TIME
     }
     
-    function startAnimation(){
+    NumberAnimation on y { 
+        id: yAnimation
+        running: false
+        duration: Globals.ANIMATION_TIME
+    }
+    
+    function setXAnimation( posX ){
+        xAnimation.to = posX;
+    }
+    
+    function setYAnimation( posY ){
+        yAnimation.to = posY;
+    }
+    
+    function startXAnimation(){
         xAnimation.start();
-        opacityAnimation.start();
+    }
+    
+    function startYAnimation(){
+        yAnimation.start();
     }
 }

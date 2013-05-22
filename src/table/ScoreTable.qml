@@ -30,13 +30,15 @@ Rectangle{
         duration: Globals.ANIMATION_TIME
     }
     
-    function setAnimationPosX( start, end ){
-        moveAnimation.from = start;
-        moveAnimation.to = end;
+    function setXAnimation( posX ){
+        moveAnimation.to = posX;
     }
     
-    function startAnimation(){
+    function startXAnimation(){
         moveAnimation.start();
+    }
+    
+    function startOpacityAnimation(){
         opacityAnimation.start();
     }
 }
