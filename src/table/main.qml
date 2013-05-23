@@ -1,7 +1,7 @@
 import QtQuick 1.1
 import "globals.js" as Globals
 
-import "logic.js" as Logic
+//import "logic.js" as Logic
 
 Item{
     id: main
@@ -71,10 +71,36 @@ Item{
             opacityAnimation.start();
         }
     }
+    
+    CardsGroup{
+        id: opponentCardsGroup
+        
+        onWidthChanged: setOpponentCardsGroupPos()
+    }
+    
+    CardsGroup{
+        id: playerCardsGroup
+        
+        onWidthChanged: setPlayerCardsGroupPos()
+    }
      
     /*function resize(){
         console.log( main.width + "x" + main.height );
     }*/
+    
+    function setOpponentCardsGroupPos(){
+        console.log( "opponentCardsGroup: "+opponentCardsGroup.width );
+        
+        opponentCardsGroup.x = ( main.width - opponentCardsGroup.width ) / 2;
+        opponentCardsGroup.y = opponentName.animationPosYEnd() + opponentName.height + Globals.NAME_CARDSGROUP_DISTANCE;
+    }
+    
+    function setPlayerCardsGroupPos(){
+        console.log( "playerCardsGroup: "+playerCardsGroup.width );
+        
+        playerCardsGroup.x = ( main.width - playerCardsGroup.width ) / 2;
+        playerCardsGroup.y = playerName.animationPosYEnd() - Globals.NAME_CARDSGROUP_DISTANCE - deck.height;
+    }
     
     function clear(){
         console.log( "Clear." );
@@ -85,7 +111,9 @@ Item{
         
         deck.visible = false;
         
-        Logic.clear();
+        //Logic.clear();
+        opponentCardsGroup.clear();
+        playerCardsGroup.clear();
     }
     
     function initialize( playerNameStr, opponentNameStr ){
@@ -110,13 +138,21 @@ Item{
         opponentScoreTable.y = opponentName.animationPosYEnd() + opponentName.height + Globals.SCORE_TABLE_DISTANCE;
         opponentScoreTable.setXAnimation( main.width / 2 + Globals.SCORE_TABLE_DISTANCE );
         
-        Logic.setOpponentCardsPosY( opponentName.animationPosYEnd() + opponentName.height + Globals.NAME_DISTANCE );
+        //
+        //opponentCardsGroup.x = ( main.width - opponentCardsGroup.width ) / 2;
+        //opponentCardsGroup.y = opponentName.animationPosYEnd() + opponentName.height + Globals.NAME_CARDSGROUP_DISTANCE;
+        setOpponentCardsGroupPos();
+        //
         
         playerScoreTable.x = main.width - playerScoreTable.width;
         playerScoreTable.y = playerName.animationPosYEnd() - Globals.SCORE_TABLE_DISTANCE - playerScoreTable.height;
         playerScoreTable.setXAnimation( main.width / 2 + Globals.SCORE_TABLE_DISTANCE );
         
-        Logic.setPlayerCardsPosY( playerName.animationPosYEnd() - Globals.NAME_DISTANCE );
+        //
+        playerCardsGroup.x = ( main.width - playerCardsGroup.width ) / 2;
+        playerCardsGroup.y = playerName.animationPosYEnd() - Globals.NAME_CARDSGROUP_DISTANCE - deck.height;
+        setPlayerCardsGroupPos();
+        //
         
         opponentName.startAnimation();
         opponentName.visible = true;
@@ -139,9 +175,9 @@ Item{
         console.log( "New round." );
         
         deck.x = 0;
-        deck.setXAnimation( Globals.DECK_DISTANCE );
+        deck.setMoveAnimation( Globals.DECK_DISTANCE, deck.y );
         
-        deck.startXAnimation();
+        deck.startMoveAnimation();
         deck.startOpacityAnimation();
         deck.visible = true;
         
@@ -159,7 +195,8 @@ Item{
             "elementId": cardText
         });
         
-        Logic.addPlayerCard( card );
+        //Logic.addPlayerCard( card );
+        playerCardsGroup.addCard( card );
         
         timer1.start();
     }
@@ -175,7 +212,8 @@ Item{
             "elementId": "back"
         });
         
-        Logic.addOpponentCard( card );
+        //Logic.addOpponentCard( card );
+        opponentCardsGroup.addCard( card );
         
         timer2.start();
     }

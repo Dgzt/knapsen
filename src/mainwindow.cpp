@@ -32,6 +32,7 @@
 
 //
 #include "table/svgimage.h"
+#include "table/array.h"
 //
 
 MainWindow::MainWindow( QWidget* parent ) : 
@@ -48,6 +49,7 @@ MainWindow::MainWindow( QWidget* parent ) :
     
     //
     qmlRegisterType<SvgImage>("CustomComponents", 1, 0, "SvgImage");
+    qmlRegisterType<Array>("CustomComponents", 1, 0, "Array");
     //
     
     //Setup the central widget

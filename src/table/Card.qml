@@ -17,7 +17,7 @@ SvgImage{
         duration: Globals.ANIMATION_TIME
     }
     
-    function setXAnimation( posX ){
+    /*function setXAnimation( posX ){
         xAnimation.to = posX;
     }
     
@@ -30,6 +30,16 @@ SvgImage{
     }
     
     function startYAnimation(){
+        yAnimation.start();
+    }*/
+    
+    function setMoveAnimation( x, y ){
+        xAnimation.to = x;
+        yAnimation.to = y;
+    }
+    
+    function startMoveAnimation(){
+        xAnimation.start();
         yAnimation.start();
     }
 }

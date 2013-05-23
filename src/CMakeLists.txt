@@ -2,6 +2,9 @@
 set(knapsen_HDRS
     enums.h
     table/svgimage.h
+    #
+    table/array.h
+    #
     table/centralwidget.h
     engine/card.h
     dialogs/waitingforopponent.h
@@ -20,6 +23,9 @@ set(knapsen_HDRS
 
 set(knapsen_SRCS
     table/svgimage.cpp
+    #
+    table/array.cpp
+    #
     table/centralwidget.cpp
     engine/card.cpp
     dialogs/waitingforopponent.cpp
