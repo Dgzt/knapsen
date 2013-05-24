@@ -75,13 +75,13 @@ Item{
     CardsGroup{
         id: opponentCardsGroup
         
-        onWidthChanged: setOpponentCardsGroupPos()
+        onWidthChanged: setOpponentCardsGroupPos(), setOpponentScoreTablePos()
     }
     
     CardsGroup{
         id: playerCardsGroup
         
-        onWidthChanged: setPlayerCardsGroupPos()
+        onWidthChanged: setPlayerCardsGroupPos(), setPlayerScoreTablePos()
     }
      
     /*function resize(){
@@ -95,11 +95,21 @@ Item{
         opponentCardsGroup.y = opponentName.animationPosYEnd() + opponentName.height + Globals.NAME_CARDSGROUP_DISTANCE;
     }
     
+    function setOpponentScoreTablePos(){
+        opponentScoreTable.setXAnimation( opponentCardsGroup.x + opponentCardsGroup.width + Globals.SCORE_TABLE_DISTANCE );
+        opponentScoreTable.startXAnimation();
+    }
+    
     function setPlayerCardsGroupPos(){
         console.log( "playerCardsGroup: "+playerCardsGroup.width );
         
         playerCardsGroup.x = ( main.width - playerCardsGroup.width ) / 2;
         playerCardsGroup.y = playerName.animationPosYEnd() - Globals.NAME_CARDSGROUP_DISTANCE - deck.height;
+    }
+    
+    function setPlayerScoreTablePos(){
+        playerScoreTable.setXAnimation( playerCardsGroup.x + playerCardsGroup.width + Globals.SCORE_TABLE_DISTANCE );
+        playerScoreTable.startXAnimation();
     }
     
     function clear(){
@@ -134,25 +144,15 @@ Item{
         opponentName.setAnimationPosY( 0, Globals.NAME_DISTANCE );
         playerName.setAnimationPosY( main.height - playerName.height, -Globals.NAME_DISTANCE );
         
+        setOpponentCardsGroupPos();
+        
         opponentScoreTable.x = main.width - opponentScoreTable.width;
         opponentScoreTable.y = opponentName.animationPosYEnd() + opponentName.height + Globals.SCORE_TABLE_DISTANCE;
-        opponentScoreTable.setXAnimation( main.width / 2 + Globals.SCORE_TABLE_DISTANCE );
         
-        //
-        //opponentCardsGroup.x = ( main.width - opponentCardsGroup.width ) / 2;
-        //opponentCardsGroup.y = opponentName.animationPosYEnd() + opponentName.height + Globals.NAME_CARDSGROUP_DISTANCE;
-        setOpponentCardsGroupPos();
-        //
+        setPlayerCardsGroupPos();
         
         playerScoreTable.x = main.width - playerScoreTable.width;
         playerScoreTable.y = playerName.animationPosYEnd() - Globals.SCORE_TABLE_DISTANCE - playerScoreTable.height;
-        playerScoreTable.setXAnimation( main.width / 2 + Globals.SCORE_TABLE_DISTANCE );
-        
-        //
-        playerCardsGroup.x = ( main.width - playerCardsGroup.width ) / 2;
-        playerCardsGroup.y = playerName.animationPosYEnd() - Globals.NAME_CARDSGROUP_DISTANCE - deck.height;
-        setPlayerCardsGroupPos();
-        //
         
         opponentName.startAnimation();
         opponentName.visible = true;
@@ -160,11 +160,11 @@ Item{
         playerName.startAnimation();
         playerName.visible = true;
         
-        opponentScoreTable.startXAnimation();
+        setOpponentScoreTablePos();
         opponentScoreTable.startOpacityAnimation();
         opponentScoreTable.visible = true;
         
-        playerScoreTable.startXAnimation();
+        setPlayerScoreTablePos();
         playerScoreTable.startOpacityAnimation();
         playerScoreTable.visible = true;
         
