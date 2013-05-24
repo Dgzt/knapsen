@@ -61,6 +61,8 @@ public slots:
     void slotNewPlayerCard( bool lastCard, Card* card );
     
     void slotNewOpponentCard( bool lastCard );
+    
+    void slotNewTrumpCard( Card* trumpCard );
      
 signals:
     void signalAnimationEnd();

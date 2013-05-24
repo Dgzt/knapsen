@@ -72,6 +72,14 @@ Item{
         }
     }
     
+    Card{
+        id: trump
+        visible: false
+        y: deck.y
+        source: "/usr/local/share/apps/knapsen/pics/william-tell.svgz"
+        elementId: "back"
+    }
+    
     CardsGroup{
         id: opponentCardsGroup
         
@@ -120,6 +128,7 @@ Item{
         playerScoreTable.visible = false;
         
         deck.visible = false;
+        trump.visible = false;
         
         //Logic.clear();
         opponentCardsGroup.clear();
@@ -216,6 +225,16 @@ Item{
         opponentCardsGroup.addCard( card );
         
         timer2.start();
+    }
+    
+    function newTrumpCard( cardText ){
+        console.log( cardText );
+        
+        trump.x = deck.x;
+        trump.elementId = cardText;
+        trump.setMoveAnimation( deck.x + deck.width + Globals.DECK_TRUMP_DISTANCE, trump.y );
+        trump.startMoveAnimation();
+        trump.visible = true;
     }
     
 }

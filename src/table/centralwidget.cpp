@@ -65,3 +65,10 @@ void CentralWidget::slotNewOpponentCard( bool lastCard )
     
     QMetaObject::invokeMethod( rootObject(), "newOpponentCard", Q_ARG( QVariant, lastCard ) );
 }
+
+void CentralWidget::slotNewTrumpCard( Card* trumpCard )
+{
+    kDebug() << "New trump card.";
+    
+    QMetaObject::invokeMethod( rootObject(), "newTrumpCard", Q_ARG( QVariant, trumpCard->getCardText() ) );
+}
