@@ -7,8 +7,9 @@ SvgImage{
     
     property bool selectable: false
     
-    //signal mouseEntered()
-    //signal mouseLeaved()
+    signal mouseClicked()
+    signal mouseEntered()
+    signal mouseExited()
     
     NumberAnimation on x { 
         id: xAnimation
@@ -23,8 +24,12 @@ SvgImage{
     }
     
     MouseArea{
+        id: mouseArea
         anchors.fill: card
-        onClicked: { console.log( "Click" ); }
+        hoverEnabled: true
+        onClicked: { if( selectable ) mouseClicked(); }
+        onEntered: { if( selectable ) mouseEntered(); }
+        onExited: { if( selectable ) mouseExited(); }
     }
     
     function setMoveAnimation( x, y ){
@@ -35,6 +40,10 @@ SvgImage{
     function startMoveAnimation(){
         xAnimation.start();
         yAnimation.start();
+    }
+    
+    function isContainsMouse(){
+        return mouseArea.containsMouse;
     }
     
 }
