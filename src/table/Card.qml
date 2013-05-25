@@ -5,6 +5,11 @@ import "globals.js" as Globals
 SvgImage{
     id: card
     
+    property bool selectable: false
+    
+    //signal mouseEntered()
+    //signal mouseLeaved()
+    
     NumberAnimation on x { 
         id: xAnimation
         running: false
@@ -17,21 +22,10 @@ SvgImage{
         duration: Globals.ANIMATION_TIME
     }
     
-    /*function setXAnimation( posX ){
-        xAnimation.to = posX;
+    MouseArea{
+        anchors.fill: card
+        onClicked: { console.log( "Click" ); }
     }
-    
-    function setYAnimation( posY ){
-        yAnimation.to = posY;
-    }
-    
-    function startXAnimation(){
-        xAnimation.start();
-    }
-    
-    function startYAnimation(){
-        yAnimation.start();
-    }*/
     
     function setMoveAnimation( x, y ){
         xAnimation.to = x;
@@ -42,4 +36,5 @@ SvgImage{
         xAnimation.start();
         yAnimation.start();
     }
+    
 }

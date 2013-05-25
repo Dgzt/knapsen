@@ -132,6 +132,7 @@ void MainWindow::setupConnects()
     connect( mClient, SIGNAL( signalNewPlayerCard( bool, Card* ) ), mCWidget, SLOT( slotNewPlayerCard( bool, Card* ) ) );
     connect( mClient, SIGNAL( signalNewOpponentCard( bool ) ), mCWidget, SLOT( slotNewOpponentCard( bool ) ) );
     connect( mClient, SIGNAL( signalNewTrumpCard( Card* ) ), mCWidget, SLOT(slotNewTrumpCard( Card* ) ) );
+    connect( mClient, SIGNAL( signalPlayerCardSelectableChanged( int, bool ) ), mCWidget, SLOT(slotPlayerCardSelectableChanged( int, bool ) ) );
     
     connect( mCWidget, SIGNAL(signalAnimationEnd() ), mClient, SLOT( slotProcessCommands() ) );
 }

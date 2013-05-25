@@ -1,12 +1,11 @@
 #include <QSvgRenderer>
 #include <QGraphicsSvgItem>
 #include <QPainter>
+#include <KDebug>
 #include "svgimage.h"
 
 SvgImage::SvgImage( QDeclarativeItem *parent ) :
-    QDeclarativeItem( parent ),
-    mX( 0 ),
-    mY( 0 )
+    QDeclarativeItem( parent )
 {
     mSvgItem = new QGraphicsSvgItem( this );
 }
@@ -19,24 +18,6 @@ int SvgImage::width()
 int SvgImage::height()
 {
     return mSvgItem->boundingRect().height();
-}
-
-void SvgImage::setX( int x )
-{
-    mX = x;
-    
-    mSvgItem->setX( mX );
-    
-    emit xChanged();
-}
-
-void SvgImage::setY( int y )
-{
-    mY = y;
-    
-    mSvgItem->setY( mY );
-    
-    emit yChanged();
 }
 
 void SvgImage::setSource( QString source )
@@ -53,6 +34,9 @@ void SvgImage::setElementId( QString elementId )
     mElementId = elementId;
     
     mSvgItem->setElementId( mElementId );
+    
+    QDeclarativeItem::setWidth( mSvgItem->boundingRect().width() );
+    QDeclarativeItem::setHeight( mSvgItem->boundingRect().height() );
     
     emit elementIdChanged();
 }

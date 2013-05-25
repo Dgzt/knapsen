@@ -51,6 +51,14 @@ Item{
         onTriggered: signalAnimationEnd()
         interval: Globals.ANIMATION_TIME
     }
+    
+    //Timer emit signalAnimationEnd signal
+    Timer{
+        id: timer3
+        running: false
+        onTriggered: signalAnimationEnd()
+        interval: Globals.ANIMATION_TIME
+    }
 
     Card{
         id: deck
@@ -178,6 +186,8 @@ Item{
         playerScoreTable.visible = true;
         
         timer1.start();
+        
+        tmpItem.visible = true;
     }
     
     function newRound(){
@@ -235,6 +245,13 @@ Item{
         trump.setMoveAnimation( deck.x + deck.width + Globals.DECK_TRUMP_DISTANCE, trump.y );
         trump.startMoveAnimation();
         trump.visible = true;
+        
+        timer3.start();
+    }
+    
+    function playerCardSelectableChanged( id, selectable ){
+        console.log( id+" "+selectable );
+        playerCardsGroup.setCardSelectable( id, selectable );
     }
     
 }

@@ -72,3 +72,10 @@ void CentralWidget::slotNewTrumpCard( Card* trumpCard )
     
     QMetaObject::invokeMethod( rootObject(), "newTrumpCard", Q_ARG( QVariant, trumpCard->getCardText() ) );
 }
+
+void CentralWidget::slotPlayerCardSelectableChanged( int id, bool enabled )
+{
+    kDebug() << "Player card selectable changed";
+    
+    QMetaObject::invokeMethod( rootObject(), "playerCardSelectableChanged", Q_ARG( QVariant, id ), Q_ARG( QVariant, enabled ) );
+}
