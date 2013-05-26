@@ -209,104 +209,6 @@ void Server::newRound()
     
 }
 
-/*void Server::roundOver()
-{
-    kDebug() << "---- Round Over ----";
-    
-    Player* currentPlayer = getCurrentPlayer();
-    Player* nextPlayer = getNextPlayer();
-    
-    Player *winnerPlayer = 0; //Initialize with 0, becouse the compiler write warning.
-    Player *looserPlayer = 0; // --- || ---
-    
-    //Who win the round
-    if( mPlayerWhoClickedToCloseButtonThisRound ){
-        
-        if( mPlayerWhoClickedToCloseButtonThisRound == currentPlayer && currentPlayer->getTricks() >= 66 ){
-            winnerPlayer = currentPlayer;
-            looserPlayer = nextPlayer;
-        }else if( mPlayerWhoClickedToCloseButtonThisRound == nextPlayer && nextPlayer->getTricks() >= 66 ){
-            winnerPlayer = nextPlayer;
-            looserPlayer = currentPlayer;
-        }else if( mPlayerWhoClickedToCloseButtonThisRound == currentPlayer ){
-            winnerPlayer = nextPlayer;
-            looserPlayer = currentPlayer;
-        }else{
-            winnerPlayer = currentPlayer;
-            looserPlayer = nextPlayer;
-        }
-
-    }else{
-
-        if( currentPlayer->getTricks() >= 66 ){
-            winnerPlayer = currentPlayer;
-            looserPlayer = nextPlayer;
-        }else if( nextPlayer->getTricks() >= 66 ){
-            winnerPlayer = nextPlayer;
-            looserPlayer = currentPlayer;
-        //}else if( currentPlayer->getNumberOfCardsInHandNow() == 0 ){
-        }else if( currentPlayer->getNumberOfCardsInHand() == 0 ){
-            winnerPlayer = currentPlayer;
-            looserPlayer = nextPlayer;
-        }
-
-    }
-
-    //Winning scores
-    int scores = 0;
-
-    if( mPlayerWhoClickedToCloseButtonThisRound == winnerPlayer ){
-        
-        if( looserPlayer->getTricks() == 0 ){
-            scores = 3;
-        }else if( looserPlayer->getTricks() < 33 ){
-            scores = 2;
-        }else{ //  33 <= looserPlayer->getTricks() && looserPlayer->getTricks() < 66
-            scores = 1;
-        }
-
-    }else if( mPlayerWhoClickedToCloseButtonThisRound == looserPlayer ){
-
-        //scores = 2;
-        if( mOpponentHaveNotTricksBeforePlayerClickedToCloseButton ){
-            scores = 3;
-        }else{
-            scores = 2;
-        }
-
-    }else{ // !mPlayerWhoClickedToCloseButtonThisRound
-
-        if( looserPlayer->getTricks() == 0 ){
-            scores = 3;
-        }else if( looserPlayer->getTricks() < 33 ){
-            scores = 2;
-        }else{ //  33 <= looserPlayer->getTricks() && looserPlayer->getTricks() < 66
-            scores = 1;
-        }
-
-    }
-
-    kDebug() << winnerPlayer->getName() << "win the round with" << scores << "scores.";
-    addScores( winnerPlayer, scores );
-    
-    //if( mGameSequence->isGameOver() ){
-    if( isGameOver() ){
-        mPlayerListWhoWantNewGame = new QList< Player* >;
-        
-        for( int i = 0; i < mPlayerList.size(); ++i ){
-            mPlayerList.at( i )->sendEndGame( winnerPlayer->getName() );
-        }
-
-    }else{
-        mPlayerListWhoWantNewRound = new QList< Player* >;
-            
-        for( int i = 0; i < mPlayerList.size(); ++i ){
-            mPlayerList.at( i )->sendEndRound( winnerPlayer->getName(), scores );
-        }
-    }
-
-}*/
-
 void Server::roundOver()
 {
     kDebug() << "---- Round Over ----";
@@ -851,8 +753,6 @@ void Server::slotPlayerChangeTrumpCard( Player *player )
     
     int id = player->changeTrumpCard( mTrump );
     
-    /*mTrump->getCard()->setSelectable( false );
-    player->getCard( id )->setSelectable( true );*/
     mTrump->getCard()->setSelectable( false );
     player->getCard( player->getNumberOfCards() - 1 )->setSelectable( true );
         
@@ -952,35 +852,16 @@ void Server::slotCheckCentralCards()
         //If player closed the deck
         if( !mPlayerWhoClickedToCloseButtonThisRound ){
             //If the dech have card yet, then add new cards to players, first who won the last turn
-            //if( mDeck->getDeckSize() > 0 ){
             if( !mCardDeck.empty() ){
-                //addNewCard( getCurrentPlayer(), mDeck->takeCard() );
                 addNewCard( getCurrentPlayer(), mCardDeck.takeLast() );
                 
-                //if( mDeck->getDeckSize() > 0 ){
                 if( !mCardDeck.empty() ){
-                    //addNewCard( getNextPlayer(), mDeck->takeCard() );
                     addNewCard( getNextPlayer(), mCardDeck.takeLast() );
                     
                 }else{
-                    //addNewCard( getNextPlayer(), mTrump->getCard() );
-                    
-                    //mTrump->clearTrumpCard( false );
-                    
-                    /*for( int i = 0; i < mPlayerList.size(); ++i ){
-                        mPlayerList.at( i )->sendClearTrumpCard();
-                    }*/
-                    
                     addTrumpCardToPlayer( getNextPlayer() );
                 }
                 
-            }
-        }
-        
-        getCurrentPlayer()->sendSelectableAllCards();
-        for( int i = 0; i < mPlayerList.size(); ++i ){
-            if( mPlayerList.at( i ) != getCurrentPlayer() ){
-                mPlayerList.at( i )->sendOpponentInAction();
             }
         }
         
@@ -1001,9 +882,15 @@ void Server::slotCheckCentralCards()
             getCurrentPlayer()->sendSelectableTrumpCard();
         }
         
-        //if( !mPlayerWhoClickedToCloseButtonThisRound && mDeck->getDeckSize() > 3 ){
         if( !mPlayerWhoClickedToCloseButtonThisRound && mCardDeck.size() > 3 ){
             getCurrentPlayer()->sendCloseButtonVisible();
+        }
+        
+        getCurrentPlayer()->sendSelectableAllCards();
+        for( int i = 0; i < mPlayerList.size(); ++i ){
+            if( mPlayerList.at( i ) != getCurrentPlayer() ){
+                mPlayerList.at( i )->sendOpponentInAction();
+            }
         }
         
     }
