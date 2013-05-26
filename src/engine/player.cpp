@@ -192,6 +192,12 @@ void Player::newRound()
     
     //Clear tricks
     setTricks( 0 );
+    
+    //Clear buttons
+    mTwentyButtonVisible = false;
+    mFortyButtonVisible = false;
+    mSchnapsenButtonVisible = false;
+    mCloseButtonVisible = false;
 }
 
 void Player::setLowestCard( int deckSize )

@@ -832,6 +832,7 @@ void Client::slotSelectTrumpCard()
 
 void Client::slotTwentyButtonClicked()
 {
+    kDebug();
     twentyButtonClicked();
     setSelectableRegularMarriageCards( mTrump );
     sendCommand( TWENTY_BUTTON_CLICKED_COMMAND );

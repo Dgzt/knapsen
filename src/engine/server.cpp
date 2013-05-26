@@ -91,9 +91,14 @@ kDebug() << "Build deck.";
         
     }
     
-    //Marriages
-    //mCards[ 11 ] = new Card( 17 );
-    //mCards[ 18 ] = new Card( 16 );
+    //Marriages to local player
+    //mCardDeck[ 11 ] = new Card( 17 );
+    //mCardDeck[ 18 ] = new Card( 16 );
+    //
+    
+    //Marriages to opponent
+    //mCardDeck[ 10 ] = new Card( 17 );
+    //mCardDeck[ 17 ] = new Card( 16 );
     //
     
     //Can change trump card

@@ -223,14 +223,14 @@ bool Bot::tryMeldMarriage()
 {
     kDebug() << "Try meld marriage.";
 
-    bool clicktedToFortyOrTwentyButton = false;
+    bool clickedToFortyOrTwentyButton = false;
                 
     //If have forty marriage, meld this
     if( isFortyButtonVisible() ){
         kDebug() << "Click to forty button.";
         
         slotFortyButtonClicked();
-        clicktedToFortyOrTwentyButton = true;
+        clickedToFortyOrTwentyButton = true;
     }
     
     //If have twenty marriage, meld this
@@ -238,10 +238,10 @@ bool Bot::tryMeldMarriage()
         kDebug() << "Click to twenty button.";
         
         slotTwentyButtonClicked();
-        clicktedToFortyOrTwentyButton = true;
+        clickedToFortyOrTwentyButton = true;
     }
     
-    return clicktedToFortyOrTwentyButton;
+    return clickedToFortyOrTwentyButton;
 }
 
 bool Bot::trySelectNotEqualTrump( Card::Type cardType )
