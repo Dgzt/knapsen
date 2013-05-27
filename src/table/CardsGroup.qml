@@ -61,8 +61,9 @@ Item{
         
         cards.add( card );
         
-        //setCardsGroupWidth();
         setCardsPos();
+        //
+        setCardsZValue();
     }
     
     function setCardSelectable( id, selectable ){
@@ -116,6 +117,18 @@ Item{
     function removeHighlight(){
         var highlightValue = cards.at( mouseEnteredCardId ).height * ( Globals.HIGHLIGHT_PERCENT / 100 );
         cards.at( mouseEnteredCardId ).y += highlightValue;
+    }
+    
+    function selectCard( id, cardText ){
+        cards.at( id ).elementId = cardText;
+        selectedCard( cards.takeAt( id ) );
+        setCardsPos();
+    }
+    
+    function setCardsZValue(){
+        for( var i=0; i < cards.size; ++i ){
+            cards.at(i).z = i;
+        }
     }
     
     function clear(){

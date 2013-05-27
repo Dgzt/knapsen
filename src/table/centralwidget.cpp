@@ -80,3 +80,10 @@ void CentralWidget::slotPlayerCardSelectableChanged( int id, bool enabled )
     
     QMetaObject::invokeMethod( rootObject(), "playerCardSelectableChanged", Q_ARG( QVariant, id ), Q_ARG( QVariant, enabled ) );
 }
+
+void CentralWidget::slotOpponentSelectedCard( int id, Card* card )
+{
+    kDebug() << "Opponent selected a card.";
+    
+    QMetaObject::invokeMethod( rootObject(), "opponentSelectedCard", Q_ARG( QVariant, id ), Q_ARG( QVariant, card->getCardText() ) );
+}

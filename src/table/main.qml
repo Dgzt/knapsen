@@ -93,6 +93,9 @@ Item{
         id: opponentCardsGroup
         
         onWidthChanged: setOpponentCardsGroupPos(), setOpponentScoreTablePos()
+        
+        //
+        onSelectedCard: centralCardsGroup.addCard( card )
     }
     
     CardsGroup{
@@ -103,14 +106,14 @@ Item{
         //
         onSelectedCardId: signalSelectedCard( id, Globals.ANIMATION_TIME )
         onSelectedCard: centralCardsGroup.addCard( card )
-        //
     }
     
     CardsGroup{
         id: centralCardsGroup
         
-        x: ( main.width - centralCardsGroup.width ) / 2
-        y: ( main.height - centralCardsGroup.height ) / 2
+        //x: ( main.width - centralCardsGroup.width ) / 2
+        //y: ( main.height - centralCardsGroup.height ) / 2
+        onWidthChanged: setCentralCardsGroupPos()
     }
      
     /*function resize(){
@@ -139,6 +142,11 @@ Item{
     function setPlayerScoreTablePos(){
         playerScoreTable.setXAnimation( playerCardsGroup.x + playerCardsGroup.width + Globals.SCORE_TABLE_DISTANCE );
         playerScoreTable.startXAnimation();
+    }
+    
+    function setCentralCardsGroupPos(){
+        centralCardsGroup.x = ( main.width - centralCardsGroup.width ) / 2;
+        centralCardsGroup.y = ( main.height - centralCardsGroup.height ) / 2;
     }
     
     function clear(){
@@ -197,6 +205,8 @@ Item{
         setPlayerScoreTablePos();
         playerScoreTable.startOpacityAnimation();
         playerScoreTable.visible = true;
+        
+        setCentralCardsGroupPos();
         
         timer1.start();
         
@@ -265,6 +275,11 @@ Item{
     function playerCardSelectableChanged( id, selectable ){
         console.log( id+" "+selectable );
         playerCardsGroup.setCardSelectable( id, selectable );
+    }
+    
+    function opponentSelectedCard( id, cardText ){
+        console.log( id+" "+cardText );
+        opponentCardsGroup.selectCard( id, cardText );
     }
     
 }
