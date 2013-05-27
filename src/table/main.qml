@@ -9,6 +9,7 @@ Item{
     height: Globals.MAIN_HEIGHT
     
     signal signalAnimationEnd()
+    signal signalSelectedCard( int id, int delay )
     
     //Opponent's name
     Name{
@@ -98,6 +99,18 @@ Item{
         id: playerCardsGroup
         
         onWidthChanged: setPlayerCardsGroupPos(), setPlayerScoreTablePos()
+        
+        //
+        onSelectedCardId: signalSelectedCard( id, Globals.ANIMATION_TIME )
+        onSelectedCard: centralCardsGroup.addCard( card )
+        //
+    }
+    
+    CardsGroup{
+        id: centralCardsGroup
+        
+        x: ( main.width - centralCardsGroup.width ) / 2
+        y: ( main.height - centralCardsGroup.height ) / 2
     }
      
     /*function resize(){
@@ -138,9 +151,9 @@ Item{
         deck.visible = false;
         trump.visible = false;
         
-        //Logic.clear();
         opponentCardsGroup.clear();
         playerCardsGroup.clear();
+        centralCardsGroup.clear();
     }
     
     function initialize( playerNameStr, opponentNameStr ){

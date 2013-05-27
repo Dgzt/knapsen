@@ -11,6 +11,8 @@ SvgImage{
     signal mouseEntered()
     signal mouseExited()
     
+    //onSelectableChanged: { if( selectable && isContainsMouse() ) mouseEntered(); }
+    
     NumberAnimation on x { 
         id: xAnimation
         running: false

@@ -134,7 +134,8 @@ void MainWindow::setupConnects()
     connect( mClient, SIGNAL( signalNewTrumpCard( Card* ) ), mCWidget, SLOT(slotNewTrumpCard( Card* ) ) );
     connect( mClient, SIGNAL( signalPlayerCardSelectableChanged( int, bool ) ), mCWidget, SLOT(slotPlayerCardSelectableChanged( int, bool ) ) );
     
-    connect( mCWidget, SIGNAL(signalAnimationEnd() ), mClient, SLOT( slotProcessCommands() ) );
+    connect( mCWidget, SIGNAL( signalAnimationEnd() ), mClient, SLOT( slotProcessCommands() ) );
+    connect( mCWidget, SIGNAL( signalSelectedCard( int, int ) ), mClient, SLOT(slotSelectCardId( int, int ) ) );
 }
 
 Server* MainWindow::createServer()

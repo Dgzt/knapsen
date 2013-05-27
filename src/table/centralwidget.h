@@ -68,6 +68,7 @@ public slots:
      
 signals:
     void signalAnimationEnd();
+    void signalSelectedCard( int id, int delay );
     
 };
 

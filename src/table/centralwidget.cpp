@@ -19,6 +19,7 @@ CentralWidget::CentralWidget( QWidget* parent ):
     setAlignment( Qt::AlignCenter | Qt::AlignCenter );
     
     connect( rootObject(), SIGNAL( signalAnimationEnd() ), this, SIGNAL( signalAnimationEnd() ) );
+    connect( rootObject(), SIGNAL( signalSelectedCard( int, int ) ), this, SIGNAL( signalSelectedCard( int, int ) ) );
 }
 
 void CentralWidget::clear()
