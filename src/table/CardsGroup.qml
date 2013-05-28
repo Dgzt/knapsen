@@ -7,10 +7,13 @@ Item{
     
     property int mouseEnteredCardId: Globals.INVALID_CARD_ID;
     
-    signal widthChanged()
-    signal heightChanged()
+    //signal widthChanged()
+    //signal heightChanged()
+    signal sizeChanged()
     signal selectedCardId( int id )
     signal selectedCard( variant card )
+    
+    onXChanged: setCardsPos()
     
     Array{
         id: cards
@@ -28,16 +31,18 @@ Item{
             cardsGroup.width = cards.at(0).width + ( cards.size - 1 ) * ( cards.at(0).width / 2 );
         }
         
-        widthChanged();
+        //widthChanged();
         
         //Height
         if( cards.size == 0 ){
             cardsGroup.height = 0;
-            heightChanged();
+            //heightChanged();
         }else if( cards.at( 0 ).height != cardsGroup.height ){
             cardsGroup.height = cards.at( 0 ).height;
-            heightChanged();
+            //heightChanged();
         }
+        
+        sizeChanged();
     }
     
     function setCardsPos(){
@@ -61,7 +66,7 @@ Item{
         
         cards.add( card );
         
-        setCardsPos();
+        //setCardsPos();
         //
         setCardsZValue();
     }
@@ -91,7 +96,7 @@ Item{
         
         selectedCardId( cardId );
         selectedCard( cards.takeAt( cardId ) );
-        setCardsPos();
+        //setCardsPos();
     }
     
     function mouseEntered(){
@@ -122,7 +127,7 @@ Item{
     function selectCard( id, cardText ){
         cards.at( id ).elementId = cardText;
         selectedCard( cards.takeAt( id ) );
-        setCardsPos();
+        //setCardsPos();
     }
     
     function setCardsZValue(){

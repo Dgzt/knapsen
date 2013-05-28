@@ -67,6 +67,10 @@ public slots:
     void slotPlayerCardSelectableChanged( int id, bool enabled );
     
     void slotOpponentSelectedCard( int id, Card* card );
+    
+    void slotOpponentGetCentralCards();
+    
+    void slotPlayerGetCentralCards();
      
 signals:
     void signalAnimationEnd();

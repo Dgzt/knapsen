@@ -36,30 +36,6 @@ Item{
         id: playerScoreTable
         visible: false
     }
-    
-    //Timer emit signalAnimationEnd signal
-    Timer{
-        id: timer1
-        running: false
-        onTriggered: signalAnimationEnd()
-        interval: Globals.ANIMATION_TIME
-    }
-    
-    //Timer emit signalAnimationEnd signal
-    Timer{
-        id: timer2
-        running: false
-        onTriggered: signalAnimationEnd()
-        interval: Globals.ANIMATION_TIME
-    }
-    
-    //Timer emit signalAnimationEnd signal
-    Timer{
-        id: timer3
-        running: false
-        onTriggered: signalAnimationEnd()
-        interval: Globals.ANIMATION_TIME
-    }
 
     Card{
         id: deck
@@ -92,7 +68,8 @@ Item{
     CardsGroup{
         id: opponentCardsGroup
         
-        onWidthChanged: setOpponentCardsGroupPos(), setOpponentScoreTablePos()
+        //onWidthChanged: setOpponentCardsGroupPos(), setOpponentScoreTablePos()
+        onSizeChanged: setOpponentCardsGroupPos(), setOpponentScoreTablePos()
         
         //
         onSelectedCard: centralCardsGroup.addCard( card )
@@ -101,7 +78,8 @@ Item{
     CardsGroup{
         id: playerCardsGroup
         
-        onWidthChanged: setPlayerCardsGroupPos(), setPlayerScoreTablePos()
+        //onWidthChanged: setPlayerCardsGroupPos(), setPlayerScoreTablePos()
+        onSizeChanged: setPlayerCardsGroupPos(), setPlayerScoreTablePos()
         
         //
         onSelectedCardId: signalSelectedCard( id, Globals.ANIMATION_TIME )
@@ -113,7 +91,9 @@ Item{
         
         //x: ( main.width - centralCardsGroup.width ) / 2
         //y: ( main.height - centralCardsGroup.height ) / 2
-        onWidthChanged: setCentralCardsGroupPos()
+        //onWidthChanged: setCentralCardsGroupPos()
+        onSizeChanged: setCentralCardsGroupPos()
+    
     }
      
     /*function resize(){
@@ -145,8 +125,9 @@ Item{
     }
     
     function setCentralCardsGroupPos(){
-        centralCardsGroup.x = ( main.width - centralCardsGroup.width ) / 2;
+        //First set y then x, before when set X then set the position of cards
         centralCardsGroup.y = ( main.height - centralCardsGroup.height ) / 2;
+        centralCardsGroup.x = ( main.width - centralCardsGroup.width ) / 2;
     }
     
     function clear(){
@@ -162,6 +143,15 @@ Item{
         opponentCardsGroup.clear();
         playerCardsGroup.clear();
         centralCardsGroup.clear();
+    }
+    
+    function singleShot(){
+        var singleShotComponent = Qt.createComponent("Singleshot.qml");
+        var timer = singleShotComponent.createObject( main );
+        timer.triggered.connect( signalAnimationEnd );
+        timer.interval = Globals.ANIMATION_TIME;
+        
+        timer.start();
     }
     
     function initialize( playerNameStr, opponentNameStr ){
@@ -208,7 +198,8 @@ Item{
         
         setCentralCardsGroupPos();
         
-        timer1.start();
+        //timer1.start();
+        singleShot()
         
         tmpItem.visible = true;
     }
@@ -223,7 +214,8 @@ Item{
         deck.startOpacityAnimation();
         deck.visible = true;
         
-        timer2.start();
+        //timer2.start();
+        singleShot();
     }
     
     function newPlayerCard( lastCard, cardText ){
@@ -240,7 +232,8 @@ Item{
         //Logic.addPlayerCard( card );
         playerCardsGroup.addCard( card );
         
-        timer1.start();
+        //timer1.start();
+        singleShot();
     }
     
     function newOpponentCard( lastCard ){
@@ -257,7 +250,8 @@ Item{
         //Logic.addOpponentCard( card );
         opponentCardsGroup.addCard( card );
         
-        timer2.start();
+        //timer2.start();
+        singleShot();
     }
     
     function newTrumpCard( cardText ){
@@ -269,7 +263,8 @@ Item{
         trump.startMoveAnimation();
         trump.visible = true;
         
-        timer3.start();
+        //timer3.start();
+        singleShot();
     }
     
     function playerCardSelectableChanged( id, selectable ){
@@ -280,6 +275,17 @@ Item{
     function opponentSelectedCard( id, cardText ){
         console.log( id+" "+cardText );
         opponentCardsGroup.selectCard( id, cardText );
+        
+        //timer1.start();
+        singleShot();
+    }
+    
+    function opponentGetCentralCards(){
+        console.log( "Opponent gets central cards." );
+    }
+    
+    function playerGetCentralCards(){
+        console.log( "Player gets central cards" );
     }
     
 }

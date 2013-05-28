@@ -87,3 +87,17 @@ void CentralWidget::slotOpponentSelectedCard( int id, Card* card )
     
     QMetaObject::invokeMethod( rootObject(), "opponentSelectedCard", Q_ARG( QVariant, id ), Q_ARG( QVariant, card->getCardText() ) );
 }
+
+void CentralWidget::slotOpponentGetCentralCards()
+{
+    kDebug() << "Opponent get central cards.";
+    
+    QMetaObject::invokeMethod( rootObject(), "opponentGetCentralCards" );
+}
+
+void CentralWidget::slotPlayerGetCentralCards()
+{
+    kDebug() << "Player get central cards.";
+    
+    QMetaObject::invokeMethod( rootObject(), "playerGetCentralCards" );
+}
