@@ -8,6 +8,10 @@ Item{
     width: Globals.MAIN_WIDTH
     height: Globals.MAIN_HEIGHT
     
+    //
+    property variant cardSize: Qt.size( 0, 0 )
+    //
+    
     signal signalAnimationEnd()
     signal signalSelectedCard( int id, int delay )
     
@@ -216,6 +220,10 @@ Item{
         
         //timer2.start();
         singleShot();
+        
+        //
+        cardSize = Qt.size( deck.width, deck.height );
+        console.log( "Card size: "+cardSize.width+"x"+cardSize.height );
     }
     
     function newPlayerCard( lastCard, cardText ){
@@ -282,10 +290,28 @@ Item{
     
     function opponentGetCentralCards(){
         console.log( "Opponent gets central cards." );
+        
+        moveAndDestroyCentralCards( main.width - cardSize.width, 0 );
     }
     
     function playerGetCentralCards(){
         console.log( "Player gets central cards" );
+        
+        moveAndDestroyCentralCards( main.width - cardSize.width, main.height - cardSize.height );
+    }
+    
+    function moveAndDestroyCentralCards( posX, posY ){
+        console.log( "Move position: "+posX+"x"+posY );
+        
+        console.log( centralCardsGroup.cardsSize() );
+        while( centralCardsGroup.cardsSize() > 0 ){
+            var card = centralCardsGroup.takeCard( 0 );
+            card.setMoveAnimation( posX, posY );
+            card.startMoveAnimation()
+            card.destroy( Globals.ANIMATION_TIME );
+        }
+        
+        singleShot();
     }
     
 }

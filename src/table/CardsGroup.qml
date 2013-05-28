@@ -18,7 +18,7 @@ Item{
     Array{
         id: cards
         
-        onSizeChanged: setCardsGroupSize()
+        //onSizeChanged: setCardsGroupSize()
     }
     
     function setCardsGroupSize(){
@@ -66,9 +66,9 @@ Item{
         
         cards.add( card );
         
-        //setCardsPos();
-        //
         setCardsZValue();
+        //
+        setCardsGroupSize()
     }
     
     function setCardSelectable( id, selectable ){
@@ -96,7 +96,8 @@ Item{
         
         selectedCardId( cardId );
         selectedCard( cards.takeAt( cardId ) );
-        //setCardsPos();
+        //
+        setCardsGroupSize()
     }
     
     function mouseEntered(){
@@ -128,6 +129,7 @@ Item{
         cards.at( id ).elementId = cardText;
         selectedCard( cards.takeAt( id ) );
         //setCardsPos();
+        setCardsGroupSize()
     }
     
     function setCardsZValue(){
@@ -142,4 +144,13 @@ Item{
         }
     }
     
+    //
+    function cardsSize(){
+        return cards.size;
+    }
+    
+    function takeCard( id ){
+        return cards.takeAt( id );
+    }
+    //
 }
