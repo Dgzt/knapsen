@@ -101,3 +101,10 @@ void CentralWidget::slotPlayerGetCentralCards()
     
     QMetaObject::invokeMethod( rootObject(), "playerGetCentralCards" );
 }
+
+void CentralWidget::slotCloseButtonVisibleChanged( bool visible )
+{
+    kDebug() << "Close button visible changed";
+    
+    QMetaObject::invokeMethod( rootObject(), "closeButtonVisibleChanged", Q_ARG( QVariant, visible ) );
+}

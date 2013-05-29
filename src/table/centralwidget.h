@@ -71,6 +71,8 @@ public slots:
     void slotOpponentGetCentralCards();
     
     void slotPlayerGetCentralCards();
+    
+    void slotCloseButtonVisibleChanged( bool visible );
      
 signals:
     void signalAnimationEnd();

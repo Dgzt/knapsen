@@ -61,6 +61,15 @@ Item{
         }
     }
     
+    Button{
+        id: closeButton
+        x: deck.x
+        y: deck.y + deck.height + 10
+        width: deck.width
+        height: 25
+        //visible: false
+    }
+    
     Card{
         id: trump
         visible: false
