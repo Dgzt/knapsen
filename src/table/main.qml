@@ -14,6 +14,7 @@ Item{
     
     signal signalAnimationEnd()
     signal signalSelectedCard( int id, int delay )
+    signal signalCloseButtonClicked()
     
     //Opponent's name
     Name{
@@ -67,7 +68,9 @@ Item{
         y: deck.y + deck.height + 10
         width: deck.width
         height: 25
-        //visible: false
+        visible: false
+        
+        onClick: signalCloseButtonClicked()
     }
     
     Card{
@@ -151,6 +154,7 @@ Item{
         playerScoreTable.visible = false;
         
         deck.visible = false;
+        closeButton.visible = false;
         trump.visible = false;
         
         opponentCardsGroup.clear();
@@ -321,6 +325,14 @@ Item{
         }
         
         singleShot();
+    }
+    
+    function closeButtonVisibleChanged( visible ){
+        closeButton.visible = visible;
+    }
+    
+    function closeDeck(){
+        trump.elementId = "back";
     }
     
 }

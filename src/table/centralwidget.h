@@ -73,10 +73,13 @@ public slots:
     void slotPlayerGetCentralCards();
     
     void slotCloseButtonVisibleChanged( bool visible );
+    
+    void slotCloseDeck();
      
 signals:
     void signalAnimationEnd();
     void signalSelectedCard( int id, int delay );
+    void signalCloseButtonClicked();
     
 };
 

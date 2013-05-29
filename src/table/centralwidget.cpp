@@ -20,6 +20,7 @@ CentralWidget::CentralWidget( QWidget* parent ):
     
     connect( rootObject(), SIGNAL( signalAnimationEnd() ), this, SIGNAL( signalAnimationEnd() ) );
     connect( rootObject(), SIGNAL( signalSelectedCard( int, int ) ), this, SIGNAL( signalSelectedCard( int, int ) ) );
+    connect( rootObject(), SIGNAL( signalCloseButtonClicked() ), this, SIGNAL( signalCloseButtonClicked() ) );
 }
 
 void CentralWidget::clear()
@@ -107,4 +108,11 @@ void CentralWidget::slotCloseButtonVisibleChanged( bool visible )
     kDebug() << "Close button visible changed";
     
     QMetaObject::invokeMethod( rootObject(), "closeButtonVisibleChanged", Q_ARG( QVariant, visible ) );
+}
+
+void CentralWidget::slotCloseDeck()
+{
+    kDebug() << "Close deck.";
+    
+    QMetaObject::invokeMethod( rootObject(), "closeDeck" );
 }

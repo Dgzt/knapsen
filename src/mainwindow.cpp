@@ -136,10 +136,12 @@ void MainWindow::setupConnects()
     connect( mClient, SIGNAL( signalOpponentSelectedCard( int, Card* ) ), mCWidget, SLOT( slotOpponentSelectedCard( int, Card* ) ) );
     connect( mClient, SIGNAL( signalOpponentGetCentralCards() ), mCWidget, SLOT( slotOpponentGetCentralCards() ) );
     connect( mClient, SIGNAL( signalPlayerGetCentralCards() ), mCWidget, SLOT( slotPlayerGetCentralCards() ) );
-    connect( mClient, SIGNAL(signalCloseButtonVisible( bool ) ), mCWidget, SLOT(slotCloseButtonVisibleChanged( bool ) ) );
+    connect( mClient, SIGNAL( signalCloseButtonVisible( bool ) ), mCWidget, SLOT( slotCloseButtonVisibleChanged( bool ) ) );
+    connect( mClient, SIGNAL( signalCloseDeck() ), mCWidget, SLOT( slotCloseDeck() ) );
     
     connect( mCWidget, SIGNAL( signalAnimationEnd() ), mClient, SLOT( slotProcessCommands() ) );
     connect( mCWidget, SIGNAL( signalSelectedCard( int, int ) ), mClient, SLOT(slotSelectCardId( int, int ) ) );
+    connect( mCWidget, SIGNAL( signalCloseButtonClicked() ), mClient, SLOT( slotCloseButtonClicked() ) );
 }
 
 Server* MainWindow::createServer()
