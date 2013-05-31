@@ -15,12 +15,16 @@ CentralWidget::CentralWidget( QWidget* parent ):
     QString path = KStandardDirs::locate( "appdata", "qml/main.qml" );
     setSource( QUrl::fromLocalFile( path ) );
   
-    setResizeMode( QDeclarativeView::SizeRootObjectToView );
-    setAlignment( Qt::AlignCenter | Qt::AlignCenter );
+    //setResizeMode( QDeclarativeView::SizeRootObjectToView );
+    //setResizeMode( QDeclarativeView::SizeViewToRootObject );
+    //setAlignment( Qt::AlignCenter | Qt::AlignCenter );
     
     connect( rootObject(), SIGNAL( signalAnimationEnd() ), this, SIGNAL( signalAnimationEnd() ) );
     connect( rootObject(), SIGNAL( signalSelectedCard( int, int ) ), this, SIGNAL( signalSelectedCard( int, int ) ) );
     connect( rootObject(), SIGNAL( signalCloseButtonClicked() ), this, SIGNAL( signalCloseButtonClicked() ) );
+    connect( rootObject(), SIGNAL( signalFortyButtonClicked() ), this, SIGNAL( signalFortyButtonClicked() ) );
+    connect( rootObject(), SIGNAL( signalTwentyButtonClicked() ), this, SIGNAL( signalTwentyButtonClicked() ) );
+    connect( rootObject(), SIGNAL( signalSchnapsenButtonClicked() ), this, SIGNAL( signalSchnapsenButtonClicked() ) );
 }
 
 void CentralWidget::clear()
@@ -29,7 +33,8 @@ void CentralWidget::clear()
 }
 
 void CentralWidget::resizeEvent( QResizeEvent* ){
-    fitInView( sceneRect(), Qt::KeepAspectRatio );
+    //fitInView( sceneRect(), Qt::KeepAspectRatio );
+    fitInView( rootObject(), Qt::KeepAspectRatio );
     //QMetaObject::invokeMethod( rootObject(), "resize" );
 }
 
@@ -115,4 +120,25 @@ void CentralWidget::slotCloseDeck()
     kDebug() << "Close deck.";
     
     QMetaObject::invokeMethod( rootObject(), "closeDeck" );
+}
+
+void CentralWidget::slotFortyButtonVisibleChanged( bool visible )
+{
+    kDebug() << "Forty button visible changed";
+    
+    QMetaObject::invokeMethod( rootObject(), "fortyButtonVisibleChanged", Q_ARG( QVariant, visible ) );
+}
+
+void CentralWidget::slotTwentyButtonVisibleChanged( bool visible )
+{
+    kDebug() << "Twenty button visible changed";
+    
+    QMetaObject::invokeMethod( rootObject(), "twentyButtonVisibleChanged", Q_ARG( QVariant, visible ) );
+}
+
+void CentralWidget::slotSchnapsenButtonVisibleChanged( bool visible )
+{
+    kDebug() << "Schnapsen button visible changed";
+    
+    QMetaObject::invokeMethod( rootObject(), "schnapsenButtonVisibleChanged", Q_ARG( QVariant, visible ) );
 }

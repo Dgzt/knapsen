@@ -5,12 +5,14 @@ Rectangle{
     color: "white"
     radius: 5
     
+    property string text: ""
+    onTextChanged: { buttonText.text = text; }
+    
     signal click()
     
     Text{
         id: buttonText
         anchors.centerIn: parent
-        text: "A button"
     }
     
     MouseArea{

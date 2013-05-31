@@ -138,10 +138,17 @@ void MainWindow::setupConnects()
     connect( mClient, SIGNAL( signalPlayerGetCentralCards() ), mCWidget, SLOT( slotPlayerGetCentralCards() ) );
     connect( mClient, SIGNAL( signalCloseButtonVisible( bool ) ), mCWidget, SLOT( slotCloseButtonVisibleChanged( bool ) ) );
     connect( mClient, SIGNAL( signalCloseDeck() ), mCWidget, SLOT( slotCloseDeck() ) );
+    connect( mClient, SIGNAL( signalFortyButtonVisible( bool ) ), mCWidget, SLOT( slotFortyButtonVisibleChanged( bool ) ) );
+    connect( mClient, SIGNAL( signalTwentyButtonVisible( bool ) ), mCWidget, SLOT( slotTwentyButtonVisibleChanged( bool ) ) );
+    connect( mClient, SIGNAL( signalSchnapsenButtonVisible( bool ) ), mCWidget, SLOT( slotSchnapsenButtonVisibleChanged( bool ) ) );
+    
     
     connect( mCWidget, SIGNAL( signalAnimationEnd() ), mClient, SLOT( slotProcessCommands() ) );
     connect( mCWidget, SIGNAL( signalSelectedCard( int, int ) ), mClient, SLOT(slotSelectCardId( int, int ) ) );
     connect( mCWidget, SIGNAL( signalCloseButtonClicked() ), mClient, SLOT( slotCloseButtonClicked() ) );
+    connect( mCWidget, SIGNAL( signalFortyButtonClicked() ), mClient, SLOT( slotFortyButtonClicked() ) );
+    connect( mCWidget, SIGNAL( signalTwentyButtonClicked() ), mClient, SLOT( slotTwentyButtonClicked() ) );
+    connect( mCWidget, SIGNAL( signalSchnapsenButtonClicked() ), mClient, SLOT( slotSchnapsenButtonClicked() ) );
 }
 
 Server* MainWindow::createServer()

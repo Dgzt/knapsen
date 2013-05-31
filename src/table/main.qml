@@ -15,6 +15,9 @@ Item{
     signal signalAnimationEnd()
     signal signalSelectedCard( int id, int delay )
     signal signalCloseButtonClicked()
+    signal signalFortyButtonClicked()
+    signal signalTwentyButtonClicked()
+    signal signalSchnapsenButtonClicked()
     
     //Opponent's name
     Name{
@@ -64,10 +67,11 @@ Item{
     
     Button{
         id: closeButton
+        text: "Close"
         x: deck.x
-        y: deck.y + deck.height + 10
+        y: deck.y + deck.height + Globals.BUTTON_DISTANCE
         width: deck.width
-        height: 25
+        height: Globals.BUTTON_HEIGHT
         visible: false
         
         onClick: signalCloseButtonClicked()
@@ -110,6 +114,42 @@ Item{
         //onWidthChanged: setCentralCardsGroupPos()
         onSizeChanged: setCentralCardsGroupPos()
     
+    }
+    
+    Button{
+        id: fortyButton
+        text: "Forty"
+        x: playerScoreTable.x
+        y: playerScoreTable.y - Globals.BUTTON_DISTANCE - fortyButton.height
+        width: deck.width
+        height: Globals.BUTTON_HEIGHT
+        visible: false
+        
+        onClick: signalFortyButtonClicked()
+    }
+    
+    Button{
+        id: twentyButton
+        text: "Twenty"
+        x: fortyButton.x
+        y: fortyButton.y - Globals.BUTTON_DISTANCE - twentyButton.height
+        width: deck.width
+        height: Globals.BUTTON_HEIGHT
+        visible: false
+        
+        onClick: signalTwentyButtonClicked()
+    }
+    
+    Button{
+        id: schnapsenButton
+        text: "Schnapsen"
+        x: twentyButton.x
+        y: twentyButton.y - Globals.BUTTON_DISTANCE - schnapsenButton.height
+        width: deck.width
+        height: Globals.BUTTON_HEIGHT
+        visible: false
+        
+        onClick: signalSchnapsenButtonClicked()
     }
      
     /*function resize(){
@@ -156,6 +196,9 @@ Item{
         deck.visible = false;
         closeButton.visible = false;
         trump.visible = false;
+        fortyButton.visible = false;
+        twentyButton.visible = false;
+        schnapsenButton.visible = false;
         
         opponentCardsGroup.clear();
         playerCardsGroup.clear();
@@ -335,4 +378,15 @@ Item{
         trump.elementId = "back";
     }
     
+    function fortyButtonVisibleChanged( visible ){
+        fortyButton.visible = visible;
+    }
+    
+    function twentyButtonVisibleChanged( visible ){
+        twentyButton.visible = visible;
+    }
+    
+    function schnapsenButtonVisibleChanged( visible ){
+        schnapsenButton.visible = visible;
+    }
 }

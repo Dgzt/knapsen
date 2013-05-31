@@ -75,12 +75,21 @@ public slots:
     void slotCloseButtonVisibleChanged( bool visible );
     
     void slotCloseDeck();
+    
+    void slotFortyButtonVisibleChanged( bool visible );
      
+    void slotTwentyButtonVisibleChanged( bool visible );
+    
+    void slotSchnapsenButtonVisibleChanged( bool visible );
+    
 signals:
     void signalAnimationEnd();
     void signalSelectedCard( int id, int delay );
     void signalCloseButtonClicked();
-    
+    void signalFortyButtonClicked();
+    void signalTwentyButtonClicked();
+    void signalSchnapsenButtonClicked();
+
 };
 
 #endif //centralwidget_h
