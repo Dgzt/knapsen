@@ -142,6 +142,8 @@ Item{
         while( cards.size > 0 ){
             cards.takeAt( 0 ).destroy();
         }
+        
+        setCardsGroupSize();
     }
     
     //
