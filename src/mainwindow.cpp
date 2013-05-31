@@ -141,7 +141,10 @@ void MainWindow::setupConnects()
     connect( mClient, SIGNAL( signalFortyButtonVisible( bool ) ), mCWidget, SLOT( slotFortyButtonVisibleChanged( bool ) ) );
     connect( mClient, SIGNAL( signalTwentyButtonVisible( bool ) ), mCWidget, SLOT( slotTwentyButtonVisibleChanged( bool ) ) );
     connect( mClient, SIGNAL( signalSchnapsenButtonVisible( bool ) ), mCWidget, SLOT( slotSchnapsenButtonVisibleChanged( bool ) ) );
-    
+    connect( mClient, SIGNAL( signalOpponentTricksChanged( int ) ), mCWidget, SLOT( slotOpponentTricksChanged( int ) ) );
+    connect( mClient, SIGNAL( signalOpponentScoresChanged( int ) ), mCWidget, SLOT( slotOpponentScoresChanged( int ) ) );
+    connect( mClient, SIGNAL( signalPlayerTricksChanged( int ) ), mCWidget, SLOT( slotPlayerTricksChanged( int ) ) );
+    connect( mClient, SIGNAL( signalPlayerScoresChanged( int ) ), mCWidget, SLOT( slotPlayerScoresChanged( int ) ) );
     
     connect( mCWidget, SIGNAL( signalAnimationEnd() ), mClient, SLOT( slotProcessCommands() ) );
     connect( mCWidget, SIGNAL( signalSelectedCard( int, int ) ), mClient, SLOT(slotSelectCardId( int, int ) ) );

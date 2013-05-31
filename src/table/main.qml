@@ -389,4 +389,20 @@ Item{
     function schnapsenButtonVisibleChanged( visible ){
         schnapsenButton.visible = visible;
     }
+    
+    function opponentTricksChanged( tricks ){
+        opponentScoreTable.tricks = tricks;
+    }
+    
+    function opponentScoresChanged( scores ){
+        opponentScoreTable.scores = scores;
+    }
+    
+    function playerTricksChanged( tricks ){
+        playerScoreTable.tricks = tricks;
+    }
+    
+    function playerScoresChanged( scores ){
+        playerScoreTable.scores = scores;
+    }
 }

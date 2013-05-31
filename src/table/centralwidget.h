@@ -82,6 +82,14 @@ public slots:
     
     void slotSchnapsenButtonVisibleChanged( bool visible );
     
+    void slotOpponentTricksChanged( int tricks );
+    
+    void slotOpponentScoresChanged( int scores );
+    
+    void slotPlayerTricksChanged( int tricks );
+    
+    void slotPlayerScoresChanged( int scores );
+    
 signals:
     void signalAnimationEnd();
     void signalSelectedCard( int id, int delay );

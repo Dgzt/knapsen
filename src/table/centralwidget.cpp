@@ -142,3 +142,31 @@ void CentralWidget::slotSchnapsenButtonVisibleChanged( bool visible )
     
     QMetaObject::invokeMethod( rootObject(), "schnapsenButtonVisibleChanged", Q_ARG( QVariant, visible ) );
 }
+
+void CentralWidget::slotOpponentTricksChanged( int tricks )
+{
+    kDebug() << "Opponent's tricks changed";
+    
+    QMetaObject::invokeMethod( rootObject(), "opponentTricksChanged", Q_ARG( QVariant, tricks ) );
+}
+
+void CentralWidget::slotOpponentScoresChanged( int scores )
+{
+    kDebug() << "Opponent's scores changed";
+    
+    QMetaObject::invokeMethod( rootObject(), "opponentScoresChanged", Q_ARG( QVariant, scores ) );
+}
+
+void CentralWidget::slotPlayerTricksChanged( int tricks )
+{
+    kDebug() << "Player's tricks changed";
+    
+    QMetaObject::invokeMethod( rootObject(), "playerTricksChanged", Q_ARG( QVariant, tricks ) );
+}
+
+void CentralWidget::slotPlayerScoresChanged( int scores )
+{
+    kDebug() << "Player's scores changed";
+    
+    QMetaObject::invokeMethod( rootObject(), "playerScoresChanged", Q_ARG( QVariant, scores ) );
+}
