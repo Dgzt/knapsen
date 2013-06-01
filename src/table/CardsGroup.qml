@@ -65,6 +65,9 @@ Item{
         card.mouseExited.connect( mouseExited );
         
         cards.add( card );
+        //
+        //cards.at( cards.size - 1 ).cardId = cards.size - 1;
+        //
         
         setCardsZValue();
         //

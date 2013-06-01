@@ -8,25 +8,69 @@ SvgImage::SvgImage( QDeclarativeItem *parent ) :
     QDeclarativeItem( parent )
 {
     mSvgItem = new QGraphicsSvgItem( this );
+    
+    //
+    //setAcceptHoverEvents( true );
 }
 
-int SvgImage::width()
+/*void SvgImage::hoverEnterEvent( QGraphicsSceneHoverEvent* /event/ )
 {
-    return mSvgItem->boundingRect().width();
+    //QGraphicsItem::hoverEnterEvent(event);
+    
+    if( mSvgItem->isUnderMouse() ){
+        kDebug() << "Under mouse";
+        emit signalMouseEntered();
+    }
+}*/
+
+/*void SvgImage::hoverLeaveEvent( QGraphicsSceneHoverEvent* /event/ )
+{
+    //QGraphicsItem::hoverLeaveEvent(event);
+    
+    if( mSvgItem->isUnderMouse() ){
+        kDebug() << "Not under mouse";
+        emit signalMouseExited();
+    }
+}*/
+
+qreal SvgImage::scale() const
+{
+    return mSvgItem->scale();
 }
 
-int SvgImage::height()
+/*bool SvgImage::mouseOnEnter() const
 {
-    return mSvgItem->boundingRect().height();
+    return mSvgItem->isUnderMouse();
 }
+
+bool SvgImage::mouseOnExit() const
+{
+    return !mSvgItem->isUnderMouse();
+}*/
+
+/*bool SvgImage::isContainsMouse() const
+{
+    return mSvgItem->isUnderMouse();
+}*/
 
 void SvgImage::setSource( QString source )
 {
-    mSource = source;
+    /*mSource = source;
 
     mSvgItem->setSharedRenderer( new QSvgRenderer( mSource ) );
     
-    emit sourceChanged();
+    emit sourceChanged();*/
+    if( !source.isEmpty() ){
+        mSource = source;
+
+        mSvgItem->setSharedRenderer( new QSvgRenderer( mSource ) );
+        setElementId( mElementId );
+            
+        emit sourceChanged();
+        
+        emit widthChanged();
+        emit heightChanged();
+    }
 }
 
 void SvgImage::setElementId( QString elementId )
@@ -35,8 +79,24 @@ void SvgImage::setElementId( QString elementId )
     
     mSvgItem->setElementId( mElementId );
     
-    QDeclarativeItem::setWidth( mSvgItem->boundingRect().width() );
-    QDeclarativeItem::setHeight( mSvgItem->boundingRect().height() );
+    QDeclarativeItem::setWidth( mSvgItem->boundingRect().width() * mSvgItem->scale() );
+    emit widthChanged();
+    
+    QDeclarativeItem::setHeight( mSvgItem->boundingRect().height() * mSvgItem->scale() );
+    emit heightChanged();
     
     emit elementIdChanged();
+}
+
+void SvgImage::setScale( qreal scale )
+{
+    mSvgItem->setScale( scale );
+    
+    QDeclarativeItem::setWidth( mSvgItem->boundingRect().width() * mSvgItem->scale() );
+    emit widthChanged();
+    
+    QDeclarativeItem::setHeight( mSvgItem->boundingRect().height() * mSvgItem->scale() );
+    emit heightChanged();
+    
+    emit scaleChanged();
 }

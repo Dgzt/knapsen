@@ -6,9 +6,10 @@ SvgImage{
     id: card
     
     property bool selectable: false
-    
+
     signal mouseClicked()
     signal mouseEntered()
+    //signal mouseEntered( int id )
     signal mouseExited()
     
     //onSelectableChanged: { if( selectable && isContainsMouse() ) mouseEntered(); }

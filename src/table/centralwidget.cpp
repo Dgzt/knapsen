@@ -14,7 +14,7 @@ CentralWidget::CentralWidget( QWidget* parent ):
     
     QString path = KStandardDirs::locate( "appdata", "qml/main.qml" );
     setSource( QUrl::fromLocalFile( path ) );
-  
+    
     //setResizeMode( QDeclarativeView::SizeRootObjectToView );
     //setResizeMode( QDeclarativeView::SizeViewToRootObject );
     //setAlignment( Qt::AlignCenter | Qt::AlignCenter );
@@ -38,11 +38,29 @@ void CentralWidget::resizeEvent( QResizeEvent* ){
     //QMetaObject::invokeMethod( rootObject(), "resize" );
 }
 
-void CentralWidget::slotInitialize( QString playerName, QString opponentName, Knapsen::TypeOfCards /*typeOfCards*/ )
+void CentralWidget::slotInitialize( QString playerName, QString opponentName, Knapsen::TypeOfCards typeOfCards )
 {
     kDebug() << playerName << opponentName;
+    
+    //
+    QString picPath;
+    qreal scale;
+    if( typeOfCards == Knapsen::GermanSuits ){
+        picPath = KGlobal::dirs()->findResource( "appdata", "pics/william-tell.svgz" );
+        scale = 0.9; //0.8
+    }else{
+        picPath = KGlobal::dirs()->findResource( "appdata", "pics/tigullio-bridge.svg" );
+        scale = 2;
+    }
+    kDebug() << picPath;
+    //
    
-    QMetaObject::invokeMethod( rootObject(), "initialize", Q_ARG(QVariant, playerName), Q_ARG(QVariant, opponentName) );
+    QMetaObject::invokeMethod( rootObject(), 
+                               "initialize", 
+                               Q_ARG( QVariant, playerName ), 
+                               Q_ARG( QVariant, opponentName ),
+                               Q_ARG( QVariant, picPath ),
+                               Q_ARG( QVariant, scale ) );
 }
 
 void CentralWidget::slotStartGame()

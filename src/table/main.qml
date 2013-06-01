@@ -8,9 +8,9 @@ Item{
     width: Globals.MAIN_WIDTH
     height: Globals.MAIN_HEIGHT
     
-    //
+    property string cardSource: ""
+    property real cardScale: 0
     property variant cardSize: Qt.size( 0, 0 )
-    //
     
     signal signalAnimationEnd()
     signal signalSelectedCard( int id, int delay )
@@ -48,9 +48,12 @@ Item{
     Card{
         id: deck
         visible: false
+        source: cardSource
+        elementId: Globals.CARD_BACK
         y: ( main.height - deck.height ) / 2
-        source: "/usr/local/share/apps/knapsen/pics/william-tell.svgz"
-        elementId: "back"
+        //
+        scale: cardScale
+        //
         
         NumberAnimation on opacity {
             id: opacityAnimation
@@ -81,8 +84,10 @@ Item{
         id: trump
         visible: false
         y: deck.y
-        source: "/usr/local/share/apps/knapsen/pics/william-tell.svgz"
-        elementId: "back"
+        //source: "/usr/local/share/apps/knapsen/pics/william-tell.svgz"
+        source: cardSource
+        elementId: Globals.CARD_BACK
+        scale: cardScale
     }
     
     CardsGroup{
@@ -214,7 +219,7 @@ Item{
         timer.start();
     }
     
-    function initialize( playerNameStr, opponentNameStr ){
+    function initialize( playerNameStr, opponentNameStr, source, scale ){
         console.log( "initialize, player:\""+playerNameStr+"\", opponent:\""+opponentNameStr+"\"" );
         
         //Set player's name
@@ -222,6 +227,11 @@ Item{
         
         //Set opponent's name
         opponentName.setText( opponentNameStr );
+        
+        //Set source
+        cardSource = source;
+        
+        cardScale = scale;
         
         console.log( "deck.height: "+deck.height );
     }
@@ -289,8 +299,10 @@ Item{
         var card = component.createObject( main, {
             "x": deck.x, 
             "y": deck.y,
-            "source": "/usr/local/share/apps/knapsen/pics/william-tell.svgz",
-            "elementId": cardText
+            //"source": "/usr/local/share/apps/knapsen/pics/william-tell.svgz",
+            "source": cardSource,
+            "elementId": cardText,
+            "scale": cardScale
         });
         
         //Logic.addPlayerCard( card );
@@ -307,8 +319,10 @@ Item{
         var card = component.createObject( main, {
             "x": deck.x, 
             "y": deck.y,
-            "source": "/usr/local/share/apps/knapsen/pics/william-tell.svgz",
-            "elementId": "back"
+            //"source": "/usr/local/share/apps/knapsen/pics/william-tell.svgz",
+            "source": cardSource,
+            "elementId": Globals.CARD_BACK,
+            "scale": cardScale
         });
         
         //Logic.addOpponentCard( card );
@@ -375,7 +389,7 @@ Item{
     }
     
     function closeDeck(){
-        trump.elementId = "back";
+        trump.elementId = Globals.CARD_BACK;
     }
     
     function fortyButtonVisibleChanged( visible ){
