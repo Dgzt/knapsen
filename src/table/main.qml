@@ -322,10 +322,12 @@ Item{
             "scale": cardScale
         });
         
-        //Logic.addPlayerCard( card );
+        if( lastCard ){
+            deck.visible = false;
+        }
+        
         playerCardsGroup.addCard( card );
         
-        //timer1.start();
         singleShot();
     }
     
@@ -341,10 +343,12 @@ Item{
             "scale": cardScale
         });
         
-        //Logic.addOpponentCard( card );
+        if( lastCard ){
+            deck.visible = false;
+        }
+        
         opponentCardsGroup.addCard( card );
         
-        //timer2.start();
         singleShot();
     }
     
