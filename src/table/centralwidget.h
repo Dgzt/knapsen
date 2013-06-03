@@ -60,7 +60,11 @@ public slots:
     
     void slotNewPlayerCard( bool lastCard, Card* card );
     
+    void slotNewPlayerCardTrumpCard();
+    
     void slotNewOpponentCard( bool lastCard );
+    
+    void slotNewOpponentCardTrumpCard();
     
     void slotNewTrumpCard( Card* trumpCard );
     

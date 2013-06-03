@@ -331,6 +331,24 @@ Item{
         singleShot();
     }
     
+    function newPlayerCardTrumpCard(){
+        var component = Qt.createComponent("Card.qml");
+        var card = component.createObject( main, {
+            "x": trump.x, 
+            "y": trump.y,
+            "source": cardSource,
+            "elementId": trump.elementId,
+            "scale": cardScale
+        });
+        
+        trump.elementId = Globals.CARD_BACK
+        trump.visible = false;
+        
+        playerCardsGroup.addCard( card );
+        
+        singleShot();
+    }
+    
     function newOpponentCard( lastCard ){
         console.log( lastCard );
         
@@ -346,6 +364,24 @@ Item{
         if( lastCard ){
             deck.visible = false;
         }
+        
+        opponentCardsGroup.addCard( card );
+        
+        singleShot();
+    }
+    
+    function newOpponentCardTrumpCard(){
+        var component = Qt.createComponent("Card.qml");
+        var card = component.createObject( main, {
+            "x": trump.x, 
+            "y": trump.y,
+            "source": cardSource,
+            "elementId": Globals.CARD_BACK,
+            "scale": cardScale
+        });
+        
+        trump.elementId = Globals.CARD_BACK
+        trump.visible = false;
         
         opponentCardsGroup.addCard( card );
         
