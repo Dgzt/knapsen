@@ -90,6 +90,10 @@ public slots:
     
     void slotPlayerScoresChanged( int scores );
     
+    void slotTrumpCardSelectableChanged( bool selectable );
+    
+    void slotPlayerChangeTrumpCard( int id );
+    
 signals:
     void signalAnimationEnd();
     void signalSelectedCard( int id, int delay );
@@ -97,6 +101,7 @@ signals:
     void signalFortyButtonClicked();
     void signalTwentyButtonClicked();
     void signalSchnapsenButtonClicked();
+    void signalTrumpCardClicked();
 
 };
 

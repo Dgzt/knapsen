@@ -71,7 +71,7 @@ Item{
         
         setCardsZValue();
         //
-        setCardsGroupSize()
+        setCardsGroupSize();
     }
     
     function setCardSelectable( id, selectable ){
@@ -155,7 +155,15 @@ Item{
     }
     
     function takeCard( id ){
-        return cards.takeAt( id );
+        //
+        var retCard = cards.takeAt( id );
+        
+        retCard.mouseClicked.disconnect();
+        retCard.mouseEntered.disconnect();
+        retCard.mouseExited.disconnect();
+        
+        return retCard;
+        //
     }
     //
 }

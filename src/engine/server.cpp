@@ -97,9 +97,9 @@ kDebug() << "Build deck.";
     //
     
     //Can change trump card
-    //mCards[ 19 ] = new Card( 3 );
-    //mCards[ 18 ] = new Card( 3 );
-    //mCards[ 13 ] = new Card( 0 );
+    mCardDeck[ 19 ] = new Card( 3 );
+    mCardDeck[ 18 ] = new Card( 3 );
+    mCardDeck[ 13 ] = new Card( 0 );
     
     kDebug() << "Generated deck:";
     for( int i = 0; i < mCardDeck.size(); ++i ){

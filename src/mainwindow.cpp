@@ -145,6 +145,8 @@ void MainWindow::setupConnects()
     connect( mClient, SIGNAL( signalOpponentScoresChanged( int ) ), mCWidget, SLOT( slotOpponentScoresChanged( int ) ) );
     connect( mClient, SIGNAL( signalPlayerTricksChanged( int ) ), mCWidget, SLOT( slotPlayerTricksChanged( int ) ) );
     connect( mClient, SIGNAL( signalPlayerScoresChanged( int ) ), mCWidget, SLOT( slotPlayerScoresChanged( int ) ) );
+    connect( mClient, SIGNAL( signalTrumpCardSelectableChanged( bool ) ), mCWidget, SLOT( slotTrumpCardSelectableChanged( bool ) ) );
+    connect( mClient, SIGNAL( signalPlayerChangeTrumpCard( int ) ), mCWidget, SLOT( slotPlayerChangeTrumpCard( int ) ) );
     
     connect( mCWidget, SIGNAL( signalAnimationEnd() ), mClient, SLOT( slotProcessCommands() ) );
     connect( mCWidget, SIGNAL( signalSelectedCard( int, int ) ), mClient, SLOT(slotSelectCardId( int, int ) ) );
@@ -152,6 +154,7 @@ void MainWindow::setupConnects()
     connect( mCWidget, SIGNAL( signalFortyButtonClicked() ), mClient, SLOT( slotFortyButtonClicked() ) );
     connect( mCWidget, SIGNAL( signalTwentyButtonClicked() ), mClient, SLOT( slotTwentyButtonClicked() ) );
     connect( mCWidget, SIGNAL( signalSchnapsenButtonClicked() ), mClient, SLOT( slotSchnapsenButtonClicked() ) );
+    connect( mCWidget, SIGNAL( signalTrumpCardClicked() ), mClient, SLOT( slotSelectTrumpCard() ) );
 }
 
 Server* MainWindow::createServer()

@@ -30,7 +30,10 @@ SvgImage{
         id: mouseArea
         anchors.fill: card
         hoverEnabled: true
-        onClicked: { if( selectable ) mouseClicked(); }
+        onClicked: { 
+            console.log( "Selectable: "+selectable );
+            if( selectable ) mouseClicked(); 
+        }
         onEntered: { if( selectable ) mouseEntered(); }
         onExited: { if( selectable ) mouseExited(); }
     }

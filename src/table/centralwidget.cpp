@@ -25,6 +25,7 @@ CentralWidget::CentralWidget( QWidget* parent ):
     connect( rootObject(), SIGNAL( signalFortyButtonClicked() ), this, SIGNAL( signalFortyButtonClicked() ) );
     connect( rootObject(), SIGNAL( signalTwentyButtonClicked() ), this, SIGNAL( signalTwentyButtonClicked() ) );
     connect( rootObject(), SIGNAL( signalSchnapsenButtonClicked() ), this, SIGNAL( signalSchnapsenButtonClicked() ) );
+    connect( rootObject(), SIGNAL( signalTrumpCardClicked() ), this, SIGNAL( signalTrumpCardClicked() ) );
 }
 
 void CentralWidget::clear()
@@ -187,4 +188,18 @@ void CentralWidget::slotPlayerScoresChanged( int scores )
     kDebug() << "Player's scores changed";
     
     QMetaObject::invokeMethod( rootObject(), "playerScoresChanged", Q_ARG( QVariant, scores ) );
+}
+
+void CentralWidget::slotTrumpCardSelectableChanged( bool selectable )
+{
+    kDebug() << "Trump card selectable changed.";
+    
+    QMetaObject::invokeMethod( rootObject(), "trumpCardSelectableChanged", Q_ARG( QVariant, selectable ) );
+}
+
+void CentralWidget::slotPlayerChangeTrumpCard( int id )
+{
+    kDebug() << "Change trump card.";
+    
+    QMetaObject::invokeMethod( rootObject(), "playerChangeTrumpCard", Q_ARG( QVariant, id ) );
 }

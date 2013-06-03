@@ -18,6 +18,9 @@ Item{
     signal signalFortyButtonClicked()
     signal signalTwentyButtonClicked()
     signal signalSchnapsenButtonClicked()
+    //
+    signal signalTrumpCardClicked()
+    //
     
     //Opponent's name
     Name{
@@ -88,6 +91,21 @@ Item{
         source: cardSource
         elementId: Globals.CARD_BACK
         scale: cardScale
+        
+        onMouseClicked: signalTrumpCardClicked()
+        
+        //
+        Timer{
+            id: visibleTimer
+            interval: Globals.ANIMATION_TIME
+            
+            onTriggered: { trump.visible = true; }
+        }
+        
+        function startVisibleTimer(){
+            visibleTimer.start();
+        }
+        
     }
     
     CardsGroup{
@@ -299,7 +317,6 @@ Item{
         var card = component.createObject( main, {
             "x": deck.x, 
             "y": deck.y,
-            //"source": "/usr/local/share/apps/knapsen/pics/william-tell.svgz",
             "source": cardSource,
             "elementId": cardText,
             "scale": cardScale
@@ -319,7 +336,6 @@ Item{
         var card = component.createObject( main, {
             "x": deck.x, 
             "y": deck.y,
-            //"source": "/usr/local/share/apps/knapsen/pics/william-tell.svgz",
             "source": cardSource,
             "elementId": Globals.CARD_BACK,
             "scale": cardScale
@@ -418,5 +434,38 @@ Item{
     
     function playerScoresChanged( scores ){
         playerScoreTable.scores = scores;
+    }
+    
+    function trumpCardSelectableChanged( selectable ){
+        trump.selectable = selectable;
+    }
+    
+    function playerChangeTrumpCard( cardId ){
+        console.log( "Change." );
+        
+        var newTmpTrumpCard = playerCardsGroup.takeCard( cardId );
+        newTmpTrumpCard.setMoveAnimation( trump.x, trump.y );
+        
+        var component = Qt.createComponent("Card.qml");
+        var newCard = component.createObject( main, {
+            "x": trump.x, 
+            "y": trump.y,
+            "source": cardSource,
+            "elementId": trump.elementId,
+            "scale": cardScale,
+            "selectable": true
+        });
+        
+        trump.visible = false;
+        trump.elementId = newTmpTrumpCard.elementId;
+        trump.selectable = newTmpTrumpCard.selectable;
+          
+        newTmpTrumpCard.startMoveAnimation();
+        newTmpTrumpCard.destroy( Globals.ANIMATION_TIME+100 );
+        trump.startVisibleTimer();
+        
+        playerCardsGroup.addCard( newCard );
+        //Becouse doesn't change the size.
+        playerCardsGroup.setCardsPos();
     }
 }
