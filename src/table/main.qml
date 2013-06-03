@@ -458,7 +458,7 @@ Item{
         
         trump.visible = false;
         trump.elementId = newTmpTrumpCard.elementId;
-        trump.selectable = newTmpTrumpCard.selectable;
+        trump.selectable = false;
           
         newTmpTrumpCard.startMoveAnimation();
         newTmpTrumpCard.destroy( Globals.ANIMATION_TIME+100 );

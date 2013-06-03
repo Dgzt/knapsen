@@ -814,7 +814,7 @@ void Client::slotSelectTrumpCard()
     mTrump->getCard()->setSelectable( false );
     
     //Set the new trump card's selectable to false
-    emit signalPlayerCardSelectableChanged( id, false );
+    //emit signalPlayerCardSelectableChanged( id, false );
     
     //Change cards on the GUI
     emit signalPlayerChangeTrumpCard( id );
