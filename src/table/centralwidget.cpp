@@ -199,7 +199,14 @@ void CentralWidget::slotTrumpCardSelectableChanged( bool selectable )
 
 void CentralWidget::slotPlayerChangeTrumpCard( int id )
 {
-    kDebug() << "Change trump card.";
+    kDebug() << "Player change trump card.";
     
     QMetaObject::invokeMethod( rootObject(), "playerChangeTrumpCard", Q_ARG( QVariant, id ) );
+}
+
+void CentralWidget::slotOpponentChangeTrumpCard( int id, Card* newTrumpCard )
+{
+    kDebug() << "Opponent change trump card.";
+    
+    QMetaObject::invokeMethod( rootObject(), "opponentChangeTrumpCard", Q_ARG( QVariant, id ), Q_ARG( QVariant, newTrumpCard->getCardText() ) );
 }

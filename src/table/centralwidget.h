@@ -94,6 +94,8 @@ public slots:
     
     void slotPlayerChangeTrumpCard( int id );
     
+    void slotOpponentChangeTrumpCard( int id, Card* newTrumpCard );
+    
 signals:
     void signalAnimationEnd();
     void signalSelectedCard( int id, int delay );

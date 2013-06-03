@@ -468,4 +468,32 @@ Item{
         //Becouse doesn't change the size.
         playerCardsGroup.setCardsPos();
     }
+    
+    function opponentChangeTrumpCard( cardId, newTrumpCardText ){
+        console.log( "Change." );
+        
+        var newTmpTrumpCard = opponentCardsGroup.takeCard( cardId );
+        newTmpTrumpCard.setMoveAnimation( trump.x, trump.y );
+        
+        var component = Qt.createComponent("Card.qml");
+        var newCard = component.createObject( main, {
+            "x": trump.x, 
+            "y": trump.y,
+            "source": cardSource,
+            "elementId": Globals.CARD_BACK,
+            "scale": cardScale
+        });
+        
+        trump.visible = false;
+        trump.elementId = newTrumpCardText;
+        
+        newTmpTrumpCard.startMoveAnimation();
+        newTmpTrumpCard.destroy( Globals.ANIMATION_TIME+100 );
+        trump.startVisibleTimer();
+        
+        opponentCardsGroup.addCard( newCard );
+        opponentCardsGroup.setCardsPos();
+        
+        singleShot();
+    }
 }
