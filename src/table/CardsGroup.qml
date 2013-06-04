@@ -33,8 +33,6 @@ Item{
             cardsGroup.width = cards.at(0).width + ( cards.size - 1 ) * ( cards.at(0).width / 2 );
         }
         
-        //widthChanged();
-        
         //Height
         if( cards.size == 0 ){
             cardsGroup.height = 0;
@@ -113,11 +111,13 @@ Item{
     }
     
     function mouseExited(){
-        console.log( "Exited from "+mouseEnteredCardId+". card." );
-        
-        removeHighlight();
-        
-        mouseEnteredCardId = Globals.INVALID_CARD_ID;
+        if( mouseEnteredCardId != Globals.INVALID_CARD_ID ){
+            console.log( "Exited from "+mouseEnteredCardId+". card." );
+            
+            removeHighlight();
+            
+            mouseEnteredCardId = Globals.INVALID_CARD_ID;
+        }
     }
     
     function highlightCard(){
