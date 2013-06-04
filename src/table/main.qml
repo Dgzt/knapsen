@@ -1,5 +1,6 @@
 import QtQuick 1.1
 import "globals.js" as Globals
+import "logic.js" as Logic
 
 //import "logic.js" as Logic
 
@@ -313,14 +314,15 @@ Item{
     function newPlayerCard( lastCard, cardText ){
         console.log( lastCard+" "+cardText );
         
-        var component = Qt.createComponent("Card.qml");
+        /*var component = Qt.createComponent("Card.qml");
         var card = component.createObject( main, {
             "x": deck.x, 
             "y": deck.y,
             "source": cardSource,
             "elementId": cardText,
             "scale": cardScale
-        });
+        });*/
+        var card = Logic.createCard( main, cardSource, cardText, cardScale, deck.x, deck.y );
         
         if( lastCard ){
             deck.visible = false;
@@ -332,14 +334,15 @@ Item{
     }
     
     function newPlayerCardTrumpCard(){
-        var component = Qt.createComponent("Card.qml");
+        /*var component = Qt.createComponent("Card.qml");
         var card = component.createObject( main, {
             "x": trump.x, 
             "y": trump.y,
             "source": cardSource,
             "elementId": trump.elementId,
             "scale": cardScale
-        });
+        });*/
+        var card = Logic.createCard( main, cardSource, trump.elementId, cardScale, trump.x, trump.y );
         
         trump.elementId = Globals.CARD_BACK
         trump.visible = false;
@@ -352,14 +355,15 @@ Item{
     function newOpponentCard( lastCard ){
         console.log( lastCard );
         
-        var component = Qt.createComponent("Card.qml");
+        /*var component = Qt.createComponent("Card.qml");
         var card = component.createObject( main, {
             "x": deck.x, 
             "y": deck.y,
             "source": cardSource,
             "elementId": Globals.CARD_BACK,
             "scale": cardScale
-        });
+        });*/
+        var card = Logic.createCard( main, cardSource, Globals.CARD_BACK, cardScale, deck.x, deck.y );
         
         if( lastCard ){
             deck.visible = false;
@@ -371,14 +375,15 @@ Item{
     }
     
     function newOpponentCardTrumpCard(){
-        var component = Qt.createComponent("Card.qml");
+        /*var component = Qt.createComponent("Card.qml");
         var card = component.createObject( main, {
             "x": trump.x, 
             "y": trump.y,
             "source": cardSource,
             "elementId": Globals.CARD_BACK,
             "scale": cardScale
-        });
+        });*/
+        var card = Logic.createCard( main, cardSource, Globals.CARD_BACK, cardScale, trump.x, trump.y );
         
         trump.elementId = Globals.CARD_BACK
         trump.visible = false;
@@ -486,7 +491,7 @@ Item{
         var newTmpTrumpCard = playerCardsGroup.takeCard( cardId );
         newTmpTrumpCard.setMoveAnimation( trump.x, trump.y );
         
-        var component = Qt.createComponent("Card.qml");
+        /*var component = Qt.createComponent("Card.qml");
         var newCard = component.createObject( main, {
             "x": trump.x, 
             "y": trump.y,
@@ -494,7 +499,9 @@ Item{
             "elementId": trump.elementId,
             "scale": cardScale,
             "selectable": true
-        });
+        });*/
+        var newCard = Logic.createCard( main, cardSource, trump.elementId, cardScale, trump.x, trump.y );
+        newCard.selectable = true;
         
         trump.visible = false;
         trump.elementId = newTmpTrumpCard.elementId;
@@ -515,14 +522,15 @@ Item{
         var newTmpTrumpCard = opponentCardsGroup.takeCard( cardId );
         newTmpTrumpCard.setMoveAnimation( trump.x, trump.y );
         
-        var component = Qt.createComponent("Card.qml");
+        /*var component = Qt.createComponent("Card.qml");
         var newCard = component.createObject( main, {
             "x": trump.x, 
             "y": trump.y,
             "source": cardSource,
             "elementId": Globals.CARD_BACK,
             "scale": cardScale
-        });
+        });*/
+        var newCard = Logic.createCard( main, cardSource, Globals.CARD_BACK, cardScale, trump.x, trump.y );
         
         trump.visible = false;
         trump.elementId = newTrumpCardText;
