@@ -224,3 +224,16 @@ void CentralWidget::slotOpponentChangeTrumpCard( int id, Card* newTrumpCard )
     
     QMetaObject::invokeMethod( rootObject(), "opponentChangeTrumpCard", Q_ARG( QVariant, id ), Q_ARG( QVariant, newTrumpCard->getCardText() ) );
 }
+
+void CentralWidget::slotShowOpponentCards( int card1Id, Card card1, int card2Id, Card card2 )
+{
+    kDebug() << "Show opponent cards.";
+    
+    QMetaObject::invokeMethod( rootObject(), 
+                               "showOpponentCards",
+                               Q_ARG( QVariant, card1Id ),
+                               Q_ARG( QVariant, card1.getCardText() ),
+                               Q_ARG( QVariant, card2Id ),
+                               Q_ARG( QVariant, card2.getCardText() )
+                             );
+}

@@ -536,4 +536,12 @@ Item{
         
         singleShot();
     }
+    
+    function showOpponentCards( card1Id, card1Text, card2Id, card2Text ){
+        console.log( "Show opponent cards." );
+        
+        opponentCardsGroup.showCards( card1Id, card1Text, card2Id, card2Text );
+        
+        singleShot();
+    }
 }

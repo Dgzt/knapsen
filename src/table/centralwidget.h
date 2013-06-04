@@ -26,9 +26,10 @@
 #define centralwidget_h
 
 #include <QDeclarativeView>
+#include "engine/card.h"
 #include "enums.h"
 
-class Card;
+//class Card;
 
 class CentralWidget : public QDeclarativeView
 {
@@ -99,6 +100,8 @@ public slots:
     void slotPlayerChangeTrumpCard( int id );
     
     void slotOpponentChangeTrumpCard( int id, Card* newTrumpCard );
+    
+    void slotShowOpponentCards( int card1Id, Card card1, int card2Id, Card card2 );
     
 signals:
     void signalAnimationEnd();

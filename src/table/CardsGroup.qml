@@ -6,9 +6,11 @@ Item{
     id: cardsGroup
     
     property int mouseEnteredCardId: Globals.INVALID_CARD_ID;
+    //
+    property int showCardId1: Globals.INVALID_CARD_ID;
+    property int showCardId2: Globals.INVALID_CARD_ID;
+    //
     
-    //signal widthChanged()
-    //signal heightChanged()
     signal sizeChanged()
     signal selectedCardId( int id )
     signal selectedCard( variant card )
@@ -164,6 +166,41 @@ Item{
         
         return retCard;
         //
+    }
+    
+    function showCards( card1Id, card1Text, card2Id, card2Text ){
+        showCardId1 = card1Id;
+        showCardId2 = card2Id;
+        
+        cards.at( showCardId1 ).elementId = card1Text;
+        cards.at( showCardId2 ).elementId = card2Text;
+        
+        var highlightValue = cards.at( showCardId1 ).height * ( Globals.HIGHLIGHT_PERCENT / 100 );
+        
+        cards.at( showCardId1 ).y += highlightValue;
+        cards.at( showCardId2 ).y += highlightValue;
+        
+        var singleShotComponent = Qt.createComponent("Singleshot.qml");
+        var timer = singleShotComponent.createObject( cardsGroup );
+        timer.interval = Globals.ANIMATION_TIME;
+        timer.triggered.connect( hideCards );
+        
+        timer.start();
+    }
+    
+    function hideCards(){
+        console.log( "Hide cards." );
+        
+        cards.at( showCardId1 ).elementId = Globals.CARD_BACK;
+        cards.at( showCardId2 ).elementId = Globals.CARD_BACK;
+        
+        var highlightValue = cards.at( showCardId1 ).height * ( Globals.HIGHLIGHT_PERCENT / 100 );
+        
+        cards.at( showCardId1 ).y -= highlightValue;
+        cards.at( showCardId2 ).y -= highlightValue;
+        
+        showCardId1 = Globals.INVALID_CARD_ID;
+        showCardId2 = Globals.INVALID_CARD_ID;
     }
     //
 }
