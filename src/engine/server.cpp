@@ -92,8 +92,8 @@ kDebug() << "Build deck.";
     }
     
     //Marriages
-    mCardDeck[ 11 ] = new Card( 17 );
-    mCardDeck[ 18 ] = new Card( 16 );
+    //mCardDeck[ 11 ] = new Card( 17 );
+    //mCardDeck[ 18 ] = new Card( 16 );
     //
     
     //Can change trump card
