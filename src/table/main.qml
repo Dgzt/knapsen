@@ -43,6 +43,57 @@ Item{
             visible: false
         }
         
+        Column{
+            id: playerControlPanel
+            spacing: Globals.BUTTON_DISTANCE
+            height: schnapsenButton.height + twentyButton.height + fortyButton.height + playerScoreTable.height + 3*Globals.BUTTON_DISTANCE
+            
+            Button{
+                id: schnapsenButton
+                text: "Schnapsen"
+                width: 100
+                height: Globals.BUTTON_HEIGHT
+            }
+            
+            Button{
+                id: twentyButton
+                text: "Twenty"
+                width: 100
+                height: Globals.BUTTON_HEIGHT
+            }
+            
+            Button{
+                id: fortyButton
+                text: "Forty"
+                width: 100
+                height: Globals.BUTTON_HEIGHT
+            }
+            
+            ScoreTable{
+                id: playerScoreTable
+                visible: false
+            }
+            
+            NumberAnimation on x{
+                id: playerControlPanelXAnimation
+                duration: Globals.ANIMATION_TIME
+            }
+        }
+        
+        Column{
+            id: opponentControlPanel
+            
+            ScoreTable{
+                id: opponentScoreTable
+                visible: false
+            }
+            
+            NumberAnimation on x{
+                id: opponentControlpanelXAnimation
+                duration: Globals.ANIMATION_TIME
+            }
+        }
+        
         Card{
             id: deck
             source: main.cardSource
@@ -51,13 +102,6 @@ Item{
             y: ( parent.height - height ) / 2
         }
         
-        /*Card{
-            id: trump
-            source: main.cardSource
-            elementId: "back"
-            y: deck.y
-            
-        }*/
     }
     
     function resized(){
@@ -78,6 +122,9 @@ Item{
     function clear(){
         opponentName.visible = false;
         playerName.visible = false;
+        
+        opponentScoreTable.visible = false;
+        playerScoreTable.visible = false;
     }
     
     function initialize( playerNameStr, opponentNameStr, picsPath, picScale ){
@@ -88,13 +135,33 @@ Item{
         opponentName.text = opponentNameStr;
         playerName.text = playerNameStr;
         
-        var mapOpponent = main.mapToItem( gameArea, 0, 0 );
-        opponentName.startYAnimation( mapOpponent.y - opponentName.height, Globals.NAME_DISTANCE );
+        var opponentNameStartPosY = main.mapToItem( gameArea, 0, 0 ).y - opponentName.height;
+        var opponentNameEndPosY = Globals.NAME_DISTANCE;
+        opponentName.startYAnimation( opponentNameStartPosY, opponentNameEndPosY );
         opponentName.visible = true;
         
-        var mapPlayer = main.mapToItem( gameArea, width, height );
-        playerName.startYAnimation( mapPlayer.y, gameArea.height - Globals.NAME_DISTANCE - playerName.height );
+        var playerNameStartPosY = main.mapToItem( gameArea, 0, height ).y;
+        var playerNameEndPosY = gameArea.height - Globals.NAME_DISTANCE - playerName.height;
+        playerName.startYAnimation( playerNameStartPosY, playerNameEndPosY );
         playerName.visible = true;
+        
+        var playerControlPanelStartPosX = main.mapToItem( gameArea, width, 0 ).x;
+        var playerControlPanelEndPosX = gameArea.width / 2;
+        var playerControlPanelPosY = playerNameEndPosY - Globals.NAME_DISTANCE - playerControlPanel.height;
+        playerControlPanel.y = playerControlPanelPosY;
+        playerControlPanelXAnimation.from = playerControlPanelStartPosX;
+        playerControlPanelXAnimation.to = playerControlPanelEndPosX;
+        playerControlPanelXAnimation.start();
+        playerScoreTable.visible = true;
+        
+        var opponentControlPanelStartPosX = playerControlPanelStartPosX;
+        var opponentControlPanelEndPosX = playerControlPanelEndPosX;
+        var opponentControlPanelPosY = opponentNameEndPosY + opponentName.height + Globals.NAME_DISTANCE;
+        opponentControlPanel.y = opponentControlPanelPosY;
+        opponentControlpanelXAnimation.from = opponentControlPanelStartPosX;
+        opponentControlpanelXAnimation.to = opponentControlPanelEndPosX;
+        opponentControlpanelXAnimation.start();
+        opponentScoreTable.visible = true;
         
     }
     

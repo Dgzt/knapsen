@@ -15,30 +15,4 @@ Rectangle{
         anchors.centerIn: parent
         text: "Tricks: " + tricks + "\nScores: " + scores;
     }
-    
-    NumberAnimation on x {  
-        id: moveAnimation
-        running: false
-        duration: Globals.ANIMATION_TIME
-    }
-    
-    NumberAnimation on opacity {
-        id: opacityAnimation
-        running: false
-        from: 0
-        to: 1
-        duration: Globals.ANIMATION_TIME
-    }
-    
-    function setXAnimation( posX ){
-        moveAnimation.to = posX;
-    }
-    
-    function startXAnimation(){
-        moveAnimation.start();
-    }
-    
-    function startOpacityAnimation(){
-        opacityAnimation.start();
-    }
 }
