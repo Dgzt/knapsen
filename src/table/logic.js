@@ -11,3 +11,7 @@ function createCard( parent, source, elementId, scale, x, y ){
     
     return card;
 }
+
+function createSingleShot(){
+    
+}

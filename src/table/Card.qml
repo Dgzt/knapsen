@@ -9,9 +9,9 @@ SvgImage{
 
     signal mouseClicked()
     signal mouseEntered()
-    //signal mouseEntered( int id )
     signal mouseExited()
     
+    //This isn't works. :\
     //onSelectableChanged: { if( selectable && isContainsMouse() ) mouseEntered(); }
     
     NumberAnimation on x { 

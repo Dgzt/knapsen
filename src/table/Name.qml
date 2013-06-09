@@ -7,41 +7,23 @@ Rectangle{
     width: name.width + Globals.TEXT_RECT_DISTANCE_WIDTH;
     height: name.height + Globals.TEXT_RECT_DISTANCE_HEIGHT;
     
+    property string text: ""
+    
     Text{
         id: name
+        text: parent.text
         anchors.centerIn: parent
     }
     
-    NumberAnimation on y { 
-        id: moveAnimation
-        running: false
-        duration: Globals.ANIMATION_TIME 
+    NumberAnimation on y{
+        id: moveYAnimation
+        duration: Globals.ANIMATION_TIME
     }
     
-    NumberAnimation on opacity { 
-        id: opcityAnimation
-        running: false
-        from: 0
-        to: 1 
-        duration: Globals.ANIMATION_TIME 
+    //
+    function startYAnimation( from, to ){
+        moveYAnimation.from = from;
+        moveYAnimation.to = to;
+        moveYAnimation.start();
     }
-    
-    function setText( text ){
-        name.text = text;
-    }
-    
-    function setAnimationPosY( start, distance ){
-        moveAnimation.from = start;
-        moveAnimation.to = start + distance;
-    }
-    
-    function animationPosYEnd(){
-        return moveAnimation.to;
-    }
-    
-    function startAnimation(){
-        moveAnimation.start();
-        opcityAnimation.start();
-    }
-    
 }

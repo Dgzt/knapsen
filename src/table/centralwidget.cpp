@@ -10,33 +10,27 @@ CentralWidget::CentralWidget( QWidget* parent ):
     QDeclarativeView( parent )
 {
     //Set background
-    scene()->setBackgroundBrush( QBrush( QImage( KGlobal::dirs()->findResource( "appdata", "pics/background.png" ) ) ) );
+    //scene()->setBackgroundBrush( QBrush( QImage( KGlobal::dirs()->findResource( "appdata", "pics/background.png" ) ) ) );
     
     QString path = KStandardDirs::locate( "appdata", "qml/main.qml" );
     setSource( QUrl::fromLocalFile( path ) );
     
-    //setResizeMode( QDeclarativeView::SizeRootObjectToView );
+    setResizeMode( QDeclarativeView::SizeRootObjectToView );
     //setResizeMode( QDeclarativeView::SizeViewToRootObject );
     //setAlignment( Qt::AlignCenter | Qt::AlignCenter );
     
-    connect( rootObject(), SIGNAL( signalAnimationEnd() ), this, SIGNAL( signalAnimationEnd() ) );
-    connect( rootObject(), SIGNAL( signalSelectedCard( int, int ) ), this, SIGNAL( signalSelectedCard( int, int ) ) );
-    connect( rootObject(), SIGNAL( signalCloseButtonClicked() ), this, SIGNAL( signalCloseButtonClicked() ) );
-    connect( rootObject(), SIGNAL( signalFortyButtonClicked() ), this, SIGNAL( signalFortyButtonClicked() ) );
-    connect( rootObject(), SIGNAL( signalTwentyButtonClicked() ), this, SIGNAL( signalTwentyButtonClicked() ) );
-    connect( rootObject(), SIGNAL( signalSchnapsenButtonClicked() ), this, SIGNAL( signalSchnapsenButtonClicked() ) );
-    connect( rootObject(), SIGNAL( signalTrumpCardClicked() ), this, SIGNAL( signalTrumpCardClicked() ) );
+    //connect( rootObject(), SIGNAL( signalAnimationEnd() ), this, SIGNAL( signalAnimationEnd() ) );
+    //connect( rootObject(), SIGNAL( signalSelectedCard( int, int ) ), this, SIGNAL( signalSelectedCard( int, int ) ) );
+    //connect( rootObject(), SIGNAL( signalCloseButtonClicked() ), this, SIGNAL( signalCloseButtonClicked() ) );
+    //connect( rootObject(), SIGNAL( signalFortyButtonClicked() ), this, SIGNAL( signalFortyButtonClicked() ) );
+    //connect( rootObject(), SIGNAL( signalTwentyButtonClicked() ), this, SIGNAL( signalTwentyButtonClicked() ) );
+    //connect( rootObject(), SIGNAL( signalSchnapsenButtonClicked() ), this, SIGNAL( signalSchnapsenButtonClicked() ) );
+    //connect( rootObject(), SIGNAL( signalTrumpCardClicked() ), this, SIGNAL( signalTrumpCardClicked() ) );
 }
 
 void CentralWidget::clear()
 {
     QMetaObject::invokeMethod( rootObject(), "clear" );
-}
-
-void CentralWidget::resizeEvent( QResizeEvent* ){
-    //fitInView( sceneRect(), Qt::KeepAspectRatio );
-    fitInView( rootObject(), Qt::KeepAspectRatio );
-    //QMetaObject::invokeMethod( rootObject(), "resize" );
 }
 
 void CentralWidget::slotInitialize( QString playerName, QString opponentName, Knapsen::TypeOfCards typeOfCards )
