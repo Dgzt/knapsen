@@ -134,6 +134,10 @@ Item{
         
         opponentName.text = opponentNameStr;
         playerName.text = playerNameStr;
+    }
+    
+    function newGame(){
+        console.log( "New game." );
         
         var opponentNameStartPosY = main.mapToItem( gameArea, 0, 0 ).y - opponentName.height;
         var opponentNameEndPosY = Globals.NAME_DISTANCE;
@@ -162,7 +166,6 @@ Item{
         opponentControlpanelXAnimation.to = opponentControlPanelEndPosX;
         opponentControlpanelXAnimation.start();
         opponentScoreTable.visible = true;
-        
     }
     
 }

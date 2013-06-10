@@ -62,7 +62,7 @@ void CentralWidget::slotStartGame()
 {
     kDebug() << "Start game.";
     
-    QMetaObject::invokeMethod( rootObject(), "startGame" );
+    QMetaObject::invokeMethod( rootObject(), "newGame" );
 }
 
 void CentralWidget::slotNewRound()
