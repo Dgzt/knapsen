@@ -10,8 +10,9 @@ Item{
     
     property real rate: 1
     
-    //property string cardSource: "/usr/local/share/apps/knapsen/pics/william-tell.svgz"
     property string cardSource: ""
+    
+    signal signalAnimationEnd()
     
     Image{
         id: backgroundImage
@@ -98,8 +99,9 @@ Item{
             id: deck
             source: main.cardSource
             elementId: "back"
-            x: Globals.DECK_DISTANCE
+            //x: Globals.DECK_DISTANCE
             y: ( parent.height - height ) / 2
+            visible: false
         }
         
     }
@@ -125,6 +127,8 @@ Item{
         
         opponentScoreTable.visible = false;
         playerScoreTable.visible = false;
+        
+        deck.visible = false;
     }
     
     function initialize( playerNameStr, opponentNameStr, picsPath, picScale ){
@@ -166,6 +170,20 @@ Item{
         opponentControlpanelXAnimation.to = opponentControlPanelEndPosX;
         opponentControlpanelXAnimation.start();
         opponentScoreTable.visible = true;
+        
+        var singleShot = Logic.createSingleShot( main, Globals.ANIMATION_TIME );
+        singleShot.triggered.connect( signalAnimationEnd );
+        singleShot.start();
+    }
+    
+    function newRound(){
+        console.log( "New round" );
+        
+        var deckStartPosX = main.mapToItem( gameArea, 0, 0 ).x - deck.width;
+        var deckEndPosX = Globals.DECK_DISTANCE;
+        deck.x = deckStartPosX;
+        deck.startAnimation( deckEndPosX, deck.y );
+        deck.visible = true;
     }
     
 }

@@ -19,7 +19,7 @@ CentralWidget::CentralWidget( QWidget* parent ):
     //setResizeMode( QDeclarativeView::SizeViewToRootObject );
     //setAlignment( Qt::AlignCenter | Qt::AlignCenter );
     
-    //connect( rootObject(), SIGNAL( signalAnimationEnd() ), this, SIGNAL( signalAnimationEnd() ) );
+    connect( rootObject(), SIGNAL( signalAnimationEnd() ), this, SIGNAL( signalAnimationEnd() ) );
     //connect( rootObject(), SIGNAL( signalSelectedCard( int, int ) ), this, SIGNAL( signalSelectedCard( int, int ) ) );
     //connect( rootObject(), SIGNAL( signalCloseButtonClicked() ), this, SIGNAL( signalCloseButtonClicked() ) );
     //connect( rootObject(), SIGNAL( signalFortyButtonClicked() ), this, SIGNAL( signalFortyButtonClicked() ) );

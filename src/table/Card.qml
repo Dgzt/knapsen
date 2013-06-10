@@ -38,12 +38,19 @@ SvgImage{
         onExited: { if( selectable ) mouseExited(); }
     }
     
-    function setMoveAnimation( x, y ){
+    /*function setMoveAnimation( x, y ){
         xAnimation.to = x;
         yAnimation.to = y;
     }
     
     function startMoveAnimation(){
+        xAnimation.start();
+        yAnimation.start();
+    }*/
+    
+    function startAnimation( endX, endY ){
+        xAnimation.to = endX;
+        yAnimation.to = endY;
         xAnimation.start();
         yAnimation.start();
     }

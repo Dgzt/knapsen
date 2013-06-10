@@ -12,6 +12,12 @@ function createCard( parent, source, elementId, scale, x, y ){
     return card;
 }
 
-function createSingleShot(){
+function createSingleShot( parent, interval ){
+    var component = Qt.createComponent( "Singleshot.qml" );
+    var singleShot = component.createObject( parent, {
+        "interval": interval,
+        "running": false
+    });
     
+    return singleShot;
 }
