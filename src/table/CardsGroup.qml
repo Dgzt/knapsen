@@ -11,7 +11,7 @@ Item{
     property int showCardId2: Globals.INVALID_CARD_ID;
     //
     
-    signal sizeChanged()
+    //signal sizeChanged()
     signal selectedCardId( int id )
     signal selectedCard( variant card )
     
@@ -42,7 +42,8 @@ Item{
             //heightChanged();
         }
         
-        sizeChanged();
+        //sizeChanged();
+        //widthChanged();
     }
     
     function setCardsPos(){
@@ -54,8 +55,9 @@ Item{
         }
         
         for( var i = 0; i < cards.size; ++i ){
-            cards.at(i).setMoveAnimation( cardsGroup.x + ( i * distance ), cardsGroup.y );
-            cards.at(i).startMoveAnimation();
+            //cards.at(i).setMoveAnimation( cardsGroup.x + ( i * distance ), cardsGroup.y );
+            //cards.at(i).startMoveAnimation();
+            cards.at(i).startAnimation( cardsGroup.x + ( i * distance ), cardsGroup.y );
         }
     }
     

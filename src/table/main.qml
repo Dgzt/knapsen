@@ -104,6 +104,18 @@ Item{
             visible: false
         }
         
+        CardsGroup{
+            id: opponentCardsGroup
+            x: ( parent.width - width ) / 2
+            y: opponentName.y + Globals.NAME_DISTANCE
+        }
+        
+        CardsGroup{
+            id: playerCardsGroup
+            x: ( parent.width - width ) / 2
+            y: playerName.y - Globals.NAME_DISTANCE - height
+        }
+        
     }
     
     function resized(){
@@ -129,6 +141,9 @@ Item{
         playerScoreTable.visible = false;
         
         deck.visible = false;
+        
+        opponentCardsGroup.clear();
+        playerCardsGroup.clear();
     }
     
     function initialize( playerNameStr, opponentNameStr, picsPath, picScale ){
@@ -184,6 +199,41 @@ Item{
         deck.x = deckStartPosX;
         deck.startAnimation( deckEndPosX, deck.y );
         deck.visible = true;
+        
+        var singleShot = Logic.createSingleShot( main, Globals.ANIMATION_TIME );
+        singleShot.triggered.connect( signalAnimationEnd );
+        singleShot.start();
     }
     
+    function newPlayerCard( lastCard, cardElementId ){
+        console.log( "New player card." );
+        
+        var card = Logic.createCard( gameArea, cardSource, cardElementId, 1, deck.x, deck.y );
+        
+        if( lastCard ){
+            deck.visible = false;
+        }
+        
+        playerCardsGroup.addCard( card );
+        
+        var singleShot = Logic.createSingleShot( main, Globals.ANIMATION_TIME );
+        singleShot.triggered.connect( signalAnimationEnd );
+        singleShot.start();
+    }
+    
+    function newOpponentCard( lastCard ){
+        console.log( "New opponent card." );
+        
+        var card = Logic.createCard( gameArea, cardSource, Globals.CARD_BACK, 1, deck.x, deck.y );
+        
+        if( lastCard ){
+            deck.visible = false;
+        }
+        
+        opponentCardsGroup.addCard( card );
+        
+        var singleShot = Logic.createSingleShot( main, Globals.ANIMATION_TIME );
+        singleShot.triggered.connect( signalAnimationEnd );
+        singleShot.start();
+    }
 }
