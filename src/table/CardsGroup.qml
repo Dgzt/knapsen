@@ -2,10 +2,10 @@ import CustomComponents 1.0
 import QtQuick 1.1
 import "globals.js" as Globals
 
-/*Item{*/
-Rectangle{
+Item{
+/*Rectangle{
     color: "white"
-    //
+    //*/
     id: cardsGroup
     
     onXChanged: setCardsPos()
