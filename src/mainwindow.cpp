@@ -324,9 +324,10 @@ void MainWindow::closeGameSlot()
     kDebug() << "Close game.";
     
     //mCWidget->clearWidget();
-    mCWidget->clear();
-    
+    mClient->disconnect();
     mClient->disconnectFromHost();
+    
+    mCWidget->clear();
     
     //delete client;
     //client = 0;

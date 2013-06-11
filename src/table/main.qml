@@ -110,11 +110,11 @@ Item{
             y: opponentName.y + opponentName.height + Globals.NAME_DISTANCE
             
             //
-            onWidthChanged: {
+            /*onWidthChanged: {
                 opponentControlPanelXAnimation.from = opponentControlPanel.x;
-                opponentControlPanelXAnimation.to = opponentCardsGroup.x + opponentCardsGroup.width /*+ Globals.SCORE_TABLE_DISTANCE*/; 
+                opponentControlPanelXAnimation.to = opponentCardsGroup.x + opponentCardsGroup.width + Globals.SCORE_TABLE_DISTANCE; 
                 opponentControlPanelXAnimation.start();
-            }
+            }*/
         }
         
         CardsGroup{
@@ -123,11 +123,11 @@ Item{
             y: playerName.y - Globals.NAME_DISTANCE - height
             
             //
-            onWidthChanged: { 
+            /*onWidthChanged: { 
                 playerControlPanelXAnimation.from = playerControlPanel.x;
-                playerControlPanelXAnimation.to = playerCardsGroup.x + playerCardsGroup.width /*+ Globals.SCORE_TABLE_DISTANCE*/; 
+                playerControlPanelXAnimation.to = playerCardsGroup.x + playerCardsGroup.width + Globals.SCORE_TABLE_DISTANCE; 
                 playerControlPanelXAnimation.start();            
-            }
+            }*/
         }
         
     }
@@ -173,18 +173,25 @@ Item{
         console.log( "New game." );
         
         var opponentNameStartPosY = main.mapToItem( gameArea, 0, 0 ).y - opponentName.height;
+        console.log( "opponentNameStartPosY:"+ opponentNameStartPosY);
         var opponentNameEndPosY = Globals.NAME_DISTANCE;
+        console.log( "opponentNameEndPosY:"+ opponentNameEndPosY);
         opponentName.startYAnimation( opponentNameStartPosY, opponentNameEndPosY );
         opponentName.visible = true;
         
         var playerNameStartPosY = main.mapToItem( gameArea, 0, height ).y;
+        console.log( "playerNameStartPosY:"+ playerNameStartPosY);
         var playerNameEndPosY = gameArea.height - Globals.NAME_DISTANCE - playerName.height;
+        console.log( "playerNameEndPosY:"+ playerNameEndPosY);
         playerName.startYAnimation( playerNameStartPosY, playerNameEndPosY );
         playerName.visible = true;
         
         var playerControlPanelStartPosX = main.mapToItem( gameArea, width, 0 ).x;
+        console.log( "playerControlPanelStartPosX:"+ playerControlPanelStartPosX);
         var playerControlPanelEndPosX = gameArea.width / 2;
+        console.log( "playerControlPanelEndPosX:"+ playerControlPanelEndPosX);
         var playerControlPanelPosY = playerNameEndPosY - Globals.NAME_DISTANCE - playerControlPanel.height;
+        console.log( "playerControlPanelPosY:"+ playerControlPanelPosY);
         playerControlPanel.y = playerControlPanelPosY;
         playerControlPanelXAnimation.from = playerControlPanelStartPosX;
         playerControlPanelXAnimation.to = playerControlPanelEndPosX;
@@ -192,8 +199,11 @@ Item{
         playerScoreTable.visible = true;
         
         var opponentControlPanelStartPosX = playerControlPanelStartPosX;
+        console.log( "opponentControlPanelStartPosX:"+ opponentControlPanelStartPosX);
         var opponentControlPanelEndPosX = playerControlPanelEndPosX;
+        console.log( "opponentControlPanelEndPosX:"+ opponentControlPanelEndPosX);
         var opponentControlPanelPosY = opponentNameEndPosY + opponentName.height + Globals.NAME_DISTANCE;
+        console.log( "opponentControlPanelPosY:"+ opponentControlPanelPosY);
         opponentControlPanel.y = opponentControlPanelPosY;
         opponentControlPanelXAnimation.from = opponentControlPanelStartPosX;
         opponentControlPanelXAnimation.to = opponentControlPanelEndPosX;
