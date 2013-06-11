@@ -90,7 +90,7 @@ Item{
             }
             
             NumberAnimation on x{
-                id: opponentControlpanelXAnimation
+                id: opponentControlPanelXAnimation
                 duration: Globals.ANIMATION_TIME
             }
         }
@@ -108,12 +108,26 @@ Item{
             id: opponentCardsGroup
             x: ( parent.width - width ) / 2
             y: opponentName.y + opponentName.height + Globals.NAME_DISTANCE
+            
+            //
+            onWidthChanged: {
+                opponentControlPanelXAnimation.from = opponentControlPanel.x;
+                opponentControlPanelXAnimation.to = opponentCardsGroup.x + opponentCardsGroup.width /*+ Globals.SCORE_TABLE_DISTANCE*/; 
+                opponentControlPanelXAnimation.start();
+            }
         }
         
         CardsGroup{
             id: playerCardsGroup
             x: ( parent.width - width ) / 2
             y: playerName.y - Globals.NAME_DISTANCE - height
+            
+            //
+            onWidthChanged: { 
+                playerControlPanelXAnimation.from = playerControlPanel.x;
+                playerControlPanelXAnimation.to = playerCardsGroup.x + playerCardsGroup.width /*+ Globals.SCORE_TABLE_DISTANCE*/; 
+                playerControlPanelXAnimation.start();            
+            }
         }
         
     }
@@ -181,9 +195,9 @@ Item{
         var opponentControlPanelEndPosX = playerControlPanelEndPosX;
         var opponentControlPanelPosY = opponentNameEndPosY + opponentName.height + Globals.NAME_DISTANCE;
         opponentControlPanel.y = opponentControlPanelPosY;
-        opponentControlpanelXAnimation.from = opponentControlPanelStartPosX;
-        opponentControlpanelXAnimation.to = opponentControlPanelEndPosX;
-        opponentControlpanelXAnimation.start();
+        opponentControlPanelXAnimation.from = opponentControlPanelStartPosX;
+        opponentControlPanelXAnimation.to = opponentControlPanelEndPosX;
+        opponentControlPanelXAnimation.start();
         opponentScoreTable.visible = true;
         
         var singleShot = Logic.createSingleShot( main, Globals.ANIMATION_TIME );

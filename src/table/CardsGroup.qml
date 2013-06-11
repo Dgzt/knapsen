@@ -2,7 +2,10 @@ import CustomComponents 1.0
 import QtQuick 1.1
 import "globals.js" as Globals
 
-Item{
+/*Item{*/
+Rectangle{
+    color: "white"
+    //
     id: cardsGroup
     
     onXChanged: setCardsPos()
@@ -31,6 +34,8 @@ Item{
         }else{
             cardsGroup.width = cards.at(0).width + ( cards.size - 1 ) * ( cards.at(0).width / 2 );
         }
+        
+        console.log( "CardsGroup size: "+cardsGroup.width+"x"+cardsGroup.height );
     }
     
     function setCardsPos(){
