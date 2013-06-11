@@ -116,11 +116,11 @@ Item{
             y: opponentName.y + opponentName.height + Globals.NAME_DISTANCE
             
             //
-            /*onWidthChanged: {
+            onXChanged: {
                 opponentControlPanelXAnimation.from = opponentControlPanel.x;
                 opponentControlPanelXAnimation.to = opponentCardsGroup.x + opponentCardsGroup.width + Globals.SCORE_TABLE_DISTANCE; 
                 opponentControlPanelXAnimation.start();
-            }*/
+            }
         }
         
         CardsGroup{
@@ -129,11 +129,11 @@ Item{
             y: playerName.y - Globals.NAME_DISTANCE - height
             
             //
-            /*onWidthChanged: { 
+            onXChanged: { 
                 playerControlPanelXAnimation.from = playerControlPanel.x;
                 playerControlPanelXAnimation.to = playerCardsGroup.x + playerCardsGroup.width + Globals.SCORE_TABLE_DISTANCE; 
                 playerControlPanelXAnimation.start();            
-            }*/
+            }
         }
         
     }
