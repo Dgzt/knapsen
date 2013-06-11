@@ -107,7 +107,7 @@ Item{
         CardsGroup{
             id: opponentCardsGroup
             x: ( parent.width - width ) / 2
-            y: opponentName.y + Globals.NAME_DISTANCE
+            y: opponentName.y + opponentName.height + Globals.NAME_DISTANCE
         }
         
         CardsGroup{
