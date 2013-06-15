@@ -55,6 +55,9 @@ Item{
         cards.add( card );
     }
     
+    function setSelectable( id, selectable ){
+        cards.at( id ).selectable = selectable;
+    }
     
     function clear(){
         while( cards.size > 0 ){

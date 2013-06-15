@@ -304,4 +304,9 @@ Item{
         
         singleShot( signalAnimationEnd, Globals.ANIMATION_TIME );
     }
+    
+    function playerCardSelectableChanged( id, selectable ){
+        playerCardsGroup.setSelectable( id, selectable );
+    }
+    
 }
