@@ -53,11 +53,6 @@ Item{
             spacing: Globals.BUTTON_DISTANCE
             height: schnapsenButton.height + twentyButton.height + fortyButton.height + playerScoreTable.height + 3*Globals.BUTTON_DISTANCE
             
-            //
-            //x: playerCardsGroup.x
-            //y: playerCardsGroup.y
-            //
-            
             Button{
                 id: schnapsenButton
                 text: "Schnapsen"
@@ -110,6 +105,13 @@ Item{
             elementId: "back"
             //x: Globals.DECK_DISTANCE
             y: ( parent.height - height ) / 2
+            visible: false
+        }
+        
+        Card{
+            id: trump
+            source: main.cardSource
+            y: deck.y
             visible: false
         }
         
@@ -171,6 +173,7 @@ Item{
         playerScoreTable.visible = false;
         
         deck.visible = false;
+        trump.visible = false;
         
         opponentCardsGroup.clear();
         playerCardsGroup.clear();
@@ -290,5 +293,15 @@ Item{
     
     function newTrumpCard( elementId ){
         console.log( "New trump card." );
+        
+        var trumpStartPosX = deck.x;
+        var trumpEndPosX = deck.x + deck.width + Globals.DECK_TRUMP_DISTANCE;
+        
+        trump.elementId = elementId;
+        trump.x = trumpStartPosX;
+        trump.startAnimation( trumpEndPosX, trump.y );
+        trump.visible = true;
+        
+        singleShot( signalAnimationEnd, Globals.ANIMATION_TIME );
     }
 }

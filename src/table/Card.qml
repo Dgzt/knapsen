@@ -26,7 +26,7 @@ SvgImage{
         duration: Globals.ANIMATION_TIME
     }
     
-    MouseArea{
+    /*MouseArea{
         id: mouseArea
         anchors.fill: card
         hoverEnabled: true
@@ -36,7 +36,7 @@ SvgImage{
         }
         onEntered: { if( selectable ) mouseEntered(); }
         onExited: { if( selectable ) mouseExited(); }
-    }
+    }*/
     
     /*function setMoveAnimation( x, y ){
         xAnimation.to = x;
@@ -55,8 +55,8 @@ SvgImage{
         yAnimation.start();
     }
     
-    function isContainsMouse(){
+    /*function isContainsMouse(){
         return mouseArea.containsMouse;
-    }
+    }*/
     
 }
