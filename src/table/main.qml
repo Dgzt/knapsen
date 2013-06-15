@@ -191,9 +191,6 @@ Item{
     function newGame(){
         console.log( "New game." );
         
-        /*var singleShot = Logic.createSingleShot( main, 500 );
-        singleShot.triggered.connect( startNewGameAnimation );
-        singleShot.start();*/
         singleShot( startNewGameAnimation, 500 );
     }
     
@@ -236,9 +233,6 @@ Item{
         opponentControlPanelXAnimation.start();
         opponentScoreTable.visible = true;
         
-        /*var singleShot = Logic.createSingleShot( main, Globals.ANIMATION_TIME );
-        singleShot.triggered.connect( signalAnimationEnd );
-        singleShot.start();*/
         singleShot( signalAnimationEnd, Globals.ANIMATION_TIME );
     }
     
@@ -251,9 +245,6 @@ Item{
         deck.startAnimation( deckEndPosX, deck.y );
         deck.visible = true;
         
-        /*var singleShot = Logic.createSingleShot( main, Globals.ANIMATION_TIME );
-        singleShot.triggered.connect( signalAnimationEnd );
-        singleShot.start();*/
         singleShot( signalAnimationEnd, Globals.ANIMATION_TIME );
     }
     
@@ -268,9 +259,6 @@ Item{
         
         playerCardsGroup.addCard( card );
         
-        /*var singleShot = Logic.createSingleShot( main, Globals.ANIMATION_TIME );
-        singleShot.triggered.connect( signalAnimationEnd );
-        singleShot.start();*/
         singleShot( signalAnimationEnd, Globals.ANIMATION_TIME );
     }
     
@@ -285,9 +273,6 @@ Item{
         
         opponentCardsGroup.addCard( card, Globals.ANIMATION_TIME );
         
-        /*var singleShot = Logic.createSingleShot( main, Globals.ANIMATION_TIME );
-        singleShot.triggered.connect( signalAnimationEnd );
-        singleShot.start();*/
         singleShot( signalAnimationEnd, Globals.ANIMATION_TIME );
     }
     
@@ -297,7 +282,8 @@ Item{
         var trumpStartPosX = deck.x;
         var trumpEndPosX = deck.x + deck.width + Globals.DECK_TRUMP_DISTANCE;
         
-        trump.elementId = elementId;
+        trump.elementId = Globals.CARD_BACK;
+        trump.newElementId = elementId;
         trump.x = trumpStartPosX;
         trump.startAnimation( trumpEndPosX, trump.y );
         trump.visible = true;

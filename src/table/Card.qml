@@ -6,6 +6,9 @@ SvgImage{
     id: card
     
     property bool selectable: false
+    //
+    property string newElementId: Globals.CARD_BACK
+    //
 
     signal mouseClicked()
     signal mouseEntered()
@@ -18,12 +21,16 @@ SvgImage{
         id: xAnimation
         running: false
         duration: Globals.ANIMATION_TIME
+        
+        onRunningChanged: { if( !running ) card.elementId = card.newElementId; }
     }
     
     NumberAnimation on y { 
         id: yAnimation
         running: false
         duration: Globals.ANIMATION_TIME
+        
+        onRunningChanged: { if( !running ) card.elementId = card.newElementId; }
     }
     
     /*MouseArea{
