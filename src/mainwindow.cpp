@@ -329,8 +329,6 @@ void MainWindow::closeGameSlot()
     
     mCWidget->clear();
     
-    //delete client;
-    //client = 0;
     mClient->deleteLater();
     mClient = 0;
     

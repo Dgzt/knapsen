@@ -13,6 +13,9 @@ Item{
     property string cardSource: ""
     
     signal signalAnimationEnd()
+    //
+    signal signalDestroyTimer()
+    //
     
     Image{
         id: backgroundImage
@@ -151,7 +154,16 @@ Item{
         }
     }
     
+    function singleShot( triggeredSlot, time ){
+        var tmpSingleShot = Logic.createSingleShot( main, time );
+        tmpSingleShot.triggered.connect( triggeredSlot );
+        signalDestroyTimer.connect( tmpSingleShot.kill );
+        tmpSingleShot.start();
+    }
+    
     function clear(){
+        signalDestroyTimer();
+        
         opponentName.visible = false;
         playerName.visible = false;
         
@@ -176,63 +188,10 @@ Item{
     function newGame(){
         console.log( "New game." );
         
-        /*var opponentNameStartPosY = main.mapToItem( gameArea, 0, 0 ).y - opponentName.height;
-        console.log( "opponentNameStartPosY:"+ opponentNameStartPosY);
-        var opponentNameEndPosY = Globals.NAME_DISTANCE;
-        console.log( "opponentNameEndPosY:"+ opponentNameEndPosY);
-        opponentName.startYAnimation( opponentNameStartPosY, opponentNameEndPosY );
-        //
-        opponentName.y = opponentNameEndPosY;
-        //
-        opponentName.visible = true;
-        
-        var playerNameStartPosY = main.mapToItem( gameArea, 0, height ).y;
-        console.log( "playerNameStartPosY:"+ playerNameStartPosY);
-        var playerNameEndPosY = gameArea.height - Globals.NAME_DISTANCE - playerName.height;
-        console.log( "playerNameEndPosY:"+ playerNameEndPosY);
-        playerName.startYAnimation( playerNameStartPosY, playerNameEndPosY );
-        //
-        playerName.y = playerNameEndPosY;
-        //
-        playerName.visible = true;
-        
-        var playerControlPanelStartPosX = main.mapToItem( gameArea, width, 0 ).x;
-        console.log( "playerControlPanelStartPosX:"+ playerControlPanelStartPosX);
-        var playerControlPanelEndPosX = gameArea.width / 2;
-        console.log( "playerControlPanelEndPosX:"+ playerControlPanelEndPosX);
-        var playerControlPanelPosY = playerNameEndPosY - Globals.NAME_DISTANCE - playerControlPanel.height;
-        console.log( "playerControlPanelPosY:"+ playerControlPanelPosY);
-        playerControlPanel.y = playerControlPanelPosY;
-        playerControlPanelXAnimation.from = playerControlPanelStartPosX;
-        playerControlPanelXAnimation.to = playerControlPanelEndPosX;
-        playerControlPanelXAnimation.start();
-        //
-        playerControlPanel.x = playerControlPanelEndPosX;
-        //
-        playerScoreTable.visible = true;
-        
-        var opponentControlPanelStartPosX = playerControlPanelStartPosX;
-        console.log( "opponentControlPanelStartPosX:"+ opponentControlPanelStartPosX);
-        var opponentControlPanelEndPosX = playerControlPanelEndPosX;
-        console.log( "opponentControlPanelEndPosX:"+ opponentControlPanelEndPosX);
-        var opponentControlPanelPosY = opponentNameEndPosY + opponentName.height + Globals.NAME_DISTANCE;
-        console.log( "opponentControlPanelPosY:"+ opponentControlPanelPosY);
-        opponentControlPanel.y = opponentControlPanelPosY;
-        opponentControlPanelXAnimation.from = opponentControlPanelStartPosX;
-        opponentControlPanelXAnimation.to = opponentControlPanelEndPosX;
-        opponentControlPanelXAnimation.start();
-        //
-        opponentControlPanel.x = opponentControlPanelEndPosX;
-        //
-        opponentScoreTable.visible = true;
-        
-        var singleShot = Logic.createSingleShot( main, Globals.ANIMATION_TIME );
-        singleShot.triggered.connect( signalAnimationEnd );
-        singleShot.start();*/
-        
-        var singleShot = Logic.createSingleShot( main, 500 );
+        /*var singleShot = Logic.createSingleShot( main, 500 );
         singleShot.triggered.connect( startNewGameAnimation );
-        singleShot.start();
+        singleShot.start();*/
+        singleShot( startNewGameAnimation, 500 );
     }
     
     function startNewGameAnimation(){
@@ -274,9 +233,10 @@ Item{
         opponentControlPanelXAnimation.start();
         opponentScoreTable.visible = true;
         
-        var singleShot = Logic.createSingleShot( main, Globals.ANIMATION_TIME );
+        /*var singleShot = Logic.createSingleShot( main, Globals.ANIMATION_TIME );
         singleShot.triggered.connect( signalAnimationEnd );
-        singleShot.start();
+        singleShot.start();*/
+        singleShot( signalAnimationEnd, Globals.ANIMATION_TIME );
     }
     
     function newRound(){
@@ -288,9 +248,10 @@ Item{
         deck.startAnimation( deckEndPosX, deck.y );
         deck.visible = true;
         
-        var singleShot = Logic.createSingleShot( main, Globals.ANIMATION_TIME );
+        /*var singleShot = Logic.createSingleShot( main, Globals.ANIMATION_TIME );
         singleShot.triggered.connect( signalAnimationEnd );
-        singleShot.start();
+        singleShot.start();*/
+        singleShot( signalAnimationEnd, Globals.ANIMATION_TIME );
     }
     
     function newPlayerCard( lastCard, cardElementId ){
@@ -304,9 +265,10 @@ Item{
         
         playerCardsGroup.addCard( card );
         
-        var singleShot = Logic.createSingleShot( main, Globals.ANIMATION_TIME );
+        /*var singleShot = Logic.createSingleShot( main, Globals.ANIMATION_TIME );
         singleShot.triggered.connect( signalAnimationEnd );
-        singleShot.start();
+        singleShot.start();*/
+        singleShot( signalAnimationEnd, Globals.ANIMATION_TIME );
     }
     
     function newOpponentCard( lastCard ){
@@ -318,10 +280,15 @@ Item{
             deck.visible = false;
         }
         
-        opponentCardsGroup.addCard( card );
+        opponentCardsGroup.addCard( card, Globals.ANIMATION_TIME );
         
-        var singleShot = Logic.createSingleShot( main, Globals.ANIMATION_TIME );
+        /*var singleShot = Logic.createSingleShot( main, Globals.ANIMATION_TIME );
         singleShot.triggered.connect( signalAnimationEnd );
-        singleShot.start();
+        singleShot.start();*/
+        singleShot( signalAnimationEnd, Globals.ANIMATION_TIME );
+    }
+    
+    function newTrumpCard( elementId ){
+        console.log( "New trump card." );
     }
 }

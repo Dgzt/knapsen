@@ -5,4 +5,9 @@ Timer{
     running: false
     
     onTriggered: { destroy( 1000 ); }
+    
+    function kill(){
+        timer.stop();
+        timer.destroy();
+    }
 }
