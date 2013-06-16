@@ -61,6 +61,8 @@ Item{
         card.mouseExited.connect( mouseExitedFromCard );
         card.mouseClicked.connect( mouseClickedToCard );
         cards.add( card );
+        
+        setCardsZValue();
     }
     
     /*function setSelectable( id, selectable ){
@@ -119,6 +121,20 @@ Item{
         cards.at( highlightCardId ).y += highlightValue;
     }
     //
+    
+    function setCardsZValue(){
+        for( var i=0; i < cards.size; ++i ){
+            cards.at( i ).z = i;
+        }
+    }
+    
+    function selectCard( id, elementId ){
+        //var card = cards.takeAt( id );
+        //card.newElementId = elementId;
+        cards.at( id ).newElementId = elementId;
+        
+        selectedCard( cards.takeAt( id ) );
+    }
     
     function clear(){
         while( cards.size > 0 ){

@@ -135,12 +135,15 @@ Item{
                 opponentControlPanelXAnimation.to = opponentCardsGroup.x + opponentCardsGroup.width + Globals.SCORE_TABLE_DISTANCE; 
                 opponentControlPanelXAnimation.start();
             }
+            
+            onSelectedCard: { centralCardsGroup.addCard( card ); }
         }
         
         CardsGroup{
             id: centralCardsGroup
             x: ( parent.width - width ) / 2
             y: ( parent.height - height ) / 2
+            
         }
         
         CardsGroup{
@@ -314,6 +317,12 @@ Item{
     function playerCardSelectableChanged( id, selectable ){
         //playerCardsGroup.setSelectable( id, selectable );
         playerCardsGroup.setSelectable( id, selectable, gameAreaMouseArea.mouseX, gameAreaMouseArea.mouseY );
+    }
+    
+    function opponentSelectedCard( id, cardElementId ){
+        console.log( "Opponent selected "+id+". card: "+cardElementId );
+        
+        opponentCardsGroup.selectCard( id, cardElementId );
     }
     
 }
