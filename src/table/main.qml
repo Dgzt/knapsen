@@ -108,19 +108,48 @@ Item{
             }
         }
         
-        Card{
+        /*Card{
             id: deck
             source: main.cardSource
             elementId: "back"
-            //x: Globals.DECK_DISTANCE
             y: ( parent.height - height ) / 2
             visible: false
+        }*/
+        
+        Column{
+            id: deckColumn
+            width: deck.width
+            y: ( parent.height - deck.height ) / 2
+            spacing: Globals.BUTTON_DISTANCE
+            
+            Card{
+                id: deck
+                source: main.cardSource
+                elementId: "back"
+                visible: false
+            }
+            
+            Button{
+                id: closeButton
+                text: "Close"
+                width: deck.width
+                height: Globals.BUTTON_HEIGHT
+                visible: false
+            }
+            
+            NumberAnimation on x{
+                id: deckColumnXAnimation
+                duration: Globals.ANIMATION_TIME
+            }
         }
+        
+        
         
         Card{
             id: trump
             source: main.cardSource
-            y: deck.y
+            //y: deck.y
+            y: deckColumn.y
             visible: false
         }
         
@@ -195,6 +224,7 @@ Item{
         playerScoreTable.visible = false;
         
         deck.visible = false;
+        closeButton.visible = false;
         trump.visible = false;
         
         opponentCardsGroup.clear();
@@ -262,10 +292,17 @@ Item{
     function newRound(){
         console.log( "New round" );
         
-        var deckStartPosX = main.mapToItem( gameArea, 0, 0 ).x - deck.width;
+        /*var deckStartPosX = main.mapToItem( gameArea, 0, 0 ).x - deck.width;
         var deckEndPosX = Globals.DECK_DISTANCE;
         deck.x = deckStartPosX;
         deck.startAnimation( deckEndPosX, deck.y );
+        deck.visible = true;*/
+        
+        var deckColumnStartPosX = main.mapToItem( gameArea, 0, 0 ).x - deckColumn.width;
+        var deckColumnEndPosX = Globals.DECK_DISTANCE;
+        deckColumnXAnimation.from = deckColumnStartPosX;
+        deckColumnXAnimation.to = deckColumnEndPosX;
+        deckColumnXAnimation.start();
         deck.visible = true;
         
         singleShot( signalAnimationEnd, Globals.ANIMATION_TIME );
@@ -274,7 +311,8 @@ Item{
     function newPlayerCard( lastCard, cardElementId ){
         console.log( "New player card." );
         
-        var card = Logic.createCard( gameArea, cardSource, cardElementId, 1, deck.x, deck.y );
+        //var card = Logic.createCard( gameArea, cardSource, cardElementId, 1, deck.x, deck.y );
+        var card = Logic.createCard( gameArea, cardSource, cardElementId, 1, deckColumn.x, deckColumn.y );
         
         if( lastCard ){
             deck.visible = false;
@@ -288,7 +326,8 @@ Item{
     function newOpponentCard( lastCard ){
         console.log( "New opponent card." );
         
-        var card = Logic.createCard( gameArea, cardSource, Globals.CARD_BACK, 1, deck.x, deck.y );
+        //var card = Logic.createCard( gameArea, cardSource, Globals.CARD_BACK, 1, deck.x, deck.y );
+        var card = Logic.createCard( gameArea, cardSource, Globals.CARD_BACK, 1, deckColumn.x, deckColumn.y );
         
         if( lastCard ){
             deck.visible = false;
@@ -302,8 +341,10 @@ Item{
     function newTrumpCard( elementId ){
         console.log( "New trump card." );
         
-        var trumpStartPosX = deck.x;
-        var trumpEndPosX = deck.x + deck.width + Globals.DECK_TRUMP_DISTANCE;
+        //var trumpStartPosX = deck.x;
+        //var trumpEndPosX = deck.x + deck.width + Globals.DECK_TRUMP_DISTANCE;
+        var trumpStartPosX = deckColumn.x;
+        var trumpEndPosX = deckColumn.x + deckColumn.width + Globals.DECK_TRUMP_DISTANCE;
         
         trump.elementId = Globals.CARD_BACK;
         trump.newElementId = elementId;
@@ -359,4 +400,7 @@ Item{
         playerScoreTable.tricks = tricks;
     }
     
+    function closeButtonVisibleChanged( visible ){
+        closeButton.visible = visible;
+    }
 }
