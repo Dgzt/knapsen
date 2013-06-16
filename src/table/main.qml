@@ -14,6 +14,7 @@ Item{
     
     signal signalAnimationEnd()
     signal signalSelectedCard( int id, int delay )
+    signal signalCloseButtonClicked()
     //
     signal signalDestroyTimer()
     //
@@ -135,6 +136,8 @@ Item{
                 width: deck.width
                 height: Globals.BUTTON_HEIGHT
                 visible: false
+                
+                onClick: signalCloseButtonClicked()
             }
             
             NumberAnimation on x{
@@ -402,5 +405,9 @@ Item{
     
     function closeButtonVisibleChanged( visible ){
         closeButton.visible = visible;
+    }
+    
+    function closeDeck(){
+        trump.elementId = Globals.CARD_BACK;
     }
 }
