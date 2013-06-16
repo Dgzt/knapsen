@@ -343,4 +343,12 @@ Item{
         singleShot( signalAnimationEnd, Globals.ANIMATION_TIME );
     }
     
+    function opponentScoresChanged( scores ){
+        opponentScoreTable.scores = scores;
+    }
+    
+    function playerScoresSchanged( scores ){
+        playerScoreTable.scores = scores;
+    }
+    
 }
