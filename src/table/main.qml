@@ -347,8 +347,16 @@ Item{
         opponentScoreTable.scores = scores;
     }
     
-    function playerScoresSchanged( scores ){
+    function playerScoresChanged( scores ){
         playerScoreTable.scores = scores;
+    }
+    
+    function opponentTricksChanged( tricks ){
+        opponentScoreTable.tricks = tricks;
+    }
+    
+    function playerTricksChanged( tricks ){
+        playerScoreTable.tricks = tricks;
     }
     
 }
