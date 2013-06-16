@@ -6,16 +6,15 @@ SvgImage{
     id: card
     
     property bool selectable: false
-    //
     property string newElementId: Globals.CARD_BACK
-    //
-
-    signal mouseClicked()
+    property bool containsMouse: false
+    
+    //signal mouseClicked()
     signal mouseEntered()
     signal mouseExited()
     
     //This isn't works. :\
-    //onSelectableChanged: { if( selectable && isContainsMouse() ) mouseEntered(); }
+    //onSelectableChanged: { if( selectable && mouseArea.containsMouse ) console.log( "highligt" ); }
     
     NumberAnimation on x { 
         id: xAnimation
@@ -33,27 +32,20 @@ SvgImage{
         onRunningChanged: { if( !running ) card.elementId = card.newElementId; }
     }
     
-    /*MouseArea{
+    MouseArea{
         id: mouseArea
         anchors.fill: card
         hoverEnabled: true
-        onClicked: { 
+        /*onClicked: { 
             console.log( "Selectable: "+selectable );
             if( selectable ) mouseClicked(); 
-        }
+        }*/
         onEntered: { if( selectable ) mouseEntered(); }
         onExited: { if( selectable ) mouseExited(); }
-    }*/
-    
-    /*function setMoveAnimation( x, y ){
-        xAnimation.to = x;
-        yAnimation.to = y;
+        
+        //
+        onContainsMouseChanged: card.containsMouse = mouseArea.containsMouse;
     }
-    
-    function startMoveAnimation(){
-        xAnimation.start();
-        yAnimation.start();
-    }*/
     
     function startAnimation( endX, endY ){
         xAnimation.to = endX;
@@ -61,9 +53,5 @@ SvgImage{
         xAnimation.start();
         yAnimation.start();
     }
-    
-    /*function isContainsMouse(){
-        return mouseArea.containsMouse;
-    }*/
     
 }

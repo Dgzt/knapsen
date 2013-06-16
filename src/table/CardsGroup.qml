@@ -8,6 +8,8 @@ Item{
     //*/
     id: cardsGroup
     
+    property int highlightCardId: Globals.INVALID_CARD_ID
+    
     onXChanged: setCardsPos()
     
     Array{
@@ -52,12 +54,58 @@ Item{
     }
     
     function addCard( card ){
+        card.mouseEntered.connect( mouseEnteredToCard );
+        card.mouseExited.connect( mouseExitedFromCard );
         cards.add( card );
     }
     
-    function setSelectable( id, selectable ){
+    /*function setSelectable( id, selectable ){
         cards.at( id ).selectable = selectable;
+    }*/
+    function setSelectable( id, selectable, mousePosX, mousePosY ){
+        cards.at( id ).selectable = selectable;
+        
+        if( selectable ){
+            var card = cards.at( id );
+            
+            if( card.x <= mousePosX && mousePosX <= card.x + card.width &&
+                card.y <= mousePosY && mousePosY <= card.y + card.height )
+            {
+                if( id == cards.size-1 || mousePosX < cards.at( id+1 ).x ){
+                    console.log( id+" contains mouse." );
+                    highlightCardId = id;
+                    highlightCard();
+                }
+            }
+        }
+            
     }
+    
+    //
+    function mouseEnteredToCard(){
+        for( var i = 0; i < cards.size; ++i ){
+            if( cards.at( i ).containsMouse && i != highlightCardId ){
+                highlightCardId = i;
+                highlightCard();
+            }
+        }
+    }
+    
+    function mouseExitedFromCard(){
+        removeHighlight();
+        highlightCardId = Globals.INVALID_CARD_ID;
+    }
+    
+    function highlightCard(){
+        var highlightValue = cards.at( highlightCardId ).height * ( Globals.HIGHLIGHT_PERCENT / 100 );
+        cards.at( highlightCardId ).y -= highlightValue;
+    }
+    
+    function removeHighlight(){
+        var highlightValue = cards.at( highlightCardId ).height * ( Globals.HIGHLIGHT_PERCENT / 100 );
+        cards.at( highlightCardId ).y += highlightValue;
+    }
+    //
     
     function clear(){
         while( cards.size > 0 ){

@@ -102,6 +102,11 @@ void Player::setSelectableAllCards( bool enabled )
         mCards.at(i)->setSelectable( enabled );
         emit signalPlayerCardSelectableChanged( i, enabled );
     }
+    
+    /*for( int i = mCards.size()-1; i >= 0; --i ){
+        mCards.at(i)->setSelectable( enabled );
+        emit signalPlayerCardSelectableChanged( i, enabled );
+    }*/
 }
 
 /*void Player::setSelectableCertainCards( CentralCards *centralCards, Trump *trump )

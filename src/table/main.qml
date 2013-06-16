@@ -30,6 +30,14 @@ Item{
         height: 700
         anchors.centerIn: parent
         
+        //
+        MouseArea{
+            id: gameAreaMouseArea
+            anchors.fill: parent
+            hoverEnabled: true
+        }
+        //
+        
         Name{
             id: opponentName
             text: "Opponent"
@@ -292,7 +300,8 @@ Item{
     }
     
     function playerCardSelectableChanged( id, selectable ){
-        playerCardsGroup.setSelectable( id, selectable );
+        //playerCardsGroup.setSelectable( id, selectable );
+        playerCardsGroup.setSelectable( id, selectable, gameAreaMouseArea.mouseX, gameAreaMouseArea.mouseY );
     }
     
 }
