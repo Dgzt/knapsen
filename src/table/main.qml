@@ -138,6 +138,12 @@ Item{
         }
         
         CardsGroup{
+            id: centralCardsGroup
+            x: ( parent.width - width ) / 2
+            y: ( parent.height - height ) / 2
+        }
+        
+        CardsGroup{
             id: playerCardsGroup
             x: ( parent.width - width ) / 2
             y: playerName.y - Globals.NAME_DISTANCE - height
@@ -151,6 +157,7 @@ Item{
             //
             
             onSelectedCardId: { signalSelectedCard( id, Globals.ANIMATION_TIME ); }
+            onSelectedCard: { centralCardsGroup.addCard( card ); }
         }
         
     }
@@ -188,6 +195,7 @@ Item{
         trump.visible = false;
         
         opponentCardsGroup.clear();
+        centralCardsGroup.clear();
         playerCardsGroup.clear();
     }
     
