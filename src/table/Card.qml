@@ -9,7 +9,7 @@ SvgImage{
     property string newElementId: Globals.CARD_BACK
     property bool containsMouse: false
     
-    //signal mouseClicked()
+    signal mouseClicked()
     signal mouseEntered()
     signal mouseExited()
     
@@ -36,10 +36,10 @@ SvgImage{
         id: mouseArea
         anchors.fill: card
         hoverEnabled: true
-        /*onClicked: { 
+        onClicked: { 
             console.log( "Selectable: "+selectable );
             if( selectable ) mouseClicked(); 
-        }*/
+        }
         onEntered: { if( selectable ) mouseEntered(); }
         onExited: { if( selectable ) mouseExited(); }
         

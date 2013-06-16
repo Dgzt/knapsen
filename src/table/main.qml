@@ -13,6 +13,7 @@ Item{
     property string cardSource: ""
     
     signal signalAnimationEnd()
+    signal signalSelectedCard( int id, int delay )
     //
     signal signalDestroyTimer()
     //
@@ -147,6 +148,9 @@ Item{
                 playerControlPanelXAnimation.to = playerCardsGroup.x + playerCardsGroup.width + Globals.SCORE_TABLE_DISTANCE; 
                 playerControlPanelXAnimation.start();            
             }
+            //
+            
+            onSelectedCardId: { signalSelectedCard( id, Globals.ANIMATION_TIME ); }
         }
         
     }

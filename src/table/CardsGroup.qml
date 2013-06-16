@@ -10,6 +10,9 @@ Item{
     
     property int highlightCardId: Globals.INVALID_CARD_ID
     
+    signal selectedCardId( int id )
+    signal selectedCard( variant card )
+    
     onXChanged: setCardsPos()
     
     Array{
@@ -56,6 +59,7 @@ Item{
     function addCard( card ){
         card.mouseEntered.connect( mouseEnteredToCard );
         card.mouseExited.connect( mouseExitedFromCard );
+        card.mouseClicked.connect( mouseClickedToCard );
         cards.add( card );
     }
     
@@ -93,6 +97,15 @@ Item{
     
     function mouseExitedFromCard(){
         removeHighlight();
+        highlightCardId = Globals.INVALID_CARD_ID;
+    }
+    
+    function mouseClickedToCard(){
+        console.log( "Selected card: "+highlightCardId );
+        
+        selectedCardId( highlightCardId );
+        selectedCard( cards.takeAt( highlightCardId ) );
+        
         highlightCardId = Globals.INVALID_CARD_ID;
     }
     
