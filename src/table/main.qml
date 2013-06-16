@@ -15,6 +15,7 @@ Item{
     signal signalAnimationEnd()
     signal signalSelectedCard( int id, int delay )
     signal signalCloseButtonClicked()
+    signal signalSchnapsenButtonClicked()
     //
     signal signalDestroyTimer()
     //
@@ -61,13 +62,23 @@ Item{
         Column{
             id: playerControlPanel
             spacing: Globals.BUTTON_DISTANCE
-            height: schnapsenButton.height + twentyButton.height + fortyButton.height + playerScoreTable.height + 3*Globals.BUTTON_DISTANCE
+            //height: schnapsenButton.height + twentyButton.height + fortyButton.height + playerScoreTable.height + 3*Globals.BUTTON_DISTANCE
+            
+            property real oldHeight: 0
+            
+            onHeightChanged: {
+                y -=  height - oldHeight;
+                oldHeight = height;
+            }
             
             Button{
                 id: schnapsenButton
                 text: "Schnapsen"
                 width: 100
                 height: Globals.BUTTON_HEIGHT
+                visible: false
+                
+                onClick: signalSchnapsenButtonClicked()
             }
             
             Button{
@@ -75,6 +86,7 @@ Item{
                 text: "Twenty"
                 width: 100
                 height: Globals.BUTTON_HEIGHT
+                visible: false
             }
             
             Button{
@@ -82,6 +94,7 @@ Item{
                 text: "Forty"
                 width: 100
                 height: Globals.BUTTON_HEIGHT
+                visible: false
             }
             
             ScoreTable{
@@ -233,6 +246,8 @@ Item{
         opponentCardsGroup.clear();
         centralCardsGroup.clear();
         playerCardsGroup.clear();
+        
+        schnapsenButton.visible = false;
     }
     
     function initialize( playerNameStr, opponentNameStr, picsPath, picScale ){
@@ -409,5 +424,9 @@ Item{
     
     function closeDeck(){
         trump.elementId = Globals.CARD_BACK;
+    }
+    
+    function schnapsenButtonVisibleChanged( visible ){
+        schnapsenButton.visible = visible;
     }
 }
