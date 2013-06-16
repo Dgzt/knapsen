@@ -50,8 +50,8 @@ SvgImage{
     function startAnimation( endX, endY ){
         xAnimation.to = endX;
         yAnimation.to = endY;
-        xAnimation.start();
-        yAnimation.start();
+        xAnimation.restart();
+        yAnimation.restart();
     }
     
 }
