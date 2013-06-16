@@ -141,4 +141,11 @@ Item{
             cards.takeAt( 0 ).destroy();
         }
     }
+    
+    function sendCardsAndDestroy( posX, posY ){
+        while( cards.size > 0 ){
+            cards.at( 0 ).startAnimation( posX, posY );
+            cards.takeAt( 0 ).destroy( Globals.ANIMATION_TIME );
+        }
+    }
 }

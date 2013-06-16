@@ -323,6 +323,24 @@ Item{
         console.log( "Opponent selected "+id+". card: "+cardElementId );
         
         opponentCardsGroup.selectCard( id, cardElementId );
+        
+        singleShot( signalAnimationEnd, Globals.ANIMATION_TIME );
+    }
+    
+    function opponentGetCentralCards(){
+        console.log( "Opponent gets central cards." );
+        
+        centralCardsGroup.sendCardsAndDestroy( gameArea.width, -centralCardsGroup.height );
+        
+        singleShot( signalAnimationEnd, Globals.ANIMATION_TIME );
+    }
+    
+    function playerGetCentralCards(){
+        console.log( "Player gets central cards." );
+        
+        centralCardsGroup.sendCardsAndDestroy( gameArea.width, gameArea.height );
+        
+        singleShot( signalAnimationEnd, Globals.ANIMATION_TIME );
     }
     
 }
