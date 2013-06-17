@@ -484,12 +484,29 @@ Item{
         trump.willVisible( Globals.ANIMATION_TIME );
         
         var card = playerCardsGroup.takeAt( id );
-        
         card.startAnimation( trump.x, trump.y );
-        card.destroy( Globals.ANIMATION_TIME + 100 );
+        card.destroy( Globals.ANIMATION_TIME + 10 );
         
         trump.elementId = card.elementId;
         
         playerCardsGroup.addCard( newCard, false );
+    }
+    
+    function opponentChangeTrumpCard( id, elementId ){
+        console.log( "Opponent change trump card with "+id+". card ("+elementId+")." );
+        
+        var newCard = Logic.createCard( gameArea, cardSource, Globals.CARD_BACK, Globals.CARD_BACK, 1, trump.x, trump.y );
+        
+        trump.visible = false;
+        trump.elementId = elementId;
+        trump.willVisible( Globals.ANIMATION_TIME );
+        
+        var card = opponentCardsGroup.takeAt( id );
+        card.startAnimation( trump.x, trump.y );
+        card.destroy( Globals.ANIMATION_TIME + 10 );
+        
+        opponentCardsGroup.addCard( newCard, true );
+        
+        singleShot( signalAnimationEnd, Globals.ANIMATION_TIME );
     }
 }
