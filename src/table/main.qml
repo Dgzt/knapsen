@@ -16,6 +16,8 @@ Item{
     signal signalSelectedCard( int id, int delay )
     signal signalCloseButtonClicked()
     signal signalSchnapsenButtonClicked()
+    signal signalTwentyButtonClicked()
+    signal signalFortyButtonClicked()
     //
     signal signalDestroyTimer()
     //
@@ -87,6 +89,8 @@ Item{
                 width: 100
                 height: Globals.BUTTON_HEIGHT
                 visible: false
+                
+                onClick: signalTwentyButtonClicked()
             }
             
             Button{
@@ -95,6 +99,8 @@ Item{
                 width: 100
                 height: Globals.BUTTON_HEIGHT
                 visible: false
+                
+                onClick: signalFortyButtonClicked()
             }
             
             ScoreTable{
@@ -248,6 +254,8 @@ Item{
         playerCardsGroup.clear();
         
         schnapsenButton.visible = false;
+        twentyButton.visible = false;
+        fortyButton.visible = false;
     }
     
     function initialize( playerNameStr, opponentNameStr, picsPath, picScale ){
@@ -428,5 +436,13 @@ Item{
     
     function schnapsenButtonVisibleChanged( visible ){
         schnapsenButton.visible = visible;
+    }
+    
+    function twentyButtonVisibleChanged( visible ){
+        twentyButton.visible = visible;
+    }
+    
+    function fortyButtonVisibleChanged( visible ){
+        fortyButton.visible = visible;
     }
 }
