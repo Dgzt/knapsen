@@ -111,8 +111,14 @@ Item{
         if( selectable ){
             var card = cards.at( id );
             
-            if( card.x <= mousePosX && mousePosX <= card.x + card.width &&
-                card.y <= mousePosY && mousePosY <= card.y + card.height )
+            if( id == cards.size-1 ){
+                console.log( id+": "+Math.round(mousePosX)+"x"+Math.round(mousePosY)+" "+Math.round(card.x)+"-"+Math.round(card.x+card.width) );
+            }else{
+                console.log( id+": "+Math.round(mousePosX)+"x"+Math.round(mousePosY)+" "+Math.round(card.x)+"-"+Math.round(card.x+card.width)+" "+Math.round(cards.at(id+1).x)+"-"+Math.round(cards.at(id+1).x+cards.at(id+1).width) );
+            }
+            
+            if( card.x <= mousePosX && mousePosX < card.x + card.width &&
+                card.y <= mousePosY && mousePosY < card.y + card.height )
             {
                 if( id == cards.size-1 || mousePosX < cards.at( id+1 ).x ){
                     console.log( id+" contains mouse." );
