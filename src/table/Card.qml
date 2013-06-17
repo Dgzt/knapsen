@@ -47,11 +47,22 @@ SvgImage{
         onContainsMouseChanged: card.containsMouse = mouseArea.containsMouse;
     }
     
+    Timer{
+        id: visibleTimer
+        
+        onTriggered: { card.visible = true; }
+    }
+    
     function startAnimation( endX, endY ){
         xAnimation.to = endX;
         yAnimation.to = endY;
         xAnimation.restart();
         yAnimation.restart();
+    }
+    
+    function willVisible( interval ){
+        visibleTimer.interval = interval;
+        visibleTimer.start();
     }
     
 }

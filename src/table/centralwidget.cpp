@@ -25,7 +25,7 @@ CentralWidget::CentralWidget( QWidget* parent ):
     connect( rootObject(), SIGNAL( signalFortyButtonClicked() ), this, SIGNAL( signalFortyButtonClicked() ) );
     connect( rootObject(), SIGNAL( signalTwentyButtonClicked() ), this, SIGNAL( signalTwentyButtonClicked() ) );
     connect( rootObject(), SIGNAL( signalSchnapsenButtonClicked() ), this, SIGNAL( signalSchnapsenButtonClicked() ) );
-    //connect( rootObject(), SIGNAL( signalTrumpCardClicked() ), this, SIGNAL( signalTrumpCardClicked() ) );
+    connect( rootObject(), SIGNAL( signalTrumpCardClicked() ), this, SIGNAL( signalTrumpCardClicked() ) );
 }
 
 void CentralWidget::clear()

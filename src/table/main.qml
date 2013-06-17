@@ -18,6 +18,7 @@ Item{
     signal signalSchnapsenButtonClicked()
     signal signalTwentyButtonClicked()
     signal signalFortyButtonClicked()
+    signal signalTrumpCardClicked()
     //
     signal signalDestroyTimer()
     //
@@ -173,6 +174,8 @@ Item{
             //y: deck.y
             y: deckColumn.y
             visible: false
+            
+            onMouseClicked: signalTrumpCardClicked()
         }
         
         CardsGroup{
@@ -184,10 +187,10 @@ Item{
             onXChanged: {
                 opponentControlPanelXAnimation.from = opponentControlPanel.x;
                 opponentControlPanelXAnimation.to = opponentCardsGroup.x + opponentCardsGroup.width + Globals.SCORE_TABLE_DISTANCE; 
-                opponentControlPanelXAnimation.start();
+                opponentControlPanelXAnimation.restart();
             }
             
-            onSelectedCard: { centralCardsGroup.addCard( card ); }
+            onSelectedCard: { centralCardsGroup.addCard( card, true ); }
         }
         
         CardsGroup{
@@ -206,12 +209,12 @@ Item{
             onXChanged: { 
                 playerControlPanelXAnimation.from = playerControlPanel.x;
                 playerControlPanelXAnimation.to = playerCardsGroup.x + playerCardsGroup.width + Globals.SCORE_TABLE_DISTANCE; 
-                playerControlPanelXAnimation.start();            
+                playerControlPanelXAnimation.restart();            
             }
             //
             
             onSelectedCardId: { signalSelectedCard( id, Globals.ANIMATION_TIME ); }
-            onSelectedCard: { centralCardsGroup.addCard( card ); }
+            onSelectedCard: { centralCardsGroup.addCard( card, true ); }
         }
         
     }
@@ -344,7 +347,7 @@ Item{
             deck.visible = false;
         }
         
-        playerCardsGroup.addCard( card );
+        playerCardsGroup.addCard( card, true );
         
         singleShot( signalAnimationEnd, Globals.ANIMATION_TIME );
     }
@@ -353,7 +356,7 @@ Item{
         var card = Logic.createCard( gameArea, cardSource, trump.elementId, trump.elementId, 1, trump.x, trump.y );
         trump.visible = false;
         
-        playerCardsGroup.addCard( card );
+        playerCardsGroup.addCard( card, true );
         
         singleShot( signalAnimationEnd, Globals.ANIMATION_TIME );
     }
@@ -368,7 +371,7 @@ Item{
             deck.visible = false;
         }
         
-        opponentCardsGroup.addCard( card, Globals.ANIMATION_TIME );
+        opponentCardsGroup.addCard( card, true );
         
         singleShot( signalAnimationEnd, Globals.ANIMATION_TIME );
     }
@@ -378,7 +381,7 @@ Item{
         
         trump.visible = false;
         
-        opponentCardsGroup.addCard( card );
+        opponentCardsGroup.addCard( card, true );
         
         singleShot( signalAnimationEnd, Globals.ANIMATION_TIME );
     }
@@ -463,5 +466,30 @@ Item{
     
     function fortyButtonVisibleChanged( visible ){
         fortyButton.visible = visible;
+    }
+    
+    function trumpCardSelectableChanged( selectable ){
+        console.log( "Trump card selectable changed: "+selectable );
+        trump.selectable = selectable;
+    }
+    
+    function playerChangeTrumpCard( id ){
+        console.log( "Player change trump card with "+id+". card." );
+        
+        var newCard = Logic.createCard( gameArea, cardSource, trump.elementId, trump.elementId, 1, trump.x, trump.y );
+        newCard.selectable = true;
+        
+        trump.visible = false;
+        trump.selectable = false;
+        trump.willVisible( Globals.ANIMATION_TIME );
+        
+        var card = playerCardsGroup.takeAt( id );
+        
+        card.startAnimation( trump.x, trump.y );
+        card.destroy( Globals.ANIMATION_TIME + 100 );
+        
+        trump.elementId = card.elementId;
+        
+        playerCardsGroup.addCard( newCard, false );
     }
 }

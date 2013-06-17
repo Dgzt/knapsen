@@ -21,6 +21,13 @@ Item{
         onSizeChanged: setCardsGroupSize()
     }
     
+    Timer{
+        id: cardConectsTimer
+        interval: Globals.ANIMATION_TIME + 10
+        
+        onTriggered: { cardsGroup.setConnects(); }
+    }
+    
     function setCardsGroupSize(){
         //Height
         if( cards.size == 0 ){
@@ -56,14 +63,34 @@ Item{
         }
     }
     
-    function addCard( card ){
+    /*function addCard( card ){
         card.mouseEntered.connect( mouseEnteredToCard );
         card.mouseExited.connect( mouseExitedFromCard );
         card.mouseClicked.connect( mouseClickedToCard );
         cards.add( card );
         
         setCardsZValue();
+    }*/
+    
+    function addCard( card, nowSetConnects ){
+        cards.add( card );
+        
+        if( nowSetConnects ){
+            setConnects();
+        }else{
+            cardConectsTimer.start();
+        }
+        
+        setCardsZValue();
     }
+    
+    //
+    function setConnects(){
+        cards.at( cards.size-1 ).mouseEntered.connect( mouseEnteredToCard );
+        cards.at( cards.size-1 ).mouseExited.connect( mouseExitedFromCard );
+        cards.at( cards.size-1 ).mouseClicked.connect( mouseClickedToCard );
+    }
+    //
     
     /*function setSelectable( id, selectable ){
         cards.at( id ).selectable = selectable;
@@ -104,6 +131,12 @@ Item{
     
     function mouseClickedToCard(){
         console.log( "Selected card: "+highlightCardId );
+        
+        //
+        if( cardConectsTimer.running ){
+            cardConectsTimer.stop();
+        }
+        //
         
         selectedCardId( highlightCardId );
         selectedCard( cards.takeAt( highlightCardId ) );
@@ -147,5 +180,13 @@ Item{
             cards.at( 0 ).startAnimation( posX, posY );
             cards.takeAt( 0 ).destroy( Globals.ANIMATION_TIME );
         }
+    }
+    
+    function takeAt( id ){
+        cards.at( id ).selectable = false;
+        cards.at( id ).mouseEntered.disconnect();
+        cards.at( id ).mouseExited.disconnect();
+        cards.at( id ).mouseClicked.disconnect();
+        return cards.takeAt( id );
     }
 }
