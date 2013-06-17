@@ -338,7 +338,7 @@ Item{
         console.log( "New player card." );
         
         //var card = Logic.createCard( gameArea, cardSource, cardElementId, 1, deck.x, deck.y );
-        var card = Logic.createCard( gameArea, cardSource, cardElementId, 1, deckColumn.x, deckColumn.y );
+        var card = Logic.createCard( gameArea, cardSource, Globals.CARD_BACK, cardElementId, 1, deckColumn.x, deckColumn.y );
         
         if( lastCard ){
             deck.visible = false;
@@ -349,17 +349,36 @@ Item{
         singleShot( signalAnimationEnd, Globals.ANIMATION_TIME );
     }
     
+    function newPlayerCardTrumpCard(){
+        var card = Logic.createCard( gameArea, cardSource, trump.elementId, trump.elementId, 1, trump.x, trump.y );
+        trump.visible = false;
+        
+        playerCardsGroup.addCard( card );
+        
+        singleShot( signalAnimationEnd, Globals.ANIMATION_TIME );
+    }
+    
     function newOpponentCard( lastCard ){
         console.log( "New opponent card." );
         
         //var card = Logic.createCard( gameArea, cardSource, Globals.CARD_BACK, 1, deck.x, deck.y );
-        var card = Logic.createCard( gameArea, cardSource, Globals.CARD_BACK, 1, deckColumn.x, deckColumn.y );
+        var card = Logic.createCard( gameArea, cardSource, Globals.CARD_BACK, Globals.CARD_BACK, 1, deckColumn.x, deckColumn.y );
         
         if( lastCard ){
             deck.visible = false;
         }
         
         opponentCardsGroup.addCard( card, Globals.ANIMATION_TIME );
+        
+        singleShot( signalAnimationEnd, Globals.ANIMATION_TIME );
+    }
+    
+    function newOpponentCardTrumpCard(){
+        var card = Logic.createCard( gameArea, cardSource, Globals.CARD_BACK, Globals.CARD_BACK, 1, trump.x, trump.y );
+        
+        trump.visible = false;
+        
+        opponentCardsGroup.addCard( card );
         
         singleShot( signalAnimationEnd, Globals.ANIMATION_TIME );
     }

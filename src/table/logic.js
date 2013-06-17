@@ -1,12 +1,12 @@
 
-function createCard( parent, source, newElementId, scale, x, y ){
+function createCard( parent, source, startElementId, endElementId, scale, x, y ){
     var component = Qt.createComponent("Card.qml");
     var card = component.createObject( parent, {
         "x": x, 
         "y": y,
         "source": source,
-        "elementId": Globals.CARD_BACK,
-        "newElementId": newElementId,
+        "elementId": startElementId,
+        "newElementId": endElementId,
         "scale": scale
     });
     
