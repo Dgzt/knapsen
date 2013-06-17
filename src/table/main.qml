@@ -509,4 +509,10 @@ Item{
         
         singleShot( signalAnimationEnd, Globals.ANIMATION_TIME );
     }
+    
+    function showOpponentCards( card1Id, card1ElementId, card2Id, card2ElementId ){
+        opponentCardsGroup.showCards( card1Id, card1ElementId, card2Id, card2ElementId );
+        
+        singleShot( signalAnimationEnd, Globals.SHOW_OPPONENT_CARDS_INTERVAL );
+    }
 }

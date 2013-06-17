@@ -28,6 +28,16 @@ Item{
         onTriggered: { cardsGroup.setConnects(); }
     }
     
+    Timer{
+        id: hideCardsTimer
+
+        property int cardId1: Globals.INVALID_CARD_ID;
+        property int cardId2: Globals.INVALID_CARD_ID;
+        
+        interval: Globals.SHOW_OPPONENT_CARDS_INTERVAL
+        onTriggered: hideCards()
+    }
+    
     function setCardsGroupSize(){
         //Height
         if( cards.size == 0 ){
@@ -188,5 +198,35 @@ Item{
         cards.at( id ).mouseExited.disconnect();
         cards.at( id ).mouseClicked.disconnect();
         return cards.takeAt( id );
+    }
+    
+    function showCards( card1Id, card1ElementId, card2Id, card2ElementId ){
+        hideCardsTimer.cardId1 = card1Id;
+        hideCardsTimer.cardId2 = card2Id;
+        
+        cards.at( hideCardsTimer.cardId1 ).elementId = card1ElementId;
+        cards.at( hideCardsTimer.cardId2 ).elementId = card2ElementId;
+        
+        var highlightValue = cards.at( hideCardsTimer.cardId1 ).height * ( Globals.HIGHLIGHT_PERCENT / 100 );
+        
+        cards.at( hideCardsTimer.cardId1 ).y += highlightValue;
+        cards.at( hideCardsTimer.cardId2 ).y += highlightValue;
+        
+        hideCardsTimer.start();
+    }
+    
+    function hideCards(){
+        console.log( "Hide cards." );
+        
+        cards.at( hideCardsTimer.cardId1 ).elementId = Globals.CARD_BACK;
+        cards.at( hideCardsTimer.cardId2 ).elementId = Globals.CARD_BACK;
+        
+        var highlightValue = cards.at( hideCardsTimer.cardId1 ).height * ( Globals.HIGHLIGHT_PERCENT / 100 );
+        
+        cards.at( hideCardsTimer.cardId1 ).y -= highlightValue;
+        cards.at( hideCardsTimer.cardId2 ).y -= highlightValue;
+        
+        hideCardsTimer.cardId1 = Globals.INVALID_CARD_ID;
+        hideCardsTimer.cardId2 = Globals.INVALID_CARD_ID;
     }
 }
