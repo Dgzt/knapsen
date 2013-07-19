@@ -58,8 +58,6 @@ Item{
             x: ( parent.width - width ) / 2
             //y: parent.height - height - Globals.NAME_DISTANCE
             visible: false
-            
-            onYChanged: { console.log( "Player Y changed: "+y ); }
         }
         
         Column{
@@ -326,6 +324,12 @@ Item{
         deck.x = deckStartPosX;
         deck.startAnimation( deckEndPosX, deck.y );
         deck.visible = true;*/
+        
+        //Clear table
+        trump.visible = false;
+        opponentCardsGroup.clear();
+        playerCardsGroup.clear();
+        centralCardsGroup.clear();
         
         var deckColumnStartPosX = main.mapToItem( gameArea, 0, 0 ).x - deckColumn.width;
         var deckColumnEndPosX = Globals.DECK_DISTANCE;

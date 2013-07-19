@@ -112,9 +112,9 @@ Item{
             var card = cards.at( id );
             
             if( id == cards.size-1 ){
-                console.log( id+": "+Math.round(mousePosX)+"x"+Math.round(mousePosY)+" "+Math.round(card.x)+"-"+Math.round(card.x+card.width) );
+                console.log( id+": "+Math.round(mousePosX)+"x"+Math.round(mousePosY)+" x:"+Math.round(card.x)+"-"+Math.round(card.x+card.width) );
             }else{
-                console.log( id+": "+Math.round(mousePosX)+"x"+Math.round(mousePosY)+" "+Math.round(card.x)+"-"+Math.round(card.x+card.width)+" "+Math.round(cards.at(id+1).x)+"-"+Math.round(cards.at(id+1).x+cards.at(id+1).width) );
+                console.log( id+": "+Math.round(mousePosX)+"x"+Math.round(mousePosY)+" x:"+Math.round(card.x)+"-"+Math.round(card.x+card.width)+" y:"+Math.round(cards.at(id+1).y)+"-"+Math.round(cards.at(id+1).y+cards.at(id+1).height) );
             }
             
             if( card.x <= mousePosX && mousePosX < card.x + card.width &&
@@ -141,8 +141,10 @@ Item{
     }
     
     function mouseExitedFromCard(){
+        //if( highlightCardId != Globals.INVALID_CARD_ID ){
         removeHighlight();
         highlightCardId = Globals.INVALID_CARD_ID;
+        //}
     }
     
     function mouseClickedToCard(){
