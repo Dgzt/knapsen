@@ -231,3 +231,9 @@ void CentralWidget::slotShowOpponentCards( int card1Id, Card card1, int card2Id,
                                Q_ARG( QVariant, card2.getCardText() )
                              );
 }
+
+void CentralWidget::slotPlayerInAction()
+{
+    kDebug() << "Player in action.";
+    QMetaObject::invokeMethod( rootObject(), "playerInAction" );
+}

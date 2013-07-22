@@ -41,6 +41,9 @@ Item{
             id: gameAreaMouseArea
             anchors.fill: parent
             hoverEnabled: true
+            z: topZ
+            
+            property int topZ: 100
         }
         //
         
@@ -212,7 +215,10 @@ Item{
             //
             
             onSelectedCardId: { signalSelectedCard( id, Globals.ANIMATION_TIME ); }
-            onSelectedCard: { centralCardsGroup.addCard( card, true ); }
+            onSelectedCard: { 
+                centralCardsGroup.addCard( card, true ); 
+                gameAreaMouseArea.z = gameAreaMouseArea.topZ;
+            }
         }
         
     }
@@ -518,5 +524,9 @@ Item{
         opponentCardsGroup.showCards( card1Id, card1ElementId, card2Id, card2ElementId );
         
         singleShot( signalAnimationEnd, Globals.SHOW_OPPONENT_CARDS_INTERVAL );
+    }
+    
+    function playerInAction(){
+        gameAreaMouseArea.z = 0;
     }
 }

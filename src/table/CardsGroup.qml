@@ -38,6 +38,14 @@ Item{
         onTriggered: hideCards()
     }
     
+    //
+    /*MouseArea{
+        id: mouseArea
+        anchors.fill: parent
+        hoverEnabled: true
+    }*/
+    //
+    
     function setCardsGroupSize(){
         //Height
         if( cards.size == 0 ){
@@ -132,6 +140,11 @@ Item{
     
     //
     function mouseEnteredToCard(){
+        if( highlightCardId != Globals.INVALID_CARD_ID ){
+            removeHighlight();
+            highlightCardId = Globals.INVALID_CARD_ID;
+        }
+        
         for( var i = 0; i < cards.size; ++i ){
             if( cards.at( i ).containsMouse && i != highlightCardId ){
                 highlightCardId = i;

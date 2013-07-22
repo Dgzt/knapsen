@@ -151,6 +151,7 @@ void MainWindow::setupConnects()
     connect( mClient, SIGNAL( signalPlayerChangeTrumpCard( int ) ), mCWidget, SLOT( slotPlayerChangeTrumpCard( int ) ) );
     connect( mClient, SIGNAL( signalOpponentChangeTrumpCard( int, Card* ) ), mCWidget, SLOT( slotOpponentChangeTrumpCard( int, Card* ) ) );
     connect( mClient, SIGNAL( signalShowOpponentCards( int, Card, int, Card ) ), mCWidget, SLOT( slotShowOpponentCards( int, Card, int, Card ) ) );
+    connect( mClient, SIGNAL( signalPlayerInAction() ), mCWidget, SLOT( slotPlayerInAction() ) );
     
     connect( mCWidget, SIGNAL( signalAnimationEnd() ), mClient, SLOT( slotProcessCommands() ) );
     connect( mCWidget, SIGNAL( signalSelectedCard( int, int ) ), mClient, SLOT(slotSelectCardId( int, int ) ) );
