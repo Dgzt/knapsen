@@ -75,6 +75,12 @@ Item{
                 oldHeight = height;
             }
             
+            Image{
+                id: playerArrow
+                source: "../pics/arrow.png"
+                visible: false
+            }
+            
             Button{
                 id: schnapsenButton
                 text: "Schnapsen"
@@ -218,6 +224,7 @@ Item{
             onSelectedCard: { 
                 centralCardsGroup.addCard( card, true ); 
                 gameAreaMouseArea.z = gameAreaMouseArea.topZ;
+                playerArrow.visible = false;
             }
         }
         
@@ -263,6 +270,8 @@ Item{
         schnapsenButton.visible = false;
         twentyButton.visible = false;
         fortyButton.visible = false;
+        
+        playerArrow.visible = false;
     }
     
     function initialize( playerNameStr, opponentNameStr, picsPath, picScale ){
@@ -528,5 +537,6 @@ Item{
     
     function playerInAction(){
         gameAreaMouseArea.z = 0;
+        playerArrow.visible = true;
     }
 }
