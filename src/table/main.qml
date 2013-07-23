@@ -124,10 +124,17 @@ Item{
         
         Column{
             id: opponentControlPanel
+            spacing: Globals.BUTTON_DISTANCE
             
             ScoreTable{
                 id: opponentScoreTable
                 visible: false
+            }
+            
+            Image{
+                id: opponentArrow
+                source: "../pics/arrow.png"
+                visible: false;
             }
             
             NumberAnimation on x{
@@ -197,7 +204,10 @@ Item{
                 opponentControlPanelXAnimation.restart();
             }
             
-            onSelectedCard: { centralCardsGroup.addCard( card, true ); }
+            onSelectedCard: { 
+                centralCardsGroup.addCard( card, true ); 
+                opponentArrow.visible = false;
+            }
         }
         
         CardsGroup{
@@ -533,6 +543,10 @@ Item{
         opponentCardsGroup.showCards( card1Id, card1ElementId, card2Id, card2ElementId );
         
         singleShot( signalAnimationEnd, Globals.SHOW_OPPONENT_CARDS_INTERVAL );
+    }
+    
+    function opponentInAction(){
+        opponentArrow.visible = true;
     }
     
     function playerInAction(){

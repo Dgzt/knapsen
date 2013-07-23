@@ -96,6 +96,8 @@ public slots:
     
     void slotShowOpponentCards( int card1Id, Card card1, int card2Id, Card card2 );
     
+    void slotOpponentInAction();
+    
     void slotPlayerInAction();
     
 signals:

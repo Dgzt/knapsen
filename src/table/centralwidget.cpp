@@ -232,6 +232,12 @@ void CentralWidget::slotShowOpponentCards( int card1Id, Card card1, int card2Id,
                              );
 }
 
+void CentralWidget::slotOpponentInAction()
+{
+    kDebug() << "Opponent in action.";
+    QMetaObject::invokeMethod( rootObject(), "opponentInAction" );
+}
+
 void CentralWidget::slotPlayerInAction()
 {
     kDebug() << "Player in action.";
