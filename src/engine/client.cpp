@@ -25,6 +25,7 @@ Client::Client( QString name ):
     mCommandsUnderProcessing( false )
 {
     mTrump = new Trump;
+    mOpponentSelectedCardInfo = 0;
     
     connect( this, SIGNAL( connected() ), this, SLOT( slotConnected() ) );
 }
@@ -32,6 +33,10 @@ Client::Client( QString name ):
 Client::~Client()
 {
     delete mTrump;
+    
+    if( mOpponentSelectedCardInfo ){
+        delete mOpponentSelectedCardInfo;
+    }
 }
 
 /*QList< QString >* Client::getValues( QString valuesStr )
@@ -565,7 +570,12 @@ void Client::commandOpponentSelectedCard( const QString& commandValue )
         Card* card = new Card( cardValue );
         mCentralCards.append( card );
         
-        emit signalOpponentSelectedCard( cardId, card );
+        //emit signalOpponentSelectedCard( cardId, card );
+        mOpponentSelectedCardInfo = new QPair< int, Card* >;
+        mOpponentSelectedCardInfo->first = cardId;
+        mOpponentSelectedCardInfo->second = card;
+        QTimer::singleShot( 1000, this, SLOT( slotOpponentSelectedCard() ) );
+        
     }catch( int error ){
         if( error == WRONG_VALUE_ARRAY_SIZE ) kDebug() << "ERROR! Wrong values size!";
         if( error == WRONG_VALUE ) kDebug() << "ERROR! Wrong value!";

@@ -54,6 +54,10 @@ class Client : public Player
     //The id of the last selected player card
     int mLastSelectedCardId;
     
+    //
+    QPair< int, Card* > *mOpponentSelectedCardInfo;
+    //
+    
     //Get the values
     QStringList getValues( const QString& );
     
@@ -313,6 +317,17 @@ protected slots:
      */
     void slotOpponentGetCentralCards(){ emit signalOpponentGetCentralCards(); }
     
+    /*!
+     * Emit the signalOpponentSelectedCard signal.
+     * The id of card and the card must in mOpponentSelectedCardInfo variable,
+     * and after then emit the signal delete this variable.
+     */
+    void slotOpponentSelectedCard(){
+        emit signalOpponentSelectedCard( mOpponentSelectedCardInfo->first, mOpponentSelectedCardInfo->second );
+        delete mOpponentSelectedCardInfo;
+        mOpponentSelectedCardInfo=0;
+    }
+    
 public:
     enum GameErrorType{ NameIsBusy, ServerIsFull, OpponentDisconnected };
     
@@ -348,7 +363,6 @@ public slots:
      * @param delay Delay to send to the server.
      */
     void slotSelectCardId( int cardId, int delay );
-    
     
     /*!
      * Change trump card with a card. The trump card
