@@ -282,6 +282,7 @@ Item{
         fortyButton.visible = false;
         
         playerArrow.visible = false;
+        opponentArrow.visible = false;
     }
     
     function initialize( playerNameStr, opponentNameStr, picsPath, picScale ){
