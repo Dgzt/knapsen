@@ -26,6 +26,7 @@ Client::Client( QString name ):
 {
     mTrump = new Trump;
     mOpponentSelectedCardInfo = 0;
+    mOpponentVisibleCardsInfo = 0;
     
     connect( this, SIGNAL( connected() ), this, SLOT( slotConnected() ) );
 }
@@ -36,6 +37,10 @@ Client::~Client()
     
     if( mOpponentSelectedCardInfo ){
         delete mOpponentSelectedCardInfo;
+    }
+    
+    if( mOpponentVisibleCardsInfo ){
+        delete mOpponentVisibleCardsInfo;
     }
 }
 
@@ -608,13 +613,17 @@ void Client::commandVisibleOpponentCards( const QString& commandValue )
         int card2Value = values.at( 3 ).toInt( &ok );
         if( !ok ) throw WRONG_VALUE;
         
-        emit signalShowOpponentCards( card1Pos, Card(card1Value), card2Pos, Card(card2Value) );
+        //emit signalShowOpponentCards( card1Pos, Card(card1Value), card2Pos, Card(card2Value) );
+        mOpponentVisibleCardsInfo = new QPair< QPair<int, Card*>, QPair<int, Card*> >;
+        mOpponentVisibleCardsInfo->first.first = card1Pos;
+        mOpponentVisibleCardsInfo->first.second = new Card( card1Value );
+        mOpponentVisibleCardsInfo->second.first = card2Pos;
+        mOpponentVisibleCardsInfo->second.second = new Card( card2Value );
+        QTimer::singleShot( 1000, this, SLOT( slotOpponentVisibleCards() ) );
     }catch( int error ){
         if( error == WRONG_VALUE_ARRAY_SIZE ) kDebug() << "ERROR! Wrong size of values in visible opponent cards command!";
         if( error == WRONG_VALUE ) kDebug() << "ERROR! Wrong value in visible cards command!";
     }
-    
-    //delete valuesArray;
 }
 
 void Client::commandPlayerTricksChanged( const QString& commandValue )

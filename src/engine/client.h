@@ -56,6 +56,8 @@ class Client : public Player
     
     //
     QPair< int, Card* > *mOpponentSelectedCardInfo;
+    
+    QPair< QPair<int, Card*>, QPair<int, Card*> > *mOpponentVisibleCardsInfo;
     //
     
     //Get the values
@@ -328,6 +330,22 @@ protected slots:
         mOpponentSelectedCardInfo=0;
     }
     
+    /*!
+     * Emit the signalShowOpponentCards signal.
+     * The id of card and the card must in mOpponentVisibleCardsInfo->first 
+     * and mOpponentVisibleCardsInfo->second and after then emit the signal 
+     * delete this variables.
+     */
+    void slotOpponentVisibleCards(){
+        emit signalShowOpponentCards( mOpponentVisibleCardsInfo->first.first, mOpponentVisibleCardsInfo->first.second,
+                                      mOpponentVisibleCardsInfo->second.first, mOpponentVisibleCardsInfo->second.second );
+        
+        delete mOpponentVisibleCardsInfo->first.second;
+        delete mOpponentVisibleCardsInfo->second.second;
+        delete mOpponentVisibleCardsInfo;
+        mOpponentVisibleCardsInfo = 0;
+    }
+    
 public:
     enum GameErrorType{ NameIsBusy, ServerIsFull, OpponentDisconnected };
     
@@ -513,7 +531,7 @@ signals:
      * @param card2Id The position of the second card.
      * @param card2 The second card.
      */
-    void signalShowOpponentCards( int card1Id, Card card1, int card2Id, Card card2 );
+    void signalShowOpponentCards( int card1Id, Card* card1, int card2Id, Card* card2 );
     
     /*!
      * The opponent clicked to the schnapsen button.
