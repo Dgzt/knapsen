@@ -27,6 +27,7 @@ Client::Client( QString name ):
     mTrump = new Trump;
     mOpponentSelectedCardInfo = 0;
     mOpponentVisibleCardsInfo = 0;
+    mOpponentChangeTrumpCardInfo = 0;
     
     connect( this, SIGNAL( connected() ), this, SLOT( slotConnected() ) );
 }
@@ -41,6 +42,10 @@ Client::~Client()
     
     if( mOpponentVisibleCardsInfo ){
         delete mOpponentVisibleCardsInfo;
+    }
+    
+    if( mOpponentChangeTrumpCardInfo ){
+        delete mOpponentChangeTrumpCardInfo;
     }
 }
 
@@ -462,8 +467,11 @@ void Client::commandOpponentChangeTrumpCard( const QString& commandValue )
         mTrump->clearTrumpCard();
         mTrump->addNewCard( new Card( trumpCardValue ) );
         
-        emit signalOpponentChangeTrumpCard( cardId, mTrump->getCard() );
-        
+        //emit signalOpponentChangeTrumpCard( cardId, mTrump->getCard() );
+        mOpponentChangeTrumpCardInfo = new QPair< int, Card* >;
+        mOpponentChangeTrumpCardInfo->first = cardId;
+        mOpponentChangeTrumpCardInfo->second = mTrump->getCard();
+        QTimer::singleShot( 1000, this, SLOT( slotOpponentChangeTrumpCard() ) );
     }catch( int error ){
         if( error == WRONG_VALUE_ARRAY_SIZE ) kDebug() << "ERROR! Wrong size of values in opponent change trump card command!";
         if( error == WRONG_VALUE ) kDebug() << "ERROR! Wrong value in opponent change trump card command!";

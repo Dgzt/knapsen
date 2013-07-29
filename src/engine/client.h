@@ -58,6 +58,8 @@ class Client : public Player
     QPair< int, Card* > *mOpponentSelectedCardInfo;
     
     QPair< QPair<int, Card*>, QPair<int, Card*> > *mOpponentVisibleCardsInfo;
+    
+    QPair< int, Card* > *mOpponentChangeTrumpCardInfo;
     //
     
     //Get the values
@@ -344,6 +346,19 @@ protected slots:
         delete mOpponentVisibleCardsInfo->second.second;
         delete mOpponentVisibleCardsInfo;
         mOpponentVisibleCardsInfo = 0;
+    }
+    
+    /*!
+     * Emit the signalOpponentChangeTrumpCard signal.
+     * The id of new trump card must in mOpponentChangeTrumpCardInfo->first
+     * and the new trump card must in mOpponentChangeTrumpCardInfo->second.
+     * After then emit the signal delete this variable.
+     */
+    void slotOpponentChangeTrumpCard(){
+        emit signalOpponentChangeTrumpCard( mOpponentChangeTrumpCardInfo->first, mOpponentChangeTrumpCardInfo->second );
+    
+        delete mOpponentChangeTrumpCardInfo;
+        mOpponentChangeTrumpCardInfo = 0;
     }
     
 public:
