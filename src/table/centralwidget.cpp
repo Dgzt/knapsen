@@ -232,6 +232,20 @@ void CentralWidget::slotShowOpponentCards( int card1Id, Card* card1, int card2Id
                              );
 }
 
+void CentralWidget::slotOpponentTwentyButtonClicked()
+{
+    kDebug() << "Opponent clicked to the twenty button.";
+    
+    QMetaObject::invokeMethod( rootObject(), "opponentTwentyButtonClicked" );
+}
+
+void CentralWidget::slotOpponentFortyButtonClicked()
+{
+    kDebug() << "Opponent clicked to the forty button.";
+    
+    QMetaObject::invokeMethod( rootObject(), "opponentFortyButtonClicked" );
+}
+
 void CentralWidget::slotOpponentInAction()
 {
     kDebug() << "Opponent in action.";

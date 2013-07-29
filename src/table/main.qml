@@ -131,11 +131,24 @@ Item{
                 visible: false
             }
             
+            Name{
+                id: fortyText
+                text: "Forty"
+                visible: false
+            }
+            
+            Name{
+                id: twentyText
+                text: "Twenty"
+                visible: false
+            }
+            
             Image{
                 id: opponentArrow
                 source: "../pics/arrow.png"
                 visible: false;
             }
+            
             
             NumberAnimation on x{
                 id: opponentControlPanelXAnimation
@@ -235,6 +248,9 @@ Item{
                 centralCardsGroup.addCard( card, true ); 
                 gameAreaMouseArea.z = gameAreaMouseArea.topZ;
                 playerArrow.visible = false;
+                //
+                if( twentyText.visible ) twentyText.visible = false;
+                if( fortyText.visible ) fortyText.visible = false;
             }
         }
         
@@ -283,6 +299,9 @@ Item{
         
         playerArrow.visible = false;
         opponentArrow.visible = false;
+        
+        twentyText.visible = false;
+        fortyText.visible = false;
     }
     
     function initialize( playerNameStr, opponentNameStr, picsPath, picScale ){
@@ -544,6 +563,14 @@ Item{
         opponentCardsGroup.showCards( card1Id, card1ElementId, card2Id, card2ElementId );
         
         singleShot( signalAnimationEnd, Globals.SHOW_OPPONENT_CARDS_INTERVAL );
+    }
+    
+    function opponentTwentyButtonClicked(){
+        twentyText.visible = true;
+    }
+    
+    function opponentFortyButtonClicked(){
+        fortyText.visible = true;
     }
     
     function opponentInAction(){
