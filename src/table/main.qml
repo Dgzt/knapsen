@@ -8,10 +8,9 @@ Item{
     onWidthChanged: resized()
     onHeightChanged: resized()
     
-    //property real rate: 1
-    
     property string cardSource: ""
-    
+    property real cardScale: 1
+        
     signal signalAnimationEnd()
     signal signalSelectedCard( int id, int delay )
     signal signalCloseButtonClicked()
@@ -179,6 +178,7 @@ Item{
             Card{
                 id: deck
                 source: main.cardSource
+                scale: main.cardScale
                 elementId: "back"
                 visible: false
             }
@@ -202,6 +202,7 @@ Item{
         Card{
             id: trump
             source: main.cardSource
+            scale: main.cardScale
             //y: deck.y
             y: deckColumn.y
             visible: false
@@ -313,6 +314,7 @@ Item{
         console.log( "Initialize" );
         
         cardSource = picsPath;
+        cardScale = picScale;
         
         opponentName.text = opponentNameStr;
         playerName.text = playerNameStr;
@@ -396,7 +398,7 @@ Item{
         console.log( "New player card." );
         
         //var card = Logic.createCard( gameArea, cardSource, cardElementId, 1, deck.x, deck.y );
-        var card = Logic.createCard( gameArea, cardSource, Globals.CARD_BACK, cardElementId, 1, deckColumn.x, deckColumn.y );
+        var card = Logic.createCard( gameArea, cardSource, Globals.CARD_BACK, cardElementId, main.cardScale, deckColumn.x, deckColumn.y );
         
         if( lastCard ){
             deck.visible = false;
@@ -408,7 +410,7 @@ Item{
     }
     
     function newPlayerCardTrumpCard(){
-        var card = Logic.createCard( gameArea, cardSource, trump.elementId, trump.elementId, 1, trump.x, trump.y );
+        var card = Logic.createCard( gameArea, cardSource, trump.elementId, trump.elementId, main.cardScale, trump.x, trump.y );
         trump.visible = false;
         
         playerCardsGroup.addCard( card, true );
@@ -420,7 +422,7 @@ Item{
         console.log( "New opponent card." );
         
         //var card = Logic.createCard( gameArea, cardSource, Globals.CARD_BACK, 1, deck.x, deck.y );
-        var card = Logic.createCard( gameArea, cardSource, Globals.CARD_BACK, Globals.CARD_BACK, 1, deckColumn.x, deckColumn.y );
+        var card = Logic.createCard( gameArea, cardSource, Globals.CARD_BACK, Globals.CARD_BACK, main.cardScale, deckColumn.x, deckColumn.y );
         
         if( lastCard ){
             deck.visible = false;
@@ -432,7 +434,7 @@ Item{
     }
     
     function newOpponentCardTrumpCard(){
-        var card = Logic.createCard( gameArea, cardSource, Globals.CARD_BACK, Globals.CARD_BACK, 1, trump.x, trump.y );
+        var card = Logic.createCard( gameArea, cardSource, Globals.CARD_BACK, Globals.CARD_BACK, main.cardScale, trump.x, trump.y );
         
         trump.visible = false;
         
@@ -531,7 +533,7 @@ Item{
     function playerChangeTrumpCard( id ){
         console.log( "Player change trump card with "+id+". card." );
         
-        var newCard = Logic.createCard( gameArea, cardSource, trump.elementId, trump.elementId, 1, trump.x, trump.y );
+        var newCard = Logic.createCard( gameArea, cardSource, trump.elementId, trump.elementId, main.cardScale, trump.x, trump.y );
         newCard.selectable = true;
         
         trump.visible = false;
@@ -550,7 +552,7 @@ Item{
     function opponentChangeTrumpCard( id, elementId ){
         console.log( "Opponent change trump card with "+id+". card ("+elementId+")." );
         
-        var newCard = Logic.createCard( gameArea, cardSource, Globals.CARD_BACK, Globals.CARD_BACK, 1, trump.x, trump.y );
+        var newCard = Logic.createCard( gameArea, cardSource, Globals.CARD_BACK, Globals.CARD_BACK, main.cardScale, trump.x, trump.y );
         
         trump.visible = false;
         trump.elementId = elementId;
