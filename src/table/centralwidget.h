@@ -100,6 +100,8 @@ public slots:
     
     void slotOpponentFortyButtonClicked();
     
+    void slotOpponentSchnapsenButtonClicked();
+    
     void slotOpponentInAction();
     
     void slotPlayerInAction();

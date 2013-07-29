@@ -246,6 +246,13 @@ void CentralWidget::slotOpponentFortyButtonClicked()
     QMetaObject::invokeMethod( rootObject(), "opponentFortyButtonClicked" );
 }
 
+void CentralWidget::slotOpponentSchnapsenButtonClicked()
+{
+    kDebug() << "Opponent clicked to the schnapsen button.";
+    
+    QMetaObject::invokeMethod( rootObject(), "opponentSchnapsenButtonClicked" );
+}
+
 void CentralWidget::slotOpponentInAction()
 {
     kDebug() << "Opponent in action.";

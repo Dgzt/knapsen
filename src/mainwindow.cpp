@@ -153,6 +153,7 @@ void MainWindow::setupConnects()
     connect( mClient, SIGNAL( signalShowOpponentCards( int, Card*, int, Card* ) ), mCWidget, SLOT( slotShowOpponentCards( int, Card*, int, Card* ) ) );
     connect( mClient, SIGNAL( signalOpponentTwentyButtonClicked() ), mCWidget, SLOT( slotOpponentTwentyButtonClicked() ) );
     connect( mClient, SIGNAL( signalOpponentFortyButtonClicked() ), mCWidget, SLOT( slotOpponentFortyButtonClicked() ) );
+    connect( mClient, SIGNAL( signalOpponentSchnapsenButtonClicked() ), mCWidget, SLOT( slotOpponentSchnapsenButtonClicked() ) );
     connect( mClient, SIGNAL( signalOpponentInAction() ), mCWidget, SLOT( slotOpponentInAction() ) );
     connect( mClient, SIGNAL( signalPlayerInAction() ), mCWidget, SLOT( slotPlayerInAction() ) );
     

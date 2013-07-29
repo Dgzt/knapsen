@@ -132,14 +132,20 @@ Item{
             }
             
             Name{
+                id: twentyText
+                text: "Twenty"
+                visible: false
+            }
+            
+            Name{
                 id: fortyText
                 text: "Forty"
                 visible: false
             }
             
             Name{
-                id: twentyText
-                text: "Twenty"
+                id: schnapsenText
+                text: "Schnapsen"
                 visible: false
             }
             
@@ -192,8 +198,6 @@ Item{
                 duration: Globals.ANIMATION_TIME
             }
         }
-        
-        
         
         Card{
             id: trump
@@ -302,6 +306,7 @@ Item{
         
         twentyText.visible = false;
         fortyText.visible = false;
+        schnapsenText.visible = false;
     }
     
     function initialize( playerNameStr, opponentNameStr, picsPath, picScale ){
@@ -375,6 +380,7 @@ Item{
         opponentCardsGroup.clear();
         playerCardsGroup.clear();
         centralCardsGroup.clear();
+        if( schnapsenText.visible ) schnapsenText.visible = false;
         
         var deckColumnStartPosX = main.mapToItem( gameArea, 0, 0 ).x - deckColumn.width;
         var deckColumnEndPosX = Globals.DECK_DISTANCE;
@@ -571,6 +577,10 @@ Item{
     
     function opponentFortyButtonClicked(){
         fortyText.visible = true;
+    }
+    
+    function opponentSchnapsenButtonClicked(){
+        schnapsenText.visible = true;
     }
     
     function opponentInAction(){
