@@ -2,9 +2,7 @@
 set(knapsen_HDRS
     enums.h
     table/svgimage.h
-    #
     table/array.h
-    #
     table/centralwidget.h
     engine/card.h
     dialogs/waitingforopponent.h
@@ -23,9 +21,7 @@ set(knapsen_HDRS
 
 set(knapsen_SRCS
     table/svgimage.cpp
-    #
     table/array.cpp
-    #
     table/centralwidget.cpp
     engine/card.cpp
     dialogs/waitingforopponent.cpp
@@ -68,7 +64,8 @@ target_link_libraries(knapsen ${QT_QTDECLARATIVE_LIBRARY} ${QT_QTSVG_LIBRARY} ${
 
 ########### install files ###############
 
-install(TARGETS   knapsen          ${INSTALL_TARGETS_DEFAULT_ARGS} )
-install( PROGRAMS knapsen.desktop  DESTINATION ${XDG_APPS_INSTALL_DIR} )
-install( FILES    knapsen.kcfg  DESTINATION  ${KCFG_INSTALL_DIR} )
-install( FILES    knapsenui.rc  DESTINATION  ${DATA_INSTALL_DIR}/knapsen )
+install( TARGETS   knapsen          ${INSTALL_TARGETS_DEFAULT_ARGS} )
+install( PROGRAMS  knapsen.desktop  DESTINATION ${XDG_APPS_INSTALL_DIR} )
+install( FILES     knapsen.kcfg     DESTINATION ${KCFG_INSTALL_DIR} )
+install( FILES     knapsenui.rc     DESTINATION ${DATA_INSTALL_DIR}/knapsen )
+install( DIRECTORY table/qml        DESTINATION ${DATA_INSTALL_DIR}/knapsen )
