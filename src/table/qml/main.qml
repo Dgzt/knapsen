@@ -391,7 +391,7 @@ Item{
         deckColumnXAnimation.start();
         deck.visible = true;
         
-        singleShot( signalAnimationEnd, Globals.ANIMATION_TIME );
+        singleShot( signalAnimationEnd, Globals.ANIMATION_TIME + Globals.DECK_ARRIVED_DELAY );
     }
     
     function newPlayerCard( lastCard, cardElementId ){
