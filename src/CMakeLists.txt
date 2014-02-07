@@ -58,6 +58,8 @@ set(knapsen_UIS
     dialogs/waitforclientwidget.ui
 )
 
+ADD_LIBRARY( Knapsen_LIBRARY STATIC ${knapsen_SRCS} )
+
 SET (CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fexceptions")
 
 kde4_add_kcfg_files(knapsen_SRCS settings.kcfgc )
