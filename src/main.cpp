@@ -7,7 +7,7 @@
 
 static const char description[] = I18N_NOOP("Knapsen is a Sixty-six card game for KDE.");
 
-static const char version[] = "1.1.0dev";
+static const char version[] = "1.0.1";
 
 int main(int argc, char **argv)
 {
