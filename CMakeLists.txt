@@ -68,10 +68,14 @@ include_directories( ${KDEGAMES_INCLUDE_DIRS} )
 # Generate config-kmess.h
 CONFIGURE_FILE( ${CMAKE_CURRENT_SOURCE_DIR}/cmake/config-knapsen.h.in ${CMAKE_CURRENT_BINARY_DIR}/src/config-knapsen.h )
 
+#Enable the unit testing
+enable_testing( true )
+
 # Information message
 MESSAGE(STATUS "${PROJECT_NAME} will be built to install into ${CMAKE_INSTALL_PREFIX}")
 
 #add_subdirectory( doc )
 add_subdirectory( po )
 add_subdirectory( pics )
+add_subdirectory( test )
 add_subdirectory( src )
