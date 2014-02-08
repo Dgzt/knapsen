@@ -1,5 +1,5 @@
 #include <QtTest>
-#include "../src/engine/card.h"
+#include "../../src/engine/card.h"
 #include "cardtest.h"
 
 void TestCard::testValue(){
