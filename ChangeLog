@@ -1,5 +1,8 @@
 Knapsen ChangeLog
 
+Since 1.0.1:
+  - Add german language.
+
 Since 1.0.0:
   - Fix BOT when doesn't select card.
   - Add homepage to the about.

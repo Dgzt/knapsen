@@ -1,0 +1,312 @@
+# German tranbslation of Knapsen.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the knapsen package.
+# Mario Blättermann <mario.blaettermann@gmail.com>, 2014.
+msgid ""
+msgstr ""
+"Project-Id-Version: 1.0.1\n"
+"Report-Msgid-Bugs-To: http://sourceforge.net/tracker/?"
+"group_id=50231&atid=459007\n"
+"POT-Creation-Date: 2013-04-30 20:26+0200\n"
+"PO-Revision-Date: 2014-02-20 19:16+0100\n"
+"Last-Translator: Mario Blättermann <mario.blaettermann@gmail.com>\n"
+"Language-Team: debian-l10n-german@lists.debian.org\n"
+"Language: de\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Poedit 1.5.4\n"
+
+#. i18n: file: src/dialogs/endgamewidget.ui:21
+#. i18n: ectx: property (text), widget (QLabel, label)
+#: rc.cpp:3
+msgid "Won the game"
+msgstr "Das Spiel gewinnt"
+
+#. i18n: file: src/dialogs/endroundwidget.ui:21
+#. i18n: ectx: property (text), widget (QLabel, label)
+#: rc.cpp:6
+msgid "Won the round"
+msgstr "Die Runde gewinnt"
+
+#. i18n: file: src/dialogs/endroundwidget.ui:89
+#. i18n: ectx: property (text), widget (QLabel, label_3)
+#: rc.cpp:9
+msgid "with"
+msgstr "mit"
+
+#. i18n: file: src/dialogs/endroundwidget.ui:157
+#. i18n: ectx: property (text), widget (QLabel, label_5)
+#: rc.cpp:12
+msgid "scores."
+msgstr "Punkten."
+
+#. i18n: file: src/dialogs/newgamewidget_client.ui:17
+#. i18n: ectx: property (text), widget (QLabel, client_ipAddressLabel)
+#: rc.cpp:15
+msgid "Ip address:"
+msgstr "IP-Adresse:"
+
+#. i18n: file: src/dialogs/newgamewidget_client.ui:31
+#. i18n: ectx: property (text), widget (QLabel, client_PortLabel)
+#: rc.cpp:18
+msgid "Port:"
+msgstr "Port:"
+
+#. i18n: file: src/dialogs/newgamewidget_local.ui:17
+#. i18n: ectx: property (title), widget (QGroupBox, difficultyGroupBox)
+#: rc.cpp:21
+msgid "Difficulty"
+msgstr "Schwierigkeitsgrad"
+
+#. i18n: file: src/dialogs/newgamewidget_local.ui:23
+#. i18n: ectx: property (text), widget (QRadioButton, easyRadioButton)
+#: rc.cpp:24
+msgid "Easy"
+msgstr "Leicht"
+
+#. i18n: file: src/dialogs/newgamewidget_local.ui:30
+#. i18n: ectx: property (text), widget (QRadioButton, normalRadioButton)
+#: rc.cpp:27
+msgid "Normal"
+msgstr "Normal"
+
+#. i18n: file: src/dialogs/newgamewidget_local.ui:37
+#. i18n: ectx: property (text), widget (QRadioButton, hardRadioButton)
+#: rc.cpp:30
+msgid "Hard"
+msgstr "Schwer"
+
+#. i18n: file: src/dialogs/newgamewidget_server.ui:17
+#. i18n: ectx: property (text), widget (QLabel, server_portLabel)
+#: rc.cpp:33
+msgid "Server port:"
+msgstr "Server-Port:"
+
+#. i18n: file: src/dialogs/waitforclientwidget.ui:19
+#. i18n: ectx: property (text), widget (QLabel, opponentNameLabel)
+#: rc.cpp:36
+msgid "The Opponent:"
+msgstr "Der Gegner:"
+
+#. i18n: file: src/gamesettingswidget.ui:17
+#. i18n: ectx: property (title), widget (QGroupBox, WhoStartGameBox)
+#: rc.cpp:39
+msgid "Start the game"
+msgstr "Das Spiel starten"
+
+#. i18n: file: src/gamesettingswidget.ui:23
+#. i18n: ectx: property (text), widget (QRadioButton, kcfg_LocalPlayer)
+#: rc.cpp:42
+msgid "Local player"
+msgstr "Lokaler Spieler"
+
+#. i18n: file: src/gamesettingswidget.ui:30
+#. i18n: ectx: property (text), widget (QRadioButton, kcfg_OpponentPlayer)
+#: rc.cpp:45
+msgid "Opponent player"
+msgstr "Gegner"
+
+#. i18n: file: src/gamesettingswidget.ui:37
+#. i18n: ectx: property (text), widget (QRadioButton, kcfg_RandomPlayer)
+#: rc.cpp:48
+msgid "Random player"
+msgstr "Zufälliger Spieler"
+
+#. i18n: file: src/gamesettingswidget.ui:49
+#. i18n: ectx: property (title), widget (QGroupBox, groupBox)
+#: rc.cpp:51
+msgid "Cards in hand"
+msgstr "Karten in der Hand"
+
+#. i18n: file: src/gamesettingswidget.ui:72
+#. i18n: ectx: property (title), widget (QGroupBox, groupBox_3)
+#: rc.cpp:54
+msgid "Size of cards of deck"
+msgstr "Anzahl der Karten"
+
+#. i18n: file: src/gamesettingswidget.ui:107
+#. i18n: ectx: property (title), widget (QGroupBox, groupBox_2)
+#: rc.cpp:57
+msgid "Type of Cards"
+msgstr "Kartentyp"
+
+#. i18n: file: src/gamesettingswidget.ui:113
+#. i18n: ectx: property (text), widget (QRadioButton, kcfg_GermanSuits)
+#: rc.cpp:60
+msgid "German suits"
+msgstr "Deutsches Blatt"
+
+#. i18n: file: src/gamesettingswidget.ui:120
+#. i18n: ectx: property (text), widget (QRadioButton, kcfg_FrenchSuits)
+#: rc.cpp:63
+msgid "French suits"
+msgstr "Französisches Blatt"
+
+#. i18n: file: src/gamesettingswidget.ui:130
+#. i18n: ectx: property (text), widget (QCheckBox, kcfg_SchnapsenButton)
+#: rc.cpp:66
+msgid "Enabble Schnapsen button"
+msgstr "Schnapsen-Knopf aktivieren"
+
+#. i18n: file: src/knapsen.kcfg:11
+#. i18n: ectx: label, entry (PlayerName), group (General)
+#. i18n: file: src/playersettingswidget.ui:21
+#. i18n: ectx: property (text), widget (QLabel, label)
+#. i18n: file: src/knapsen.kcfg:11
+#. i18n: ectx: label, entry (PlayerName), group (General)
+#. i18n: file: src/playersettingswidget.ui:21
+#. i18n: ectx: property (text), widget (QLabel, label)
+#: rc.cpp:69 rc.cpp:75
+msgid "Player name"
+msgstr "Spielername"
+
+#. i18n: file: src/knapsen.kcfg:16
+#. i18n: ectx: label, entry (BotName), group (General)
+#: rc.cpp:72
+msgid "Bot name"
+msgstr "Name des Bots"
+
+#: rc.cpp:76
+msgctxt "NAME OF TRANSLATORS"
+msgid "Your names"
+msgstr "Mario Blättermann"
+
+#: rc.cpp:77
+msgctxt "EMAIL OF TRANSLATORS"
+msgid "Your emails"
+msgstr "mario.blaettermann@gmail.com"
+
+#: src/dialogs/endgamedialog.cpp:18 src/dialogs/newgamedialog.cpp:18
+msgid "New Game"
+msgstr "Neues Spiel"
+
+#: src/dialogs/endgamedialog.cpp:19
+msgid "Exit"
+msgstr "Beenden"
+
+#: src/dialogs/endgamedialog.cpp:21
+msgid "Game end"
+msgstr "Spiel beendet"
+
+#: src/dialogs/endrounddialog.cpp:20
+msgid "Next round"
+msgstr "Nächste Runde"
+
+#: src/dialogs/endrounddialog.cpp:22
+msgid "Round end"
+msgstr "Ende der Runde"
+
+#: src/dialogs/newgamedialog.cpp:11
+msgid "Local"
+msgstr "Lokal"
+
+#: src/dialogs/newgamedialog.cpp:12
+msgid "Client"
+msgstr "Client"
+
+#: src/dialogs/newgamedialog.cpp:13
+msgid "Server"
+msgstr "Server"
+
+#: src/dialogs/waitforclientdialog.cpp:9
+msgid "Waiting for client"
+msgstr "Auf den Client wird gewartet"
+
+#: src/dialogs/waitforserverdialog.cpp:9
+msgid "Waiting for server"
+msgstr "Auf den Server wird gewartet"
+
+#: src/dialogs/waitingforopponent.cpp:8
+msgid "Waiting for opponent"
+msgstr "Auf den Gegner wird gewartet"
+
+#: src/main.cpp:8
+msgid "Knapsen is a Sixty-six card game for KDE."
+msgstr "Knapsen ist ein Sechsundsechzig-Kartenspiel für KDE."
+
+#: src/main.cpp:19
+msgid "Knapsen"
+msgstr "Knapsen"
+
+#: src/main.cpp:23
+msgid "(C) 2012 Zsuró Tibor"
+msgstr "(C) 2012 Zsuró Tibor"
+
+#: src/mainwindow.cpp:67 src/mainwindow.cpp:77 src/mainwindow.cpp:87
+#: src/mainwindow.cpp:98
+msgid "Knapsen not found the \"%1\"!"
+msgstr "Knapsen hat „%1“ nicht gefunden!"
+
+#: src/mainwindow.cpp:168
+msgid "Really want to start a new game?"
+msgstr "Möchten Sie wirklich ein neues Spiel starten?"
+
+#: src/mainwindow.cpp:314
+msgid "Player"
+msgstr "Spieler"
+
+#: src/mainwindow.cpp:314
+msgid "Player settings"
+msgstr "Spieler-Einstellungen"
+
+#: src/mainwindow.cpp:320
+msgid "Game"
+msgstr "Spiel"
+
+#: src/mainwindow.cpp:320
+msgid "Game settings"
+msgstr "Spieleinstellungen"
+
+#: src/mainwindow.cpp:351
+msgid "The connection was refused!"
+msgstr "Die Verbindung wurde verweigert!"
+
+#: src/mainwindow.cpp:354
+msgid "The host not found!"
+msgstr "Rechner wurde nicht gefunden!"
+
+#: src/mainwindow.cpp:357
+msgid "The remote host closed the connection!"
+msgstr "Die Gegenstelle hat die Verbindung beendet!"
+
+#: src/mainwindow.cpp:361
+msgid "Undefined error!"
+msgstr "Unbekannter Fehler!"
+
+#: src/mainwindow.cpp:370
+msgid "The name is busy!"
+msgstr "Der Name ist belegt!"
+
+#: src/mainwindow.cpp:379
+msgid "The opponent disconnected!"
+msgstr "Die Verbindung zum Gegner wurde unterbrochen!"
+
+#: src/mainwindow.cpp:385
+msgid "The server is full!"
+msgstr "Der Server ist ausgelastet!"
+
+#: src/table/centralwidget.cpp:51 src/table/centralwidget.cpp:179
+msgid "Schnapsen"
+msgstr "Schnapsen"
+
+#: src/table/centralwidget.cpp:52 src/table/centralwidget.cpp:197
+msgid "Forty"
+msgstr "Vierzig"
+
+#: src/table/centralwidget.cpp:53 src/table/centralwidget.cpp:188
+msgid "Twenty"
+msgstr "Zwanzig"
+
+#: src/table/centralwidget.cpp:169
+msgid "Close"
+msgstr "Schließen"
+
+#: src/table/scoretable.cpp:9
+msgid "Tricks:"
+msgstr "Augen:"
+
+#: src/table/scoretable.cpp:10
+msgid "Scores:"
+msgstr "Punkte:"
